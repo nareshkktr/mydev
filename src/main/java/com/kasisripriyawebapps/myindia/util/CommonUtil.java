@@ -1,0 +1,415 @@
+/*
+ * 
+ */
+package com.kasisripriyawebapps.myindia.util;
+
+import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.nio.charset.Charset;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.imageio.ImageIO;
+
+import com.kasisripriyawebapps.myindia.constants.ApplicationConstants;
+import com.kasisripriyawebapps.myindia.constants.ServiceConstants;
+import com.kasisripriyawebapps.myindia.dto.ExternalServiceResponse;
+import com.kasisripriyawebapps.myindia.exception.InternalServerException;
+
+import sun.misc.BASE64Decoder;
+
+// TODO: Auto-generated Javadoc
+/**
+ * The Class CommonUtil.
+ */
+public class CommonUtil {
+
+	/** The id card types. */
+	public static List<String> idCardTypes = new ArrayList<String>();
+	public static List<String> objectTypes = new ArrayList<String>();
+	public static List<String> searchTerms = new ArrayList<String>();
+
+	static {
+		idCardTypes.add(ApplicationConstants.IDENTITY_CARD_TYPE_ADHAR);
+		idCardTypes.add(ApplicationConstants.IDENTITY_CARD_TYPE_VOTER_ID);
+		objectTypes.add(ApplicationConstants.OBJECT_TYPE_USER);
+		objectTypes.add(ApplicationConstants.OBJECT_TYPE_POLTIICIAN);
+		objectTypes.add(ApplicationConstants.OBJECT_TYPE_PARTY);
+		objectTypes.add(ApplicationConstants.OBJECT_TYPE_LOCATION);
+		objectTypes.add(ApplicationConstants.OBJECT_TYPE_PROBLEM);
+		objectTypes.add(ApplicationConstants.OBJECT_TYPE_EVENT);
+		objectTypes.add(ApplicationConstants.OBJECT_TYPE_COMMENT);
+		objectTypes.add(ApplicationConstants.OBJECT_TYPE_POST);
+
+		for (char alphabet = 'A'; alphabet <= 'Z'; alphabet++) {
+			searchTerms.add(String.valueOf(alphabet));
+		}
+	}
+
+	/**
+	 * Checks if is valid email.
+	 *
+	 * @param email
+	 *            the email
+	 * @return true, if is valid email
+	 */
+	public static boolean isValidEmail(final String email) {
+		boolean isValidEmail = true;
+		if (email == null || email.isEmpty()) {
+			isValidEmail = false;
+		} else {
+			final String regex = "^[A-Za-z0-9+_.-]+@(.+)$";
+			final Pattern pattern = Pattern.compile(regex);
+			final Matcher matcher = pattern.matcher(email);
+			isValidEmail = matcher.matches();
+		}
+		return isValidEmail;
+	}
+
+	/**
+	 * Checks if is valid size filed.
+	 *
+	 * @param fieldName
+	 *            the field name
+	 * @param minSize
+	 *            the min size
+	 * @param maxSize
+	 *            the max size
+	 * @return true, if is valid size filed
+	 */
+	public static boolean isValidSizeFiled(final String fieldName, final Integer minSize, final Integer maxSize) {
+		final boolean isValidSizeFiled = true;
+		if (fieldName == null || fieldName.isEmpty()) {
+			return false;
+		}
+		if (fieldName.length() < minSize) {
+			return false;
+		}
+		if (maxSize != null && fieldName.length() > maxSize) {
+			return false;
+		}
+		return isValidSizeFiled;
+	}
+
+	/**
+	 * Checks if is value exist in list.
+	 *
+	 * @param inputString
+	 *            the input string
+	 * @param inputList
+	 *            the input list
+	 * @return true, if is value exist in list
+	 */
+	public static boolean isValueExistInList(final String inputString, final List<String> inputList) {
+		boolean isValueExistInList = true;
+		if (inputString == null || inputString.isEmpty() || inputList == null || inputList.isEmpty()) {
+			return false;
+		}
+		if (!inputList.contains(inputString)) {
+			isValueExistInList = false;
+		}
+		return isValueExistInList;
+	}
+
+	/**
+	 * Generate salt.
+	 *
+	 * @param length
+	 *            the length
+	 * @return the string
+	 */
+	public static String generateSalt(final int length) {
+		final Random rng = new Random();
+		String characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwzyz";
+		char[] text = new char[length];
+		for (int i = 0; i < length; i++) {
+			text[i] = characters.charAt(rng.nextInt(characters.length()));
+		}
+		return new String(text);
+	}
+
+	/**
+	 * Salt password.
+	 *
+	 * @param password
+	 *            the password
+	 * @param salt
+	 *            the salt
+	 * @return the string
+	 */
+	public static String saltPassword(final String password, final String salt) {
+		return salt.substring(0, 16) + password + salt.substring(16, 32);
+	}
+
+	/**
+	 * Hash password.
+	 *
+	 * @param password
+	 *            the password
+	 * @return the string
+	 */
+	public static String hashPassword(final String password) {
+
+		final char[] hexDigits = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+		byte[] input = null;
+		try {
+			input = password.getBytes("UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		MessageDigest digest = null;
+		try {
+			digest = MessageDigest.getInstance("SHA-256");
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		digest.update(input);
+		final byte[] output = digest.digest();
+		final StringBuffer buffer = new StringBuffer();
+		for (int i = 0; i < output.length; i++) {
+			buffer.append(hexDigits[(0xf0 & output[i]) >> 4]);
+			buffer.append(hexDigits[0x0f & output[i]]);
+		}
+		return buffer.toString();
+
+	}
+
+	/**
+	 * Gets the current gmt timestamp.
+	 *
+	 * @return the current gmt timestamp
+	 */
+	public static Timestamp getCurrentGMTTimestamp() {
+		final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(ApplicationConstants.DEFAULT_TIMESTAMP_FORMAT);
+		final ZoneId inputZone = ZoneId.of(ApplicationConstants.ZONE_ID_UTC);
+		final LocalDateTime date = LocalDateTime.now(inputZone);
+		return Timestamp.valueOf(date.format(formatter).toString());
+	}
+
+	/**
+	 * Gets the image location.
+	 *
+	 * @param imageURL
+	 *            the image url
+	 * @return the image location
+	 * @throws InternalServerException
+	 *             the common exception
+	 */
+	public static String getImageLocation(String imageURL) throws InternalServerException {
+
+		BufferedImage img = null;
+		try {
+			URL url = new URL(imageURL);
+			img = ImageIO.read(url);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		String lsFilePath = "";
+		try {
+			String uploadFile = ServiceConstants.CAPTCHA_IMAGE_FILE_NAME + ".png";
+			File f = new File(uploadFile);
+			// write the image
+			ImageIO.write(img, "png", f);
+			lsFilePath = f.getAbsolutePath();
+		} catch (IOException e) {
+			new InternalServerException(e.getMessage());
+		}
+
+		return lsFilePath;
+	}
+
+	/**
+	 * Gets the image location.
+	 *
+	 * @param fsBase64
+	 *            the fs base64
+	 * @param fsFileName
+	 *            the fs file name
+	 * @return the image location
+	 * @throws InternalServerException
+	 *             the common exception
+	 */
+	@SuppressWarnings("restriction")
+	public static String getImageLocation(String fsBase64, String fsFileName) throws InternalServerException {
+		String lsFilePath = "";
+		String base64String = fsBase64;
+		BASE64Decoder decoder = new BASE64Decoder();
+		byte[] decodedBytes = null;
+		try {
+			decodedBytes = decoder.decodeBuffer(base64String);
+			String uploadFile = fsFileName + ".png";
+			BufferedImage image = ImageIO.read(new ByteArrayInputStream(decodedBytes));
+			image = decodeToImage(base64String);
+			File f = new File(uploadFile);
+			// write the image
+			ImageIO.write(image, "png", f);
+			lsFilePath = f.getAbsolutePath();
+		} catch (IOException e) {
+			new InternalServerException(e.getMessage());
+		}
+
+		return lsFilePath;
+	}
+
+	/**
+	 * Decode to image.
+	 *
+	 * @param imageString
+	 *            the image string
+	 * @return the buffered image
+	 */
+	@SuppressWarnings("restriction")
+	public static BufferedImage decodeToImage(String imageString) {
+		BufferedImage image = null;
+		byte[] imageByte;
+		String base64Image = imageString.split(",")[1];
+		BASE64Decoder decoder = new BASE64Decoder();
+		ByteArrayInputStream bis = null;
+		try {
+			imageByte = decoder.decodeBuffer(base64Image);
+			bis = new ByteArrayInputStream(imageByte);
+			image = ImageIO.read(bis);
+			bis.close();
+		} catch (IOException e) {
+			new InternalServerException(e.getMessage());
+		}
+		return image;
+	}
+
+	/**
+	 * Call url.
+	 *
+	 * @param myURL
+	 *            the my url
+	 * @return the external service response
+	 * @throws InternalServerException
+	 *             the common exception
+	 */
+	public static ExternalServiceResponse callURL(String myURL) throws InternalServerException {
+		ExternalServiceResponse serviceResponse = new ExternalServiceResponse();
+
+		System.setProperty("http.proxyHost", "proxy.cat.com");
+		System.setProperty("http.proxyPort", "80");
+		System.setProperty("https.proxyHost", "proxy.cat.com");
+		System.setProperty("https.proxyPort", "80");
+
+		StringBuilder sb = new StringBuilder();
+		URLConnection urlConn = null;
+		InputStreamReader in = null;
+		try {
+			URL url = new URL(myURL);
+			urlConn = url.openConnection();
+			if (urlConn != null)
+				urlConn.setReadTimeout(120 * 1000);
+			if (urlConn != null && urlConn.getInputStream() != null) {
+				in = new InputStreamReader(urlConn.getInputStream(), Charset.defaultCharset());
+				BufferedReader bufferedReader = new BufferedReader(in);
+				if (bufferedReader != null) {
+					int cp;
+					while ((cp = bufferedReader.read()) != -1) {
+						sb.append((char) cp);
+					}
+					bufferedReader.close();
+				}
+			}
+			in.close();
+
+		} catch (Exception e) {
+			throw new InternalServerException(e.getMessage());
+		}
+		serviceResponse.setResponseHeaders(urlConn.getHeaderFields());
+		serviceResponse.setResponse(sb.toString());
+
+		return serviceResponse;
+	}
+
+	/**
+	 * Gets the final captcha.
+	 *
+	 * @param captcha
+	 *            the captcha
+	 * @return the final captcha
+	 */
+	public static String getFinalCaptcha(String captcha) {
+		String finalCaptcha = "";
+		String[] lines = captcha.split("\r\n|\r|\n");
+		String firstLine = "";
+		if (lines != null && lines.length > 0) {
+			firstLine = lines[0];
+		}
+		String nextLine = "";
+		if (lines != null && lines.length > 1) {
+			nextLine = lines[1];
+		}
+		if (firstLine != null && !firstLine.isEmpty()) {
+			for (int i = 0; i < firstLine.length(); i++) {
+				Character c = firstLine.charAt(i);
+				if (c == ' ') {
+					if (nextLine != null && !nextLine.isEmpty()) {
+						c = nextLine.charAt(0);
+					}
+				}
+				finalCaptcha += String.valueOf(convertString(c));
+			}
+		}
+		if (nextLine != null && !nextLine.isEmpty()) {
+			for (int i = 0; i < nextLine.length(); i++) {
+				Character c = nextLine.charAt(i);
+				if (c == ' ') {
+					if (firstLine != null && !nextLine.isEmpty()) {
+						c = firstLine.charAt(0);
+					}
+				}
+				finalCaptcha += String.valueOf(convertString(c));
+			}
+		}
+		return finalCaptcha;
+	}
+
+	/**
+	 * Convert string.
+	 *
+	 * @param inputChar
+	 *            the input char
+	 * @return the character
+	 */
+	public static Character convertString(char inputChar) {
+		Character returnChar;
+		switch (inputChar) {
+		case 'G':
+			returnChar = '6';
+			break;
+		case 'B':
+			returnChar = '8';
+			break;
+		default:
+			returnChar = inputChar;
+			break;
+		}
+		return returnChar;
+	}
+
+	public static void main(String args[]) {
+		String salt = generateSalt((32));
+		System.out.println(salt);
+		System.out.println(CommonUtil.hashPassword(saltPassword("abc123", salt)));
+	}
+}
