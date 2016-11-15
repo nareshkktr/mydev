@@ -162,7 +162,7 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 			}
 			String locationType = eachRow.getCell(2).getStringCellValue().trim();
 
-			double parentLocationCode = eachRow.getCell(0).getNumericCellValue();
+			double parentLocationCode = eachRow.getCell(3).getNumericCellValue();
 			long parentLocationCodeLong = Long.valueOf(0);
 			parentLocationCodeLong = (long) parentLocationCode;
 
@@ -1102,6 +1102,11 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 							locationCodes.add(districtLocationCodeLong);
 						}
 
+						String locationName = eachRow.getCell(9).getStringCellValue().trim();
+
+						if (locationName == null || locationName.isEmpty()) {
+							break;
+						}
 					}
 				}
 			}
