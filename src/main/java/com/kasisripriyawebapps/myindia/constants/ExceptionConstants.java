@@ -101,4 +101,7 @@ public class ExceptionConstants {
 	public static final String PROBLEM_TYPE_IMAGE_SHOULD_NOT_BE_EMPTY = "Problem Type Image Should Not Be Empty";
 	public static final String PROBLEM_TYPE_EXISTS_WITH_NAME = "Problem Type Already Exsist With This Name";
 	public static final String PROBLEM_TYPE_NOT_FOUND = "Problem Type Not Found";
+	public static final String EXCEL_FILE_TYPE_VALIDATION = "Only xls and xlsx file types allowed";
+	public static final String ATLEAST_ONE_FILE_REQUIRED = "Atleast One File Required To Process";
+	public static final String NOT_FOUND = " Not Found";
 }

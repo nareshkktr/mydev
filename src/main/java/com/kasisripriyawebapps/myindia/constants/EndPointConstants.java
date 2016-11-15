@@ -545,4 +545,182 @@ public class EndPointConstants {
 	/** The Constant CREATE_ACCOUNT_API_DESCRIPTION. */
 	public static final String GET_ALL_THUMBS_UP_DOWN_OBJECTS_API_DESCRIPTION = "Get All Like/Dislike Objects";
 
+	public static final String LOCATION_IMPORT_EXPORT_ENDPOINT_REQUEST_MAPPING = "/locationImportExport";
+	public static final String LOCATION_IMPORT_EXPORT_ENDPOINT_API_VALUE = "locationImportExport";
+	public static final String LOCATION_IMPORT_EXPORT_ENDPOINT_API_TAGS = "locationImportExport";
+	public static final String LOCATION_IMPORT_EXPORT_ENDPOINT_API_DESCRIPTION = "Location Import Export Management API";
+
+	public static final String IMPORT_COUNTRY_LOCATIONS_REQUEST_MAPPING = "importCountryLocations";
+	public static final String IMPORT_COUNTRY_LOCATIONS_API_VALUE = "importCountryLocations";
+	public static final String IMPORT_COUNTRY_LOCATIONS_API_NICKNAME = "importCountryLocations";
+	public static final String IMPORT_COUNTRY_LOCATIONS_API_DESCRIPTION = "Import Country Locations";
+
+	public static final String IMPORT_STATE_LOCATIONS_REQUEST_MAPPING = "importStateLocations";
+	public static final String IMPORT_STATE_LOCATIONS_API_VALUE = "importStateLocations";
+	public static final String IMPORT_STATE_LOCATIONS_API_NICKNAME = "importStateLocations";
+	public static final String IMPORT_STATE_LOCATIONS_API_DESCRIPTION = "Import State Locations";
+
+	public static final String IMPORT_DISTRICT_LOCATIONS_REQUEST_MAPPING = "importDistrictLocations";
+	public static final String IMPORT_DISTRICT_LOCATIONS_API_VALUE = "importDistrictLocations";
+	public static final String IMPORT_DISTRICT_LOCATIONS_API_NICKNAME = "importDistrictLocations";
+	public static final String IMPORT_DISTRICT_LOCATIONS_API_DESCRIPTION = "Import District Locations";
+
+	public static final String IMPORT_SUB_DISTRICT_LOCATIONS_REQUEST_MAPPING = "importSubDistrictLocations";
+	public static final String IMPORT_SUB_DISTRICT_LOCATIONS_API_VALUE = "importSubDistrictLocations";
+	public static final String IMPORT_SUB_DISTRICT_LOCATIONS_API_NICKNAME = "importSubDistrictLocations";
+	public static final String IMPORT_SUB_DISTRICT_LOCATIONS_API_DESCRIPTION = "Import Sub District Locations";
+
+	public static final String IMPORT_MUNCIPAL_CORPORATION_LOCATIONS_REQUEST_MAPPING = "importMuncipalCorporationLocations";
+	public static final String IMPORT_MUNCIPAL_CORPORATION_LOCATIONS_API_VALUE = "importMuncipalCorporationLocations";
+	public static final String IMPORT_MUNCIPAL_CORPORATION_LOCATIONS_API_NICKNAME = "importMuncipalCorporationLocations";
+	public static final String IMPORT_MUNCIPAL_CORPORATION_LOCATIONS_API_DESCRIPTION = "Import Muncipal Corporation Locations";
+
+	public static final String IMPORT_MUNCIPALITY_LOCATIONS_REQUEST_MAPPING = "importMuncipalityLocations";
+	public static final String IMPORT_MUNCIPALITY_LOCATIONS_API_VALUE = "importMuncipalityLocations";
+	public static final String IMPORT_MUNCIPALITY_LOCATIONS_API_NICKNAME = "importMuncipalityLocations";
+	public static final String IMPORT_MUNCIPALITY_LOCATIONS_API_DESCRIPTION = "Import Muncipality Locations";
+
+	public static final String IMPORT_TOWN_PANCHAYATH_LOCATIONS_REQUEST_MAPPING = "importTownPanchayathLocations";
+	public static final String IMPORT_TOWN_PANCHAYATH_LOCATIONS_API_VALUE = "importTownPanchayathLocations";
+	public static final String IMPORT_TOWN_PANCHAYATH_LOCATIONS_API_NICKNAME = "importTownPanchayathLocations";
+	public static final String IMPORT_TOWN_PANCHAYATH_LOCATIONS_API_DESCRIPTION = "Import Town Panchayath Locations";
+
+	public static final String IMPORT_VILLAGE_PANCHAYATH_LOCATIONS_REQUEST_MAPPING = "importVillagePanchayathLocations";
+	public static final String IMPORT_VILLAGE_PANCHAYATH_LOCATIONS_API_VALUE = "importVillagePanchayathLocations";
+	public static final String IMPORT_VILLAGE_PANCHAYATH_LOCATIONS_API_NICKNAME = "importVillagePanchayathLocations";
+	public static final String IMPORT_VILLAGE_PANCHAYATH_LOCATIONS_API_DESCRIPTION = "Import Village Panchayath Locations";
+
+	public static final String IMPORT_VILLAGE_LOCATIONS_REQUEST_MAPPING = "importVillageLocations";
+	public static final String IMPORT_VILLAGE_LOCATIONS_API_VALUE = "importVillageLocations";
+	public static final String IMPORT_VILLAGE_LOCATIONS_API_NICKNAME = "importVillageLocations";
+	public static final String IMPORT_VILLAGE_LOCATIONS_API_DESCRIPTION = "Import Village Locations";
+
+	public static final String EXPORT_COUNTRY_LOCATIONS_REQUEST_MAPPING = "exportCountryLocations";
+	public static final String EXPORT_COUNTRY_LOCATIONS_API_VALUE = "exportCountryLocations";
+	public static final String EXPORT_COUNTRY_LOCATIONS_API_NICKNAME = "exportCountryLocations";
+	public static final String EXPORT_COUNTRY_LOCATIONS_API_DESCRIPTION = "Export Country Locations";
+
+	public static final String EXPORT_STATE_LOCATIONS_REQUEST_MAPPING = "exportStateLocations";
+	public static final String EXPORT_STATE_LOCATIONS_API_VALUE = "exportStateLocations";
+	public static final String EXPORT_STATE_LOCATIONS_API_NICKNAME = "exportStateLocations";
+	public static final String EXPORT_STATE_LOCATIONS_API_DESCRIPTION = "Export State Locations";
+
+	public static final String EXPORT_DISTRICT_LOCATIONS_REQUEST_MAPPING = "exportDistrictLocations";
+	public static final String EXPORT_DISTRICT_LOCATIONS_API_VALUE = "exportDistrictLocations";
+	public static final String EXPORT_DISTRICT_LOCATIONS_API_NICKNAME = "exportDistrictLocations";
+	public static final String EXPORT_DISTRICT_LOCATIONS_API_DESCRIPTION = "Export District Locations";
+
+	public static final String EXPORT_SUB_DISTRICT_LOCATIONS_REQUEST_MAPPING = "exportSubDistrictLocations";
+	public static final String EXPORT_SUB_DISTRICT_LOCATIONS_API_VALUE = "exportSubDistrictLocations";
+	public static final String EXPORT_SUB_DISTRICT_LOCATIONS_API_NICKNAME = "exportSubDistrictLocations";
+	public static final String EXPORT_SUB_DISTRICT_LOCATIONS_API_DESCRIPTION = "Export Sub District Locations";
+
+	public static final String EXPORT_MUNCIPAL_CORPORATION_LOCATIONS_REQUEST_MAPPING = "exportMuncipalCorporationLocations";
+	public static final String EXPORT_MUNCIPAL_CORPORATION_LOCATIONS_API_VALUE = "exportMuncipalCorporationLocations";
+	public static final String EXPORT_MUNCIPAL_CORPORATION_LOCATIONS_API_NICKNAME = "exportMuncipalCorporationLocations";
+	public static final String EXPORT_MUNCIPAL_CORPORATION_LOCATIONS_API_DESCRIPTION = "Export Muncipal Corporation Locations";
+
+	public static final String EXPORT_MUNCIPALITY_LOCATIONS_REQUEST_MAPPING = "exportMuncipalityLocations";
+	public static final String EXPORT_MUNCIPALITY_LOCATIONS_API_VALUE = "exportMuncipalityLocations";
+	public static final String EXPORT_MUNCIPALITY_LOCATIONS_API_NICKNAME = "exportMuncipalityLocations";
+	public static final String EXPORT_MUNCIPALITY_LOCATIONS_API_DESCRIPTION = "Export Muncipality Locations";
+
+	public static final String EXPORT_TOWN_PANCHAYATH_LOCATIONS_REQUEST_MAPPING = "exportTownPanchayathLocations";
+	public static final String EXPORT_TOWN_PANCHAYATH_LOCATIONS_API_VALUE = "exportTownPanchayathLocations";
+	public static final String EXPORT_TOWN_PANCHAYATH_LOCATIONS_API_NICKNAME = "exportTownPanchayathLocations";
+	public static final String EXPORT_TOWN_PANCHAYATH_LOCATIONS_API_DESCRIPTION = "Export Town Panchayath Locations";
+
+	public static final String EXPORT_VILLAGE_PANCHAYATH_LOCATIONS_REQUEST_MAPPING = "exportVillagePanchayathLocations";
+	public static final String EXPORT_VILLAGE_PANCHAYATH_LOCATIONS_API_VALUE = "exportVillagePanchayathLocations";
+	public static final String EXPORT_VILLAGE_PANCHAYATH_LOCATIONS_API_NICKNAME = "exportVillagePanchayathLocations";
+	public static final String EXPORT_VILLAGE_PANCHAYATH_LOCATIONS_API_DESCRIPTION = "Export Village Panchayath Locations";
+
+	public static final String EXPORT_VILLAGE_LOCATIONS_REQUEST_MAPPING = "exportVillageLocations";
+	public static final String EXPORT_VILLAGE_LOCATIONS_API_VALUE = "exportVillageLocations";
+	public static final String EXPORT_VILLAGE_LOCATIONS_API_NICKNAME = "exportVillageLocations";
+	public static final String EXPORT_VILLAGE_LOCATIONS_API_DESCRIPTION = "Export Village Locations";
+
+	public static final String EXPORT_URBAN_REFERENCE_LOCATIONS_REQUEST_MAPPING = "exportUrbanReferenceLocations";
+	public static final String EXPORT_URBAN_REFERENCE_LOCATIONS_API_VALUE = "exportUrbanReferenceLocations";
+	public static final String EXPORT_URBAN_REFERENCE_LOCATIONS_API_NICKNAME = "exportUrbanReferenceLocations";
+	public static final String EXPORT_URBAN_REFERENCE_LOCATIONS_API_DESCRIPTION = "Export Urban (Municipal Corporations,Municipalities and Town Panchayath Parent Locations";
+
+	public static final String EXPORT_VILLAGE_REFERENCE_LOCATIONS_REQUEST_MAPPING = "exportVillageReferenceLocations";
+	public static final String EXPORT_VILLAGE_REFERENCE_LOCATIONS_API_VALUE = "exportVillageReferenceLocations";
+	public static final String EXPORT_VILLAGE_REFERENCE_LOCATIONS_API_NICKNAME = "exportVillageReferenceLocations";
+	public static final String EXPORT_VILLAGE_REFERENCE_LOCATIONS_API_DESCRIPTION = "Export Village Parent Locations";
+
+	public static final String IMPORT_VILLAGE_REFERENCE_LOCATIONS_REQUEST_MAPPING = "importVillageReferenceLocations";
+	public static final String IMPORT_VILLAGE_REFERENCE_LOCATIONS_API_VALUE = "importVillageReferenceLocations";
+	public static final String IMPORT_VILLAGE_REFERENCE_LOCATIONS_API_NICKNAME = "importVillageReferenceLocations";
+	public static final String IMPORT_VILLAGE_REFERENCE_LOCATIONS_API_DESCRIPTION = "Import Village Parent Locations";
+
+	/** The Constant USER_ENDPOINT_REQUEST_MAPPING. */
+	public static final String USER_IMPORT_ENDPOINT_REQUEST_MAPPING = "/userImport";
+
+	/** The Constant USER_ENDPOINT_API_VALUE. */
+	public static final String USER_IMPORT_ENDPOINT_API_VALUE = "userImport";
+
+	/** The Constant USER_ENDPOINT_API_TAGS. */
+	public static final String USER_IMPORT_ENDPOINT_API_TAGS = "userImport";
+
+	/** The Constant USER_ENDPOINT_API_DESCRIPTION. */
+	public static final String USER_IMPORT_ENDPOINT_API_DESCRIPTION = "User Import Management API";
+
+	/** The Constant UPLOAD_ALL_USERS_REQUEST_MAPPING. */
+	public static final String SAVE_ELECTRORAL_ROLLES_URLS_REQUEST_MAPPING = "saveStateElectroralRolleUrls";
+
+	/** The Constant UPLOAD_ALL_USERS_API_VALUE. */
+	public static final String SAVE_ELECTRORAL_ROLLES_URLS_API_VALUE = "saveStateElectroralRolleUrls";
+
+	/** The Constant UPLOAD_ALL_USERS_API_NICKNAME. */
+	public static final String SAVE_ELECTRORAL_ROLLES_URLS_API_NICKNAME = "saveStateElectroralRolleUrls";
+
+	/** The Constant UPLOAD_ALL_USERS_API_DESCRIPTION. */
+	public static final String SAVE_ELECTRORAL_ROLLES_URLS_API_DESCRIPTION = "Save States Electroral Rolles URLs";
+
+	/** The Constant UPLOAD_ALL_USERS_REQUEST_MAPPING. */
+	public static final String SAVE_ELECTRORAL_ROLLES_DATA_REQUEST_MAPPING = "saveStateElectroralRolleData";
+
+	/** The Constant UPLOAD_ALL_USERS_API_VALUE. */
+	public static final String SAVE_ELECTRORAL_ROLLES_DATA_API_VALUE = "saveStateElectroralRolleData";
+
+	/** The Constant UPLOAD_ALL_USERS_API_NICKNAME. */
+	public static final String SAVE_ELECTRORAL_ROLLES_DATA_API_NICKNAME = "saveStateElectroralRolleData";
+
+	/** The Constant UPLOAD_ALL_USERS_API_DESCRIPTION. */
+	public static final String SAVE_ELECTRORAL_ROLLES_DATA_API_DESCRIPTION = "Save States Electroral Rolles Data";
+
+	/** The Constant CREATE_ACCOUNT_REQUEST_MAPPING. */
+	public static final String IMPORT_PARTIES_REQUEST_MAPPING = "importParties";
+
+	/** The Constant CREATE_ACCOUNT_API_VALUE. */
+	public static final String IMPORT_PARTIES_API_VALUE = "importParties";
+
+	/** The Constant CREATE_ACCOUNT_API_NICKNAME. */
+	public static final String IMPORT_PARTIES_API_NICKNAME = "importParties";
+
+	/** The Constant CREATE_ACCOUNT_API_DESCRIPTION. */
+	public static final String IMPORT_PARTIES_API_DESCRIPTION = "Import All Parties In India";
+
+	public static final String IMPORT_CONSTITUENCY_LOCATIONS_REQUEST_MAPPING = "importConstituencyLocations";
+	public static final String IMPORT_CONSTITUENCY_LOCATIONS_API_VALUE = "importConstituencyLocations";
+	public static final String IMPORT_CONSTITUENCY_LOCATIONS_API_NICKNAME = "importConstituencyLocations";
+	public static final String IMPORT_CONSTITUENCY_LOCATIONS_API_DESCRIPTION = "Import MLA/MP Constituency Locations";
+
+	public static final String IMPORT_URBAN_REFERENCE_LOCATIONS_REQUEST_MAPPING = "importUrbanReferenceLocations";
+	public static final String IMPORT_URBAN_REFERENCE_LOCATIONS_API_VALUE = "importUrbanReferenceLocations";
+	public static final String IMPORT_URBAN_REFERENCE_LOCATIONS_API_NICKNAME = "importUrbanReferenceLocations";
+	public static final String IMPORT_URBAN_REFERENCE_LOCATIONS_API_DESCRIPTION = "Import Urban Parent Locations";
+
+	public static final String IMPORT_ALL_LOCATIONS_REQUEST_MAPPING = "importAllLocations";
+	public static final String IMPORT_ALL_LOCATIONS_API_VALUE = "importAllLocations";
+	public static final String IMPORT_ALL_LOCATIONS_API_NICKNAME = "importAllLocations";
+	public static final String IMPORT_ALL_LOCATIONS_API_DESCRIPTION = "Import All Locations";
+
+	public static final String EXPORT_ALL_LOCATIONS_REQUEST_MAPPING = "exportAllLocations";
+	public static final String EXPORT_ALL_LOCATIONS_API_VALUE = "exportAllLocations";
+	public static final String EXPORT_ALL_LOCATIONS_API_NICKNAME = "exportAllLocations";
+	public static final String EXPORT_ALL_LOCATIONS_API_DESCRIPTION = "Export All Locations";
+
 }

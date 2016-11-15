@@ -14,4 +14,10 @@ import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 public interface LocationDao {
 
 	void saveAllLocations(List<Location> allLocations) throws InternalServerException;
+
+	void deleteAllLocations() throws InternalServerException;
+
+	Location getLocationByTypeAndGuid(String masterLocationType, Long masterLocationGuid)
+			throws InternalServerException;
+
 }

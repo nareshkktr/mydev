@@ -4,6 +4,7 @@
 package com.kasisripriyawebapps.myindia.endpoints;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -36,6 +37,14 @@ public class PartyEndpoint {
 	@Path(EndPointConstants.GET_ALL_PARTIES_REQUEST_MAPPING)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllParties() throws InternalServerException {
+		return Response.status(Status.OK).entity(null).build();
+	}
+
+	@POST
+	@ApiOperation(value = EndPointConstants.IMPORT_PARTIES_API_VALUE, nickname = EndPointConstants.IMPORT_PARTIES_API_NICKNAME, httpMethod = EndPointConstants.HTTP_GET, notes = EndPointConstants.IMPORT_PARTIES_API_DESCRIPTION)
+	@Path(EndPointConstants.IMPORT_PARTIES_REQUEST_MAPPING)
+	public Response importParties() throws InternalServerException {
+		partyService.importParties();
 		return Response.status(Status.OK).entity(null).build();
 	}
 }

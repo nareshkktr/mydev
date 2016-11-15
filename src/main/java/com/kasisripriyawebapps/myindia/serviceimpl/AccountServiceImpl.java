@@ -51,16 +51,12 @@ public class AccountServiceImpl implements AccountService {
 		UserInfo userInfo = null;
 		if (user != null) {
 			userInfo = new UserInfo();
-			userInfo.setDateOfBirth(user.getDateOfBirth());
-			userInfo.setFatherOrHusband(user.getFatherOrHusband());
-			userInfo.setFatherOrHusbandName(user.getFatherOrHusbandName());
 			userInfo.setHouseNo(user.getHouseNo());
 			userInfo.setIdCardType(user.getIdCardType());
 			userInfo.setIdCardType(user.getIdCardNo());
 			userInfo.setCreatedTimeStamp(CommonUtil.getCurrentGMTTimestamp());
 			userInfo.setAccount(account);
 			account.setUserInfo(userInfo);
-			account.setUser(user);
 			accountGuid = accountDao.createAccount(account);
 		} else {
 			throw new RecordNotFoundException(ExceptionConstants.USER_NOT_FOUND);

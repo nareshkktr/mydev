@@ -18,8 +18,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 // TODO: Auto-generated Javadoc
 /**
  * The Class CommentEntity.
@@ -66,7 +64,6 @@ public class Comment implements Serializable {
 	private Timestamp createdTimeStamp;
 
 	@OneToMany(mappedBy = "comment", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JsonManagedReference
 	private List<CommentImage> commentImages = new ArrayList<CommentImage>(0);
 
 	/**

@@ -13,8 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 @Entity
 @Table(name = "LOCATION_IMAGE")
 public class LocationImage implements Serializable {
@@ -55,8 +53,7 @@ public class LocationImage implements Serializable {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "LOCATION_GUID")
-	@JsonBackReference
-	private Location location;
+	private LocationMaster location;
 
 	public Long getGuid() {
 		return guid;
@@ -130,11 +127,11 @@ public class LocationImage implements Serializable {
 		this.createdBy = createdBy;
 	}
 
-	public Location getLocation() {
+	public LocationMaster getLocation() {
 		return location;
 	}
 
-	public void setLocation(Location location) {
+	public void setLocation(LocationMaster location) {
 		this.location = location;
 	}
 

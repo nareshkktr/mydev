@@ -10,8 +10,6 @@ import com.kasisripriyawebapps.myindia.requestresponsemodel.GetUserByPropertyRes
 
 public interface UserService {
 
-	void uploadAllUsers() throws InternalServerException;
-
 	GetUserByPropertyResponse getUserByVoterIdName(GetUserByPropertyRequest getUserByPropertyRequest)
 			throws InternalServerException, RecordNotFoundException;
 

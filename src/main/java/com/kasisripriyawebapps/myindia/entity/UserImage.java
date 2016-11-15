@@ -13,8 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 @Entity
 @Table(name = "USER_IMAGE")
 public class UserImage implements Serializable {
@@ -55,7 +53,6 @@ public class UserImage implements Serializable {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "USER_INFO_GUID")
-	@JsonBackReference
 	private UserInfo userInfo;
 
 	public Long getGuid() {

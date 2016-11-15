@@ -18,8 +18,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 // TODO: Auto-generated Javadoc
 /**
  * The Class Post.
@@ -86,7 +84,6 @@ public class Post implements Serializable {
 	private Long createdBy;
 
 	@OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JsonManagedReference
 	private List<PostImage> postImages = new ArrayList<PostImage>(0);
 
 	public Long getGuid() {

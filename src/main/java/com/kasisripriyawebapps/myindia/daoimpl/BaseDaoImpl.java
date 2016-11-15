@@ -248,13 +248,14 @@ public class BaseDaoImpl<PK extends Serializable, T> implements BaseDao<PK, T> {
 			for (int i = 0; i < entities.size(); i++) {
 				try {
 					getSession().saveOrUpdate(entities.get(i));
+					if (i % jdbcBatchSize == 0 && i > 0) {
+						getSession().flush();
+						getSession().clear();
+					}
 				} catch (Exception e) {
 					throw new InternalServerException(e.getMessage());
 				}
-				if (i % jdbcBatchSize == 0 && i > 0) {
-					getSession().flush();
-					getSession().clear();
-				}
+
 			}
 		} catch (Exception e) {
 			throw new InternalServerException(e.getMessage());
@@ -267,12 +268,12 @@ public class BaseDaoImpl<PK extends Serializable, T> implements BaseDao<PK, T> {
 			for (int i = 0; i < entities.size(); i++) {
 				try {
 					getSession().delete(entities.get(i));
+					if (i % jdbcBatchSize == 0 && i > 0) {
+						getSession().flush();
+						getSession().clear();
+					}
 				} catch (Exception e) {
 					throw new InternalServerException(e.getMessage());
-				}
-				if (i % jdbcBatchSize == 0 && i > 0) {
-					getSession().flush();
-					getSession().clear();
 				}
 			}
 		} catch (Exception e) {
@@ -288,13 +289,14 @@ public class BaseDaoImpl<PK extends Serializable, T> implements BaseDao<PK, T> {
 			for (int i = 0; i < entities.size(); i++) {
 				try {
 					getSession().saveOrUpdate(entities.get(i));
+					if (i % jdbcBatchSize == 0 && i > 0) {
+						getSession().flush();
+						getSession().clear();
+					}
 				} catch (Exception e) {
 					throw new InternalServerException(e.getMessage());
 				}
-				if (i % jdbcBatchSize == 0 && i > 0) {
-					getSession().flush();
-					getSession().clear();
-				}
+
 			}
 			tx.commit();
 		} catch (Exception e) {
@@ -311,5 +313,64 @@ public class BaseDaoImpl<PK extends Serializable, T> implements BaseDao<PK, T> {
 		criteria.setFirstResult((pageNo - 1) * pageLimit);
 		criteria.setMaxResults(pageLimit);
 		return criteria.list();
+	}
+
+	@Override
+	public void saveBatch(List<T> entities) throws InternalServerException {
+		try {
+			for (int i = 0; i < entities.size(); i++) {
+				try {
+					getSession().save(entities.get(i));
+					if (i % jdbcBatchSize == 0 && i > 0) {
+						getSession().flush();
+						getSession().clear();
+					}
+				} catch (Exception e) {
+					throw new InternalServerException(e.getMessage());
+				}
+
+			}
+		} catch (Exception e) {
+			throw new InternalServerException(e.getMessage());
+		}
+	}
+
+	@Override
+	public void updateBatch(List<T> entities) throws InternalServerException {
+		try {
+			for (int i = 0; i < entities.size(); i++) {
+				try {
+					getSession().update(entities.get(i));
+					if (i % jdbcBatchSize == 0 && i > 0) {
+						getSession().flush();
+						getSession().clear();
+					}
+				} catch (Exception e) {
+					throw new InternalServerException(e.getMessage());
+				}
+			}
+		} catch (Exception e) {
+			throw new InternalServerException(e.getMessage());
+		}
+	}
+
+	@Override
+	public void mergeBatch(List<T> entities) throws InternalServerException {
+		try {
+			for (int i = 0; i < entities.size(); i++) {
+				try {
+					getSession().merge(entities.get(i));
+					if (i % jdbcBatchSize == 0 && i > 0) {
+						getSession().flush();
+						getSession().clear();
+					}
+				} catch (Exception e) {
+					throw new InternalServerException(e.getMessage());
+				}
+
+			}
+		} catch (Exception e) {
+			throw new InternalServerException(e.getMessage());
+		}
 	}
 }

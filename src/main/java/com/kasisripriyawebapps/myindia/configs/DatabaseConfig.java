@@ -32,6 +32,13 @@ public class DatabaseConfig {
 
 	@Bean
 	public TomcatEmbeddedServletContainerFactory tomcatFactory() {
+
+		System.setProperty("http.proxyHost", "proxy.cat.com");
+		System.setProperty("http.proxyPort", "80");
+
+		System.setProperty("https.proxyHost", "proxy.cat.com");
+		System.setProperty("https.proxyPort", "80");
+
 		return new TomcatEmbeddedServletContainerFactory() {
 
 			@Override
@@ -49,6 +56,10 @@ public class DatabaseConfig {
 				resource.setProperty("url", env.getProperty("datasource.url"));
 				resource.setProperty("password", env.getProperty("datasource.password"));
 				resource.setProperty("username", env.getProperty("datasource.username"));
+				resource.setProperty("testWhileIdle", env.getProperty("spring.datasource.testWhileIdle"));
+				resource.setProperty("timeBetweenEvictionRunsMillis",
+						env.getProperty("spring.datasource.timeBetweenEvictionRunsMillis"));
+				resource.setProperty("validationQuery", env.getProperty("spring.datasource.validationQuery"));
 				context.getNamingResources().addResource(resource);
 			}
 		};

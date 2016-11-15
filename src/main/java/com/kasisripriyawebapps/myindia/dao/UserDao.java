@@ -16,7 +16,7 @@ public interface UserDao {
 
 	User getUserByIDTypeNoAndName(String idCardType, String idCardNo, String userName) throws InternalServerException;
 
-	User getUserByIDTypeNoNameAndReference(String idCardType, String idCardNo, String userName,String referenceType,
+	User getUserByIDTypeNoNameAndReference(String idCardType, String idCardNo, String userName, String referenceType,
 			String referenceName) throws InternalServerException;
 
 }

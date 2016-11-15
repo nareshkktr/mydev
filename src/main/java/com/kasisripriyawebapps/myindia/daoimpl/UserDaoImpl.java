@@ -42,7 +42,7 @@ public class UserDaoImpl extends BaseDaoImpl<Long, User> implements UserDao {
 
 	@Override
 	public void saveUsers(List<User> users) throws InternalServerException {
-		saveOrUpdateBatchAsManualCommit(users);
+		saveBatch(users);
 	}
 
 	@Override
@@ -61,5 +61,4 @@ public class UserDaoImpl extends BaseDaoImpl<Long, User> implements UserDao {
 		criterions.add(criterionObjFour);
 		return getByConditions(criterions);
 	}
-
 }

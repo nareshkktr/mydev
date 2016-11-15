@@ -16,10 +16,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.google.gson.annotations.SerializedName;
-
-// TODO: Auto-generated Javadoc
 /**
  * The Class User.
  */
@@ -51,73 +47,86 @@ public class User implements Serializable {
 	@Column(name = "ID_CARD_NO")
 	private String idCardNo;
 
-	/** The pc name. */
-	@Column(name = "PC_NAME")
-	@SerializedName("pc_name")
-	private String pcName;
-
 	/** The gender. */
 	@Column(name = "GENDER")
-	@SerializedName("gender")
 	private String gender;
 
 	/** The assembly constituency name. */
 	@Column(name = "ASSEMBLY_CONSTITUENCY_NAME")
-	@SerializedName("ac_name")
 	private String assemblyConstituencyName;
 
 	/** The state. */
 	@Column(name = "LOCATION_STATE")
-	@SerializedName("state")
 	private String state;
 
 	/** The father or husband. */
-	@Column(name = "FATHER_OR_HUSBAND")
-	@SerializedName("rln_type")
-	private String fatherOrHusband;
-
-	/** The date of birth. */
-	@Column(name = "DATE_OF_BIRTH")
-	@SerializedName("dob")
-	private String dateOfBirth;
+	@Column(name = "REFERENCE_TYPE")
+	private String referenceType;
 
 	/** The district. */
 	@Column(name = "LOCATION_DISTRICT")
-	@SerializedName("district")
 	private String district;
 
 	/** The user name. */
-	@Column(name = "USER_NAME")
-	@SerializedName("name")
-	private String userName;
+	@Column(name = "ELECTOR_NAME")
+	private String electorName;
 
 	/** The house no. */
 	@Column(name = "HOUSE_NO")
-	@SerializedName("house_no")
 	private String houseNo;
 
 	/** The assembly constituency no. */
 	@Column(name = "ASSEMBLY_CONSTITUENCT_NO")
-	@SerializedName("ac_no")
-	private String assemblyConstituencyNo;
+	private Integer assemblyConstituencyNo;
 
 	/** The father or husband name. */
-	@Column(name = "FATHER_HUSBAND_NAME")
-	@SerializedName("rln_name")
-	private String fatherOrHusbandName;
+	@Column(name = "REFERENCE_NAME")
+	private String referenceName;
 
 	/** The age. */
 	@Column(name = "AGE")
-	@SerializedName("age")
 	private int age;
+
+	@Column(name = "PARLIAMENTARY_CONSTITUENCY_NAME")
+	private String parliamentaryConstituencyName;
+
+	@Column(name = "PARLIAMENTARY_CONSTITUENCT_NO")
+	private Integer parliamentaryConstituencyNo;
+
+	@Column(name = "LOCATION_MANDAL")
+	private String mandal;
+
+	@Column(name = "LOCATION_PINCODE")
+	private String pincode;
+
+	@Column(name = "POLICE_STATION")
+	private String policeStation;
+
+	@Column(name = "MAIN_TOWN")
+	private String mainTwon;
+
+	@Column(name = "REVENUE_DIVISION")
+	private String revenueDivision;
 
 	/** The created time stamp. */
 	@Column(name = "CREATED_TIMESTAMP")
 	private Timestamp createdTimeStamp;
 
+	/** The created time stamp. */
+	@Column(name = "UPDATED_TIMESTAMP")
+	private Timestamp updatedTimeStamp;
+
+	@Column(name = "PART_NO")
+	private Integer partNo;
+
+	@Column(name = "POLLING_STATION")
+	private String pollingStation;
+
+	@Column(name = "POLLING_STATION_ADDRESS")
+	private String pollingStationAddress;
+
 	@OneToOne(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
-	@JsonManagedReference
-	private Account account;
+	private UserInfo userInfo;
 
 	public Long getGuid() {
 		return guid;
@@ -141,14 +150,6 @@ public class User implements Serializable {
 
 	public void setIdCardNo(String idCardNo) {
 		this.idCardNo = idCardNo;
-	}
-
-	public String getPcName() {
-		return pcName;
-	}
-
-	public void setPcName(String pcName) {
-		this.pcName = pcName;
 	}
 
 	public String getGender() {
@@ -175,36 +176,12 @@ public class User implements Serializable {
 		this.state = state;
 	}
 
-	public String getFatherOrHusband() {
-		return fatherOrHusband;
-	}
-
-	public void setFatherOrHusband(String fatherOrHusband) {
-		this.fatherOrHusband = fatherOrHusband;
-	}
-
-	public String getDateOfBirth() {
-		return dateOfBirth;
-	}
-
-	public void setDateOfBirth(String dateOfBirth) {
-		this.dateOfBirth = dateOfBirth;
-	}
-
 	public String getDistrict() {
 		return district;
 	}
 
 	public void setDistrict(String district) {
 		this.district = district;
-	}
-
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
 	}
 
 	public String getHouseNo() {
@@ -215,20 +192,28 @@ public class User implements Serializable {
 		this.houseNo = houseNo;
 	}
 
-	public String getAssemblyConstituencyNo() {
+	public String getReferenceType() {
+		return referenceType;
+	}
+
+	public void setReferenceType(String referenceType) {
+		this.referenceType = referenceType;
+	}
+
+	public String getReferenceName() {
+		return referenceName;
+	}
+
+	public void setReferenceName(String referenceName) {
+		this.referenceName = referenceName;
+	}
+
+	public Integer getAssemblyConstituencyNo() {
 		return assemblyConstituencyNo;
 	}
 
-	public void setAssemblyConstituencyNo(String assemblyConstituencyNo) {
+	public void setAssemblyConstituencyNo(Integer assemblyConstituencyNo) {
 		this.assemblyConstituencyNo = assemblyConstituencyNo;
-	}
-
-	public String getFatherOrHusbandName() {
-		return fatherOrHusbandName;
-	}
-
-	public void setFatherOrHusbandName(String fatherOrHusbandName) {
-		this.fatherOrHusbandName = fatherOrHusbandName;
 	}
 
 	public int getAge() {
@@ -247,12 +232,108 @@ public class User implements Serializable {
 		this.createdTimeStamp = createdTimeStamp;
 	}
 
-	public Account getAccount() {
-		return account;
+	public String getParliamentaryConstituencyName() {
+		return parliamentaryConstituencyName;
 	}
 
-	public void setAccount(Account account) {
-		this.account = account;
+	public void setParliamentaryConstituencyName(String parliamentaryConstituencyName) {
+		this.parliamentaryConstituencyName = parliamentaryConstituencyName;
+	}
+
+	public Integer getParliamentaryConstituencyNo() {
+		return parliamentaryConstituencyNo;
+	}
+
+	public void setParliamentaryConstituencyNo(Integer parliamentaryConstituencyNo) {
+		this.parliamentaryConstituencyNo = parliamentaryConstituencyNo;
+	}
+
+	public String getMandal() {
+		return mandal;
+	}
+
+	public void setMandal(String mandal) {
+		this.mandal = mandal;
+	}
+
+	public String getPincode() {
+		return pincode;
+	}
+
+	public void setPincode(String pincode) {
+		this.pincode = pincode;
+	}
+
+	public String getPoliceStation() {
+		return policeStation;
+	}
+
+	public void setPoliceStation(String policeStation) {
+		this.policeStation = policeStation;
+	}
+
+	public String getMainTwon() {
+		return mainTwon;
+	}
+
+	public void setMainTwon(String mainTwon) {
+		this.mainTwon = mainTwon;
+	}
+
+	public String getRevenueDivision() {
+		return revenueDivision;
+	}
+
+	public void setRevenueDivision(String revenueDivision) {
+		this.revenueDivision = revenueDivision;
+	}
+
+	public Integer getPartNo() {
+		return partNo;
+	}
+
+	public void setPartNo(Integer partNo) {
+		this.partNo = partNo;
+	}
+
+	public Timestamp getUpdatedTimeStamp() {
+		return updatedTimeStamp;
+	}
+
+	public void setUpdatedTimeStamp(Timestamp updatedTimeStamp) {
+		this.updatedTimeStamp = updatedTimeStamp;
+	}
+
+	public String getElectorName() {
+		return electorName;
+	}
+
+	public void setElectorName(String electorName) {
+		this.electorName = electorName;
+	}
+
+	public String getPollingStation() {
+		return pollingStation;
+	}
+
+	public void setPollingStation(String pollingStation) {
+		this.pollingStation = pollingStation;
+	}
+
+	public String getPollingStationAddress() {
+		return pollingStationAddress;
+	}
+
+	public void setPollingStationAddress(String pollingStationAddress) {
+		this.pollingStationAddress = pollingStationAddress;
+	}
+
+	public UserInfo getUserInfo() {
+		return userInfo;
+	}
+
+	public void setUserInfo(UserInfo userInfo) {
+		this.userInfo = userInfo;
 	}
 
 }

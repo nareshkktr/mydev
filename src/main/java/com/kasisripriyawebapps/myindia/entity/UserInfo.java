@@ -13,16 +13,20 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.google.gson.annotations.SerializedName;
 
 @Entity
 @Table(name = "USER_INFO")
+@NamedQueries({
+		@NamedQuery(name = "UPDATE_USER_LOCATION_REF_ID", query = "update UserInfo ui set ui.nativeLocation.guid=:locationGuid") })
 public class UserInfo implements Serializable {
 
 	/**
@@ -46,37 +50,28 @@ public class UserInfo implements Serializable {
 
 	/** The gender. */
 	@Column(name = "GENDER")
-	@SerializedName("gender")
 	private String gender;
 
-	/** The father or husband. */
-	@Column(name = "FATHER_OR_HUSBAND")
-	@SerializedName("rln_type")
-	private String fatherOrHusband;
+	@Column(name = "REFERENCE_TYPE")
+	private String referenceType;
 
 	/** The date of birth. */
 	@Column(name = "DATE_OF_BIRTH")
-	@SerializedName("dob")
 	private String dateOfBirth;
 
 	/** The user name. */
 	@Column(name = "USER_NAME")
-	@SerializedName("name")
 	private String userName;
 
 	/** The house no. */
 	@Column(name = "HOUSE_NO")
-	@SerializedName("house_no")
 	private String houseNo;
 
-	/** The father or husband name. */
-	@Column(name = "FATHER_HUSBAND_NAME")
-	@SerializedName("rln_name")
-	private String fatherOrHusbandName;
+	@Column(name = "REFERENCE_NAME")
+	private String referenceName;
 
 	/** The age. */
 	@Column(name = "AGE")
-	@SerializedName("age")
 	private int age;
 
 	/** The created time stamp. */
@@ -90,19 +85,33 @@ public class UserInfo implements Serializable {
 	@Column(name = "EMAIL_ADDRESS")
 	private String emailAddress;
 
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "ACCOUNT_GUID")
-	@JsonBackReference
+	@Column(name = "LOCATION_PINCODE")
+	private String pincode;
+
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "userInfo", cascade = CascadeType.ALL)
 	private Account account;
 
 	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "USER_GUID")
+	private User user;
+
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "LOCATION_REF_GUID")
+	private Location nativeLocation;
+
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "LOCATION_GUID")
-	@JsonBackReference
-	private Location location;
+	private LocationMaster masterLocation;
 
 	@OneToMany(mappedBy = "userInfo", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonManagedReference
 	private List<UserImage> userImages = new ArrayList<UserImage>(0);
+
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinTable(name = "USER_POLITICAL_LOCATION", catalog = "myindia", joinColumns = {
+			@JoinColumn(name = "USER_INFO_GUID", nullable = false, updatable = false) }, inverseJoinColumns = {
+					@JoinColumn(name = "LOCATION_GUID", nullable = false, updatable = false) })
+	private List<LocationMaster> userPoliticalLocations = new ArrayList<LocationMaster>(0);
 
 	@Column(name = "BANNER_PHOTO_URL")
 	private String bannerPhotoURL;
@@ -142,14 +151,6 @@ public class UserInfo implements Serializable {
 		this.gender = gender;
 	}
 
-	public String getFatherOrHusband() {
-		return fatherOrHusband;
-	}
-
-	public void setFatherOrHusband(String fatherOrHusband) {
-		this.fatherOrHusband = fatherOrHusband;
-	}
-
 	public String getDateOfBirth() {
 		return dateOfBirth;
 	}
@@ -172,14 +173,6 @@ public class UserInfo implements Serializable {
 
 	public void setHouseNo(String houseNo) {
 		this.houseNo = houseNo;
-	}
-
-	public String getFatherOrHusbandName() {
-		return fatherOrHusbandName;
-	}
-
-	public void setFatherOrHusbandName(String fatherOrHusbandName) {
-		this.fatherOrHusbandName = fatherOrHusbandName;
 	}
 
 	public int getAge() {
@@ -225,6 +218,17 @@ public class UserInfo implements Serializable {
 		}
 	}
 
+	public List<LocationMaster> getUserPoliticalLocations() {
+		return userPoliticalLocations;
+	}
+
+	public void setUserPoliticalLocations(List<LocationMaster> userPoliticalLocations) {
+		this.userPoliticalLocations.clear();
+		if (userPoliticalLocations != null) {
+			this.userPoliticalLocations.addAll(userPoliticalLocations);
+		}
+	}
+
 	public String getBannerPhotoURL() {
 		return bannerPhotoURL;
 	}
@@ -249,12 +253,52 @@ public class UserInfo implements Serializable {
 		this.emailAddress = emailAddress;
 	}
 
-	public Location getLocation() {
-		return location;
+	public Location getNativeLocation() {
+		return nativeLocation;
 	}
 
-	public void setLocation(Location location) {
-		this.location = location;
+	public void setNativeLocation(Location nativeLocation) {
+		this.nativeLocation = nativeLocation;
+	}
+
+	public String getReferenceType() {
+		return referenceType;
+	}
+
+	public void setReferenceType(String referenceType) {
+		this.referenceType = referenceType;
+	}
+
+	public String getReferenceName() {
+		return referenceName;
+	}
+
+	public void setReferenceName(String referenceName) {
+		this.referenceName = referenceName;
+	}
+
+	public String getPincode() {
+		return pincode;
+	}
+
+	public void setPincode(String pincode) {
+		this.pincode = pincode;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public LocationMaster getMasterLocation() {
+		return masterLocation;
+	}
+
+	public void setMasterLocation(LocationMaster masterLocation) {
+		this.masterLocation = masterLocation;
 	}
 
 }

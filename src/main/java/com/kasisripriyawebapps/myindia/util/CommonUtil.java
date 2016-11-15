@@ -7,8 +7,13 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -27,6 +32,11 @@ import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 
+import org.apache.commons.io.FilenameUtils;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 import com.kasisripriyawebapps.myindia.constants.ApplicationConstants;
 import com.kasisripriyawebapps.myindia.constants.ServiceConstants;
 import com.kasisripriyawebapps.myindia.dto.ExternalServiceResponse;
@@ -38,6 +48,7 @@ import sun.misc.BASE64Decoder;
 /**
  * The Class CommonUtil.
  */
+@SuppressWarnings("restriction")
 public class CommonUtil {
 
 	/** The id card types. */
@@ -247,7 +258,6 @@ public class CommonUtil {
 	 * @throws InternalServerException
 	 *             the common exception
 	 */
-	@SuppressWarnings("restriction")
 	public static String getImageLocation(String fsBase64, String fsFileName) throws InternalServerException {
 		String lsFilePath = "";
 		String base64String = fsBase64;
@@ -276,7 +286,6 @@ public class CommonUtil {
 	 *            the image string
 	 * @return the buffered image
 	 */
-	@SuppressWarnings("restriction")
 	public static BufferedImage decodeToImage(String imageString) {
 		BufferedImage image = null;
 		byte[] imageByte;
@@ -407,9 +416,154 @@ public class CommonUtil {
 		return returnChar;
 	}
 
-	public static void main(String args[]) {
-		String salt = generateSalt((32));
-		System.out.println(salt);
-		System.out.println(CommonUtil.hashPassword(saltPassword("abc123", salt)));
+	public static void writeToFile(InputStream uploadedInputStream, String uploadedFileLocation) {
+		try {
+			OutputStream out = new FileOutputStream(new File(uploadedFileLocation));
+			int read = 0;
+			byte[] bytes = new byte[1024];
+
+			out = new FileOutputStream(new File(uploadedFileLocation));
+			while ((read = uploadedInputStream.read(bytes)) != -1) {
+				out.write(bytes, 0, read);
+			}
+			out.flush();
+			out.close();
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		}
+
 	}
+
+	public static boolean isValidExcelFile(String fileName) {
+		ArrayList<String> excelFileTypes = new ArrayList<>();
+		excelFileTypes.add("xls");
+		excelFileTypes.add("xlsx");
+		String fileExtension = FilenameUtils.getExtension(fileName);
+		if (fileExtension != null && excelFileTypes.contains(fileExtension)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public static Workbook getWorkBookFromFileName(String inputFileName) throws InternalServerException {
+
+		Workbook workbook = null;
+		if (FilenameUtils.getExtension(inputFileName)
+				.equalsIgnoreCase(ServiceConstants.EXCEL_SHEET_TYPE_XLS_EXTENSION)) {
+			workbook = new HSSFWorkbook();
+
+		} else if (FilenameUtils.getExtension(inputFileName)
+				.equalsIgnoreCase(ServiceConstants.EXCEL_SHEET_TYPE_XLSX_EXTENSION)) {
+			workbook = new XSSFWorkbook();
+		}
+		return workbook;
+	}
+
+	public static void createExcelFile(String directoryPath, String fileName) throws InternalServerException {
+		String outPutFilePath = "";
+
+		outPutFilePath = directoryPath + fileName;
+		File directory = new File(directoryPath);
+		if (!directory.exists()) {
+			directory.mkdirs();
+		}
+		File outPutFile = new File(outPutFilePath);
+		if (!outPutFile.exists()) {
+			FileOutputStream fileOut = null;
+			try {
+				fileOut = new FileOutputStream(outPutFile);
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			Workbook wb = getWorkBookFromFileName(outPutFilePath);
+			try {
+				wb.write(fileOut);
+				fileOut.close();
+				wb.close();
+			} catch (IOException e) {
+				throw new InternalServerException(e.getMessage());
+			}
+
+		}
+	}
+
+	public static Workbook getWorkBookFromFile(String inputFilePath) throws InternalServerException {
+		InputStream fs = null;
+		try {
+			fs = new FileInputStream(inputFilePath);
+		} catch (FileNotFoundException e1) {
+			throw new InternalServerException(e1.getMessage());
+		}
+		Workbook workbook = null;
+		if (FilenameUtils.getExtension(inputFilePath)
+				.equalsIgnoreCase(ServiceConstants.EXCEL_SHEET_TYPE_XLS_EXTENSION)) {
+			try {
+				workbook = new HSSFWorkbook(fs);
+			} catch (IOException e) {
+				throw new InternalServerException(e.getMessage());
+			}
+		} else if (FilenameUtils.getExtension(inputFilePath)
+				.equalsIgnoreCase(ServiceConstants.EXCEL_SHEET_TYPE_XLSX_EXTENSION)) {
+			try {
+				workbook = new XSSFWorkbook(fs);
+			} catch (IOException e) {
+				throw new InternalServerException(e.getMessage());
+			}
+		}
+		return workbook;
+	}
+
+	public static String removeEndsWith(String mainString, String endsWith) {
+		String str = "";
+		if (mainString != null && endsWith != null && !mainString.isEmpty() && !endsWith.isEmpty()
+				&& mainString.trim().endsWith(endsWith.trim())) {
+			str = mainString.trim().split(endsWith.trim())[0].trim();
+		} else {
+			str = mainString;
+		}
+		return str;
+	}
+
+	public static void main(String args[]) {
+		String districtSubDistrictCode = "MUMBAI SUBURBAN(483)";
+		Long subDistrictLocationLong = null;
+		Long districtLocationLong = null;
+
+		if (districtSubDistrictCode != null && !districtSubDistrictCode.isEmpty()) {
+			String[] districtSubDistrictCodeArray = districtSubDistrictCode.split("/");
+			if (districtSubDistrictCodeArray != null) {
+				int subDistrictCodeIndex = 0;
+				String subDistrictCode = "";
+				String districtCode = "";
+				if (districtSubDistrictCodeArray.length == 1) {
+					subDistrictCode = "";
+					districtCode = districtSubDistrictCodeArray[0];
+				} else {
+					subDistrictCodeIndex = districtSubDistrictCodeArray.length - 1;
+					subDistrictCode = districtSubDistrictCodeArray[subDistrictCodeIndex - 1];
+					districtCode = districtSubDistrictCodeArray[subDistrictCodeIndex];
+				}
+
+				if (subDistrictCode != null && !subDistrictCode.isEmpty()) {
+					String[] subDistrictCodeArray = subDistrictCode.split("\\(");
+					String subDistrictCodeArraySecondIndex = subDistrictCodeArray[subDistrictCodeArray.length - 1];
+					subDistrictLocationLong = Long.parseLong(
+							subDistrictCodeArraySecondIndex.substring(0, subDistrictCodeArraySecondIndex.length() - 1));
+				}
+				if (districtCode != null && !districtCode.isEmpty()) {
+					String[] districtCodeArray = districtCode.split("\\(");
+					String districtCodeArraySecondIndex = districtCodeArray[districtCodeArray.length - 1];
+					districtLocationLong = Long.parseLong(
+							districtCodeArraySecondIndex.substring(0, districtCodeArraySecondIndex.length() - 1));
+				}
+			}
+		}
+
+		System.out.println(subDistrictLocationLong);
+		System.out.println(districtLocationLong);
+	}
+
 }

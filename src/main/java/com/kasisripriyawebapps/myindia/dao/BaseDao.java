@@ -107,4 +107,10 @@ public interface BaseDao<PK, T> {
 	List<T> getAllByPage(SortCriteriaData sortCriteria, Integer pageNo, Integer pageLimit)
 			throws InternalServerException;
 
+	void updateBatch(List<T> entities) throws InternalServerException;
+
+	void mergeBatch(List<T> entities) throws InternalServerException;
+
+	void saveBatch(List<T> entities) throws InternalServerException;
+
 }

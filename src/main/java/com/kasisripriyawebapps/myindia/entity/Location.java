@@ -4,8 +4,6 @@
 package com.kasisripriyawebapps.myindia.entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,10 +12,10 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -25,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
  */
 @Entity
 @Table(name = "LOCATION_REFERENCE")
+@NamedQueries({ @NamedQuery(name = "DELETE_ALL_LOCATIONS", query = "delete from Location") })
 public class Location implements Serializable {
 
 	/** The Constant serialVersionUID. */
@@ -38,96 +37,50 @@ public class Location implements Serializable {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Location(Long guid, String locationType, String locationName, String locationCountry, String locationState,
-			String locationMuncipalCorporation, String locationCorporation, String locationMpConstituency,
-			String locationMlaConstituency, String locationDistrict, String locationMandal, String locationPanchayath,
-			String locationVillage, List<Event> events) {
-		super();
-		this.guid = guid;
-		this.locationType = locationType;
-		this.locationName = locationName;
-		this.locationCountry = locationCountry;
-		this.locationState = locationState;
-		this.locationMuncipalCorporation = locationMuncipalCorporation;
-		this.locationCorporation = locationCorporation;
-		this.locationMpConstituency = locationMpConstituency;
-		this.locationMlaConstituency = locationMlaConstituency;
-		this.locationDistrict = locationDistrict;
-		this.locationMandal = locationMandal;
-		this.locationPanchayath = locationPanchayath;
-		this.locationVillage = locationVillage;
-		this.events = events;
-	}
-
 	/** The guid. */
 	@Id
-	@Column(name = "LOCATION_GUID")
+	@Column(name = "LOCATION_REF_GUID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long guid;
 
-	/** The location type. */
-	@Column(name = "LOCATION_TYPE")
-	private String locationType;
-
-	/** The location name. */
-	@Column(name = "LOCATION_NAME")
-	private String locationName;
-
-	/** The location country. */
+	/** The location state. */
 	@Column(name = "LOCATION_COUNTRY")
-	private String locationCountry;
+	private Long locationCountry;
 
 	/** The location state. */
 	@Column(name = "LOCATION_STATE")
-	private String locationState;
-
-	/** The location muncipal corporation. */
-	@Column(name = "LOCATION_MUNCIPAL_CORPORATION")
-	private String locationMuncipalCorporation;
-
-	/** The location corporation. */
-	@Column(name = "LOCATION_CORPORATION")
-	private String locationCorporation;
-
-	/** The location country. */
-	@Column(name = "LOCATION_MP_CONSTITUENCY")
-	private String locationMpConstituency;
-
-	/** The location state. */
-	@Column(name = "LOCATION_MLA_CONSTITUENCY")
-	private String locationMlaConstituency;
+	private Long locationState;
 
 	/** The location district. */
 	@Column(name = "LOCATION_DISTRICT")
-	private String locationDistrict;
+	private Long locationDistrict;
 
 	/** The location mandal. */
-	@Column(name = "LOCATION_MANDAL")
-	private String locationMandal;
+	@Column(name = "LOCATION_SUB_DISTIRCT")
+	private Long locationSubDistrict;
+
+	/** The location muncipal corporation. */
+	@Column(name = "LOCATION_MUNICIPAL_CORPORATION")
+	private Long locationMunicipalCorporation;
+
+	/** The location corporation. */
+	@Column(name = "LOCATION_MUNICIPALITY")
+	private Long locationMunicipality;
+
+	/** The location corporation. */
+	@Column(name = "LOCATION_TOWN_PANCHAYAT")
+	private Long locationTownPanchayat;
 
 	/** The location panchayath. */
-	@Column(name = "LOCATION_PANCHAYATH")
-	private String locationPanchayath;
+	@Column(name = "LOCATION_VILLAGE_PANCHAYATH")
+	private Long locationVillagePanchayat;
 
 	/** The location village. */
 	@Column(name = "LOCATION_VILLAGE")
-	private String locationVillage;
+	private Long locationVillage;
 
-	@OneToMany(mappedBy = "location", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JsonManagedReference
-	private List<Event> events = new ArrayList<Event>(0);
-
-	@OneToMany(mappedBy = "location", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JsonManagedReference
-	private List<Problem> problems = new ArrayList<Problem>(0);
-
-	@OneToMany(mappedBy = "location", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JsonManagedReference
-	private List<LocationImage> locationImages = new ArrayList<LocationImage>(0);
-
-	@OneToMany(mappedBy = "location", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JsonManagedReference
-	private List<UserInfo> users = new ArrayList<UserInfo>(0);
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "nativeLocation", cascade = CascadeType.ALL)
+	private UserInfo userInfo;
 
 	public Long getGuid() {
 		return guid;
@@ -137,144 +90,84 @@ public class Location implements Serializable {
 		this.guid = guid;
 	}
 
-	public String getLocationType() {
-		return locationType;
-	}
-
-	public void setLocationType(String locationType) {
-		this.locationType = locationType;
-	}
-
-	public String getLocationName() {
-		return locationName;
-	}
-
-	public void setLocationName(String locationName) {
-		this.locationName = locationName;
-	}
-
-	public String getLocationCountry() {
-		return locationCountry;
-	}
-
-	public void setLocationCountry(String locationCountry) {
-		this.locationCountry = locationCountry;
-	}
-
-	public String getLocationState() {
+	public Long getLocationState() {
 		return locationState;
 	}
 
-	public void setLocationState(String locationState) {
+	public void setLocationState(Long locationState) {
 		this.locationState = locationState;
 	}
 
-	public String getLocationMuncipalCorporation() {
-		return locationMuncipalCorporation;
-	}
-
-	public void setLocationMuncipalCorporation(String locationMuncipalCorporation) {
-		this.locationMuncipalCorporation = locationMuncipalCorporation;
-	}
-
-	public String getLocationCorporation() {
-		return locationCorporation;
-	}
-
-	public void setLocationCorporation(String locationCorporation) {
-		this.locationCorporation = locationCorporation;
-	}
-
-	public String getLocationMpConstituency() {
-		return locationMpConstituency;
-	}
-
-	public void setLocationMpConstituency(String locationMpConstituency) {
-		this.locationMpConstituency = locationMpConstituency;
-	}
-
-	public String getLocationMlaConstituency() {
-		return locationMlaConstituency;
-	}
-
-	public void setLocationMlaConstituency(String locationMlaConstituency) {
-		this.locationMlaConstituency = locationMlaConstituency;
-	}
-
-	public String getLocationDistrict() {
+	public Long getLocationDistrict() {
 		return locationDistrict;
 	}
 
-	public void setLocationDistrict(String locationDistrict) {
+	public void setLocationDistrict(Long locationDistrict) {
 		this.locationDistrict = locationDistrict;
 	}
 
-	public String getLocationMandal() {
-		return locationMandal;
+	public Long getLocationSubDistrict() {
+		return locationSubDistrict;
 	}
 
-	public void setLocationMandal(String locationMandal) {
-		this.locationMandal = locationMandal;
+	public void setLocationSubDistrict(Long locationSubDistrict) {
+		this.locationSubDistrict = locationSubDistrict;
 	}
 
-	public String getLocationPanchayath() {
-		return locationPanchayath;
+	public Long getLocationMunicipalCorporation() {
+		return locationMunicipalCorporation;
 	}
 
-	public void setLocationPanchayath(String locationPanchayath) {
-		this.locationPanchayath = locationPanchayath;
+	public void setLocationMunicipalCorporation(Long locationMunicipalCorporation) {
+		this.locationMunicipalCorporation = locationMunicipalCorporation;
 	}
 
-	public String getLocationVillage() {
+	public Long getLocationMunicipality() {
+		return locationMunicipality;
+	}
+
+	public void setLocationMunicipality(Long locationMunicipality) {
+		this.locationMunicipality = locationMunicipality;
+	}
+
+	public Long getLocationTownPanchayat() {
+		return locationTownPanchayat;
+	}
+
+	public void setLocationTownPanchayat(Long locationTownPanchayat) {
+		this.locationTownPanchayat = locationTownPanchayat;
+	}
+
+	public Long getLocationVillagePanchayat() {
+		return locationVillagePanchayat;
+	}
+
+	public void setLocationVillagePanchayat(Long locationVillagePanchayat) {
+		this.locationVillagePanchayat = locationVillagePanchayat;
+	}
+
+	public Long getLocationVillage() {
 		return locationVillage;
 	}
 
-	public void setLocationVillage(String locationVillage) {
+	public void setLocationVillage(Long locationVillage) {
 		this.locationVillage = locationVillage;
 	}
 
-	public List<Event> getEvents() {
-		return events;
+	public UserInfo getUserInfo() {
+		return userInfo;
 	}
 
-	public void setEvents(List<Event> events) {
-		this.events.clear();
-		if (events != null) {
-			this.events.addAll(events);
-		}
+	public void setUserInfo(UserInfo userInfo) {
+		this.userInfo = userInfo;
 	}
 
-	public List<Problem> getProblems() {
-		return problems;
+	public Long getLocationCountry() {
+		return locationCountry;
 	}
 
-	public void setProblems(List<Problem> problems) {
-		this.problems.clear();
-		if (problems != null) {
-			this.problems.addAll(problems);
-		}
-	}
-
-	public List<LocationImage> getLocationImages() {
-		return locationImages;
-	}
-
-	public void setLocationImages(List<LocationImage> locationImages) {
-		this.locationImages.clear();
-		if (locationImages != null) {
-			this.locationImages.addAll(locationImages);
-		}
-	}
-
-	public List<UserInfo> getUsers() {
-		return users;
-	}
-
-	public void setUsers(List<UserInfo> users) {
-		this.users.clear();
-		if (users != null) {
-			this.users.addAll(users);
-		}
+	public void setLocationCountry(Long locationCountry) {
+		this.locationCountry = locationCountry;
 	}
 
 }

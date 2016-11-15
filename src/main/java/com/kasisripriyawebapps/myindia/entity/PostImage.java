@@ -12,8 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 @Entity
 @Table(name = "POST_IMAGE")
 public class PostImage implements Serializable {
@@ -36,7 +34,6 @@ public class PostImage implements Serializable {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "POST_GUID")
-	@JsonBackReference
 	private Post post;
 
 	public Long getGuid() {

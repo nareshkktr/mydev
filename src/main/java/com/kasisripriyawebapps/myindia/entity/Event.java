@@ -20,9 +20,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 // TODO: Auto-generated Javadoc
 /**
  * The Class EventEntity.
@@ -42,14 +39,14 @@ public class Event implements Serializable {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Event(Long guid, EventType eventType, Location location, String eventName,
+	public Event(Long guid, EventType eventType, LocationMaster createdLocation, String eventName,
 			String eventDescription, String eventLocationDetails, String photoURL, Timestamp eventStartDate,
 			Timestamp eventEndDate, Timestamp createdTimeStamp, Timestamp updatedTimeStamp, Long createdBy,
 			Long updatedBy) {
 		super();
 		this.guid = guid;
 		this.eventType = eventType;
-		this.location = location;
+		this.createdLocation = createdLocation;
 		this.eventName = eventName;
 		this.eventDescription = eventDescription;
 		this.eventLocationDetails = eventLocationDetails;
@@ -67,15 +64,13 @@ public class Event implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long guid;
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "EVENT_TYPE_GUID")
-	@JsonBackReference
 	private EventType eventType;
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "LOCATION_GUID")
-	@JsonBackReference
-	private Location location;
+	private LocationMaster createdLocation;
 
 	@Column(name = "EVENT_NAME")
 	private String eventName;
@@ -124,7 +119,6 @@ public class Event implements Serializable {
 	private Long updatedBy;
 
 	@OneToMany(mappedBy = "event", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JsonManagedReference
 	private List<EventImage> eventImages = new ArrayList<EventImage>(0);
 
 	public Long getGuid() {
@@ -143,12 +137,12 @@ public class Event implements Serializable {
 		this.eventType = eventType;
 	}
 
-	public Location getLocation() {
-		return location;
+	public LocationMaster getCreatedLocation() {
+		return createdLocation;
 	}
 
-	public void setLocation(Location location) {
-		this.location = location;
+	public void setCreatedLocation(LocationMaster createdLocation) {
+		this.createdLocation = createdLocation;
 	}
 
 	public String getEventName() {
@@ -274,5 +268,4 @@ public class Event implements Serializable {
 		this.photoURL = photoURL;
 	}
 
-	
 }

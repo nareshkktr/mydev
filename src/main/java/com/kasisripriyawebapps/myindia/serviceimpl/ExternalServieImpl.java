@@ -53,11 +53,10 @@ public class ExternalServieImpl implements ExternalService {
 		String serviceUrl = (String) serviceParams.get(ServiceConstants.SERVICE_URL);
 		String baseURL = (String) serviceParams.get(ServiceConstants.BASE_URL);
 		String requestType = (String) serviceParams.get(ServiceConstants.REQUEST_TYPE);
+		@SuppressWarnings("unchecked")
 		Map<String, Object> queryParams = (HashMap<String, Object>) serviceParams
 				.get(ServiceConstants.REQUEST_PARAMS_INFO);
-		String requestBody = (String) serviceParams.get(ServiceConstants.REQUEST_BODY);
 		String contentType = (String) serviceParams.get(ServiceConstants.CONTENT_TYPE);
-		String acceptType = (String) serviceParams.get(ServiceConstants.ACCEPT_TYPE);
 		String cookies = (String) serviceParams.get(ServiceConstants.COOKIES);
 
 		StringBuilder urlParameters = new StringBuilder();

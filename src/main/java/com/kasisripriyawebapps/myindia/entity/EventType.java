@@ -14,8 +14,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 @Entity
 @Table(name = "EVENT_TYPE")
 public class EventType implements Serializable {
@@ -50,7 +48,6 @@ public class EventType implements Serializable {
 	}
 
 	@OneToMany(mappedBy = "eventType", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JsonManagedReference
 	private List<Event> events = new ArrayList<Event>(0);
 
 	public Long getGuid() {

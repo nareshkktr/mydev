@@ -6,7 +6,6 @@ package com.kasisripriyawebapps.myindia.entity;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,9 +15,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 /**
  * The Class AccountEntity.
@@ -56,21 +52,23 @@ public class Account implements Serializable {
 	@Column(name = "CREATED_TIMESTAMP")
 	private Timestamp createdTimeStamp;
 
-	@OneToOne(fetch = FetchType.LAZY, mappedBy = "account", cascade = CascadeType.ALL)
-	@JsonManagedReference
-	private UserInfo userInfo;
-
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "USER_GUID")
-	@JsonBackReference
-	private User user;
+	@JoinColumn(name = "USER_INFO_GUID")
+	private UserInfo userInfo;
 
 	/**
 	 * Instantiates a new account entity.
+	 * 
+	 * @param account
 	 */
-	public Account() {
+	public Account(Account account) {
 		super();
-		// TODO Auto-generated constructor stub
+		this.guid = account.getGuid();
+		this.userName = account.getUserName();
+		this.password = account.getPassword();
+		this.salt = account.getSalt();
+		this.type = account.getType();
+		this.createdTimeStamp = account.getCreatedTimeStamp();
 	}
 
 	/**
@@ -106,14 +104,8 @@ public class Account implements Serializable {
 
 	}
 
-	public Account(Account account) {
-		super();
-		this.guid = account.getGuid();
-		this.userName = account.getUserName();
-		this.password = account.getPassword();
-		this.salt = account.getSalt();
-		this.type = account.getType();
-		this.createdTimeStamp = account.getCreatedTimeStamp();
+	public Account() {
+		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -217,14 +209,6 @@ public class Account implements Serializable {
 
 	public void setUserInfo(UserInfo userInfo) {
 		this.userInfo = userInfo;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
 	}
 
 	public String getUserName() {

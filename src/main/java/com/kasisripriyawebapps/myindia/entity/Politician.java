@@ -17,10 +17,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -42,14 +40,15 @@ public class Politician implements Serializable {
 	}
 
 	public Politician(Long guid, String fullName, String designation, String bannerPhotoURL, String photoURL,
-			Location location, Long popularityCount, Long supportingCount, Long followingCount, Long shareCount) {
+			LocationMaster electedLocation, Long popularityCount, Long supportingCount, Long followingCount,
+			Long shareCount) {
 		super();
 		this.guid = guid;
 		this.fullName = fullName;
 		this.designation = designation;
 		this.bannerPhotoURL = bannerPhotoURL;
 		this.photoURL = photoURL;
-		this.location = location;
+		this.electedLocation = electedLocation;
 		this.popularityCount = popularityCount;
 		this.supportingCount = supportingCount;
 		this.followingCount = followingCount;
@@ -75,8 +74,11 @@ public class Politician implements Serializable {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "LOCATION_GUID")
-	@JsonBackReference
-	private Location location;
+	private LocationMaster electedLocation;
+
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "LOCATION_REF_GUID")
+	private Location nativeLocation;
 
 	@Column(name = "POPULARITY_COUNT")
 	private Long popularityCount;
@@ -90,9 +92,15 @@ public class Politician implements Serializable {
 	@Column(name = "SHARE_COUNT")
 	private Long shareCount;
 
-	@OneToMany(mappedBy = "politician", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JsonManagedReference
+	@OneToMany(mappedBy = "politician", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<PoliticianImage> politicianImages = new ArrayList<PoliticianImage>(0);
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "PARTY_GUID")
+	private Party party;
+
+	@Column(name = "POLITICIAN_TYPE")
+	private String politicianType;
 
 	public Long getGuid() {
 		return guid;
@@ -134,12 +142,12 @@ public class Politician implements Serializable {
 		this.photoURL = photoURL;
 	}
 
-	public Location getLocation() {
-		return location;
+	public LocationMaster getElectedLocation() {
+		return electedLocation;
 	}
 
-	public void setLocation(Location location) {
-		this.location = location;
+	public void setElectedLocation(LocationMaster electedLocation) {
+		this.electedLocation = electedLocation;
 	}
 
 	public Long getPopularityCount() {
@@ -183,6 +191,30 @@ public class Politician implements Serializable {
 		if (politicianImages != null) {
 			this.politicianImages.addAll(politicianImages);
 		}
+	}
+
+	public Party getParty() {
+		return party;
+	}
+
+	public void setParty(Party party) {
+		this.party = party;
+	}
+
+	public String getPoliticianType() {
+		return politicianType;
+	}
+
+	public void setPoliticianType(String politicianType) {
+		this.politicianType = politicianType;
+	}
+
+	public Location getNativeLocation() {
+		return nativeLocation;
+	}
+
+	public void setNativeLocation(Location nativeLocation) {
+		this.nativeLocation = nativeLocation;
 	}
 
 }

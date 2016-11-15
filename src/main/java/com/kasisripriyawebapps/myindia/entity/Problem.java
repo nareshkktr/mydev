@@ -20,9 +20,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 // TODO: Auto-generated Javadoc
 /**
  * The Class Problem.
@@ -42,12 +39,12 @@ public class Problem implements Serializable {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Problem(Long guid, Location location, String problemShortDescription, String problemLongDescription,
-			String photoURL, Long noOfAffectedPeople, Timestamp createdTimeStamp, Timestamp updatedTimeStamp,
-			Long createdBy, Long updatedBy) {
+	public Problem(Long guid, LocationMaster createdLocation, String problemShortDescription,
+			String problemLongDescription, String photoURL, Long noOfAffectedPeople, Timestamp createdTimeStamp,
+			Timestamp updatedTimeStamp, Long createdBy, Long updatedBy) {
 		super();
 		this.guid = guid;
-		this.location = location;
+		this.createdLocation = createdLocation;
 		this.problemShortDescription = problemShortDescription;
 		this.problemLongDescription = problemLongDescription;
 		this.photoURL = photoURL;
@@ -65,8 +62,7 @@ public class Problem implements Serializable {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "LOCATION_GUID")
-	@JsonBackReference
-	private Location location;
+	private LocationMaster createdLocation;
 
 	@Column(name = "SHORT_DESCRIPTION")
 	private String problemShortDescription;
@@ -96,17 +92,14 @@ public class Problem implements Serializable {
 	@Column(name = "UPDATED_BY")
 	private Long updatedBy;
 
-	@OneToMany(mappedBy = "problem", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JsonManagedReference
+	@OneToMany(mappedBy = "problem", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<ProblemImage> problemImages = new ArrayList<ProblemImage>(0);
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "PROBLEM_TYPE_GUID")
-	@JsonBackReference
 	private ProblemType problemType;
 
-	@OneToMany(mappedBy = "problem", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JsonManagedReference
+	@OneToMany(mappedBy = "problem", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<ProblemHistory> problemHistory = new ArrayList<ProblemHistory>(0);
 
 	public Long getGuid() {
@@ -117,12 +110,12 @@ public class Problem implements Serializable {
 		this.guid = guid;
 	}
 
-	public Location getLocation() {
-		return location;
+	public LocationMaster getCreatedLocation() {
+		return createdLocation;
 	}
 
-	public void setLocation(Location location) {
-		this.location = location;
+	public void setCreatedLocation(LocationMaster createdLocation) {
+		this.createdLocation = createdLocation;
 	}
 
 	public String getProblemShortDescription() {

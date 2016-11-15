@@ -56,7 +56,6 @@ public class LocationUtil {
 
 	public static void loadMainPage() throws InterruptedException {
 		driver.get(baseUrl);
-
 	}
 
 	public static void clickDownLoadDirectoryLink() {

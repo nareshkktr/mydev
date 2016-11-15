@@ -102,5 +102,42 @@ public class ServiceConstants {
 	public static final int DEAFULT_PAGE_OFFSET = 1;
 
 	public static final String CAPTCHA_LOCATION_FILE_NAME = "LocationCaptcha";
+	public static final String LOCATION_EXCEL_COUNTRY_SHEET_NAME = "Countries";
+	public static final String LOCATION_EXCEL_STATE_SHEET_NAME = "States";
+	public static final String LOCATION_EXCEL_DISTRICT_SHEET_NAME = "Districts";
+	public static final String LOCATION_EXCEL_SUB_DISTRICT_SHEET_NAME = "SubDistricts";
+	public static final String LOCATION_COUNTRY_TYPE = "Country";
+	public static final String LOCATION_STATE_TYPE = "State";
+	public static final String LOCATION_UNION_TERRITORY_TYPE = "Union Territory";
+	public static final String LOCATION_DISTRICT_TYPE = "District";
+	public static final String LOCATION_MP_CONSTITUENCT_TYPE = "MP Constituency";
+	public static final String LOCATION_MLA_CONSTITUENCT_TYPE = "MLA Constituency";
+	public static final String LOCATION_SUB_DISTRICT_TYPE = "Sub District";
+	public static final String LOCATION_MUNCIPAL_CORPORATION_TYPE = "Muncipal Corporation";
+	public static final String LOCATION_MUNCIPALITY_TYPE = "Municipality";
+	public static final String LOCATION_TOWN_PANCHAYATH_TYPE = "Town Panchayat";
+	public static final String LOCATION_VILLAGE_PANCHAYATH_TYPE = "Village Panchayat";
+	public static final String LOCATION_VILLAGE_TYPE = "Village";
+
+	public static final String LOCATION_CODE = "Location Code";
+	public static final String LOCATION_NAME = "Location Name";
+	public static final String LOCATION_PARENT_CODE = "Parent Location Code";
+	public static final String LOCATION_TYPE = "Location Type";
+	public static final String PARENT_LOCATION_CODE = "Parent Location Code";
+
+	public static final String EXCEL_SHEET_TYPE_XLS = ".xls";
+	public static final String EXCEL_SHEET_TYPE_XLSX = ".xlsx";
+	public static final String EXCEL_SHEET_TYPE_XLS_EXTENSION = "xls";
+	public static final String EXCEL_SHEET_TYPE_XLSX_EXTENSION = "xlsx";
+	public static final String LOCATION_MUNCIPAL_CORPORATIONS_TYPE = "Municipal Corporations";
+	public static final String LOCATION_MUNCIPAL_CORPORATION_TYPE_LOWER = "Municipal  Corporation";
+	public static final String LOCATION_MUNCIPAL_COUNCIL_TYPE = "Municipal Council";
+	public static final String LOCATION_NAGAR_PANCHAYAT_TYPE = "Nagar Panchayat";
+	public static final String LOCATION_NOTIFIED_AREA_COUNCIL_TYPE = "Notified Area Council";
+	public static final String LOCATION_URBAN_BODY_TYPE = "Urban Body";
+	public static final String PIPE = "|";
+
+	public static final String DELETE_USER = "D E L E T E D";
+	public static final Long DEFAULT_COUNTRY_CODE=(long)-1;
 
 }

@@ -3,6 +3,7 @@ package com.kasisripriyawebapps.myindia.configs;
 import javax.annotation.PostConstruct;
 
 import org.glassfish.jersey.filter.LoggingFilter;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.spring.scope.RequestContextFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,6 @@ import io.swagger.jaxrs.config.BeanConfig;
 import io.swagger.jaxrs.listing.ApiListingResource;
 import io.swagger.jaxrs.listing.SwaggerSerializers;
 
-@SuppressWarnings("deprecation")
 @Component
 public class JerseyConfig extends ResourceConfig {
 
@@ -25,6 +25,7 @@ public class JerseyConfig extends ResourceConfig {
 		register(AuthenticationRequestFilter.class);
 		packages("com.kasisripriyawebapps.myindia.endpoints", "com.kasisripriyawebapps.myindia.exception");
 		register(LoggingFilter.class);
+		register(MultiPartFeature.class);
 	}
 
 	@PostConstruct

@@ -14,6 +14,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -49,14 +52,14 @@ public class Party implements Serializable {
 	@Column(name = "PARTY_ABBREVATION")
 	private String partyAbbrevation;
 
-	@Column(name = "SUPER_PARTY_GUID")
-	private Long superPartyGuid;
-
 	@Column(name = "BANNER_PHOTO_URL")
 	private String bannerPhotoUrl;
 
 	@Column(name = "PHOTO_URL")
 	private String photoURL;
+
+	@Column(name = "FOUNDATION_YEAR")
+	private Integer foundationYear;
 
 	@Column(name = "POPULARITY_COUNT")
 	private Long popularityCount;
@@ -70,9 +73,21 @@ public class Party implements Serializable {
 	@Column(name = "SHARE_COUNT")
 	private Long shareCount;
 
+	@Column(name = "IS_NATIONAL_PARTY")
+	private Boolean isNationalParty;
+
 	@OneToMany(mappedBy = "party", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonManagedReference
 	private List<PartyImage> partyImages = new ArrayList<PartyImage>(0);
+
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinTable(name = "PARTY_LOCATION", catalog = "myindia", joinColumns = {
+			@JoinColumn(name = "PARTY_GUID", nullable = false, updatable = false) }, inverseJoinColumns = {
+					@JoinColumn(name = "LOCATION_GUID", nullable = false, updatable = false) })
+	private List<LocationMaster> locatedIn = new ArrayList<LocationMaster>(0);
+
+	@OneToMany(mappedBy = "party", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Politician> politicians = new ArrayList<Politician>(0);
 
 	public Long getGuid() {
 		return guid;
@@ -96,14 +111,6 @@ public class Party implements Serializable {
 
 	public void setPartyAbbrevation(String partyAbbrevation) {
 		this.partyAbbrevation = partyAbbrevation;
-	}
-
-	public Long getSuperPartyGuid() {
-		return superPartyGuid;
-	}
-
-	public void setSuperPartyGuid(Long superPartyGuid) {
-		this.superPartyGuid = superPartyGuid;
 	}
 
 	public String getBannerPhotoUrl() {
@@ -159,7 +166,49 @@ public class Party implements Serializable {
 	}
 
 	public void setPartyImages(List<PartyImage> partyImages) {
-		this.partyImages = partyImages;
+		this.partyImages.clear();
+		if (partyImages != null) {
+			this.partyImages.addAll(partyImages);
+		}
+	}
+
+	public Integer getFoundationYear() {
+		return foundationYear;
+	}
+
+	public void setFoundationYear(Integer foundationYear) {
+		this.foundationYear = foundationYear;
+	}
+
+	public List<LocationMaster> getLocatedIn() {
+		return locatedIn;
+	}
+
+	public void setLocatedIn(List<LocationMaster> locatedIn) {
+
+		this.locatedIn.clear();
+		if (locatedIn != null) {
+			this.locatedIn.addAll(locatedIn);
+		}
+	}
+
+	public Boolean getIsNationalParty() {
+		return isNationalParty;
+	}
+
+	public void setIsNationalParty(Boolean isNationalParty) {
+		this.isNationalParty = isNationalParty;
+	}
+
+	public List<Politician> getPoliticians() {
+		return politicians;
+	}
+
+	public void setPoliticians(List<Politician> politicians) {
+		this.politicians.clear();
+		if (politicians != null) {
+			this.politicians.addAll(politicians);
+		}
 	}
 
 }
