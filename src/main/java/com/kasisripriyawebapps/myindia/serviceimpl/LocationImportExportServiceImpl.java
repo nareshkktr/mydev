@@ -265,27 +265,6 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 		locationMasterDao.deleteMasterLocations(existingMasterLocations);
 	}
 
-	public static Predicate<LocationMaster> applyStatesFilter(String stateName) {
-		return u -> u.getLocationName().equalsIgnoreCase(stateName);
-	}
-
-	@Override
-	@Transactional
-	public boolean importAllLocations() throws InternalServerException {
-		importCountries(null);
-		importStates(null);
-		importDistricts(null);
-		importSubDistricts(null);
-		importMuncipalCorporations(null);
-		importMuncipalities(null);
-		importTownPanchayathies(null);
-		importVillagePanchayathies(null);
-		importVillages(null);
-		importVillageReferenceLocations(null);
-		importTownPanchayathies(null);
-		return true;
-	}
-
 	@Override
 	public boolean exportCountries(String inputFilePath) throws InternalServerException {
 		if (inputFilePath == null || inputFilePath.isEmpty()) {
@@ -901,7 +880,6 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 	@Override
 	@Transactional(readOnly = true)
 	public boolean exportVillageReferenceLocations(String inputFilePath) throws InternalServerException {
-		// TODO Auto-generated method stub
 
 		if (inputFilePath == null || inputFilePath.isEmpty()) {
 			inputFilePath = env.getProperty("project.locations-files.download-path")
@@ -982,8 +960,10 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 										if (locationCodesMap != null) {
 											if (locationCodesMap.get(locationCodeLong) != null
 													&& locationCodesMap.get(locationCodeLong).get(0) != null) {
-												villageLocationGuid = locationCodesMap.get(locationCodeLong).get(0)
-														.getGuid();
+												villageLocationGuid = getLocationTypeGuid(
+														locationCodesMap.get(locationCodeLong),
+														ServiceConstants.LOCATION_VILLAGE_TYPE);
+
 											}
 										}
 									}
@@ -993,8 +973,10 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 											if (locationCodesMap.get(villagePanchathLocationCodeLong) != null
 													&& locationCodesMap.get(villagePanchathLocationCodeLong)
 															.get(0) != null) {
-												villageLocationPanchayathGuid = locationCodesMap
-														.get(villagePanchathLocationCodeLong).get(0).getGuid();
+												villageLocationPanchayathGuid = getLocationTypeGuid(
+														locationCodesMap.get(villagePanchathLocationCodeLong),
+														ServiceConstants.LOCATION_VILLAGE_PANCHAYATH_TYPE);
+
 											}
 										}
 									}
@@ -1003,8 +985,10 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 										if (locationCodesMap != null) {
 											if (locationCodesMap.get(subDistrictLocationLong) != null
 													&& locationCodesMap.get(subDistrictLocationLong).get(0) != null) {
-												subDistrictLocationGuid = locationCodesMap.get(subDistrictLocationLong)
-														.get(0).getGuid();
+												subDistrictLocationGuid = getLocationTypeGuid(
+														locationCodesMap.get(subDistrictLocationLong),
+														ServiceConstants.LOCATION_SUB_DISTRICT_TYPE);
+
 											}
 										}
 									}
@@ -1013,8 +997,9 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 										if (locationCodesMap != null) {
 											if (locationCodesMap.get(districtLocationLong) != null
 													&& locationCodesMap.get(districtLocationLong).get(0) != null) {
-												districtLocationGuid = locationCodesMap.get(districtLocationLong).get(0)
-														.getGuid();
+												districtLocationGuid = getLocationTypeGuid(
+														locationCodesMap.get(subDistrictLocationLong),
+														ServiceConstants.LOCATION_DISTRICT_TYPE);
 											}
 										}
 									}
@@ -1045,6 +1030,18 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 
 		return true;
 
+	}
+
+	private Long getLocationTypeGuid(List<LocationMaster> list, String locationType) {
+		Long guid = null;
+		if (list != null && !list.isEmpty()) {
+			list = list.stream().filter(u -> locationType.equalsIgnoreCase(u.getLocationType()))
+					.collect(Collectors.toList());
+			if (list != null && !list.isEmpty()) {
+				guid = list.get(0).getGuid();
+			}
+		}
+		return guid;
 	}
 
 	private Map<Long, List<LocationMaster>> prepareLocationCodeMapForVillageReferenceLocations(String inputFilePath)
@@ -1090,16 +1087,24 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 						districtLocationCodeLong = (long) districtLocationCode;
 
 						if (villageLocationCodeLong != null) {
-							locationCodes.add(villageLocationCodeLong);
+							if (!locationCodes.contains(villageLocationCodeLong)) {
+								locationCodes.add(villageLocationCodeLong);
+							}
 						}
 						if (villagePanchathLocationCodeLong != null) {
-							locationCodes.add(villagePanchathLocationCodeLong);
+							if (!locationCodes.contains(villagePanchathLocationCodeLong)) {
+								locationCodes.add(villagePanchathLocationCodeLong);
+							}
 						}
 						if (subDistrictLocationCodeLong != null) {
-							locationCodes.add(subDistrictLocationCodeLong);
+							if (!locationCodes.contains(subDistrictLocationCodeLong)) {
+								locationCodes.add(subDistrictLocationCodeLong);
+							}
 						}
 						if (districtLocationCodeLong != null) {
-							locationCodes.add(districtLocationCodeLong);
+							if (!locationCodes.contains(districtLocationCodeLong)) {
+								locationCodes.add(districtLocationCodeLong);
+							}
 						}
 
 						String locationName = eachRow.getCell(9).getStringCellValue().trim();
@@ -1131,7 +1136,6 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 		}
 
 		if (masterLocations != null && !masterLocations.isEmpty()) {
-
 			locationCodesMap = masterLocations.stream()
 					.collect(Collectors.groupingBy(location -> location.getLocationCode()));
 		}
@@ -1648,20 +1652,29 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 
 	@Override
 	@Transactional
-	public boolean exportAllLocations() throws InternalServerException {
+	public boolean importExportAllLocations() throws InternalServerException {
 		exportCountries(null);
-		exportStates(null);
-		exportDistricts(null);
-		exportSubDistricts(null);
 		importCountries(null);
+		exportStates(null);
 		importStates(null);
+		exportDistricts(null);
+		importDistricts(null);
+		exportSubDistricts(null);
+		importSubDistricts(null);
 		exportMuncipalCorporations(null);
+		importMuncipalCorporations(null);
 		exportMuncipalities(null);
+		importMuncipalities(null);
 		exportTownPanchayathies(null);
+		importTownPanchayathies(null);
 		exportVillagePanchayathies(null);
+		importVillagePanchayathies(null);
 		exportVillages(null);
+		importVillages(null);
 		exportVillageReferenceLocations(null);
+		importVillageReferenceLocations(null);
 		exportUrbanReferenceLocations(null);
+		importUrbanReferenceLocations(null);
 		return true;
 	}
 

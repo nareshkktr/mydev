@@ -136,14 +136,6 @@ public class LocationImportExportEndPoint extends BaseEndPoint {
 	}
 
 	@POST
-	@ApiOperation(value = EndPointConstants.IMPORT_ALL_LOCATIONS_API_VALUE, nickname = EndPointConstants.IMPORT_ALL_LOCATIONS_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.IMPORT_ALL_LOCATIONS_API_DESCRIPTION)
-	@Path(EndPointConstants.IMPORT_ALL_LOCATIONS_REQUEST_MAPPING)
-	public Response importAllLocations() throws InternalServerException {
-		locationImportExportService.importAllLocations();
-		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
-	}
-
-	@POST
 	@ApiOperation(value = EndPointConstants.EXPORT_COUNTRY_LOCATIONS_API_VALUE, nickname = EndPointConstants.EXPORT_COUNTRY_LOCATIONS_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.EXPORT_COUNTRY_LOCATIONS_API_DESCRIPTION)
 	@Path(EndPointConstants.EXPORT_COUNTRY_LOCATIONS_REQUEST_MAPPING)
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -276,10 +268,10 @@ public class LocationImportExportEndPoint extends BaseEndPoint {
 	}
 
 	@POST
-	@ApiOperation(value = EndPointConstants.EXPORT_ALL_LOCATIONS_API_VALUE, nickname = EndPointConstants.EXPORT_ALL_LOCATIONS_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.EXPORT_ALL_LOCATIONS_API_DESCRIPTION)
-	@Path(EndPointConstants.EXPORT_ALL_LOCATIONS_REQUEST_MAPPING)
-	public Response exportAllLocations() throws InternalServerException {
-		locationImportExportService.exportAllLocations();
+	@ApiOperation(value = EndPointConstants.IMPORT_EXPORT_ALL_LOCATIONS_API_VALUE, nickname = EndPointConstants.IMPORT_EXPORT_ALL_LOCATIONS_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.IMPORT_EXPORT_ALL_LOCATIONS_API_DESCRIPTION)
+	@Path(EndPointConstants.IMPORT_EXPORT_ALL_LOCATIONS_REQUEST_MAPPING)
+	public Response importExportAllLocations() throws InternalServerException {
+		locationImportExportService.importExportAllLocations();
 		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
 	}
 

@@ -722,5 +722,10 @@ public class EndPointConstants {
 	public static final String EXPORT_ALL_LOCATIONS_API_VALUE = "exportAllLocations";
 	public static final String EXPORT_ALL_LOCATIONS_API_NICKNAME = "exportAllLocations";
 	public static final String EXPORT_ALL_LOCATIONS_API_DESCRIPTION = "Export All Locations";
+	
+	public static final String IMPORT_EXPORT_ALL_LOCATIONS_REQUEST_MAPPING = "importExportAllLocations";
+	public static final String IMPORT_EXPORT_ALL_LOCATIONS_API_VALUE = "importExportAllLocations";
+	public static final String IMPORT_EXPORT_ALL_LOCATIONS_API_NICKNAME = "importExportAllLocations";
+	public static final String IMPORT_EXPORT_ALL_LOCATIONS_API_DESCRIPTION = "Import Export All Locations";
 
 }
