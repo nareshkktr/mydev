@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -1652,7 +1651,7 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 
 	@Override
 	@Transactional
-	public boolean importExportAllLocations() throws InternalServerException {
+	public boolean importExportAllMasterLocations() throws InternalServerException {
 		exportCountries(null);
 		importCountries(null);
 		exportStates(null);
@@ -1671,6 +1670,12 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 		importVillagePanchayathies(null);
 		exportVillages(null);
 		importVillages(null);
+		return true;
+	}
+
+	@Override
+	@Transactional
+	public boolean importExportAllReferenceLocations() throws InternalServerException {
 		exportVillageReferenceLocations(null);
 		importVillageReferenceLocations(null);
 		exportUrbanReferenceLocations(null);

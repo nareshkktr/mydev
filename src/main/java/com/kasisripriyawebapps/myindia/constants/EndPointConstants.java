@@ -722,10 +722,15 @@ public class EndPointConstants {
 	public static final String EXPORT_ALL_LOCATIONS_API_VALUE = "exportAllLocations";
 	public static final String EXPORT_ALL_LOCATIONS_API_NICKNAME = "exportAllLocations";
 	public static final String EXPORT_ALL_LOCATIONS_API_DESCRIPTION = "Export All Locations";
-	
-	public static final String IMPORT_EXPORT_ALL_LOCATIONS_REQUEST_MAPPING = "importExportAllLocations";
-	public static final String IMPORT_EXPORT_ALL_LOCATIONS_API_VALUE = "importExportAllLocations";
-	public static final String IMPORT_EXPORT_ALL_LOCATIONS_API_NICKNAME = "importExportAllLocations";
-	public static final String IMPORT_EXPORT_ALL_LOCATIONS_API_DESCRIPTION = "Import Export All Locations";
+
+	public static final String IMPORT_EXPORT_ALL_MASTER_LOCATIONS_REQUEST_MAPPING = "importExportAllMasterLocations";
+	public static final String IMPORT_EXPORT_ALL_MASTER_LOCATIONS_API_VALUE = "importExportAllMasterLocations";
+	public static final String IMPORT_EXPORT_ALL_MASTER_LOCATIONS_API_NICKNAME = "importExportAllMasterLocations";
+	public static final String IMPORT_EXPORT_ALL_MASTER_LOCATIONS_API_DESCRIPTION = "Import Export All Master Locations";
+
+	public static final String IMPORT_EXPORT_ALL_REFERENCE_LOCATIONS_REQUEST_MAPPING = "importExportAllReferenceLocations";
+	public static final String IMPORT_EXPORT_ALL_REFERENCE_LOCATIONS_API_VALUE = "importExportAllReferenceLocations";
+	public static final String IMPORT_EXPORT_ALL_REFERENCE_LOCATIONS_API_NICKNAME = "importExportAllReferenceLocations";
+	public static final String IMPORT_EXPORT_ALL_REFERENCE_LOCATIONS_API_DESCRIPTION = "Import Export All Reference Locations";
 
 }

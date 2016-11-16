@@ -268,10 +268,18 @@ public class LocationImportExportEndPoint extends BaseEndPoint {
 	}
 
 	@POST
-	@ApiOperation(value = EndPointConstants.IMPORT_EXPORT_ALL_LOCATIONS_API_VALUE, nickname = EndPointConstants.IMPORT_EXPORT_ALL_LOCATIONS_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.IMPORT_EXPORT_ALL_LOCATIONS_API_DESCRIPTION)
-	@Path(EndPointConstants.IMPORT_EXPORT_ALL_LOCATIONS_REQUEST_MAPPING)
-	public Response importExportAllLocations() throws InternalServerException {
-		locationImportExportService.importExportAllLocations();
+	@ApiOperation(value = EndPointConstants.IMPORT_EXPORT_ALL_MASTER_LOCATIONS_API_VALUE, nickname = EndPointConstants.IMPORT_EXPORT_ALL_MASTER_LOCATIONS_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.IMPORT_EXPORT_ALL_MASTER_LOCATIONS_API_DESCRIPTION)
+	@Path(EndPointConstants.IMPORT_EXPORT_ALL_MASTER_LOCATIONS_REQUEST_MAPPING)
+	public Response importExportAllMasterLocations() throws InternalServerException {
+		locationImportExportService.importExportAllMasterLocations();
+		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
+	}
+	
+	@POST
+	@ApiOperation(value = EndPointConstants.IMPORT_EXPORT_ALL_REFERENCE_LOCATIONS_API_VALUE, nickname = EndPointConstants.IMPORT_EXPORT_ALL_REFERENCE_LOCATIONS_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.IMPORT_EXPORT_ALL_REFERENCE_LOCATIONS_API_DESCRIPTION)
+	@Path(EndPointConstants.IMPORT_EXPORT_ALL_REFERENCE_LOCATIONS_REQUEST_MAPPING)
+	public Response importExportAllReferenceLocations() throws InternalServerException {
+		locationImportExportService.importExportAllReferenceLocations();
 		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
 	}
 

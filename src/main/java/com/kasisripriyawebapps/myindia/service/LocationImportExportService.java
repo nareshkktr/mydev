@@ -51,6 +51,8 @@ public interface LocationImportExportService {
 
 	boolean importUrbanReferenceLocations(LocationImportRequest locationImportRequest) throws InternalServerException;
 
-	boolean importExportAllLocations() throws InternalServerException;
+	boolean importExportAllMasterLocations() throws InternalServerException;
+
+	boolean importExportAllReferenceLocations() throws InternalServerException;
 
 }
