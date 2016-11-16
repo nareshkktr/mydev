@@ -13,7 +13,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -62,8 +61,8 @@ public class LocationMaster implements Serializable {
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "userPoliticalLocations")
 	private List<UserInfo> locationUsers = new ArrayList<UserInfo>(0);
 
-	@OneToOne(fetch = FetchType.LAZY, mappedBy = "masterLocation", cascade = CascadeType.ALL)
-	private UserInfo userInfo;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "masterLocation", cascade = CascadeType.ALL)
+	private List<UserInfo> users= new ArrayList<UserInfo>(0);
 
 	public Long getGuid() {
 		return guid;
@@ -167,13 +166,15 @@ public class LocationMaster implements Serializable {
 			this.locationUsers.addAll(locationUsers);
 		}
 	}
-
-	public UserInfo getUserInfo() {
-		return userInfo;
+	public List<UserInfo> getUsers() {
+		return users;
 	}
 
-	public void setUserInfo(UserInfo userInfo) {
-		this.userInfo = userInfo;
+	public void setUsers(List<UserInfo> users) {
+		this.users.clear();
+		if (users != null) {
+			this.users.addAll(users);
+		}
 	}
 
 	@Override
