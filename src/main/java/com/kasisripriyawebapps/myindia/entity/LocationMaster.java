@@ -164,7 +164,10 @@ public class LocationMaster implements Serializable {
 	}
 
 	public void setUsers(List<UserInfo> users) {
-		this.users = users;
+		this.users.clear();
+		if (users != null) {
+			this.users.addAll(users);
+		}
 	}
 
 	@Override
