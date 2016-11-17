@@ -15,6 +15,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -162,15 +163,15 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 			String locationType = eachRow.getCell(2).getStringCellValue().trim();
 
 			double parentLocationCode = eachRow.getCell(3).getNumericCellValue();
-			long parentLocationCodeLong = Long.valueOf(0);
-			parentLocationCodeLong = (long) parentLocationCode;
+			long parentLocationGuid = Long.valueOf(0);
+			parentLocationGuid = (long) parentLocationCode;
 
 			if (locationName != null) {
 				LocationMaster locationMaster = new LocationMaster();
 				locationMaster.setLocationCode(locationCodeLong);
 				locationMaster.setLocationName(locationName);
 				locationMaster.setLocationType(locationType);
-				locationMaster.setParentLocationCode(parentLocationCodeLong);
+				locationMaster.setParentLocationGuid(parentLocationGuid);
 				if (!masterLocations.contains(locationMaster) && !existingMasterLocations.contains(locationMaster)) {
 					masterLocations.add(locationMaster);
 				}
@@ -300,12 +301,12 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 			String locationType = ServiceConstants.LOCATION_COUNTRY_TYPE;
 
 			double parentLocationCode = eachRow.getCell(3).getNumericCellValue();
-			long parentLocationCodeLong = Long.valueOf(0);
-			parentLocationCodeLong = (long) parentLocationCode;
+			long parentLocationGuid = Long.valueOf(0);
+			parentLocationGuid = (long) parentLocationCode;
 
 			if (locationName != null && !locationName.isEmpty()) {
 				j++;
-				writeDataIntoSheet(locationCodeLong, locationName, locationType, parentLocationCodeLong,
+				writeDataIntoSheet(locationCodeLong, locationName, locationType, parentLocationGuid,
 						exportWorkBookSheet, j);
 			} else {
 				break;
@@ -322,47 +323,57 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 			inputFilePath = env.getProperty("project.locations-files.download-path")
 					+ env.getProperty("project.state-locations-file-name");
 		}
-		Workbook importWorkBook = CommonUtil.getWorkBookFromFile(inputFilePath);
-		Sheet importWorkBookSheet = importWorkBook.getSheetAt(0);
+		List<LocationMaster> countryLocations = locationMasterDao
+				.getAllMasterLocationsByType(ServiceConstants.LOCATION_COUNTRY_TYPE);
 
-		String outPutFilePath = "";
-		String directoryPath = env.getProperty("project.locations-files.upload-path");
-		String fileName = env.getProperty("project.state-locations-file-name");
+		if (countryLocations != null && !countryLocations.isEmpty()) {
+			for (LocationMaster eachCountryLocation : countryLocations) {
+				if (eachCountryLocation != null) {
+					Workbook importWorkBook = CommonUtil.getWorkBookFromFile(inputFilePath);
+					Sheet importWorkBookSheet = importWorkBook.getSheetAt(0);
 
-		outPutFilePath = directoryPath + fileName;
-		CommonUtil.createExcelFile(directoryPath, fileName);
+					String outPutFilePath = "";
+					String directoryPath = env.getProperty("project.locations-files.upload-path");
+					String fileName = env.getProperty("project.state-locations-file-name");
 
-		Workbook exportWorkBook = CommonUtil.getWorkBookFromFile(outPutFilePath);
-		if (exportWorkBook.getNumberOfSheets() == 1 && exportWorkBook.getSheetAt(0) != null) {
-			exportWorkBook.removeSheetAt(0);
-		}
-		Sheet exportWorkBookSheet = exportWorkBook.createSheet(ServiceConstants.LOCATION_EXCEL_STATE_SHEET_NAME);
-		addHeaderRow(exportWorkBookSheet);
-		int j = 0;
-		for (int i = 0; i <= importWorkBookSheet.getLastRowNum(); i++) {
-			if (i < 3) {
-				continue;
+					outPutFilePath = directoryPath + fileName;
+					CommonUtil.createExcelFile(directoryPath, fileName);
+
+					Workbook exportWorkBook = CommonUtil.getWorkBookFromFile(outPutFilePath);
+					if (exportWorkBook.getNumberOfSheets() == 1 && exportWorkBook.getSheetAt(0) != null) {
+						exportWorkBook.removeSheetAt(0);
+					}
+					Sheet exportWorkBookSheet = exportWorkBook
+							.createSheet(ServiceConstants.LOCATION_EXCEL_STATE_SHEET_NAME);
+					addHeaderRow(exportWorkBookSheet);
+					int j = 0;
+					for (int i = 0; i <= importWorkBookSheet.getLastRowNum(); i++) {
+						if (i < 3) {
+							continue;
+						}
+						Row eachRow = importWorkBookSheet.getRow(i);
+						double locationCode = eachRow.getCell(1).getNumericCellValue();
+						long locationCodeLong = Long.valueOf(0);
+						locationCodeLong = (long) locationCode;
+						String locationName = eachRow.getCell(3).getStringCellValue().trim();
+						String locationType = "";
+						String stateOrUnionTerritory = eachRow.getCell(7).getStringCellValue().trim();
+						locationType = stateOrUnionTerritory.equalsIgnoreCase("S")
+								? ServiceConstants.LOCATION_STATE_TYPE : ServiceConstants.LOCATION_UNION_TERRITORY_TYPE;
+						Long parentLocationGuid = eachCountryLocation.getGuid();
+						if (locationName != null && !locationName.isEmpty()) {
+							j++;
+							writeDataIntoSheet(locationCodeLong, locationName, locationType, parentLocationGuid,
+									exportWorkBookSheet, j);
+						} else {
+							break;
+						}
+
+					}
+					writeExcelDataIntoFile(outPutFilePath, exportWorkBook);
+				}
 			}
-			Row eachRow = importWorkBookSheet.getRow(i);
-			double locationCode = eachRow.getCell(1).getNumericCellValue();
-			long locationCodeLong = Long.valueOf(0);
-			locationCodeLong = (long) locationCode;
-			String locationName = eachRow.getCell(3).getStringCellValue().trim();
-			String locationType = "";
-			String stateOrUnionTerritory = eachRow.getCell(7).getStringCellValue().trim();
-			locationType = stateOrUnionTerritory.equalsIgnoreCase("S") ? ServiceConstants.LOCATION_STATE_TYPE
-					: ServiceConstants.LOCATION_UNION_TERRITORY_TYPE;
-			Long parentLocationCodeLong = ServiceConstants.DEFAULT_COUNTRY_CODE;
-			if (locationName != null && !locationName.isEmpty()) {
-				j++;
-				writeDataIntoSheet(locationCodeLong, locationName, locationType, parentLocationCodeLong,
-						exportWorkBookSheet, j);
-			} else {
-				break;
-			}
-
 		}
-		writeExcelDataIntoFile(outPutFilePath, exportWorkBook);
 		return true;
 	}
 
@@ -372,28 +383,28 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 		Cell locationCodeHeaderCell = headerRow.createCell(0);
 		Cell locationNameHeaderCell = headerRow.createCell(1);
 		Cell locationTypeHeaderCell = headerRow.createCell(2);
-		Cell parentLocationCodeHeaderCell = headerRow.createCell(3);
+		Cell parentLocationGuidHeaderCell = headerRow.createCell(3);
 
 		locationCodeHeaderCell.setCellValue(ServiceConstants.LOCATION_CODE);
 		locationNameHeaderCell.setCellValue(ServiceConstants.LOCATION_NAME);
 		locationTypeHeaderCell.setCellValue(ServiceConstants.LOCATION_TYPE);
-		parentLocationCodeHeaderCell.setCellValue(ServiceConstants.PARENT_LOCATION_CODE);
+		parentLocationGuidHeaderCell.setCellValue(ServiceConstants.PARENT_LOCATION_GUID);
 
 	}
 
 	private void writeDataIntoSheet(Long locationCode, String locationName, String locationType,
-			long parentLocationCodeLong, Sheet exportWorkBookSheet, int rowNo) {
+			long parentLocationGuid, Sheet exportWorkBookSheet, int rowNo) {
 
 		Row row = exportWorkBookSheet.createRow(rowNo);
 		Cell locationCodeCell = row.createCell(0);
 		Cell locationNameCell = row.createCell(1);
 		Cell locationTypeCell = row.createCell(2);
-		Cell parentLocationCodeCell = row.createCell(3);
+		Cell parentLocationGuidCell = row.createCell(3);
 
 		locationCodeCell.setCellValue(locationCode);
 		locationNameCell.setCellValue(locationName);
 		locationTypeCell.setCellValue(locationType);
-		parentLocationCodeCell.setCellValue(parentLocationCodeLong);
+		parentLocationGuidCell.setCellValue(parentLocationGuid);
 
 	}
 
@@ -419,6 +430,15 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 			inputFilePath = env.getProperty("project.locations-files.download-path")
 					+ env.getProperty("project.district-locations-file-name");
 		}
+
+		List<LocationMaster> stateMasterLocations = new ArrayList<LocationMaster>();
+		List<String> locationTypes = new ArrayList<String>();
+		locationTypes.add(ServiceConstants.LOCATION_STATE_TYPE);
+		locationTypes.add(ServiceConstants.LOCATION_UNION_TERRITORY_TYPE);
+		stateMasterLocations = locationMasterDao.getAllMasterLocationsByTypes(locationTypes);
+		Map<Long, List<LocationMaster>> stateMasterLocationsCodeMap = stateMasterLocations.stream()
+				.collect(Collectors.groupingBy(locationObject -> locationObject.getLocationCode()));
+
 		Workbook importWorkBook = CommonUtil.getWorkBookFromFile(inputFilePath);
 		Sheet importWorkBookSheet = importWorkBook.getSheetAt(0);
 
@@ -451,15 +471,22 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 			long parentLocationCodeLong = Long.valueOf(0);
 			parentLocationCodeLong = (long) parentLocationCode;
 
+			Long parentLocationGuid = null;
+			List<LocationMaster> stateLocations = stateMasterLocationsCodeMap.get(parentLocationCodeLong);
+			if (stateLocations != null && !stateLocations.isEmpty()) {
+				LocationMaster locationMaster = stateLocations.get(0);
+				parentLocationGuid = locationMaster.getGuid();
+			}
 			if (locationName != null && !locationName.isEmpty()) {
 				j++;
-				writeDataIntoSheet(locationCodeLong, locationName, locationType, parentLocationCodeLong,
+				writeDataIntoSheet(locationCodeLong, locationName, locationType, parentLocationGuid,
 						exportWorkBookSheet, j);
 			} else {
 				break;
 			}
 		}
 		writeExcelDataIntoFile(outPutFilePath, exportWorkBook);
+
 		return true;
 	}
 
@@ -469,6 +496,12 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 			inputFilePath = env.getProperty("project.locations-files.download-path")
 					+ env.getProperty("project.sub_dsitrict-locations-file-name");
 		}
+
+		List<LocationMaster> districtLocations = new ArrayList<LocationMaster>();
+		districtLocations = locationMasterDao.getAllMasterLocationsByType(ServiceConstants.LOCATION_DISTRICT_TYPE);
+
+		final Map<Long, List<LocationMaster>> districtLocationsMap = districtLocations.stream()
+				.collect(Collectors.groupingBy(districtLocation -> districtLocation.getLocationCode()));
 
 		Workbook importWorkBook = CommonUtil.getWorkBookFromFile(inputFilePath);
 		Sheet importWorkBookSheet = importWorkBook.getSheetAt(0);
@@ -502,9 +535,16 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 			long parentLocationCodeLong = Long.valueOf(0);
 			parentLocationCodeLong = (long) parentLocationCode;
 
+			Long parentLocationGuid = null;
+			List<LocationMaster> districtLocationsList = districtLocationsMap.get(parentLocationCodeLong);
+			if (districtLocationsList != null && !districtLocationsList.isEmpty()) {
+				LocationMaster locationMaster = districtLocationsList.get(0);
+				parentLocationGuid = locationMaster.getGuid();
+			}
+
 			if (locationName != null && !locationName.isEmpty()) {
 				j++;
-				writeDataIntoSheet(locationCodeLong, locationName, locationType, parentLocationCodeLong,
+				writeDataIntoSheet(locationCodeLong, locationName, locationType, parentLocationGuid,
 						exportWorkBookSheet, j);
 			} else {
 				break;
@@ -574,8 +614,8 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 								j++;
 								locationName = CommonUtil.removeEndsWith(locationName,
 										ServiceConstants.LOCATION_MUNCIPAL_CORPORATION_TYPE_LOWER);
-								writeDataIntoSheet(locationCodeLong, locationName, locationType,
-										eachLocation.getLocationCode(), exportWorkBookSheet, j);
+								writeDataIntoSheet(locationCodeLong, locationName, locationType, eachLocation.getGuid(),
+										exportWorkBookSheet, j);
 							}
 						} else {
 							break;
@@ -642,8 +682,8 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 								j++;
 								locationName = CommonUtil.removeEndsWith(locationName,
 										ServiceConstants.LOCATION_MUNCIPAL_COUNCIL_TYPE);
-								writeDataIntoSheet(locationCodeLong, locationName, locationType,
-										eachLocation.getLocationCode(), exportWorkBookSheet, j);
+								writeDataIntoSheet(locationCodeLong, locationName, locationType, eachLocation.getGuid(),
+										exportWorkBookSheet, j);
 							}
 						} else {
 							break;
@@ -715,8 +755,8 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 								locationName = CommonUtil.removeEndsWith(locationName,
 										ServiceConstants.LOCATION_NAGAR_PANCHAYAT_TYPE);
 								locationType = ServiceConstants.LOCATION_TOWN_PANCHAYATH_TYPE;
-								writeDataIntoSheet(locationCodeLong, locationName, locationType,
-										eachLocation.getLocationCode(), exportWorkBookSheet, j);
+								writeDataIntoSheet(locationCodeLong, locationName, locationType, eachLocation.getGuid(),
+										exportWorkBookSheet, j);
 							}
 						} else {
 							break;
@@ -745,6 +785,21 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 		if (stateLocations != null && !stateLocations.isEmpty()) {
 			for (LocationMaster eachLocation : stateLocations) {
 				if (eachLocation != null) {
+
+					List<LocationMaster> districtLocations = new ArrayList<LocationMaster>();
+					districtLocations = locationMasterDao.getAllMasterLocationsByTypeAndParentLocation(
+							ServiceConstants.LOCATION_DISTRICT_TYPE, eachLocation.getGuid());
+
+					List<Long> distirctGuids = districtLocations.stream().map(LocationMaster::getGuid)
+							.collect(Collectors.toList());
+
+					List<LocationMaster> subDistrictLocations = new ArrayList<LocationMaster>();
+					subDistrictLocations = locationMasterDao.getAllMasterLocationsByTypeAndParentLocations(
+							ServiceConstants.LOCATION_SUB_DISTRICT_TYPE, distirctGuids);
+
+					final Map<Long, List<LocationMaster>> subDistrictLocationsMap = subDistrictLocations.stream()
+							.collect(Collectors
+									.groupingBy(subDistrictLocation -> subDistrictLocation.getLocationCode()));
 
 					Workbook importWorkBook = CommonUtil.getWorkBookFromFile(
 							inputFilePath + eachLocation.getLocationName() + ServiceConstants.EXCEL_SHEET_TYPE_XLS);
@@ -783,10 +838,18 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 						long parentLocationCodeLong = Long.valueOf(0);
 						parentLocationCodeLong = (long) parentLocationCode;
 
+						Long parentLocationGuid = null;
+						List<LocationMaster> subDistrictLocationsList = subDistrictLocationsMap
+								.get(parentLocationCodeLong);
+						if (subDistrictLocationsList != null && !subDistrictLocationsList.isEmpty()) {
+							LocationMaster locationMaster = subDistrictLocationsList.get(0);
+							parentLocationGuid = locationMaster.getGuid();
+						}
+
 						if (villageName != null && !villageName.isEmpty()) {
 							if (locationName != null && !locationName.isEmpty()) {
 								j++;
-								writeDataIntoSheet(locationCodeLong, locationName, locationType, parentLocationCodeLong,
+								writeDataIntoSheet(locationCodeLong, locationName, locationType, parentLocationGuid,
 										exportWorkBookSheet, j);
 							}
 						} else {
@@ -819,6 +882,32 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 		if (stateLocations != null && !stateLocations.isEmpty()) {
 			for (LocationMaster eachLocation : stateLocations) {
 				if (eachLocation != null) {
+
+					List<LocationMaster> districtLocations = new ArrayList<LocationMaster>();
+					districtLocations = locationMasterDao.getAllMasterLocationsByTypeAndParentLocation(
+							ServiceConstants.LOCATION_DISTRICT_TYPE, eachLocation.getGuid());
+
+					List<Long> distirctGuids = districtLocations.stream().map(LocationMaster::getGuid)
+							.collect(Collectors.toList());
+
+					List<LocationMaster> subDistrictLocations = new ArrayList<LocationMaster>();
+					subDistrictLocations = locationMasterDao.getAllMasterLocationsByTypeAndParentLocations(
+							ServiceConstants.LOCATION_SUB_DISTRICT_TYPE, distirctGuids);
+
+					final Map<Long, List<LocationMaster>> subDistrictLocationsMap = subDistrictLocations.stream()
+							.collect(Collectors
+									.groupingBy(subDistrictLocation -> subDistrictLocation.getLocationCode()));
+
+					List<Long> subDistirctGuids = subDistrictLocations.stream().map(LocationMaster::getGuid)
+							.collect(Collectors.toList());
+
+					List<LocationMaster> villagePanchayathLocations = new ArrayList<LocationMaster>();
+					villagePanchayathLocations = locationMasterDao.getAllMasterLocationsByTypeAndParentLocations(
+							ServiceConstants.LOCATION_VILLAGE_PANCHAYATH_TYPE, subDistirctGuids);
+
+					final Map<Long, List<LocationMaster>> villagePanchayathLocationsMap = villagePanchayathLocations
+							.stream().collect(Collectors.groupingBy(
+									villagePanchayathLocation -> villagePanchayathLocation.getLocationCode()));
 
 					Workbook importWorkBook = CommonUtil.getWorkBookFromFile(
 							inputFilePath + eachLocation.getLocationName() + ServiceConstants.EXCEL_SHEET_TYPE_XLS);
@@ -853,15 +942,34 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 
 						double parentLocationCode = 0;
 						long parentLocationCodeLong = Long.valueOf(0);
-
+						Long parentLocationGuid = null;
 						if (eachRow.getCell(12).getCellType() != Cell.CELL_TYPE_BLANK) {
+
 							parentLocationCode = eachRow.getCell(12).getNumericCellValue();
 							parentLocationCodeLong = (long) parentLocationCode;
+
+							List<LocationMaster> villagePanchayathLocationsList = villagePanchayathLocationsMap
+									.get(parentLocationCodeLong);
+							if (villagePanchayathLocationsList != null && !villagePanchayathLocationsList.isEmpty()) {
+								LocationMaster locationMaster = villagePanchayathLocationsList.get(0);
+								parentLocationGuid = locationMaster.getGuid();
+							}
+						} else {
+							parentLocationCode = eachRow.getCell(4).getNumericCellValue();
+							parentLocationCodeLong = (long) parentLocationCode;
+
+							List<LocationMaster> subDistrictLocationsList = subDistrictLocationsMap
+									.get(parentLocationCodeLong);
+							if (subDistrictLocationsList != null && !subDistrictLocationsList.isEmpty()) {
+								LocationMaster locationMaster = subDistrictLocationsList.get(0);
+								parentLocationGuid = locationMaster.getGuid();
+							}
+
 						}
 
 						if (locationName != null && !locationName.isEmpty()) {
 							j++;
-							writeDataIntoSheet(locationCodeLong, locationName, locationType, parentLocationCodeLong,
+							writeDataIntoSheet(locationCodeLong, locationName, locationType, parentLocationGuid,
 									exportWorkBookSheet, j);
 
 						} else {
@@ -888,9 +996,6 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 		List<LocationMaster> countryLocations = locationMasterDao
 				.getAllMasterLocationsByType(ServiceConstants.LOCATION_COUNTRY_TYPE);
 
-		final Map<Long, List<LocationMaster>> locationCodesMap = prepareLocationCodeMapForVillageReferenceLocations(
-				inputFilePath);
-
 		if (countryLocations != null && !countryLocations.isEmpty()) {
 			for (LocationMaster eachCountryLocation : countryLocations) {
 				if (eachCountryLocation != null) {
@@ -904,6 +1009,39 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 					if (stateLocations != null && !stateLocations.isEmpty()) {
 						for (LocationMaster eachLocation : stateLocations) {
 							if (eachLocation != null) {
+
+								List<LocationMaster> districtLocations = new ArrayList<LocationMaster>();
+								districtLocations = locationMasterDao.getAllMasterLocationsByTypeAndParentLocation(
+										ServiceConstants.LOCATION_DISTRICT_TYPE, eachLocation.getGuid());
+
+								final Map<Long, List<LocationMaster>> districtLocationsMap = districtLocations.stream()
+										.collect(Collectors
+												.groupingBy(districtLocation -> districtLocation.getLocationCode()));
+
+								List<Long> distirctGuids = districtLocations.stream().map(LocationMaster::getGuid)
+										.collect(Collectors.toList());
+
+								List<LocationMaster> subDistrictLocations = new ArrayList<LocationMaster>();
+								subDistrictLocations = locationMasterDao.getAllMasterLocationsByTypeAndParentLocations(
+										ServiceConstants.LOCATION_SUB_DISTRICT_TYPE, distirctGuids);
+
+								final Map<Long, List<LocationMaster>> subDistrictLocationsMap = subDistrictLocations
+										.stream().collect(Collectors.groupingBy(
+												subDistrictLocation -> subDistrictLocation.getLocationCode()));
+
+								List<Long> subDistirctGuids = subDistrictLocations.stream().map(LocationMaster::getGuid)
+										.collect(Collectors.toList());
+
+								List<LocationMaster> villagePanchayathLocations = new ArrayList<LocationMaster>();
+								villagePanchayathLocations = locationMasterDao
+										.getAllMasterLocationsByTypeAndParentLocations(
+												ServiceConstants.LOCATION_VILLAGE_PANCHAYATH_TYPE, subDistirctGuids);
+
+								final Map<Long, List<LocationMaster>> villagePanchayathLocationsMap = villagePanchayathLocations
+										.stream()
+										.collect(Collectors
+												.groupingBy(villagePanchayathLocation -> villagePanchayathLocation
+														.getLocationCode()));
 
 								Workbook importWorkBook = CommonUtil.getWorkBookFromFile(inputFilePath
 										+ eachLocation.getLocationName() + ServiceConstants.EXCEL_SHEET_TYPE_XLS);
@@ -955,51 +1093,45 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 									Long subDistrictLocationGuid = null;
 									Long districtLocationGuid = null;
 
-									if (locationCodeLong != null) {
-										if (locationCodesMap != null) {
-											if (locationCodesMap.get(locationCodeLong) != null
-													&& locationCodesMap.get(locationCodeLong).get(0) != null) {
-												villageLocationGuid = getLocationTypeGuid(
-														locationCodesMap.get(locationCodeLong),
-														ServiceConstants.LOCATION_VILLAGE_TYPE);
-
-											}
-										}
-									}
+									/*
+									 * if (locationCodeLong != null) { if
+									 * (locationCodesMap != null) { if
+									 * (locationCodesMap.get(locationCodeLong)
+									 * != null &&
+									 * locationCodesMap.get(locationCodeLong).
+									 * get(0) != null) { villageLocationGuid =
+									 * getLocationTypeGuid(
+									 * locationCodesMap.get(locationCodeLong),
+									 * ServiceConstants.LOCATION_VILLAGE_TYPE);
+									 * 
+									 * } } }
+									 */
 
 									if (villagePanchathLocationCodeLong != null) {
-										if (locationCodesMap != null) {
-											if (locationCodesMap.get(villagePanchathLocationCodeLong) != null
-													&& locationCodesMap.get(villagePanchathLocationCodeLong)
-															.get(0) != null) {
-												villageLocationPanchayathGuid = getLocationTypeGuid(
-														locationCodesMap.get(villagePanchathLocationCodeLong),
-														ServiceConstants.LOCATION_VILLAGE_PANCHAYATH_TYPE);
-
-											}
+										List<LocationMaster> villagePanchayathLocationsList = subDistrictLocationsMap
+												.get(villagePanchathLocationCodeLong);
+										if (villagePanchayathLocationsList != null
+												&& !villagePanchayathLocationsList.isEmpty()) {
+											LocationMaster locationMaster = villagePanchayathLocationsList.get(0);
+											villageLocationPanchayathGuid = locationMaster.getGuid();
 										}
 									}
 
 									if (subDistrictLocationLong != null) {
-										if (locationCodesMap != null) {
-											if (locationCodesMap.get(subDistrictLocationLong) != null
-													&& locationCodesMap.get(subDistrictLocationLong).get(0) != null) {
-												subDistrictLocationGuid = getLocationTypeGuid(
-														locationCodesMap.get(subDistrictLocationLong),
-														ServiceConstants.LOCATION_SUB_DISTRICT_TYPE);
-
-											}
+										List<LocationMaster> subDistrictLocationsList = subDistrictLocationsMap
+												.get(subDistrictLocationLong);
+										if (subDistrictLocationsList != null && !subDistrictLocationsList.isEmpty()) {
+											LocationMaster locationMaster = subDistrictLocationsList.get(0);
+											subDistrictLocationGuid = locationMaster.getGuid();
 										}
 									}
 
 									if (districtLocationLong != null) {
-										if (locationCodesMap != null) {
-											if (locationCodesMap.get(districtLocationLong) != null
-													&& locationCodesMap.get(districtLocationLong).get(0) != null) {
-												districtLocationGuid = getLocationTypeGuid(
-														locationCodesMap.get(subDistrictLocationLong),
-														ServiceConstants.LOCATION_DISTRICT_TYPE);
-											}
+										List<LocationMaster> districtLocationsList = districtLocationsMap
+												.get(districtLocationLong);
+										if (districtLocationsList != null && !districtLocationsList.isEmpty()) {
+											LocationMaster locationMaster = districtLocationsList.get(0);
+											districtLocationGuid = locationMaster.getGuid();
 										}
 									}
 
@@ -1029,117 +1161,6 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 
 		return true;
 
-	}
-
-	private Long getLocationTypeGuid(List<LocationMaster> list, String locationType) {
-		Long guid = null;
-		if (list != null && !list.isEmpty()) {
-			list = list.stream().filter(u -> locationType.equalsIgnoreCase(u.getLocationType()))
-					.collect(Collectors.toList());
-			if (list != null && !list.isEmpty()) {
-				guid = list.get(0).getGuid();
-			}
-		}
-		return guid;
-	}
-
-	private Map<Long, List<LocationMaster>> prepareLocationCodeMapForVillageReferenceLocations(String inputFilePath)
-			throws InternalServerException {
-
-		Map<Long, List<LocationMaster>> locationCodesMap = new HashMap<Long, List<LocationMaster>>();
-
-		List<LocationMaster> stateLocations = new ArrayList<LocationMaster>();
-		List<String> locationTypes = new ArrayList<String>();
-		locationTypes.add(ServiceConstants.LOCATION_STATE_TYPE);
-		locationTypes.add(ServiceConstants.LOCATION_UNION_TERRITORY_TYPE);
-		stateLocations = locationMasterDao.getAllMasterLocationsByTypes(locationTypes);
-		List<LocationMaster> masterLocations = new ArrayList<LocationMaster>();
-		List<Long> locationCodes = new ArrayList<Long>();
-		if (stateLocations != null && !stateLocations.isEmpty()) {
-			for (LocationMaster eachLocation : stateLocations) {
-				if (eachLocation != null) {
-
-					Workbook importWorkBook = CommonUtil.getWorkBookFromFile(
-							inputFilePath + eachLocation.getLocationName() + ServiceConstants.EXCEL_SHEET_TYPE_XLS);
-					Sheet importWorkBookSheet = importWorkBook.getSheetAt(0);
-
-					for (int i = 0; i <= importWorkBookSheet.getLastRowNum(); i++) {
-						if (i < 4) {
-							continue;
-						}
-						Row eachRow = importWorkBookSheet.getRow(i);
-						double villageLocationCode = eachRow.getCell(8).getNumericCellValue();
-						Long villageLocationCodeLong = null;
-						villageLocationCodeLong = (long) villageLocationCode;
-
-						Long villagePanchathLocationCodeLong = null;
-						if ((Double) eachRow.getCell(12).getNumericCellValue() != null) {
-							villagePanchathLocationCodeLong = (long) eachRow.getCell(12).getNumericCellValue();
-						}
-
-						double subDistrictLocationCode = eachRow.getCell(4).getNumericCellValue();
-						Long subDistrictLocationCodeLong = null;
-						subDistrictLocationCodeLong = (long) subDistrictLocationCode;
-
-						double districtLocationCode = eachRow.getCell(0).getNumericCellValue();
-						Long districtLocationCodeLong = null;
-						districtLocationCodeLong = (long) districtLocationCode;
-
-						if (villageLocationCodeLong != null) {
-							if (!locationCodes.contains(villageLocationCodeLong)) {
-								locationCodes.add(villageLocationCodeLong);
-							}
-						}
-						if (villagePanchathLocationCodeLong != null) {
-							if (!locationCodes.contains(villagePanchathLocationCodeLong)) {
-								locationCodes.add(villagePanchathLocationCodeLong);
-							}
-						}
-						if (subDistrictLocationCodeLong != null) {
-							if (!locationCodes.contains(subDistrictLocationCodeLong)) {
-								locationCodes.add(subDistrictLocationCodeLong);
-							}
-						}
-						if (districtLocationCodeLong != null) {
-							if (!locationCodes.contains(districtLocationCodeLong)) {
-								locationCodes.add(districtLocationCodeLong);
-							}
-						}
-
-						String locationName = eachRow.getCell(9).getStringCellValue().trim();
-
-						if (locationName == null || locationName.isEmpty()) {
-							break;
-						}
-					}
-				}
-			}
-		}
-
-		if (locationCodes != null && !locationCodes.isEmpty()) {
-			int startIndex = 0;
-			int endIndex = 0;
-			for (int i = 0; endIndex < locationCodes.size(); i++) {
-				startIndex = i * DaoConstants.DEFAULT_FETCH_ROW_COUNT;
-				endIndex = startIndex + DaoConstants.DEFAULT_FETCH_ROW_COUNT;
-				if (endIndex > locationCodes.size()) {
-					endIndex = locationCodes.size();
-				}
-				List<Long> eachOffSetLocationCodes = locationCodes.subList(startIndex, endIndex);
-				List<LocationMaster> eachOffSetLocations = locationMasterDao
-						.getLocationsMasterData(eachOffSetLocationCodes);
-				if (eachOffSetLocations != null && !eachOffSetLocations.isEmpty()) {
-					masterLocations.addAll(eachOffSetLocations);
-				}
-			}
-		}
-
-		if (masterLocations != null && !masterLocations.isEmpty()) {
-			locationCodesMap = masterLocations.stream()
-					.collect(Collectors.groupingBy(location -> location.getLocationCode()));
-		}
-
-		return locationCodesMap;
 	}
 
 	private void addReferenceHeaderRow(Sheet exportWorkBookSheet) {
@@ -1588,7 +1609,7 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 
 	@Override
 	@Transactional
-	public boolean importConstituencyLocations() throws InternalServerException {
+	public boolean importMPConstituencyLocations() throws InternalServerException {
 
 		List<LocationMaster> mpConstituencyLocations = new ArrayList<LocationMaster>();
 		driver = new ChromeDriver();
@@ -1683,4 +1704,105 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 		return true;
 	}
 
+	@Override
+	public boolean importMLAConstituencyLocations() throws InternalServerException {
+		List<LocationMaster> mlaConstituencyLocations = new ArrayList<LocationMaster>();
+		driver = new ChromeDriver();
+		driver.manage().window().maximize();
+		driver.get(env.getProperty("india-mla-constituency.url"));
+
+		List<WebElement> pageMainTables = driver.findElements(By.className("tableizer-table"));
+		WebElement pageMainTable = pageMainTables.get(5);
+		WebElement pageMainTableBody = pageMainTable.findElements(By.xpath("tbody")).get(0);
+		List<WebElement> statesTableRowsWithHeader = pageMainTableBody.findElements(By.xpath("tr"));
+		List<LocationMaster> stateMasterLocations = new ArrayList<LocationMaster>();
+		List<String> locationTypes = new ArrayList<String>();
+		locationTypes.add(ServiceConstants.LOCATION_STATE_TYPE);
+		locationTypes.add(ServiceConstants.LOCATION_UNION_TERRITORY_TYPE);
+		stateMasterLocations = locationMasterDao.getAllMasterLocationsByTypes(locationTypes);
+		Map<String, List<LocationMaster>> stateMasterLocationsCodeMap = stateMasterLocations.stream()
+				.collect(Collectors.groupingBy(locationObject -> locationObject.getLocationType()));
+
+		processEachStateMLAConstituencyURL(1, statesTableRowsWithHeader.size(), mlaConstituencyLocations,
+				stateMasterLocationsCodeMap);
+		if (mlaConstituencyLocations != null && !mlaConstituencyLocations.isEmpty()) {
+
+		}
+		return true;
+	}
+
+	private void processEachStateMLAConstituencyURL(int rowNo, int rowsSize,
+			List<LocationMaster> mlaConstituencyLocations,
+			Map<String, List<LocationMaster>> stateMasterLocationsCodeMap) {
+		if (rowNo > rowsSize) {
+			driver.close();
+			driver.quit();
+		} else {
+			driver.get(env.getProperty("india-mla-constituency.url"));
+			List<WebElement> pageMainTables = driver.findElements(By.className("tableizer-table"));
+			WebElement pageMainTable = pageMainTables.get(5);
+			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", pageMainTable);
+			WebElement pageMainTableBody = pageMainTable.findElements(By.xpath("tbody")).get(0);
+			List<WebElement> statesTableRowsWithHeader = pageMainTableBody.findElements(By.xpath("tr"));
+			WebElement stateNameTrWebElement = statesTableRowsWithHeader.get(rowNo);
+			WebElement stateNameTdWebElement = stateNameTrWebElement.findElements(By.xpath("td")).get(0);
+			WebElement eachRowStateCellLink = stateNameTdWebElement.findElement(By.xpath("a"));
+			String stateName = eachRowStateCellLink.getText();
+			String stateUrl = eachRowStateCellLink.getAttribute("href");
+			processEachStateMLAConstituencyLocationData(mlaConstituencyLocations, stateName, stateUrl,
+					stateMasterLocationsCodeMap);
+			processEachStateMLAConstituencyURL(rowNo + 1, rowsSize, mlaConstituencyLocations,
+					stateMasterLocationsCodeMap);
+		}
+	}
+
+	private void processEachStateMLAConstituencyLocationData(List<LocationMaster> mlaConstituencyLocations,
+			String stateName, String stateUrl, Map<String, List<LocationMaster>> stateMasterLocationsCodeMap) {
+		driver.get(stateUrl);
+		WebElement scrollTabDiv = driver.findElement(By.className("scroll-tab"));
+		WebElement mCSB2Div = scrollTabDiv.findElement(By.id("mCSB_2"));
+		WebElement mCSB2DivContainerDiv = mCSB2Div.findElement(By.id("mCSB_2_container"));
+		List<WebElement> mlaConstituencyTables = mCSB2DivContainerDiv.findElements(By.className("tableizer-table"));
+		WebElement mlaConstituencyTable = mlaConstituencyTables.get(0);
+		if (mlaConstituencyTables.size() > 1) {
+			mlaConstituencyTable = mlaConstituencyTables.get(1);
+		}
+		WebElement mlaConstituencyTableBody = mlaConstituencyTable.findElement(By.xpath("tbody"));
+		List<WebElement> mlaConstituencyTableBodyTrs = mlaConstituencyTableBody.findElements(By.xpath("tr"));
+
+		Long parentLocationGuid = null;
+		List<LocationMaster> stateLocations = stateMasterLocationsCodeMap.get(stateName);
+		if (stateLocations != null && !stateLocations.isEmpty()) {
+			LocationMaster locationMaster = stateLocations.get(0);
+			parentLocationGuid = locationMaster.getGuid();
+		}
+
+		for (WebElement row : mlaConstituencyTableBodyTrs) {
+
+			List<WebElement> cells = row.findElements(By.xpath("td"));
+			WebElement assemblyConstituencyNo1 = cells.get(0);
+			WebElement assemblyConstituencyName1 = cells.get(1);
+			WebElement assemblyConstituencyNo2 = cells.get(2);
+			WebElement assemblyConstituencyName2 = cells.get(3);
+
+			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", assemblyConstituencyNo1);
+
+			if (assemblyConstituencyName1.getText() != null && !assemblyConstituencyName1.getText().isEmpty()) {
+				LocationMaster loc1 = new LocationMaster();
+				loc1.setLocationCode(Long.parseLong(assemblyConstituencyNo1.getText()));
+				loc1.setLocationName(assemblyConstituencyName1.getText());
+				loc1.setLocationType(ServiceConstants.LOCATION_MLA_CONSTITUENCT_TYPE);
+				loc1.setParentLocationGuid(parentLocationGuid);
+				mlaConstituencyLocations.add(loc1);
+			}
+			if (assemblyConstituencyName2.getText() != null && !assemblyConstituencyName2.getText().isEmpty()) {
+				LocationMaster loc2 = new LocationMaster();
+				loc2.setLocationCode(Long.parseLong(assemblyConstituencyNo2.getText()));
+				loc2.setLocationName(assemblyConstituencyName2.getText());
+				loc2.setLocationType(ServiceConstants.LOCATION_MLA_CONSTITUENCT_TYPE);
+				loc2.setParentLocationGuid(parentLocationGuid);
+				mlaConstituencyLocations.add(loc2);
+			}
+		}
+	}
 }

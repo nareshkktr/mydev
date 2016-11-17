@@ -703,10 +703,16 @@ public class EndPointConstants {
 	/** The Constant CREATE_ACCOUNT_API_DESCRIPTION. */
 	public static final String IMPORT_PARTIES_API_DESCRIPTION = "Import All Parties In India";
 
-	public static final String IMPORT_CONSTITUENCY_LOCATIONS_REQUEST_MAPPING = "importConstituencyLocations";
-	public static final String IMPORT_CONSTITUENCY_LOCATIONS_API_VALUE = "importConstituencyLocations";
-	public static final String IMPORT_CONSTITUENCY_LOCATIONS_API_NICKNAME = "importConstituencyLocations";
-	public static final String IMPORT_CONSTITUENCY_LOCATIONS_API_DESCRIPTION = "Import MLA/MP Constituency Locations";
+	public static final String IMPORT_MP_CONSTITUENCY_LOCATIONS_REQUEST_MAPPING = "importMPConstituencyLocations";
+	public static final String IMPORT_MP_CONSTITUENCY_LOCATIONS_API_VALUE = "importMPConstituencyLocations";
+	public static final String IMPORT_MP_CONSTITUENCY_LOCATIONS_API_NICKNAME = "importMPConstituencyLocations";
+	public static final String IMPORT_MP_CONSTITUENCY_LOCATIONS_API_DESCRIPTION = "Import MP Constituency Locations";
+	
+	public static final String IMPORT_MLA_CONSTITUENCY_LOCATIONS_REQUEST_MAPPING = "importMLAConstituencyLocations";
+	public static final String IMPORT_MLA_CONSTITUENCY_LOCATIONS_API_VALUE = "importMLAConstituencyLocations";
+	public static final String IMPORT_MLA_CONSTITUENCY_LOCATIONS_API_NICKNAME = "importMLAConstituencyLocations";
+	public static final String IMPORT_MLA_CONSTITUENCY_LOCATIONS_API_DESCRIPTION = "Import MLA Constituency Locations";
+
 
 	public static final String IMPORT_URBAN_REFERENCE_LOCATIONS_REQUEST_MAPPING = "importUrbanReferenceLocations";
 	public static final String IMPORT_URBAN_REFERENCE_LOCATIONS_API_VALUE = "importUrbanReferenceLocations";

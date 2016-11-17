@@ -123,7 +123,7 @@ public class ServiceConstants {
 	public static final String LOCATION_NAME = "Location Name";
 	public static final String LOCATION_PARENT_CODE = "Parent Location Code";
 	public static final String LOCATION_TYPE = "Location Type";
-	public static final String PARENT_LOCATION_CODE = "Parent Location Code";
+	public static final String PARENT_LOCATION_GUID = "Parent Location Guid";
 
 	public static final String EXCEL_SHEET_TYPE_XLS = ".xls";
 	public static final String EXCEL_SHEET_TYPE_XLSX = ".xlsx";

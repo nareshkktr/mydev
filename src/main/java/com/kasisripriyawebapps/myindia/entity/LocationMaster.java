@@ -40,8 +40,8 @@ public class LocationMaster implements Serializable {
 	@Column(name = "LOCATION_TYPE")
 	private String locationType;
 
-	@Column(name = "PARENT_LOCATION_CODE")
-	private Long parentLocationCode;
+	@Column(name = "PARENT_LOCATION_GUID")
+	private Long parentLocationGuid;
 
 	@OneToMany(mappedBy = "createdLocation", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Event> events = new ArrayList<Event>(0);
@@ -62,7 +62,7 @@ public class LocationMaster implements Serializable {
 	private List<UserInfo> locationUsers = new ArrayList<UserInfo>(0);
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "masterLocation", cascade = CascadeType.ALL)
-	private List<UserInfo> users= new ArrayList<UserInfo>(0);
+	private List<UserInfo> users = new ArrayList<UserInfo>(0);
 
 	public Long getGuid() {
 		return guid;
@@ -148,14 +148,6 @@ public class LocationMaster implements Serializable {
 		}
 	}
 
-	public Long getParentLocationCode() {
-		return parentLocationCode;
-	}
-
-	public void setParentLocationCode(Long parentLocationCode) {
-		this.parentLocationCode = parentLocationCode;
-	}
-
 	public List<UserInfo> getLocationUsers() {
 		return locationUsers;
 	}
@@ -166,6 +158,7 @@ public class LocationMaster implements Serializable {
 			this.locationUsers.addAll(locationUsers);
 		}
 	}
+
 	public List<UserInfo> getUsers() {
 		return users;
 	}
@@ -184,7 +177,7 @@ public class LocationMaster implements Serializable {
 		result = prime * result + ((locationCode == null) ? 0 : locationCode.hashCode());
 		result = prime * result + ((locationName == null) ? 0 : locationName.hashCode());
 		result = prime * result + ((locationType == null) ? 0 : locationType.hashCode());
-		result = prime * result + ((parentLocationCode == null) ? 0 : parentLocationCode.hashCode());
+		result = prime * result + ((parentLocationGuid == null) ? 0 : parentLocationGuid.hashCode());
 		return result;
 	}
 
@@ -212,12 +205,21 @@ public class LocationMaster implements Serializable {
 				return false;
 		} else if (!locationType.equals(other.locationType))
 			return false;
-		if (parentLocationCode == null) {
-			if (other.parentLocationCode != null)
+		if (parentLocationGuid == null) {
+			if (other.parentLocationGuid != null)
 				return false;
-		} else if (!parentLocationCode.equals(other.parentLocationCode))
+		} else if (!parentLocationGuid.equals(other.parentLocationGuid))
 			return false;
 		return true;
 	}
 
+	public Long getParentLocationGuid() {
+		return parentLocationGuid;
+	}
+
+	public void setParentLocationGuid(Long parentLocationGuid) {
+		this.parentLocationGuid = parentLocationGuid;
+	}
+
+	
 }
