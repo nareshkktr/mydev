@@ -123,4 +123,20 @@ public class LocationMasterDaoImpl extends BaseDaoImpl<Long, LocationMaster> imp
 		sortCriteria.setIsAscending(true);
 		return getAllByConditions(criterions, sortCriteria);
 	}
+
+	@Override
+	public List<LocationMaster> getAllMasterLocationsByTypesAndParentLocation(List<String> urbanLocationTypes,
+			Long parentLocationGuid) throws InternalServerException {
+		Criterion criterionObj = Restrictions.in("locationType", urbanLocationTypes);
+		Criterion criterionObj1 = Restrictions.eq("parentLocationGuid", parentLocationGuid);
+
+		List<Criterion> criterions = new ArrayList<Criterion>();
+		criterions.add(criterionObj);
+		criterions.add(criterionObj1);
+
+		SortCriteriaData sortCriteria = new SortCriteriaData();
+		sortCriteria.setProperty("locationName");
+		sortCriteria.setIsAscending(true);
+		return getAllByConditions(criterions, sortCriteria);
+	}
 }

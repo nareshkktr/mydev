@@ -15,6 +15,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Index;
+
 @Entity
 @Table(name = "LOCATION_MASTER")
 public class LocationMaster implements Serializable {
@@ -38,6 +40,7 @@ public class LocationMaster implements Serializable {
 
 	/** The location type. */
 	@Column(name = "LOCATION_TYPE")
+	@Index(name="locationTypeIndex")
 	private String locationType;
 
 	@Column(name = "PARENT_LOCATION_GUID")

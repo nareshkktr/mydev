@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -25,7 +24,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.kasisripriyawebapps.myindia.constants.DaoConstants;
 import com.kasisripriyawebapps.myindia.constants.ServiceConstants;
 import com.kasisripriyawebapps.myindia.dao.LocationDao;
 import com.kasisripriyawebapps.myindia.dao.LocationMasterDao;
@@ -471,12 +469,8 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 			long parentLocationCodeLong = Long.valueOf(0);
 			parentLocationCodeLong = (long) parentLocationCode;
 
-			Long parentLocationGuid = null;
-			List<LocationMaster> stateLocations = stateMasterLocationsCodeMap.get(parentLocationCodeLong);
-			if (stateLocations != null && !stateLocations.isEmpty()) {
-				LocationMaster locationMaster = stateLocations.get(0);
-				parentLocationGuid = locationMaster.getGuid();
-			}
+			Long parentLocationGuid = stateMasterLocationsCodeMap.get(parentLocationCodeLong).get(0).getGuid();
+
 			if (locationName != null && !locationName.isEmpty()) {
 				j++;
 				writeDataIntoSheet(locationCodeLong, locationName, locationType, parentLocationGuid,
@@ -535,12 +529,7 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 			long parentLocationCodeLong = Long.valueOf(0);
 			parentLocationCodeLong = (long) parentLocationCode;
 
-			Long parentLocationGuid = null;
-			List<LocationMaster> districtLocationsList = districtLocationsMap.get(parentLocationCodeLong);
-			if (districtLocationsList != null && !districtLocationsList.isEmpty()) {
-				LocationMaster locationMaster = districtLocationsList.get(0);
-				parentLocationGuid = locationMaster.getGuid();
-			}
+			Long parentLocationGuid = districtLocationsMap.get(parentLocationCodeLong).get(0).getGuid();
 
 			if (locationName != null && !locationName.isEmpty()) {
 				j++;
@@ -782,24 +771,16 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 		locationTypes.add(ServiceConstants.LOCATION_UNION_TERRITORY_TYPE);
 		stateLocations = locationMasterDao.getAllMasterLocationsByTypes(locationTypes);
 
+		List<LocationMaster> subDistrictLocations = new ArrayList<LocationMaster>();
+		subDistrictLocations = locationMasterDao
+				.getAllMasterLocationsByType(ServiceConstants.LOCATION_SUB_DISTRICT_TYPE);
+
+		final Map<Long, List<LocationMaster>> subDistrictLocationsMap = subDistrictLocations.stream()
+				.collect(Collectors.groupingBy(subDistrictLocation -> subDistrictLocation.getLocationCode()));
+
 		if (stateLocations != null && !stateLocations.isEmpty()) {
 			for (LocationMaster eachLocation : stateLocations) {
 				if (eachLocation != null) {
-
-					List<LocationMaster> districtLocations = new ArrayList<LocationMaster>();
-					districtLocations = locationMasterDao.getAllMasterLocationsByTypeAndParentLocation(
-							ServiceConstants.LOCATION_DISTRICT_TYPE, eachLocation.getGuid());
-
-					List<Long> distirctGuids = districtLocations.stream().map(LocationMaster::getGuid)
-							.collect(Collectors.toList());
-
-					List<LocationMaster> subDistrictLocations = new ArrayList<LocationMaster>();
-					subDistrictLocations = locationMasterDao.getAllMasterLocationsByTypeAndParentLocations(
-							ServiceConstants.LOCATION_SUB_DISTRICT_TYPE, distirctGuids);
-
-					final Map<Long, List<LocationMaster>> subDistrictLocationsMap = subDistrictLocations.stream()
-							.collect(Collectors
-									.groupingBy(subDistrictLocation -> subDistrictLocation.getLocationCode()));
 
 					Workbook importWorkBook = CommonUtil.getWorkBookFromFile(
 							inputFilePath + eachLocation.getLocationName() + ServiceConstants.EXCEL_SHEET_TYPE_XLS);
@@ -838,13 +819,7 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 						long parentLocationCodeLong = Long.valueOf(0);
 						parentLocationCodeLong = (long) parentLocationCode;
 
-						Long parentLocationGuid = null;
-						List<LocationMaster> subDistrictLocationsList = subDistrictLocationsMap
-								.get(parentLocationCodeLong);
-						if (subDistrictLocationsList != null && !subDistrictLocationsList.isEmpty()) {
-							LocationMaster locationMaster = subDistrictLocationsList.get(0);
-							parentLocationGuid = locationMaster.getGuid();
-						}
+						Long parentLocationGuid = subDistrictLocationsMap.get(parentLocationCodeLong).get(0).getGuid();
 
 						if (villageName != null && !villageName.isEmpty()) {
 							if (locationName != null && !locationName.isEmpty()) {
@@ -879,35 +854,23 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 		locationTypes.add(ServiceConstants.LOCATION_UNION_TERRITORY_TYPE);
 		stateLocations = locationMasterDao.getAllMasterLocationsByTypes(locationTypes);
 
+		List<LocationMaster> villagePanchayathLocations = locationMasterDao
+				.getAllMasterLocationsByType(ServiceConstants.LOCATION_VILLAGE_PANCHAYATH_TYPE);
+
+		final Map<Long, List<LocationMaster>> villagePanchayathLocationsMap = villagePanchayathLocations.stream()
+				.collect(Collectors
+						.groupingBy(villagePanchayathLocation -> villagePanchayathLocation.getLocationCode()));
+
+		List<LocationMaster> subDistrictLocations = new ArrayList<LocationMaster>();
+		subDistrictLocations = locationMasterDao
+				.getAllMasterLocationsByType(ServiceConstants.LOCATION_SUB_DISTRICT_TYPE);
+
+		final Map<Long, List<LocationMaster>> subDistrictLocationsMap = subDistrictLocations.stream()
+				.collect(Collectors.groupingBy(subDistrictLocation -> subDistrictLocation.getLocationCode()));
+
 		if (stateLocations != null && !stateLocations.isEmpty()) {
 			for (LocationMaster eachLocation : stateLocations) {
 				if (eachLocation != null) {
-
-					List<LocationMaster> districtLocations = new ArrayList<LocationMaster>();
-					districtLocations = locationMasterDao.getAllMasterLocationsByTypeAndParentLocation(
-							ServiceConstants.LOCATION_DISTRICT_TYPE, eachLocation.getGuid());
-
-					List<Long> distirctGuids = districtLocations.stream().map(LocationMaster::getGuid)
-							.collect(Collectors.toList());
-
-					List<LocationMaster> subDistrictLocations = new ArrayList<LocationMaster>();
-					subDistrictLocations = locationMasterDao.getAllMasterLocationsByTypeAndParentLocations(
-							ServiceConstants.LOCATION_SUB_DISTRICT_TYPE, distirctGuids);
-
-					final Map<Long, List<LocationMaster>> subDistrictLocationsMap = subDistrictLocations.stream()
-							.collect(Collectors
-									.groupingBy(subDistrictLocation -> subDistrictLocation.getLocationCode()));
-
-					List<Long> subDistirctGuids = subDistrictLocations.stream().map(LocationMaster::getGuid)
-							.collect(Collectors.toList());
-
-					List<LocationMaster> villagePanchayathLocations = new ArrayList<LocationMaster>();
-					villagePanchayathLocations = locationMasterDao.getAllMasterLocationsByTypeAndParentLocations(
-							ServiceConstants.LOCATION_VILLAGE_PANCHAYATH_TYPE, subDistirctGuids);
-
-					final Map<Long, List<LocationMaster>> villagePanchayathLocationsMap = villagePanchayathLocations
-							.stream().collect(Collectors.groupingBy(
-									villagePanchayathLocation -> villagePanchayathLocation.getLocationCode()));
 
 					Workbook importWorkBook = CommonUtil.getWorkBookFromFile(
 							inputFilePath + eachLocation.getLocationName() + ServiceConstants.EXCEL_SHEET_TYPE_XLS);
@@ -944,34 +907,19 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 						long parentLocationCodeLong = Long.valueOf(0);
 						Long parentLocationGuid = null;
 						if (eachRow.getCell(12).getCellType() != Cell.CELL_TYPE_BLANK) {
-
 							parentLocationCode = eachRow.getCell(12).getNumericCellValue();
 							parentLocationCodeLong = (long) parentLocationCode;
-
-							List<LocationMaster> villagePanchayathLocationsList = villagePanchayathLocationsMap
-									.get(parentLocationCodeLong);
-							if (villagePanchayathLocationsList != null && !villagePanchayathLocationsList.isEmpty()) {
-								LocationMaster locationMaster = villagePanchayathLocationsList.get(0);
-								parentLocationGuid = locationMaster.getGuid();
-							}
+							parentLocationGuid = villagePanchayathLocationsMap.get(parentLocationCodeLong).get(0)
+									.getGuid();
 						} else {
 							parentLocationCode = eachRow.getCell(4).getNumericCellValue();
 							parentLocationCodeLong = (long) parentLocationCode;
-
-							List<LocationMaster> subDistrictLocationsList = subDistrictLocationsMap
-									.get(parentLocationCodeLong);
-							if (subDistrictLocationsList != null && !subDistrictLocationsList.isEmpty()) {
-								LocationMaster locationMaster = subDistrictLocationsList.get(0);
-								parentLocationGuid = locationMaster.getGuid();
-							}
-
+							parentLocationGuid = subDistrictLocationsMap.get(parentLocationCodeLong).get(0).getGuid();
 						}
-
 						if (locationName != null && !locationName.isEmpty()) {
 							j++;
 							writeDataIntoSheet(locationCodeLong, locationName, locationType, parentLocationGuid,
 									exportWorkBookSheet, j);
-
 						} else {
 							break;
 						}
@@ -982,6 +930,7 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 			}
 		}
 		return true;
+
 	}
 
 	@Override
@@ -996,6 +945,31 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 		List<LocationMaster> countryLocations = locationMasterDao
 				.getAllMasterLocationsByType(ServiceConstants.LOCATION_COUNTRY_TYPE);
 
+		List<LocationMaster> districtLocations = locationMasterDao
+				.getAllMasterLocationsByType(ServiceConstants.LOCATION_DISTRICT_TYPE);
+
+		final Map<Long, List<LocationMaster>> districtLocationsMap = districtLocations.stream()
+				.collect(Collectors.groupingBy(districtLocation -> districtLocation.getLocationCode()));
+
+		List<LocationMaster> subDistrictLocations = locationMasterDao
+				.getAllMasterLocationsByType(ServiceConstants.LOCATION_SUB_DISTRICT_TYPE);
+
+		final Map<Long, List<LocationMaster>> subDistrictLocationsMap = subDistrictLocations.stream()
+				.collect(Collectors.groupingBy(subDistrictLocation -> subDistrictLocation.getLocationCode()));
+
+		List<LocationMaster> villagePanchayathLocations = locationMasterDao
+				.getAllMasterLocationsByType(ServiceConstants.LOCATION_VILLAGE_PANCHAYATH_TYPE);
+
+		final Map<Long, List<LocationMaster>> villagePanchayathLocationsMap = villagePanchayathLocations.stream()
+				.collect(Collectors
+						.groupingBy(villagePanchayathLocation -> villagePanchayathLocation.getLocationCode()));
+
+		List<LocationMaster> villageLocations = locationMasterDao
+				.getAllMasterLocationsByType(ServiceConstants.LOCATION_VILLAGE_TYPE);
+
+		final Map<Long, List<LocationMaster>> villageLocationsMap = villageLocations.stream()
+				.collect(Collectors.groupingBy(villageLocation -> villageLocation.getLocationCode()));
+
 		if (countryLocations != null && !countryLocations.isEmpty()) {
 			for (LocationMaster eachCountryLocation : countryLocations) {
 				if (eachCountryLocation != null) {
@@ -1009,39 +983,6 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 					if (stateLocations != null && !stateLocations.isEmpty()) {
 						for (LocationMaster eachLocation : stateLocations) {
 							if (eachLocation != null) {
-
-								List<LocationMaster> districtLocations = new ArrayList<LocationMaster>();
-								districtLocations = locationMasterDao.getAllMasterLocationsByTypeAndParentLocation(
-										ServiceConstants.LOCATION_DISTRICT_TYPE, eachLocation.getGuid());
-
-								final Map<Long, List<LocationMaster>> districtLocationsMap = districtLocations.stream()
-										.collect(Collectors
-												.groupingBy(districtLocation -> districtLocation.getLocationCode()));
-
-								List<Long> distirctGuids = districtLocations.stream().map(LocationMaster::getGuid)
-										.collect(Collectors.toList());
-
-								List<LocationMaster> subDistrictLocations = new ArrayList<LocationMaster>();
-								subDistrictLocations = locationMasterDao.getAllMasterLocationsByTypeAndParentLocations(
-										ServiceConstants.LOCATION_SUB_DISTRICT_TYPE, distirctGuids);
-
-								final Map<Long, List<LocationMaster>> subDistrictLocationsMap = subDistrictLocations
-										.stream().collect(Collectors.groupingBy(
-												subDistrictLocation -> subDistrictLocation.getLocationCode()));
-
-								List<Long> subDistirctGuids = subDistrictLocations.stream().map(LocationMaster::getGuid)
-										.collect(Collectors.toList());
-
-								List<LocationMaster> villagePanchayathLocations = new ArrayList<LocationMaster>();
-								villagePanchayathLocations = locationMasterDao
-										.getAllMasterLocationsByTypeAndParentLocations(
-												ServiceConstants.LOCATION_VILLAGE_PANCHAYATH_TYPE, subDistirctGuids);
-
-								final Map<Long, List<LocationMaster>> villagePanchayathLocationsMap = villagePanchayathLocations
-										.stream()
-										.collect(Collectors
-												.groupingBy(villagePanchayathLocation -> villagePanchayathLocation
-														.getLocationCode()));
 
 								Workbook importWorkBook = CommonUtil.getWorkBookFromFile(inputFilePath
 										+ eachLocation.getLocationName() + ServiceConstants.EXCEL_SHEET_TYPE_XLS);
@@ -1093,46 +1034,24 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 									Long subDistrictLocationGuid = null;
 									Long districtLocationGuid = null;
 
-									/*
-									 * if (locationCodeLong != null) { if
-									 * (locationCodesMap != null) { if
-									 * (locationCodesMap.get(locationCodeLong)
-									 * != null &&
-									 * locationCodesMap.get(locationCodeLong).
-									 * get(0) != null) { villageLocationGuid =
-									 * getLocationTypeGuid(
-									 * locationCodesMap.get(locationCodeLong),
-									 * ServiceConstants.LOCATION_VILLAGE_TYPE);
-									 * 
-									 * } } }
-									 */
+									if (locationCodeLong != null) {
+										villageLocationGuid = villageLocationsMap.get(locationCodeLong).get(0)
+												.getGuid();
+									}
 
 									if (villagePanchathLocationCodeLong != null) {
-										List<LocationMaster> villagePanchayathLocationsList = subDistrictLocationsMap
-												.get(villagePanchathLocationCodeLong);
-										if (villagePanchayathLocationsList != null
-												&& !villagePanchayathLocationsList.isEmpty()) {
-											LocationMaster locationMaster = villagePanchayathLocationsList.get(0);
-											villageLocationPanchayathGuid = locationMaster.getGuid();
-										}
+										villageLocationPanchayathGuid = villagePanchayathLocationsMap
+												.get(villagePanchathLocationCodeLong).get(0).getGuid();
 									}
 
 									if (subDistrictLocationLong != null) {
-										List<LocationMaster> subDistrictLocationsList = subDistrictLocationsMap
-												.get(subDistrictLocationLong);
-										if (subDistrictLocationsList != null && !subDistrictLocationsList.isEmpty()) {
-											LocationMaster locationMaster = subDistrictLocationsList.get(0);
-											subDistrictLocationGuid = locationMaster.getGuid();
-										}
+										subDistrictLocationGuid = subDistrictLocationsMap.get(subDistrictLocationLong)
+												.get(0).getGuid();
 									}
 
 									if (districtLocationLong != null) {
-										List<LocationMaster> districtLocationsList = districtLocationsMap
-												.get(districtLocationLong);
-										if (districtLocationsList != null && !districtLocationsList.isEmpty()) {
-											LocationMaster locationMaster = districtLocationsList.get(0);
-											districtLocationGuid = locationMaster.getGuid();
-										}
+										districtLocationGuid = districtLocationsMap.get(districtLocationLong).get(0)
+												.getGuid();
 									}
 
 									Location loc = new Location();
@@ -1261,22 +1180,22 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 		urbanLocationTypes.add(ServiceConstants.LOCATION_MUNCIPALITY_TYPE);
 		urbanLocationTypes.add(ServiceConstants.LOCATION_TOWN_PANCHAYATH_TYPE);
 
-		List<LocationMaster> urbanLocations = new ArrayList<LocationMaster>();
-		urbanLocations = locationMasterDao.getAllMasterLocationsByTypes(urbanLocationTypes);
+		List<LocationMaster> urbanLocationsList = locationMasterDao.getAllMasterLocationsByTypes(urbanLocationTypes);
 
-		final Map<Long, List<LocationMaster>> urbanLocationsMap = urbanLocations.stream()
+		final Map<Long, List<LocationMaster>> urbanLocationsMap = urbanLocationsList.stream()
 				.collect(Collectors.groupingBy(urbanLocation -> urbanLocation.getLocationCode()));
 
-		List<String> districtSubDistrictLocationTypes = new ArrayList<String>();
-		districtSubDistrictLocationTypes.add(ServiceConstants.LOCATION_DISTRICT_TYPE);
-		districtSubDistrictLocationTypes.add(ServiceConstants.LOCATION_SUB_DISTRICT_TYPE);
+		List<LocationMaster> districtLocations = locationMasterDao
+				.getAllMasterLocationsByType(ServiceConstants.LOCATION_DISTRICT_TYPE);
 
-		List<LocationMaster> districtSubDistrictLocations = new ArrayList<LocationMaster>();
-		districtSubDistrictLocations = locationMasterDao.getAllMasterLocationsByTypes(districtSubDistrictLocationTypes);
+		final Map<Long, List<LocationMaster>> districtLocationsMap = districtLocations.stream()
+				.collect(Collectors.groupingBy(districtLocation -> districtLocation.getLocationCode()));
 
-		final Map<Long, List<LocationMaster>> districtSubDistrictLocationMap = districtSubDistrictLocations.stream()
-				.collect(Collectors
-						.groupingBy(districtSubDistrictLocation -> districtSubDistrictLocation.getLocationCode()));
+		List<LocationMaster> subDistrictLocations = locationMasterDao
+				.getAllMasterLocationsByType(ServiceConstants.LOCATION_SUB_DISTRICT_TYPE);
+
+		final Map<Long, List<LocationMaster>> subDistrictLocationsMap = subDistrictLocations.stream()
+				.collect(Collectors.groupingBy(subDistrictLocation -> subDistrictLocation.getLocationCode()));
 
 		List<LocationMaster> countryLocations = locationMasterDao
 				.getAllMasterLocationsByType(ServiceConstants.LOCATION_COUNTRY_TYPE);
@@ -1375,26 +1294,16 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 									Long subDistrictLocationGuid = null;
 
 									if (subDistrictLocationLong != null) {
-										if (districtSubDistrictLocationMap != null) {
-											if (districtSubDistrictLocationMap.get(subDistrictLocationLong) != null
-													&& districtSubDistrictLocationMap.get(subDistrictLocationLong)
-															.get(0) != null) {
-												subDistrictLocationGuid = districtSubDistrictLocationMap
-														.get(subDistrictLocationLong).get(0).getGuid();
-											}
-										}
+										subDistrictLocationGuid = subDistrictLocationsMap.get(subDistrictLocationLong)
+												.get(0).getGuid();
 									}
 
 									if (districtLocationLong != null) {
-										if (districtSubDistrictLocationMap != null) {
-											if (districtSubDistrictLocationMap.get(districtLocationLong) != null
-													&& districtSubDistrictLocationMap.get(districtLocationLong)
-															.get(0) != null) {
-												districtLocationGuid = districtSubDistrictLocationMap
-														.get(districtLocationLong).get(0).getGuid();
-											}
-										}
+										districtLocationGuid = districtLocationsMap.get(districtLocationLong).get(0)
+												.getGuid();
+
 									}
+
 									Location loc = new Location();
 									loc.setLocationCountry(eachCountryLocation.getGuid());
 									loc.setLocationState(eachLocation.getGuid());
