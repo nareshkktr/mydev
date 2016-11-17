@@ -24,4 +24,10 @@ public interface LocationMasterDao {
 
 	List<LocationMaster> getLocationsMasterData(List<Long> eachOffSetLocationCodes) throws InternalServerException;
 
+	List<LocationMaster> getAllMasterLocationsByTypeAndParentLocation(String locationDistrictType,
+			Long parentLocationGuid) throws InternalServerException;
+
+	List<LocationMaster> getAllMasterLocationsByTypeAndParentLocations(String locationSubDistrictType,
+			List<Long> distirctGuids) throws InternalServerException;
+
 }

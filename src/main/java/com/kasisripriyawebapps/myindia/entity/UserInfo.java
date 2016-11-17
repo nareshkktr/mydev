@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -99,7 +100,7 @@ public class UserInfo implements Serializable {
 	@JoinColumn(name = "LOCATION_REF_GUID")
 	private Location nativeLocation;
 
-	@OneToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "LOCATION_GUID")
 	private LocationMaster masterLocation;
 

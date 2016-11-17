@@ -128,10 +128,18 @@ public class LocationImportExportEndPoint extends BaseEndPoint {
 	}
 
 	@POST
-	@ApiOperation(value = EndPointConstants.IMPORT_CONSTITUENCY_LOCATIONS_API_VALUE, nickname = EndPointConstants.IMPORT_CONSTITUENCY_LOCATIONS_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.IMPORT_CONSTITUENCY_LOCATIONS_API_DESCRIPTION)
-	@Path(EndPointConstants.IMPORT_CONSTITUENCY_LOCATIONS_REQUEST_MAPPING)
-	public Response importConstituencyLocations() throws InternalServerException {
-		locationImportExportService.importConstituencyLocations();
+	@ApiOperation(value = EndPointConstants.IMPORT_MP_CONSTITUENCY_LOCATIONS_API_VALUE, nickname = EndPointConstants.IMPORT_MP_CONSTITUENCY_LOCATIONS_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.IMPORT_MP_CONSTITUENCY_LOCATIONS_API_DESCRIPTION)
+	@Path(EndPointConstants.IMPORT_MP_CONSTITUENCY_LOCATIONS_REQUEST_MAPPING)
+	public Response importMPConstituencyLocations() throws InternalServerException {
+		locationImportExportService.importMPConstituencyLocations();
+		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
+	}
+	
+	@POST
+	@ApiOperation(value = EndPointConstants.IMPORT_MLA_CONSTITUENCY_LOCATIONS_API_VALUE, nickname = EndPointConstants.IMPORT_MLA_CONSTITUENCY_LOCATIONS_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.IMPORT_MLA_CONSTITUENCY_LOCATIONS_API_DESCRIPTION)
+	@Path(EndPointConstants.IMPORT_MLA_CONSTITUENCY_LOCATIONS_REQUEST_MAPPING)
+	public Response importMLAConstituencyLocations() throws InternalServerException {
+		locationImportExportService.importMLAConstituencyLocations();
 		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
 	}
 
@@ -274,7 +282,7 @@ public class LocationImportExportEndPoint extends BaseEndPoint {
 		locationImportExportService.importExportAllMasterLocations();
 		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
 	}
-	
+
 	@POST
 	@ApiOperation(value = EndPointConstants.IMPORT_EXPORT_ALL_REFERENCE_LOCATIONS_API_VALUE, nickname = EndPointConstants.IMPORT_EXPORT_ALL_REFERENCE_LOCATIONS_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.IMPORT_EXPORT_ALL_REFERENCE_LOCATIONS_API_DESCRIPTION)
 	@Path(EndPointConstants.IMPORT_EXPORT_ALL_REFERENCE_LOCATIONS_REQUEST_MAPPING)

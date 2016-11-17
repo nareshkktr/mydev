@@ -47,12 +47,14 @@ public interface LocationImportExportService {
 
 	boolean importVillageReferenceLocations(LocationImportRequest locationImportRequest) throws InternalServerException;
 
-	boolean importConstituencyLocations() throws InternalServerException;
+	boolean importMPConstituencyLocations() throws InternalServerException;
 
 	boolean importUrbanReferenceLocations(LocationImportRequest locationImportRequest) throws InternalServerException;
 
 	boolean importExportAllMasterLocations() throws InternalServerException;
 
 	boolean importExportAllReferenceLocations() throws InternalServerException;
+
+	boolean importMLAConstituencyLocations() throws InternalServerException;
 
 }
