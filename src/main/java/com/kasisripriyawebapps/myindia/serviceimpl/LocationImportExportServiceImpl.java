@@ -220,6 +220,9 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 		if (existingStateMasterLocations != null && !existingStateMasterLocations.isEmpty()) {
 			for (LocationMaster eachLocation : existingStateMasterLocations) {
 				if (eachLocation != null) {
+					if(locationType.equalsIgnoreCase(ServiceConstants.LOCATION_VILLAGE_PANCHAYATH_TYPE)|| locationType.equalsIgnoreCase(ServiceConstants.LOCATION_VILLAGE_TYPE)){
+						System.out.println("Import "+locationType+">>State>>"+eachLocation.getLocationName());
+					}
 					String outPutFilePath = "";
 					String directoryPath = env.getProperty("project.locations-files.upload-path") + subDirectoryPath;
 					String fileName = eachLocation.getLocationName() + ServiceConstants.EXCEL_SHEET_TYPE_XLS;
@@ -231,7 +234,14 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 
 				}
 			}
+			
+			if(locationType.equalsIgnoreCase(ServiceConstants.LOCATION_VILLAGE_PANCHAYATH_TYPE)|| locationType.equalsIgnoreCase(ServiceConstants.LOCATION_VILLAGE_TYPE)){
+				System.out.println("Import "+locationType+">>State>> Start Save");
+			}
 			locationMasterDao.saveAllMasterLocations(newMasterLocations);
+			if(locationType.equalsIgnoreCase(ServiceConstants.LOCATION_VILLAGE_PANCHAYATH_TYPE)|| locationType.equalsIgnoreCase(ServiceConstants.LOCATION_VILLAGE_TYPE)){
+				System.out.println("Import "+locationType+">>State>> End Save");
+			}
 			List<LocationMaster> updatedMasterLocations = findUpdatedMasterLocations(existingMasterVillageLocations,
 					excelMasterLocations);
 			if (updatedMasterLocations != null && !updatedMasterLocations.isEmpty()) {
@@ -240,6 +250,9 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 			if (existingMasterVillageLocations != null && !existingMasterVillageLocations.isEmpty()) {
 				existingMasterVillageLocations.removeAll(excelMasterLocations);
 				locationMasterDao.deleteMasterLocations(existingMasterVillageLocations);
+			}
+			if(locationType.equalsIgnoreCase(ServiceConstants.LOCATION_VILLAGE_PANCHAYATH_TYPE)|| locationType.equalsIgnoreCase(ServiceConstants.LOCATION_VILLAGE_TYPE)){
+				System.out.println("Import "+locationType+">>State>> Final Save");
 			}
 		}
 	}
@@ -771,6 +784,8 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 		if (stateLocations != null && !stateLocations.isEmpty()) {
 			for (LocationMaster eachLocation : stateLocations) {
 				if (eachLocation != null) {
+					
+					System.out.println("Export VP State>>"+eachLocation.getLocationName());
 
 					Workbook importWorkBook = CommonUtil.getWorkBookFromFile(
 							inputFilePath + eachLocation.getLocationName() + ServiceConstants.EXCEL_SHEET_TYPE_XLS);
@@ -848,6 +863,8 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 		if (stateLocations != null && !stateLocations.isEmpty()) {
 			for (LocationMaster eachLocation : stateLocations) {
 				if (eachLocation != null) {
+					
+					System.out.println("Export V State>>"+eachLocation.getLocationName());
 
 					Workbook importWorkBook = CommonUtil.getWorkBookFromFile(
 							inputFilePath + eachLocation.getLocationName() + ServiceConstants.EXCEL_SHEET_TYPE_XLS);
@@ -1553,24 +1570,60 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 	@Override
 	@Transactional
 	public boolean importExportAllMasterLocations() throws InternalServerException {
+		System.out.println("Export Countries Start");
 		exportCountries(null);
+		System.out.println("Export Countries End");
+		System.out.println("Import Countries Started");
 		importCountries(null);
+		System.out.println("Import Countries End");
+		System.out.println("Export States Started");
 		exportStates(null);
+		System.out.println("Export States Ended");
+		System.out.println("Import States Started");
 		importStates(null);
+		System.out.println("Import Stated End");
+		System.out.println("Export Districts Started");
 		exportDistricts(null);
+		System.out.println("Export Districts Ended");
+		System.out.println("Import Districts Started");
 		importDistricts(null);
+		System.out.println("Import Districts Ended");
+		System.out.println("Export Sub Districts Started");
 		exportSubDistricts(null);
+		System.out.println("Export Sub Districts Ended");
+		System.out.println("Import Sub Districts Started");
 		importSubDistricts(null);
+		System.out.println("Import Sub Districts Ended");
+		System.out.println("Export Muncipal Corporations Started");
 		exportMuncipalCorporations(null);
+		System.out.println("Export Muncipal Corporations Ended");
+		System.out.println("Import MC Started");
 		importMuncipalCorporations(null);
+		System.out.println("Import MC Ended");
+		System.out.println("Export M Started");
 		exportMuncipalities(null);
+		System.out.println("Export M Ended");
+		System.out.println("Import M Started");
 		importMuncipalities(null);
+		System.out.println("Import M Ended");
+		System.out.println("Export TP Started");
 		exportTownPanchayathies(null);
+		System.out.println("Export TP Ended");
+		System.out.println("Import TP Started");
 		importTownPanchayathies(null);
+		System.out.println("Import TP End");
+		System.out.println("Export VP Started");
 		exportVillagePanchayathies(null);
+		System.out.println("Export VP End");
+		System.out.println("Import VP Started");
 		importVillagePanchayathies(null);
+		System.out.println("Import VP End");
+		System.out.println("Export V Started");
 		exportVillages(null);
+		System.out.println("Export V Ended");
+		System.out.println("Import V Started");
 		importVillages(null);
+		System.out.println("Import V End");
 		return true;
 	}
 
