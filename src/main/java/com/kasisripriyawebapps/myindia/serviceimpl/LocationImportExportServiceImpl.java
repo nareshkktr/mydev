@@ -5,8 +5,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -221,8 +223,9 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 		if (existingStateMasterLocations != null && !existingStateMasterLocations.isEmpty()) {
 			for (LocationMaster eachLocation : existingStateMasterLocations) {
 				if (eachLocation != null) {
-					if(locationType.equalsIgnoreCase(ServiceConstants.LOCATION_VILLAGE_PANCHAYATH_TYPE)|| locationType.equalsIgnoreCase(ServiceConstants.LOCATION_VILLAGE_TYPE)){
-						System.out.println("Import "+locationType+">>State>>"+eachLocation.getLocationName());
+					if (locationType.equalsIgnoreCase(ServiceConstants.LOCATION_VILLAGE_PANCHAYATH_TYPE)
+							|| locationType.equalsIgnoreCase(ServiceConstants.LOCATION_VILLAGE_TYPE)) {
+						System.out.println("Import " + locationType + ">>State>>" + eachLocation.getLocationName());
 					}
 					String outPutFilePath = "";
 					String directoryPath = env.getProperty("project.locations-files.upload-path") + subDirectoryPath;
@@ -235,13 +238,15 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 
 				}
 			}
-			
-			if(locationType.equalsIgnoreCase(ServiceConstants.LOCATION_VILLAGE_PANCHAYATH_TYPE)|| locationType.equalsIgnoreCase(ServiceConstants.LOCATION_VILLAGE_TYPE)){
-				System.out.println("Import "+locationType+">>State>> Start Save");
+
+			if (locationType.equalsIgnoreCase(ServiceConstants.LOCATION_VILLAGE_PANCHAYATH_TYPE)
+					|| locationType.equalsIgnoreCase(ServiceConstants.LOCATION_VILLAGE_TYPE)) {
+				System.out.println("Import " + locationType + ">>State>> Start Save");
 			}
 			locationMasterDao.saveAllMasterLocations(newMasterLocations);
-			if(locationType.equalsIgnoreCase(ServiceConstants.LOCATION_VILLAGE_PANCHAYATH_TYPE)|| locationType.equalsIgnoreCase(ServiceConstants.LOCATION_VILLAGE_TYPE)){
-				System.out.println("Import "+locationType+">>State>> End Save");
+			if (locationType.equalsIgnoreCase(ServiceConstants.LOCATION_VILLAGE_PANCHAYATH_TYPE)
+					|| locationType.equalsIgnoreCase(ServiceConstants.LOCATION_VILLAGE_TYPE)) {
+				System.out.println("Import " + locationType + ">>State>> End Save");
 			}
 			List<LocationMaster> updatedMasterLocations = findUpdatedMasterLocations(existingMasterVillageLocations,
 					excelMasterLocations);
@@ -252,8 +257,9 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 				existingMasterVillageLocations.removeAll(excelMasterLocations);
 				locationMasterDao.deleteMasterLocations(existingMasterVillageLocations);
 			}
-			if(locationType.equalsIgnoreCase(ServiceConstants.LOCATION_VILLAGE_PANCHAYATH_TYPE)|| locationType.equalsIgnoreCase(ServiceConstants.LOCATION_VILLAGE_TYPE)){
-				System.out.println("Import "+locationType+">>State>> Final Save");
+			if (locationType.equalsIgnoreCase(ServiceConstants.LOCATION_VILLAGE_PANCHAYATH_TYPE)
+					|| locationType.equalsIgnoreCase(ServiceConstants.LOCATION_VILLAGE_TYPE)) {
+				System.out.println("Import " + locationType + ">>State>> Final Save");
 			}
 		}
 	}
@@ -311,6 +317,7 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 		addHeaderRow(exportWorkBookSheet);
 		int j = 0;
 		int i = 0;
+		Map<Integer, Object[]> sheetData = new HashMap<Integer, Object[]>();
 		for (Row eachRow : importWorkBookSheet) {
 			if (i < 3) {
 				i++;
@@ -322,15 +329,13 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 			if (locationName != null && !locationName.isEmpty()) {
 				Long locationCode = (long) eachRow.getCell(1).getNumericCellValue();
 				Long parentLocationGuid = (long) eachRow.getCell(3).getNumericCellValue();
-
 				j++;
-				writeDataIntoSheet(locationCode, locationName, locationType, parentLocationGuid, exportWorkBookSheet,
-						j);
+				sheetData.put(j, new Object[] { locationCode, locationName, locationType, parentLocationGuid });
 			} else {
 				break;
 			}
-
 		}
+		writeDataIntoSheet(sheetData, exportWorkBookSheet);
 		writeExcelDataIntoFile(outPutFilePath, exportWorkBook);
 		return true;
 	}
@@ -366,6 +371,7 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 					addHeaderRow(exportWorkBookSheet);
 					int j = 0;
 					int i = 0;
+					Map<Integer, Object[]> sheetData = new HashMap<Integer, Object[]>();
 					for (Row eachRow : importWorkBookSheet) {
 						if (i < 3) {
 							i++;
@@ -379,16 +385,17 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 								? ServiceConstants.LOCATION_STATE_TYPE : ServiceConstants.LOCATION_UNION_TERRITORY_TYPE;
 
 						if (locationName != null && !locationName.isEmpty()) {
-							Long locationCodeLong = (long) eachRow.getCell(1).getNumericCellValue();
+							Long locationCode = (long) eachRow.getCell(1).getNumericCellValue();
 							Long parentLocationGuid = eachCountryLocation.getGuid();
 							j++;
-							writeDataIntoSheet(locationCodeLong, locationName, locationType, parentLocationGuid,
-									exportWorkBookSheet, j);
+							sheetData.put(j,
+									new Object[] { locationCode, locationName, locationType, parentLocationGuid });
+
 						} else {
 							break;
 						}
-
 					}
+					writeDataIntoSheet(sheetData, exportWorkBookSheet);
 					writeExcelDataIntoFile(outPutFilePath, exportWorkBook);
 				}
 			}
@@ -411,20 +418,25 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 
 	}
 
-	private void writeDataIntoSheet(Long locationCode, String locationName, String locationType,
-			long parentLocationGuid, Sheet exportWorkBookSheet, int rowNo) {
+	private void writeDataIntoSheet(Map<Integer, Object[]> sheetData, Sheet exportWorkBookSheet) {
 
-		Row row = exportWorkBookSheet.createRow(rowNo);
-		Cell locationCodeCell = row.createCell(0);
-		Cell locationNameCell = row.createCell(1);
-		Cell locationTypeCell = row.createCell(2);
-		Cell parentLocationGuidCell = row.createCell(3);
-
-		locationCodeCell.setCellValue(locationCode);
-		locationNameCell.setCellValue(locationName);
-		locationTypeCell.setCellValue(locationType);
-		parentLocationGuidCell.setCellValue(parentLocationGuid);
-
+		Set<Integer> newRows = sheetData.keySet();
+		int rownum = exportWorkBookSheet.getLastRowNum()+1;
+		for (Integer key : newRows) {
+			Row row = exportWorkBookSheet.createRow(rownum++);
+			Object[] objArr = sheetData.get(key);
+			int cellnum = 0;
+			for (Object obj : objArr) {
+				Cell cell = row.createCell(cellnum++);
+				if (obj instanceof String) {
+					cell.setCellValue((String) obj);
+				} else if (obj instanceof Long) {
+					cell.setCellValue((Long) obj);
+				} else if (obj == null) {
+					cell.setCellType(Cell.CELL_TYPE_BLANK);
+				}
+			}
+		}
 	}
 
 	private void writeExcelDataIntoFile(String outPutFilePath, Workbook exportWorkBook) throws InternalServerException {
@@ -476,6 +488,7 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 		addHeaderRow(exportWorkBookSheet);
 		int j = 0;
 		int i = 0;
+		Map<Integer, Object[]> sheetData = new HashMap<Integer, Object[]>();
 		for (Row eachRow : importWorkBookSheet) {
 			if (i < 3) {
 				i++;
@@ -488,12 +501,12 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 				Long parentLocationCode = (long) eachRow.getCell(2).getNumericCellValue();
 				Long parentLocationGuid = stateMasterLocationsCodeMap.get(parentLocationCode).get(0).getGuid();
 				j++;
-				writeDataIntoSheet(locationCode, locationName, locationType, parentLocationGuid, exportWorkBookSheet,
-						j);
+				sheetData.put(j, new Object[] { locationCode, locationName, locationType, parentLocationGuid });
 			} else {
 				break;
 			}
 		}
+		writeDataIntoSheet(sheetData, exportWorkBookSheet);
 		writeExcelDataIntoFile(outPutFilePath, exportWorkBook);
 
 		return true;
@@ -530,6 +543,7 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 		addHeaderRow(exportWorkBookSheet);
 		int j = 0;
 		int i = 0;
+		Map<Integer, Object[]> sheetData = new HashMap<Integer, Object[]>();
 		for (Row eachRow : importWorkBookSheet) {
 			if (i < 3) {
 				i++;
@@ -543,14 +557,13 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 				Long locationCode = (long) eachRow.getCell(0).getNumericCellValue();
 				Long parentLocationCode = (long) eachRow.getCell(3).getNumericCellValue();
 				Long parentLocationGuid = districtLocationsMap.get(parentLocationCode).get(0).getGuid();
-
 				j++;
-				writeDataIntoSheet(locationCode, locationName, locationType, parentLocationGuid, exportWorkBookSheet,
-						j);
+				sheetData.put(j, new Object[] { locationCode, locationName, locationType, parentLocationGuid });
 			} else {
 				break;
 			}
 		}
+		writeDataIntoSheet(sheetData, exportWorkBookSheet);
 		writeExcelDataIntoFile(outPutFilePath, exportWorkBook);
 		return true;
 	}
@@ -593,6 +606,7 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 
 					int j = 0;
 					int i = 0;
+					Map<Integer, Object[]> sheetData = new HashMap<Integer, Object[]>();
 					for (Row eachRow : importWorkBookSheet) {
 						if (i < 4) {
 							i++;
@@ -613,13 +627,14 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 								j++;
 								locationName = CommonUtil.removeEndsWith(locationName,
 										ServiceConstants.LOCATION_MUNCIPAL_CORPORATION_TYPE_LOWER);
-								writeDataIntoSheet(locationCode, locationName, locationType, eachLocation.getGuid(),
-										exportWorkBookSheet, j);
+								sheetData.put(j, new Object[] { locationCode, locationName, locationType,
+										eachLocation.getGuid() });
 							}
 						} else {
 							break;
 						}
 					}
+					writeDataIntoSheet(sheetData, exportWorkBookSheet);
 					writeExcelDataIntoFile(outPutFilePath, exportWorkBook);
 				}
 			}
@@ -661,9 +676,9 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 					}
 					Sheet exportWorkBookSheet = exportWorkBook.createSheet(ServiceConstants.LOCATION_MUNCIPALITY_TYPE);
 					addHeaderRow(exportWorkBookSheet);
-
 					int j = 0;
 					int i = 0;
+					Map<Integer, Object[]> sheetData = new HashMap<Integer, Object[]>();
 					for (Row eachRow : importWorkBookSheet) {
 						if (i < 4) {
 							i++;
@@ -679,13 +694,14 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 								j++;
 								locationName = CommonUtil.removeEndsWith(locationName,
 										ServiceConstants.LOCATION_MUNCIPAL_COUNCIL_TYPE);
-								writeDataIntoSheet(locationCode, locationName, locationType, eachLocation.getGuid(),
-										exportWorkBookSheet, j);
+								sheetData.put(j, new Object[] { locationCode, locationName, locationType,
+										eachLocation.getGuid() });
 							}
 						} else {
 							break;
 						}
 					}
+					writeDataIntoSheet(sheetData, exportWorkBookSheet);
 					writeExcelDataIntoFile(outPutFilePath, exportWorkBook);
 				}
 			}
@@ -732,6 +748,7 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 
 					int j = 0;
 					int i = 0;
+					Map<Integer, Object[]> sheetData = new HashMap<Integer, Object[]>();
 					for (Row eachRow : importWorkBookSheet) {
 						if (i < 4) {
 							i++;
@@ -750,13 +767,14 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 								locationName = CommonUtil.removeEndsWith(locationName,
 										ServiceConstants.LOCATION_NAGAR_PANCHAYAT_TYPE);
 								locationType = ServiceConstants.LOCATION_TOWN_PANCHAYATH_TYPE;
-								writeDataIntoSheet(locationCode, locationName, locationType, eachLocation.getGuid(),
-										exportWorkBookSheet, j);
+								sheetData.put(j, new Object[] { locationCode, locationName, locationType,
+										eachLocation.getGuid() });
 							}
 						} else {
 							break;
 						}
 					}
+					writeDataIntoSheet(sheetData, exportWorkBookSheet);
 					writeExcelDataIntoFile(outPutFilePath, exportWorkBook);
 				}
 			}
@@ -787,8 +805,8 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 		if (stateLocations != null && !stateLocations.isEmpty()) {
 			for (LocationMaster eachLocation : stateLocations) {
 				if (eachLocation != null) {
-					
-					System.out.println("Export VP State>>"+eachLocation.getLocationName());
+
+					System.out.println("Export VP State>>" + eachLocation.getLocationName());
 
 					Workbook importWorkBook = CommonUtil.getWorkBookFromFile(
 							inputFilePath + eachLocation.getLocationName() + ServiceConstants.EXCEL_SHEET_TYPE_XLS);
@@ -811,6 +829,7 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 					addHeaderRow(exportWorkBookSheet);
 					int j = 0;
 					int i = 0;
+					Map<Integer, Object[]> sheetData = new HashMap<Integer, Object[]>();
 					for (Row eachRow : importWorkBookSheet) {
 						if (i < 4) {
 							i++;
@@ -827,14 +846,15 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 								Long parentLocationGuid = subDistrictLocationsMap.get(parentLocationCode).get(0)
 										.getGuid();
 								j++;
-								writeDataIntoSheet(locationCode, locationName, locationType, parentLocationGuid,
-										exportWorkBookSheet, j);
+								sheetData.put(j,
+										new Object[] { locationCode, locationName, locationType, parentLocationGuid });
 							}
 						} else {
 							break;
 						}
 
 					}
+					writeDataIntoSheet(sheetData, exportWorkBookSheet);
 					writeExcelDataIntoFile(outPutFilePath, exportWorkBook);
 
 				}
@@ -867,8 +887,8 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 		if (stateLocations != null && !stateLocations.isEmpty()) {
 			for (LocationMaster eachLocation : stateLocations) {
 				if (eachLocation != null) {
-					
-					System.out.println("Export V State>>"+eachLocation.getLocationName());
+
+					System.out.println("Export V State>>" + eachLocation.getLocationName());
 
 					Workbook importWorkBook = CommonUtil.getWorkBookFromFile(
 							inputFilePath + eachLocation.getLocationName() + ServiceConstants.EXCEL_SHEET_TYPE_XLS);
@@ -891,6 +911,7 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 
 					int j = 0;
 					int i = 0;
+					Map<Integer, Object[]> sheetData = new HashMap<Integer, Object[]>();
 					for (Row eachRow : importWorkBookSheet) {
 						if (i < 4) {
 							i++;
@@ -903,14 +924,14 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 							Long parentLocationCode = (long) eachRow.getCell(4).getNumericCellValue();
 							Long parentLocationGuid = subDistrictLocationsMap.get(parentLocationCode).get(0).getGuid();
 							j++;
-							writeDataIntoSheet(locationCode, locationName, locationType, parentLocationGuid,
-									exportWorkBookSheet, j);
+							sheetData.put(j,
+									new Object[] { locationCode, locationName, locationType, parentLocationGuid });
 						} else {
 							break;
 						}
 					}
+					writeDataIntoSheet(sheetData, exportWorkBookSheet);
 					writeExcelDataIntoFile(outPutFilePath, exportWorkBook);
-
 				}
 			}
 		}
@@ -943,6 +964,8 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 					if (stateLocations != null && !stateLocations.isEmpty()) {
 						for (LocationMaster eachLocation : stateLocations) {
 							if (eachLocation != null) {
+
+								System.out.println("Export V Ref State>" + eachLocation.getLocationName());
 
 								List<LocationMaster> districtLocations = locationMasterDao
 										.getAllMasterLocationsByTypeAndParentLocation(
@@ -1006,6 +1029,7 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 								addReferenceHeaderRow(exportWorkBookSheet);
 								int j = 0;
 								int i = 0;
+								Map<Integer, Object[]> sheetData = new HashMap<Integer, Object[]>();
 								for (Row eachRow : importWorkBookSheet) {
 									if (i < 4) {
 										i++;
@@ -1028,40 +1052,40 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 										Long subDistrictLocationGuid = null;
 										Long districtLocationGuid = null;
 
-										if (villageLocationCode != null) {
+										if (villageLocationCode != null
+												&& !villageLocationCode.equals(Long.valueOf(0))) {
 											villageLocationGuid = villageLocationsMap.get(villageLocationCode).get(0)
 													.getGuid();
 										}
 
-										if (villagePanchathLocationCode != null) {
+										if (villagePanchathLocationCode != null
+												&& !villagePanchathLocationCode.equals(Long.valueOf(0))) {
 											villageLocationPanchayathGuid = villagePanchayathLocationsMap
 													.get(villagePanchathLocationCode).get(0).getGuid();
 										}
 
-										if (subDistrictLocationCode != null) {
+										if (subDistrictLocationCode != null
+												&& !subDistrictLocationCode.equals(Long.valueOf(0))) {
 											subDistrictLocationGuid = subDistrictLocationsMap
 													.get(subDistrictLocationCode).get(0).getGuid();
 										}
 
-										if (districtLocationCode != null) {
+										if (districtLocationCode != null
+												&& !districtLocationCode.equals(Long.valueOf(0))) {
 											districtLocationGuid = districtLocationsMap.get(districtLocationCode).get(0)
 													.getGuid();
 										}
 
-										Location loc = new Location();
-										loc.setLocationCountry(eachCountryLocation.getGuid());
-										loc.setLocationState(eachLocation.getGuid());
-										loc.setLocationDistrict(districtLocationGuid);
-										loc.setLocationSubDistrict(subDistrictLocationGuid);
-										loc.setLocationVillagePanchayat(villageLocationPanchayathGuid);
-										loc.setLocationVillage(villageLocationGuid);
-
 										j++;
-										writeReferenceDataIntoSheet(loc, exportWorkBookSheet, j);
+										sheetData.put(j,
+												new Object[] { villageLocationGuid, villageLocationPanchayathGuid, null,
+														null, null, subDistrictLocationGuid, districtLocationGuid,
+														eachLocation.getGuid(), eachCountryLocation.getGuid() });
 									} else {
 										break;
 									}
 								}
+								writeDataIntoSheet(sheetData, exportWorkBookSheet);
 								writeExcelDataIntoFile(outPutFilePath, exportWorkBook);
 
 							}
@@ -1097,59 +1121,6 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 		locationDistrictHeaderCell.setCellValue(ServiceConstants.LOCATION_DISTRICT_TYPE);
 		locationStateHeaderCell.setCellValue(ServiceConstants.LOCATION_STATE_TYPE);
 		locationCountryHeaderCell.setCellValue(ServiceConstants.LOCATION_COUNTRY_TYPE);
-
-	}
-
-	private void writeReferenceDataIntoSheet(Location loc, Sheet exportWorkBookSheet, int rowNo) {
-
-		Row row = exportWorkBookSheet.createRow(rowNo);
-		Cell locationVillageCell = row.createCell(0);
-		Cell locationVillagePanchayatCell = row.createCell(1);
-		Cell locationTownPanchayathCell = row.createCell(2);
-		Cell locationMunicipalityCell = row.createCell(3);
-		Cell locationMunicipalCorporationCell = row.createCell(4);
-		Cell locationSubDistrictCell = row.createCell(5);
-		Cell locationDistrictCell = row.createCell(6);
-		Cell locationStateCell = row.createCell(7);
-		Cell locationCountryCell = row.createCell(8);
-
-		if (loc.getLocationVillage() == null) {
-			locationVillageCell.setCellType(Cell.CELL_TYPE_BLANK);
-		} else {
-			locationVillageCell.setCellValue(loc.getLocationVillage());
-		}
-		if (loc.getLocationVillagePanchayat() == null) {
-			locationVillagePanchayatCell.setCellType(Cell.CELL_TYPE_BLANK);
-		} else {
-			locationVillagePanchayatCell.setCellValue(loc.getLocationVillagePanchayat());
-		}
-		if (loc.getLocationTownPanchayat() == null) {
-			locationTownPanchayathCell.setCellType(Cell.CELL_TYPE_BLANK);
-		} else {
-			locationTownPanchayathCell.setCellValue(loc.getLocationTownPanchayat());
-		}
-		if (loc.getLocationMunicipality() == null) {
-			locationMunicipalityCell.setCellType(Cell.CELL_TYPE_BLANK);
-		} else {
-			locationMunicipalityCell.setCellValue(loc.getLocationMunicipality());
-		}
-		if (loc.getLocationMunicipalCorporation() == null) {
-			locationMunicipalCorporationCell.setCellType(Cell.CELL_TYPE_BLANK);
-		} else {
-			locationMunicipalCorporationCell.setCellValue(loc.getLocationMunicipalCorporation());
-		}
-		if (loc.getLocationSubDistrict() == null) {
-			locationSubDistrictCell.setCellType(Cell.CELL_TYPE_BLANK);
-		} else {
-			locationSubDistrictCell.setCellValue(loc.getLocationSubDistrict());
-		}
-		if (loc.getLocationDistrict() == null) {
-			locationDistrictCell.setCellType(Cell.CELL_TYPE_BLANK);
-		} else {
-			locationDistrictCell.setCellValue(loc.getLocationDistrict());
-		}
-		locationStateCell.setCellValue(loc.getLocationState());
-		locationCountryCell.setCellValue(loc.getLocationCountry());
 
 	}
 
@@ -1199,6 +1170,8 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 						for (LocationMaster eachLocation : stateLocations) {
 							if (eachLocation != null) {
 
+								System.out.println("Export U Ref State>" + eachLocation.getLocationName());
+
 								Workbook importWorkBook = CommonUtil.getWorkBookFromFile(inputFilePath
 										+ eachLocation.getLocationName() + ServiceConstants.EXCEL_SHEET_TYPE_XLS);
 								Sheet importWorkBookSheet = importWorkBook.getSheetAt(0);
@@ -1221,6 +1194,7 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 								addReferenceHeaderRow(exportWorkBookSheet);
 								int j = 0;
 								int i = 0;
+								Map<Integer, Object[]> sheetData = new HashMap<Integer, Object[]>();
 								for (Row eachRow : importWorkBookSheet) {
 									if (i < 4) {
 										i++;
@@ -1289,21 +1263,19 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 										Long districtLocationGuid = null;
 										Long subDistrictLocationGuid = null;
 
-										if (subDistrictLocationLong != null) {
+										if (subDistrictLocationLong != null
+												&& !subDistrictLocationLong.equals(Long.valueOf(0))) {
 											subDistrictLocationGuid = subDistrictLocationsMap
 													.get(subDistrictLocationLong).get(0).getGuid();
 										}
 
-										if (districtLocationLong != null) {
+										if (districtLocationLong != null
+												&& !districtLocationLong.equals(Long.valueOf(0))) {
 											districtLocationGuid = districtLocationsMap.get(districtLocationLong).get(0)
 													.getGuid();
 
 										}
-
 										Location loc = new Location();
-										loc.setLocationCountry(eachCountryLocation.getGuid());
-										loc.setLocationState(eachLocation.getGuid());
-										loc.setLocationDistrict(districtLocationGuid);
 										if (urbanLocationType != null) {
 											if (urbanLocationType.equalsIgnoreCase(
 													ServiceConstants.LOCATION_MUNCIPAL_CORPORATION_TYPE)) {
@@ -1316,13 +1288,17 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 												loc.setLocationTownPanchayat(urbanLocationGuid);
 											}
 										}
-										loc.setLocationSubDistrict(subDistrictLocationGuid);
 										j++;
-										writeReferenceDataIntoSheet(loc, exportWorkBookSheet, j);
+										sheetData.put(j, new Object[] { null, null, loc.getLocationTownPanchayat(),
+												loc.getLocationMunicipality(), loc.getLocationMunicipalCorporation(),
+												subDistrictLocationGuid, districtLocationGuid, eachLocation.getGuid(),
+												eachCountryLocation.getGuid() });
+
 									} else {
 										break;
 									}
 								}
+								writeDataIntoSheet(sheetData, exportWorkBookSheet);
 								writeExcelDataIntoFile(outPutFilePath, exportWorkBook);
 							}
 						}
@@ -1362,6 +1338,7 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 	private void processReferenceLocationsData(String filePath, LocationImportRequest locationImportRequest)
 			throws InternalServerException {
 
+		System.out.println("Import V/U Ref Save Start Intial>");
 		List<LocationMaster> stateMasterLocations = new ArrayList<LocationMaster>();
 		List<String> locationTypes = new ArrayList<String>();
 		locationTypes.add(ServiceConstants.LOCATION_STATE_TYPE);
@@ -1375,6 +1352,9 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 		if (stateMasterLocations != null && !stateMasterLocations.isEmpty()) {
 			for (LocationMaster eachStateLocation : stateMasterLocations) {
 				if (eachStateLocation != null) {
+
+					System.out.println("Import V/U Ref State>" + eachStateLocation.getLocationName());
+
 					String outPutFilePath = "";
 					String directoryPath = env.getProperty("project.locations-files.upload-path") + filePath;
 					String fileName = eachStateLocation.getLocationName() + ServiceConstants.EXCEL_SHEET_TYPE_XLS;
@@ -1385,9 +1365,16 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 					referenceLocations.addAll(eachSheetNewReferenceLocations);
 				}
 			}
+			System.out.println("Import V/U Ref Save Start>");
 			locationDao.saveAllLocations(referenceLocations);
+			System.out.println("Import V/U Ref Save End>");
+
 		}
+		System.out.println("Import V/U Ref Updated Start>");
 		updateAllUsersLocationReferenceToBaseLocation();
+		System.out.println("Import V/U Ref Updated End>");
+		System.out.println("Import V/U Ref Save End Final>");
+
 	}
 
 	private void updateAllUsersLocationReferenceToBaseLocation() throws InternalServerException {
@@ -1637,10 +1624,18 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 	@Override
 	@Transactional
 	public boolean importExportAllReferenceLocations() throws InternalServerException {
+		System.out.println("Export V Ref Start");
 		exportVillageReferenceLocations(null);
+		System.out.println("Export V Ref End");
+		System.out.println("Import V Ref Start");
 		importVillageReferenceLocations(null);
+		System.out.println("Import V Ref End");
+		System.out.println("Export U Ref Start");
 		exportUrbanReferenceLocations(null);
+		System.out.println("Export U Ref End");
+		System.out.println("Import U Ref Start");
 		importUrbanReferenceLocations(null);
+		System.out.println("Import U Ref End");
 		return true;
 	}
 
