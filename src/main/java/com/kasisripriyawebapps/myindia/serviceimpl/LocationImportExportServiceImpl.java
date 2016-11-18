@@ -146,11 +146,12 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 		Workbook myWorkBook = CommonUtil.getWorkBookFromFile(filePath);
 
 		Sheet sheet = myWorkBook.getSheetAt(0);
-		for (int i = 0; i <= sheet.getLastRowNum(); i++) {
+		int i = 0;
+		for (Row eachRow : sheet) {
 			if (i < 1) {
+				i++;
 				continue;
 			}
-			Row eachRow = sheet.getRow(i);
 			double locationCode = eachRow.getCell(0).getNumericCellValue();
 			long locationCodeLong = Long.valueOf(0);
 			locationCodeLong = (long) locationCode;
@@ -296,12 +297,12 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 		Sheet exportWorkBookSheet = exportWorkBook.createSheet(ServiceConstants.LOCATION_EXCEL_COUNTRY_SHEET_NAME);
 		addHeaderRow(exportWorkBookSheet);
 		int j = 0;
-		for (int i = 0; i <= importWorkBookSheet.getLastRowNum(); i++) {
+		int i = 0;
+		for (Row eachRow : importWorkBookSheet) {
 			if (i < 3) {
+				i++;
 				continue;
 			}
-			Row eachRow = importWorkBookSheet.getRow(i);
-
 			String locationName = eachRow.getCell(2).getStringCellValue().trim();
 			String locationType = ServiceConstants.LOCATION_COUNTRY_TYPE;
 
@@ -351,11 +352,12 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 							.createSheet(ServiceConstants.LOCATION_EXCEL_STATE_SHEET_NAME);
 					addHeaderRow(exportWorkBookSheet);
 					int j = 0;
-					for (int i = 0; i <= importWorkBookSheet.getLastRowNum(); i++) {
+					int i = 0;
+					for (Row eachRow : importWorkBookSheet) {
 						if (i < 3) {
+							i++;
 							continue;
 						}
-						Row eachRow = importWorkBookSheet.getRow(i);
 
 						String locationName = eachRow.getCell(3).getStringCellValue().trim();
 						String locationType = "";
@@ -460,11 +462,12 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 		Sheet exportWorkBookSheet = exportWorkBook.createSheet(ServiceConstants.LOCATION_EXCEL_DISTRICT_SHEET_NAME);
 		addHeaderRow(exportWorkBookSheet);
 		int j = 0;
-		for (int i = 0; i <= importWorkBookSheet.getLastRowNum(); i++) {
+		int i = 0;
+		for (Row eachRow : importWorkBookSheet) {
 			if (i < 3) {
+				i++;
 				continue;
 			}
-			Row eachRow = importWorkBookSheet.getRow(i);
 			String locationName = eachRow.getCell(1).getStringCellValue().trim();
 			String locationType = ServiceConstants.LOCATION_DISTRICT_TYPE;
 			if (locationName != null && !locationName.isEmpty()) {
@@ -513,11 +516,12 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 		Sheet exportWorkBookSheet = exportWorkBook.createSheet(ServiceConstants.LOCATION_EXCEL_SUB_DISTRICT_SHEET_NAME);
 		addHeaderRow(exportWorkBookSheet);
 		int j = 0;
-		for (int i = 0; i <= importWorkBookSheet.getLastRowNum(); i++) {
+		int i = 0;
+		for (Row eachRow : importWorkBookSheet) {
 			if (i < 3) {
+				i++;
 				continue;
 			}
-			Row eachRow = importWorkBookSheet.getRow(i);
 
 			String locationName = eachRow.getCell(2).getStringCellValue().trim();
 			String locationType = ServiceConstants.LOCATION_SUB_DISTRICT_TYPE;
@@ -575,13 +579,12 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 					addHeaderRow(exportWorkBookSheet);
 
 					int j = 0;
-
-					for (int i = 0; i <= importWorkBookSheet.getLastRowNum(); i++) {
+					int i = 0;
+					for (Row eachRow : importWorkBookSheet) {
 						if (i < 4) {
+							i++;
 							continue;
 						}
-						Row eachRow = importWorkBookSheet.getRow(i);
-
 						String locationName = eachRow.getCell(3).getStringCellValue().trim();
 						String excelLocationType = eachRow.getCell(6).getStringCellValue().trim();
 						String locationType = "";
@@ -647,12 +650,12 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 					addHeaderRow(exportWorkBookSheet);
 
 					int j = 0;
-
-					for (int i = 0; i <= importWorkBookSheet.getLastRowNum(); i++) {
+					int i = 0;
+					for (Row eachRow : importWorkBookSheet) {
 						if (i < 4) {
+							i++;
 							continue;
 						}
-						Row eachRow = importWorkBookSheet.getRow(i);
 						String locationName = eachRow.getCell(3).getStringCellValue().trim();
 						String locationType = eachRow.getCell(6).getStringCellValue().trim();
 
@@ -715,12 +718,12 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 					addHeaderRow(exportWorkBookSheet);
 
 					int j = 0;
-
-					for (int i = 0; i <= importWorkBookSheet.getLastRowNum(); i++) {
+					int i = 0;
+					for (Row eachRow : importWorkBookSheet) {
 						if (i < 4) {
+							i++;
 							continue;
 						}
-						Row eachRow = importWorkBookSheet.getRow(i);
 						String locationName = eachRow.getCell(3).getStringCellValue().trim();
 						String locationType = eachRow.getCell(6).getStringCellValue().trim();
 
@@ -792,11 +795,12 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 							.createSheet(ServiceConstants.LOCATION_VILLAGE_PANCHAYATH_TYPE);
 					addHeaderRow(exportWorkBookSheet);
 					int j = 0;
-					for (int i = 0; i <= importWorkBookSheet.getLastRowNum(); i++) {
+					int i = 0;
+					for (Row eachRow : importWorkBookSheet) {
 						if (i < 4) {
+							i++;
 							continue;
 						}
-						Row eachRow = importWorkBookSheet.getRow(i);
 						String locationName = eachRow.getCell(13).getStringCellValue().trim();
 						String locationType = ServiceConstants.LOCATION_VILLAGE_PANCHAYATH_TYPE;
 						String villageName = eachRow.getCell(9).getStringCellValue().trim();
@@ -869,11 +873,12 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 					addHeaderRow(exportWorkBookSheet);
 
 					int j = 0;
-					for (int i = 0; i <= importWorkBookSheet.getLastRowNum(); i++) {
+					int i = 0;
+					for (Row eachRow : importWorkBookSheet) {
 						if (i < 4) {
+							i++;
 							continue;
 						}
-						Row eachRow = importWorkBookSheet.getRow(i);
 						String locationName = eachRow.getCell(9).getStringCellValue().trim();
 						String locationType = ServiceConstants.LOCATION_VILLAGE_TYPE;
 						if (locationName != null && !locationName.isEmpty()) {
@@ -983,11 +988,12 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 										.createSheet(ServiceConstants.LOCATION_VILLAGE_TYPE);
 								addReferenceHeaderRow(exportWorkBookSheet);
 								int j = 0;
-								for (int i = 0; i <= importWorkBookSheet.getLastRowNum(); i++) {
+								int i = 0;
+								for (Row eachRow : importWorkBookSheet) {
 									if (i < 4) {
+										i++;
 										continue;
 									}
-									Row eachRow = importWorkBookSheet.getRow(i);
 									String locationName = eachRow.getCell(9).getStringCellValue().trim();
 									if (locationName != null && !locationName.isEmpty()) {
 										Long villageLocationCode = (long) eachRow.getCell(8).getNumericCellValue();
@@ -1197,11 +1203,12 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 										.createSheet(ServiceConstants.LOCATION_URBAN_BODY_TYPE);
 								addReferenceHeaderRow(exportWorkBookSheet);
 								int j = 0;
-								for (int i = 0; i <= importWorkBookSheet.getLastRowNum(); i++) {
+								int i = 0;
+								for (Row eachRow : importWorkBookSheet) {
 									if (i < 4) {
+										i++;
 										continue;
 									}
-									Row eachRow = importWorkBookSheet.getRow(i);
 									String locationCode = eachRow.getCell(0).getStringCellValue();
 									Long locationCodeLong = null;
 									String[] locationCodeArray = locationCode.split(",");
@@ -1389,12 +1396,12 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 		Workbook myWorkBook = CommonUtil.getWorkBookFromFile(outPutFilePath);
 
 		Sheet sheet = myWorkBook.getSheetAt(0);
-		for (int i = 0; i <= sheet.getLastRowNum(); i++) {
+		int i = 0;
+		for (Row eachRow : sheet) {
 			if (i < 1) {
+				i++;
 				continue;
 			}
-			Row eachRow = sheet.getRow(i);
-
 			Location location = prepareLocationReferenceData(eachRow);
 			if (!referenceLocations.contains(location)) {
 				referenceLocations.add(location);
