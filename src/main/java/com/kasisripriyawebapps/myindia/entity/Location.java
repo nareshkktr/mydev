@@ -170,4 +170,78 @@ public class Location implements Serializable {
 		this.locationCountry = locationCountry;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((locationCountry == null) ? 0 : locationCountry.hashCode());
+		result = prime * result + ((locationDistrict == null) ? 0 : locationDistrict.hashCode());
+		result = prime * result
+				+ ((locationMunicipalCorporation == null) ? 0 : locationMunicipalCorporation.hashCode());
+		result = prime * result + ((locationMunicipality == null) ? 0 : locationMunicipality.hashCode());
+		result = prime * result + ((locationState == null) ? 0 : locationState.hashCode());
+		result = prime * result + ((locationSubDistrict == null) ? 0 : locationSubDistrict.hashCode());
+		result = prime * result + ((locationTownPanchayat == null) ? 0 : locationTownPanchayat.hashCode());
+		result = prime * result + ((locationVillage == null) ? 0 : locationVillage.hashCode());
+		result = prime * result + ((locationVillagePanchayat == null) ? 0 : locationVillagePanchayat.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Location other = (Location) obj;
+		if (locationCountry == null) {
+			if (other.locationCountry != null)
+				return false;
+		} else if (!locationCountry.equals(other.locationCountry))
+			return false;
+		if (locationDistrict == null) {
+			if (other.locationDistrict != null)
+				return false;
+		} else if (!locationDistrict.equals(other.locationDistrict))
+			return false;
+		if (locationMunicipalCorporation == null) {
+			if (other.locationMunicipalCorporation != null)
+				return false;
+		} else if (!locationMunicipalCorporation.equals(other.locationMunicipalCorporation))
+			return false;
+		if (locationMunicipality == null) {
+			if (other.locationMunicipality != null)
+				return false;
+		} else if (!locationMunicipality.equals(other.locationMunicipality))
+			return false;
+		if (locationState == null) {
+			if (other.locationState != null)
+				return false;
+		} else if (!locationState.equals(other.locationState))
+			return false;
+		if (locationSubDistrict == null) {
+			if (other.locationSubDistrict != null)
+				return false;
+		} else if (!locationSubDistrict.equals(other.locationSubDistrict))
+			return false;
+		if (locationTownPanchayat == null) {
+			if (other.locationTownPanchayat != null)
+				return false;
+		} else if (!locationTownPanchayat.equals(other.locationTownPanchayat))
+			return false;
+		if (locationVillage == null) {
+			if (other.locationVillage != null)
+				return false;
+		} else if (!locationVillage.equals(other.locationVillage))
+			return false;
+		if (locationVillagePanchayat == null) {
+			if (other.locationVillagePanchayat != null)
+				return false;
+		} else if (!locationVillagePanchayat.equals(other.locationVillagePanchayat))
+			return false;
+		return true;
+	}
+
 }
