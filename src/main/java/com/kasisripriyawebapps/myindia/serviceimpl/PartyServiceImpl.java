@@ -5,6 +5,8 @@ package com.kasisripriyawebapps.myindia.serviceimpl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -23,7 +25,6 @@ import com.kasisripriyawebapps.myindia.entity.Party;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 import com.kasisripriyawebapps.myindia.service.PartyService;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class PartyServiceImpl.
  */
@@ -44,7 +45,6 @@ public class PartyServiceImpl implements PartyService {
 	@Override
 	@Transactional
 	public void importParties() throws InternalServerException {
-		// TODO Auto-generated method stub
 		driver = new ChromeDriver();
 		driver.manage().window().maximize();
 		driver.get(env.getProperty("india-parties.url"));
@@ -57,6 +57,15 @@ public class PartyServiceImpl implements PartyService {
 
 		List<WebElement> partyTables = driver.findElements(By.cssSelector("table.wikitable"));
 		if (partyTables != null && !partyTables.isEmpty()) {
+
+			List<String> locationTypes = new ArrayList<String>();
+			locationTypes.add(ServiceConstants.LOCATION_STATE_TYPE);
+			locationTypes.add(ServiceConstants.LOCATION_UNION_TERRITORY_TYPE);
+
+			List<LocationMaster> stateLocations = locationMasterDao.getAllMasterLocationsByTypes(locationTypes);
+			Map<String, List<LocationMaster>> stateMasterLocationsCodeMap = stateLocations.stream()
+					.collect(Collectors.groupingBy(locationObject -> locationObject.getLocationName()));
+
 			int tableIndex = 0;
 			for (WebElement eachPartyTable : partyTables) {
 				if (eachPartyTable != null) {
@@ -81,7 +90,6 @@ public class PartyServiceImpl implements PartyService {
 								partyNameCell = cells.get(1);
 								partyAbbrevationCell = cells.get(2);
 								partyFoundedOnCell = cells.get(3);
-
 								isNationalParty = true;
 
 							} else if (tableIndex == 1) {
@@ -111,7 +119,6 @@ public class PartyServiceImpl implements PartyService {
 							List<String> stateNames = new ArrayList<String>();
 
 							if (partyLocatedInCell != null) {
-
 								String partyLocationNames = partyLocatedInCell.getText();
 								if (partyLocationNames.contains(",")) {
 									String[] partyLocationNamesArray = partyLocationNames.split(",");
@@ -123,21 +130,14 @@ public class PartyServiceImpl implements PartyService {
 								} else {
 									stateNames.add(partyLocationNames.trim());
 								}
-
 								if (stateNames != null && !stateNames.isEmpty()) {
-
-									List<String> locationTypes = new ArrayList<String>();
-									locationTypes.add(ServiceConstants.LOCATION_STATE_TYPE);
-									locationTypes.add(ServiceConstants.LOCATION_UNION_TERRITORY_TYPE);
-
-									partyLocations = locationMasterDao.getMasterLocationsByTypes(locationTypes,
-											stateNames);
+									for (String stateName : stateNames) {
+										partyLocations.addAll(stateMasterLocationsCodeMap.get(stateName));
+									}
 								}
 							}
-
 							party.setLocatedIn(partyLocations);
 							politicalParties.add(party);
-
 						}
 					}
 					tableIndex++;

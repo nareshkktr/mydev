@@ -279,6 +279,14 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 		List<LocationMaster> excelMasterLocations = new ArrayList<LocationMaster>();
 		List<LocationMaster> newMasterLocations = prepareMasterLocations(filePath, existingMasterLocations,
 				excelMasterLocations, locationImportRequest);
+
+		processSaveUpdateDeleteLocations(newMasterLocations, excelMasterLocations, existingMasterLocations);
+
+	}
+
+	private void processSaveUpdateDeleteLocations(List<LocationMaster> newMasterLocations,
+			List<LocationMaster> excelMasterLocations, List<LocationMaster> existingMasterLocations)
+			throws InternalServerException {
 		locationMasterDao.saveAllMasterLocations(newMasterLocations);
 		List<LocationMaster> updatedMasterLocations = findUpdatedMasterLocations(existingMasterLocations,
 				excelMasterLocations);
@@ -421,7 +429,7 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 	private void writeDataIntoSheet(Map<Integer, Object[]> sheetData, Sheet exportWorkBookSheet) {
 
 		Set<Integer> newRows = sheetData.keySet();
-		int rownum = exportWorkBookSheet.getLastRowNum()+1;
+		int rownum = exportWorkBookSheet.getLastRowNum() + 1;
 		for (Integer key : newRows) {
 			Row row = exportWorkBookSheet.createRow(rownum++);
 			Object[] objArr = sheetData.get(key);
@@ -1347,7 +1355,8 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 
 		List<Location> referenceLocations = new ArrayList<Location>();
 		userInfoDao.updateAllUsersLocationReferenceToDefault();
-		locationDao.deleteAllLocations();
+
+		// locationDao.deleteAllLocations();
 
 		if (stateMasterLocations != null && !stateMasterLocations.isEmpty()) {
 			for (LocationMaster eachStateLocation : stateMasterLocations) {
@@ -1641,7 +1650,6 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 
 	@Override
 	public boolean importMLAConstituencyLocations() throws InternalServerException {
-		List<LocationMaster> mlaConstituencyLocations = new ArrayList<LocationMaster>();
 		driver = new ChromeDriver();
 		driver.manage().window().maximize();
 		driver.get(env.getProperty("india-mla-constituency.url"));
@@ -1658,17 +1666,20 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 		Map<String, List<LocationMaster>> stateMasterLocationsCodeMap = stateMasterLocations.stream()
 				.collect(Collectors.groupingBy(locationObject -> locationObject.getLocationType()));
 
-		processEachStateMLAConstituencyURL(1, statesTableRowsWithHeader.size(), mlaConstituencyLocations,
-				stateMasterLocationsCodeMap);
-		if (mlaConstituencyLocations != null && !mlaConstituencyLocations.isEmpty()) {
+		List<LocationMaster> excelMasterLocations = new ArrayList<LocationMaster>();
+		List<LocationMaster> existingMasterLocations = locationMasterDao
+				.getAllMasterLocationsByType(ServiceConstants.LOCATION_MLA_CONSTITUENCT_TYPE);
 
-		}
+		List<LocationMaster> newMasterLocations = new ArrayList<LocationMaster>();
+		processEachStateMLAConstituencyURL(1, statesTableRowsWithHeader.size(), stateMasterLocationsCodeMap,
+				existingMasterLocations, excelMasterLocations, newMasterLocations);
+		processSaveUpdateDeleteLocations(newMasterLocations, excelMasterLocations, existingMasterLocations);
 		return true;
 	}
 
 	private void processEachStateMLAConstituencyURL(int rowNo, int rowsSize,
-			List<LocationMaster> mlaConstituencyLocations,
-			Map<String, List<LocationMaster>> stateMasterLocationsCodeMap) {
+			Map<String, List<LocationMaster>> stateMasterLocationsCodeMap, List<LocationMaster> existingMasterLocations,
+			List<LocationMaster> excelMasterLocations, List<LocationMaster> newMasterLocations) {
 		if (rowNo > rowsSize) {
 			driver.close();
 			driver.quit();
@@ -1684,15 +1695,16 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 			WebElement eachRowStateCellLink = stateNameTdWebElement.findElement(By.xpath("a"));
 			String stateName = eachRowStateCellLink.getText();
 			String stateUrl = eachRowStateCellLink.getAttribute("href");
-			processEachStateMLAConstituencyLocationData(mlaConstituencyLocations, stateName, stateUrl,
-					stateMasterLocationsCodeMap);
-			processEachStateMLAConstituencyURL(rowNo + 1, rowsSize, mlaConstituencyLocations,
-					stateMasterLocationsCodeMap);
+			processEachStateMLAConstituencyLocationData(stateName, stateUrl, stateMasterLocationsCodeMap,
+					existingMasterLocations, excelMasterLocations, newMasterLocations);
+			processEachStateMLAConstituencyURL(rowNo + 1, rowsSize, stateMasterLocationsCodeMap,
+					existingMasterLocations, excelMasterLocations, newMasterLocations);
 		}
 	}
 
-	private void processEachStateMLAConstituencyLocationData(List<LocationMaster> mlaConstituencyLocations,
-			String stateName, String stateUrl, Map<String, List<LocationMaster>> stateMasterLocationsCodeMap) {
+	private void processEachStateMLAConstituencyLocationData(String stateName, String stateUrl,
+			Map<String, List<LocationMaster>> stateMasterLocationsCodeMap, List<LocationMaster> existingMasterLocations,
+			List<LocationMaster> excelMasterLocations, List<LocationMaster> newMasterLocations) {
 		driver.get(stateUrl);
 		WebElement scrollTabDiv = driver.findElement(By.className("scroll-tab"));
 		WebElement mCSB2Div = scrollTabDiv.findElement(By.id("mCSB_2"));
@@ -1728,7 +1740,14 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 				loc1.setLocationName(assemblyConstituencyName1.getText());
 				loc1.setLocationType(ServiceConstants.LOCATION_MLA_CONSTITUENCT_TYPE);
 				loc1.setParentLocationGuid(parentLocationGuid);
-				mlaConstituencyLocations.add(loc1);
+
+				if (!newMasterLocations.contains(loc1) && !existingMasterLocations.contains(loc1)) {
+					newMasterLocations.add(loc1);
+				}
+
+				if (!excelMasterLocations.contains(loc1)) {
+					excelMasterLocations.add(loc1);
+				}
 			}
 			if (assemblyConstituencyName2.getText() != null && !assemblyConstituencyName2.getText().isEmpty()) {
 				LocationMaster loc2 = new LocationMaster();
@@ -1736,7 +1755,12 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 				loc2.setLocationName(assemblyConstituencyName2.getText());
 				loc2.setLocationType(ServiceConstants.LOCATION_MLA_CONSTITUENCT_TYPE);
 				loc2.setParentLocationGuid(parentLocationGuid);
-				mlaConstituencyLocations.add(loc2);
+				if (!newMasterLocations.contains(loc2) && !existingMasterLocations.contains(loc2)) {
+					newMasterLocations.add(loc2);
+				}
+				if (!excelMasterLocations.contains(loc2)) {
+					excelMasterLocations.add(loc2);
+				}
 			}
 		}
 	}
