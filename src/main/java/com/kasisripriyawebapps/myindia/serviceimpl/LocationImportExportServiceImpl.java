@@ -1347,7 +1347,7 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 
 		List<Location> referenceLocations = new ArrayList<Location>();
 		userInfoDao.updateAllUsersLocationReferenceToDefault();
-		locationDao.deleteAllLocations();
+		//locationDao.deleteAllLocations();
 
 		if (stateMasterLocations != null && !stateMasterLocations.isEmpty()) {
 			for (LocationMaster eachStateLocation : stateMasterLocations) {
@@ -1640,6 +1640,7 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 	}
 
 	@Override
+	@Transactional
 	public boolean importMLAConstituencyLocations() throws InternalServerException {
 		List<LocationMaster> mlaConstituencyLocations = new ArrayList<LocationMaster>();
 		driver = new ChromeDriver();
