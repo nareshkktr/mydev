@@ -25,7 +25,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -55,6 +57,7 @@ public class CommonUtil {
 	public static List<String> idCardTypes = new ArrayList<String>();
 	public static List<String> objectTypes = new ArrayList<String>();
 	public static List<String> searchTerms = new ArrayList<String>();
+	public static Map<String, String> conflictLocationsMap = new HashMap<String, String>();
 
 	static {
 		idCardTypes.add(ApplicationConstants.IDENTITY_CARD_TYPE_ADHAR);
@@ -71,6 +74,10 @@ public class CommonUtil {
 		for (char alphabet = 'A'; alphabet <= 'Z'; alphabet++) {
 			searchTerms.add(String.valueOf(alphabet));
 		}
+
+		conflictLocationsMap.put("Jammu & Kashmir", "Jammu And Kashmir");
+		conflictLocationsMap.put("New Delhi", "Delhi");
+		conflictLocationsMap.put("NCT of Delhi", "Delhi");
 	}
 
 	/**
@@ -528,42 +535,62 @@ public class CommonUtil {
 	}
 
 	public static void main(String args[]) {
-		String districtSubDistrictCode = "MUMBAI SUBURBAN(483)";
-		Long subDistrictLocationLong = null;
-		Long districtLocationLong = null;
+		String str = "Tuting-Yingkiong, Pangin, Nari-Koyu, Pasighat (West), Pasighat (East), Mebo, Mariyang-Geku, Anini, Dambuk, Roing,Tezu, Hayuliang, Chowkham, Namsai, Lekang, Bordumsa-Diyum, Miao, Nampong, Changlang South,Changlang North, Namsang, Khonsa East, Khonsa West, Borduria-Bagapani, Kanubari, Longding-Pumao, Pongchou-Wakka";
+		String[] part = str.split("(?<=\\D)(?=\\d)");
 
-		if (districtSubDistrictCode != null && !districtSubDistrictCode.isEmpty()) {
-			String[] districtSubDistrictCodeArray = districtSubDistrictCode.split("/");
-			if (districtSubDistrictCodeArray != null) {
-				int subDistrictCodeIndex = 0;
-				String subDistrictCode = "";
-				String districtCode = "";
-				if (districtSubDistrictCodeArray.length == 1) {
-					subDistrictCode = "";
-					districtCode = districtSubDistrictCodeArray[0];
-				} else {
-					subDistrictCodeIndex = districtSubDistrictCodeArray.length - 1;
-					subDistrictCode = districtSubDistrictCodeArray[subDistrictCodeIndex - 1];
-					districtCode = districtSubDistrictCodeArray[subDistrictCodeIndex];
-				}
+		boolean isHavingHyphon = false;
+		boolean isHavingDot = false;
 
-				if (subDistrictCode != null && !subDistrictCode.isEmpty()) {
-					String[] subDistrictCodeArray = subDistrictCode.split("\\(");
-					String subDistrictCodeArraySecondIndex = subDistrictCodeArray[subDistrictCodeArray.length - 1];
-					subDistrictLocationLong = Long.parseLong(
-							subDistrictCodeArraySecondIndex.substring(0, subDistrictCodeArraySecondIndex.length() - 1));
-				}
-				if (districtCode != null && !districtCode.isEmpty()) {
-					String[] districtCodeArray = districtCode.split("\\(");
-					String districtCodeArraySecondIndex = districtCodeArray[districtCodeArray.length - 1];
-					districtLocationLong = Long.parseLong(
-							districtCodeArraySecondIndex.substring(0, districtCodeArraySecondIndex.length() - 1));
-				}
-			}
+		if (str.trim().charAt(1) == '-') {
+			isHavingHyphon = true;
 		}
 
-		System.out.println(subDistrictLocationLong);
-		System.out.println(districtLocationLong);
+		if (str.trim().charAt(1) == '.') {
+			isHavingDot = true;
+		}
+
+		for (int i = 0; i < part.length; i++) {
+			String eachStr = part[i];
+			System.out.println(eachStr);
+			Long locationCode = null;
+			String locationName = "";
+
+			if (eachStr.matches(".*\\d+.*") && isHavingDot) {
+				locationCode = Long.parseLong(eachStr.split("\\.")[0]);
+				locationName = eachStr.split("\\.")[1];
+			} else if (eachStr.matches(".*\\d+.*") && isHavingHyphon) {
+				locationCode = Long.parseLong(eachStr.split("-")[0]);
+				locationName = eachStr.split("-")[1];
+			} else {
+				String[] locationNamesArray = eachStr.split(",");
+				for (int j = 0; j < locationNamesArray.length; j++) {
+					locationName = locationNamesArray[j];
+				}
+			}
+			System.out.println(locationCode);
+			if (locationName.contains("(")) {
+				String[] subDistrictCodeArray = locationName.split("\\(");
+				if (subDistrictCodeArray.length > 2) {
+					locationName = subDistrictCodeArray[0] + "(" + subDistrictCodeArray[1];
+				} else {
+					locationName = subDistrictCodeArray[subDistrictCodeArray.length - 2];
+				}
+			}
+			if (locationName.endsWith(".") || locationName.endsWith(",")) {
+				locationName = locationName.substring(0, locationName.length() - 1);
+			}
+			System.out.println(locationName.trim());
+		}
+	}
+
+	public static String getResolvedConflictedLocationName(String locationName) {
+		for (String param : conflictLocationsMap.keySet()) {
+			if (param.equalsIgnoreCase(locationName)) {
+				locationName = conflictLocationsMap.get(locationName);
+				break;
+			}
+		}
+		return locationName;
 	}
 
 }

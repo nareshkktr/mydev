@@ -211,4 +211,35 @@ public class Party implements Serializable {
 		}
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((partyAbbrevation == null) ? 0 : partyAbbrevation.hashCode());
+		result = prime * result + ((partyName == null) ? 0 : partyName.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Party other = (Party) obj;
+		if (partyAbbrevation == null) {
+			if (other.partyAbbrevation != null)
+				return false;
+		} else if (!partyAbbrevation.equals(other.partyAbbrevation))
+			return false;
+		if (partyName == null) {
+			if (other.partyName != null)
+				return false;
+		} else if (!partyName.equals(other.partyName))
+			return false;
+		return true;
+	}
+
 }

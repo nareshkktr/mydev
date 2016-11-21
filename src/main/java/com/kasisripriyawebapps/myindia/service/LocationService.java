@@ -8,5 +8,4 @@ package com.kasisripriyawebapps.myindia.service;
  */
 public interface LocationService {
 
-	void exportVillageReferenceLocations(String uploadedFileLocation);
 }

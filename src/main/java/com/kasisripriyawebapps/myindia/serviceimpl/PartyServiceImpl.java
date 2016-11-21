@@ -24,6 +24,7 @@ import com.kasisripriyawebapps.myindia.entity.LocationMaster;
 import com.kasisripriyawebapps.myindia.entity.Party;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 import com.kasisripriyawebapps.myindia.service.PartyService;
+import com.kasisripriyawebapps.myindia.util.CommonUtil;
 
 /**
  * The Class PartyServiceImpl.
@@ -53,19 +54,56 @@ public class PartyServiceImpl implements PartyService {
 		} catch (InterruptedException e) {
 			new InternalServerException(e.getMessage());
 		}
-		List<Party> politicalParties = new ArrayList<Party>();
 
+		List<String> locationTypes = new ArrayList<String>();
+		locationTypes.add(ServiceConstants.LOCATION_STATE_TYPE);
+		locationTypes.add(ServiceConstants.LOCATION_UNION_TERRITORY_TYPE);
+
+		List<LocationMaster> stateLocations = locationMasterDao.getAllMasterLocationsByTypes(locationTypes);
+		Map<String, List<LocationMaster>> stateMasterLocationsCodeMap = stateLocations.stream()
+				.collect(Collectors.groupingBy(locationObject -> locationObject.getLocationName().toUpperCase()));
+
+		List<Party> existingParties = partyDao.getAllParties();
+		List<Party> newParties = new ArrayList<Party>();
+		List<Party> exportedParties = new ArrayList<Party>();
+
+		processPartiesData(stateMasterLocationsCodeMap, newParties, existingParties, exportedParties);
+
+		partyDao.saveParties(newParties);
+		List<Party> updatedParties = findUpdatedParties(existingParties, exportedParties);
+		if (updatedParties != null && !updatedParties.isEmpty()) {
+			partyDao.updateParties(updatedParties);
+		}
+		if (existingParties != null && !existingParties.isEmpty()) {
+			existingParties.removeAll(exportedParties);
+			partyDao.deleteParties(existingParties);
+		}
+	}
+
+	private List<Party> findUpdatedParties(List<Party> existingParties, List<Party> exportedParties) {
+
+		List<Party> updatedParties = new ArrayList<Party>();
+		Map<String, List<Party>> existingLocationCodeMap = existingParties.stream().collect(Collectors
+				.groupingBy(partyObject -> partyObject.getPartyName() + "|" + partyObject.getPartyAbbrevation()));
+
+		if (exportedParties != null && !exportedParties.isEmpty() && existingParties != null
+				&& !existingParties.isEmpty()) {
+			for (Party eachExportedParty : exportedParties) {
+				if (existingParties.contains(eachExportedParty) && !updatedParties.contains(eachExportedParty)) {
+					eachExportedParty.setGuid(existingLocationCodeMap
+							.get(eachExportedParty.getPartyName() + "|" + eachExportedParty.getPartyAbbrevation())
+							.get(0).getGuid());
+					updatedParties.add(eachExportedParty);
+				}
+			}
+		}
+		return updatedParties;
+	}
+
+	private void processPartiesData(Map<String, List<LocationMaster>> stateMasterLocationsCodeMap,
+			List<Party> newParties, List<Party> existingParties, List<Party> exportedParties) {
 		List<WebElement> partyTables = driver.findElements(By.cssSelector("table.wikitable"));
 		if (partyTables != null && !partyTables.isEmpty()) {
-
-			List<String> locationTypes = new ArrayList<String>();
-			locationTypes.add(ServiceConstants.LOCATION_STATE_TYPE);
-			locationTypes.add(ServiceConstants.LOCATION_UNION_TERRITORY_TYPE);
-
-			List<LocationMaster> stateLocations = locationMasterDao.getAllMasterLocationsByTypes(locationTypes);
-			Map<String, List<LocationMaster>> stateMasterLocationsCodeMap = stateLocations.stream()
-					.collect(Collectors.groupingBy(locationObject -> locationObject.getLocationName()));
-
 			int tableIndex = 0;
 			for (WebElement eachPartyTable : partyTables) {
 				if (eachPartyTable != null) {
@@ -132,12 +170,20 @@ public class PartyServiceImpl implements PartyService {
 								}
 								if (stateNames != null && !stateNames.isEmpty()) {
 									for (String stateName : stateNames) {
+										stateName = CommonUtil.getResolvedConflictedLocationName(stateName);
+										stateName = stateName.toUpperCase();
+										System.out.println(stateName);
 										partyLocations.addAll(stateMasterLocationsCodeMap.get(stateName));
 									}
 								}
 							}
 							party.setLocatedIn(partyLocations);
-							politicalParties.add(party);
+							if (!newParties.contains(party) && !existingParties.contains(party)) {
+								newParties.add(party);
+							}
+							if (!exportedParties.contains(party)) {
+								exportedParties.add(party);
+							}
 						}
 					}
 					tableIndex++;
@@ -146,8 +192,6 @@ public class PartyServiceImpl implements PartyService {
 		}
 		driver.close();
 		driver.quit();
-		if (politicalParties != null && !politicalParties.isEmpty()) {
-			partyDao.importParties(politicalParties);
-		}
 	}
+
 }

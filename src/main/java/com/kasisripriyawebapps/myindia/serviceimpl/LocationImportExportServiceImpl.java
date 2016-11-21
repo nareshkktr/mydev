@@ -16,7 +16,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -1355,7 +1354,7 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 
 		List<Location> referenceLocations = new ArrayList<Location>();
 		userInfoDao.updateAllUsersLocationReferenceToDefault();
-		//locationDao.deleteAllLocations();
+		// locationDao.deleteAllLocations();
 
 		if (stateMasterLocations != null && !stateMasterLocations.isEmpty()) {
 			for (LocationMaster eachStateLocation : stateMasterLocations) {
@@ -1510,7 +1509,30 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 	@Transactional
 	public boolean importMPConstituencyLocations() throws InternalServerException {
 
-		List<LocationMaster> mpConstituencyLocations = new ArrayList<LocationMaster>();
+		List<LocationMaster> stateMasterLocations = new ArrayList<LocationMaster>();
+		List<String> locationTypes = new ArrayList<String>();
+		locationTypes.add(ServiceConstants.LOCATION_STATE_TYPE);
+		locationTypes.add(ServiceConstants.LOCATION_UNION_TERRITORY_TYPE);
+		stateMasterLocations = locationMasterDao.getAllMasterLocationsByTypes(locationTypes);
+		Map<String, List<LocationMaster>> stateMasterLocationsCodeMap = stateMasterLocations.stream()
+				.collect(Collectors.groupingBy(locationObject -> locationObject.getLocationName().toUpperCase()));
+
+		List<LocationMaster> exportMasterLocations = new ArrayList<LocationMaster>();
+		List<LocationMaster> existingMasterLocations = locationMasterDao
+				.getAllMasterLocationsByType(ServiceConstants.LOCATION_MP_CONSTITUENCT_TYPE);
+
+		List<LocationMaster> newMasterLocations = new ArrayList<LocationMaster>();
+		processMPConstituencyLocations(stateMasterLocationsCodeMap, existingMasterLocations, exportMasterLocations,
+				newMasterLocations);
+		processSaveUpdateDeleteLocations(newMasterLocations, exportMasterLocations, existingMasterLocations);
+
+		return true;
+	}
+
+	private void processMPConstituencyLocations(Map<String, List<LocationMaster>> stateMasterLocationsCodeMap,
+			List<LocationMaster> existingMasterLocations, List<LocationMaster> exportMasterLocations,
+			List<LocationMaster> newMasterLocations) {
+
 		driver = new ChromeDriver();
 		driver.manage().window().maximize();
 		driver.get(env.getProperty("india-loksabha-constituency.url"));
@@ -1520,6 +1542,7 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 			new InternalServerException(e.getMessage());
 		}
 
+		List<WebElement> stateNameHeaderElements = driver.findElements(By.tagName("h3"));
 		List<WebElement> mpConstiencyTables = driver.findElements(By.cssSelector("table.wikitable"));
 		if (mpConstiencyTables != null && !mpConstiencyTables.isEmpty()) {
 
@@ -1530,6 +1553,10 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 					continue;
 				}
 				if (eachMpConstiencyTable != null) {
+					WebElement stateNameHeaderElement = stateNameHeaderElements.get(tableIndex - 1);
+					WebElement stateNameHeaderSpanElement = stateNameHeaderElement.findElement(By.xpath("span"));
+					WebElement stateNameHeaderSpanAchorElement = stateNameHeaderSpanElement.findElement(By.xpath("a"));
+					String stateName = stateNameHeaderSpanAchorElement.getText();
 					WebElement eachMpConstiencyTableTbody = eachMpConstiencyTable.findElements(By.xpath("tbody"))
 							.get(0);
 					List<WebElement> eachMpConstiencyTableTbodyTrList = eachMpConstiencyTableTbody
@@ -1552,7 +1579,19 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 								locationMaster.setLocationName(mpConstituencyName);
 								locationMaster.setLocationCode(mpConstituencyNo);
 								locationMaster.setLocationType(ServiceConstants.LOCATION_MP_CONSTITUENCT_TYPE);
-								mpConstituencyLocations.add(locationMaster);
+								stateName = CommonUtil.getResolvedConflictedLocationName(stateName);
+								stateName = stateName.toUpperCase();
+								Long parentLocationGuid = stateMasterLocationsCodeMap.get(stateName).get(0).getGuid();
+								locationMaster.setParentLocationGuid(parentLocationGuid);
+
+								if (!newMasterLocations.contains(locationMaster)
+										&& !existingMasterLocations.contains(locationMaster)) {
+									newMasterLocations.add(locationMaster);
+								}
+
+								if (!exportMasterLocations.contains(locationMaster)) {
+									exportMasterLocations.add(locationMaster);
+								}
 							}
 						}
 					}
@@ -1563,10 +1602,6 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 		driver.close();
 		driver.quit();
 
-		if (mpConstituencyLocations != null && !mpConstituencyLocations.isEmpty()) {
-			locationMasterDao.saveAllMasterLocations(mpConstituencyLocations);
-		}
-		return true;
 	}
 
 	@Override
@@ -1650,118 +1685,162 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 	@Override
 	@Transactional
 	public boolean importMLAConstituencyLocations() throws InternalServerException {
-		driver = new ChromeDriver();
-		driver.manage().window().maximize();
-		driver.get(env.getProperty("india-mla-constituency.url"));
 
-		List<WebElement> pageMainTables = driver.findElements(By.className("tableizer-table"));
-		WebElement pageMainTable = pageMainTables.get(5);
-		WebElement pageMainTableBody = pageMainTable.findElements(By.xpath("tbody")).get(0);
-		List<WebElement> statesTableRowsWithHeader = pageMainTableBody.findElements(By.xpath("tr"));
-		List<LocationMaster> stateMasterLocations = new ArrayList<LocationMaster>();
-		List<String> locationTypes = new ArrayList<String>();
-		locationTypes.add(ServiceConstants.LOCATION_STATE_TYPE);
-		locationTypes.add(ServiceConstants.LOCATION_UNION_TERRITORY_TYPE);
-		stateMasterLocations = locationMasterDao.getAllMasterLocationsByTypes(locationTypes);
-		Map<String, List<LocationMaster>> stateMasterLocationsCodeMap = stateMasterLocations.stream()
-				.collect(Collectors.groupingBy(locationObject -> locationObject.getLocationType()));
+		List<LocationMaster> mPMasterLocations = locationMasterDao
+				.getAllMasterLocationsByType(ServiceConstants.LOCATION_MP_CONSTITUENCT_TYPE);
 
-		List<LocationMaster> excelMasterLocations = new ArrayList<LocationMaster>();
+		Map<String, List<LocationMaster>> mPMasterLocationsCodeMap = mPMasterLocations.stream()
+				.collect(Collectors.groupingBy(locationObject -> locationObject.getLocationName()));
+
+		List<LocationMaster> exportMasterLocations = new ArrayList<LocationMaster>();
 		List<LocationMaster> existingMasterLocations = locationMasterDao
 				.getAllMasterLocationsByType(ServiceConstants.LOCATION_MLA_CONSTITUENCT_TYPE);
 
 		List<LocationMaster> newMasterLocations = new ArrayList<LocationMaster>();
-		processEachStateMLAConstituencyURL(1, statesTableRowsWithHeader.size(), stateMasterLocationsCodeMap,
-				existingMasterLocations, excelMasterLocations, newMasterLocations);
-		processSaveUpdateDeleteLocations(newMasterLocations, excelMasterLocations, existingMasterLocations);
+		processMLAConstituencyLocations(mPMasterLocationsCodeMap, existingMasterLocations, exportMasterLocations,
+				newMasterLocations);
+		processSaveUpdateDeleteLocations(newMasterLocations, exportMasterLocations, existingMasterLocations);
+
 		return true;
 	}
 
-	private void processEachStateMLAConstituencyURL(int rowNo, int rowsSize,
-			Map<String, List<LocationMaster>> stateMasterLocationsCodeMap, List<LocationMaster> existingMasterLocations,
-			List<LocationMaster> excelMasterLocations, List<LocationMaster> newMasterLocations) {
-		if (rowNo > rowsSize) {
-			driver.close();
-			driver.quit();
-		} else {
-			driver.get(env.getProperty("india-mla-constituency.url"));
-			List<WebElement> pageMainTables = driver.findElements(By.className("tableizer-table"));
-			WebElement pageMainTable = pageMainTables.get(5);
-			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", pageMainTable);
-			WebElement pageMainTableBody = pageMainTable.findElements(By.xpath("tbody")).get(0);
-			List<WebElement> statesTableRowsWithHeader = pageMainTableBody.findElements(By.xpath("tr"));
-			WebElement stateNameTrWebElement = statesTableRowsWithHeader.get(rowNo);
-			WebElement stateNameTdWebElement = stateNameTrWebElement.findElements(By.xpath("td")).get(0);
-			WebElement eachRowStateCellLink = stateNameTdWebElement.findElement(By.xpath("a"));
-			String stateName = eachRowStateCellLink.getText();
-			String stateUrl = eachRowStateCellLink.getAttribute("href");
-			processEachStateMLAConstituencyLocationData(stateName, stateUrl, stateMasterLocationsCodeMap,
-					existingMasterLocations, excelMasterLocations, newMasterLocations);
-			processEachStateMLAConstituencyURL(rowNo + 1, rowsSize, stateMasterLocationsCodeMap,
-					existingMasterLocations, excelMasterLocations, newMasterLocations);
+	private void processMLAConstituencyLocations(Map<String, List<LocationMaster>> mPMasterLocationsCodeMap,
+			List<LocationMaster> existingMasterLocations, List<LocationMaster> exportMasterLocations,
+			List<LocationMaster> newMasterLocations) {
+
+		driver = new ChromeDriver();
+		driver.manage().window().maximize();
+		driver.get(env.getProperty("india-mla-constituency.url"));
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			new InternalServerException(e.getMessage());
 		}
+
+		List<WebElement> mpConstiencyTables = driver.findElements(By.cssSelector("table.wikitable"));
+		if (mpConstiencyTables != null && !mpConstiencyTables.isEmpty()) {
+
+			int tableIndex = 0;
+			for (WebElement eachMpConstiencyTable : mpConstiencyTables) {
+				if (tableIndex == 0) {
+					tableIndex++;
+					continue;
+				}
+				Long validStateMLAConstituencyId = (long) 0;
+				if (eachMpConstiencyTable != null) {
+					WebElement eachMpConstiencyTableTbody = eachMpConstiencyTable.findElements(By.xpath("tbody"))
+							.get(0);
+					List<WebElement> eachMpConstiencyTableTbodyTrList = eachMpConstiencyTableTbody
+							.findElements(By.xpath("tr"));
+					if (eachMpConstiencyTableTbodyTrList != null && !eachMpConstiencyTableTbodyTrList.isEmpty()) {
+						for (WebElement row : eachMpConstiencyTableTbodyTrList) {
+
+							List<WebElement> cells = row.findElements(By.xpath("td"));
+							WebElement mpConstituencyNameCell = cells.get(1);
+							String mpConstituencyName = mpConstituencyNameCell.getText();
+							WebElement mlaConstituencyNamesCell = cells.get(3);
+							System.out.println(mlaConstituencyNamesCell.getText());
+							System.out.println(">>>>>>>>>>>>>>");
+
+							if (mpConstituencyNameCell != null && mpConstituencyNameCell.getText() != null
+									&& !mpConstituencyNameCell.getText().isEmpty() && mlaConstituencyNamesCell != null
+									&& mlaConstituencyNamesCell.getText() != null
+									&& !mlaConstituencyNamesCell.getText().isEmpty()) {
+
+								Long parentLocationGuid = mPMasterLocationsCodeMap.get(mpConstituencyName).get(0)
+										.getGuid();
+
+								String[] mlaConstituencyNamesArray = mlaConstituencyNamesCell.getText().trim()
+										.split("(?<=\\D)(?=\\d)");
+
+								boolean isHavingHyphon = false;
+								boolean isHavingDot = false;
+
+								if (mlaConstituencyNamesCell.getText().trim().charAt(1) == '-') {
+									isHavingHyphon = true;
+								}
+
+								if (mlaConstituencyNamesCell.getText().trim().charAt(1) == '.') {
+									isHavingDot = true;
+								}
+
+								for (int i = 0; i < mlaConstituencyNamesArray.length; i++) {
+									String eachStr = mlaConstituencyNamesArray[i].trim();
+									Long locationCode = null;
+									String locationName = "";
+
+									if (eachStr.matches(".*\\d+.*") && isHavingDot) {
+										locationCode = Long.parseLong(eachStr.split("\\.")[0]);
+										locationName = eachStr.split("\\.")[1].trim();
+										validStateMLAConstituencyId = prepareLocationMasterData(locationCode,
+												locationName, parentLocationGuid, existingMasterLocations,
+												exportMasterLocations, newMasterLocations, validStateMLAConstituencyId);
+									} else if (eachStr.matches(".*\\d+.*") && isHavingHyphon) {
+										locationCode = Long.parseLong(eachStr.split("-")[0]);
+										locationName = eachStr.split("-")[1].trim();
+										validStateMLAConstituencyId = prepareLocationMasterData(locationCode,
+												locationName, parentLocationGuid, existingMasterLocations,
+												exportMasterLocations, newMasterLocations, validStateMLAConstituencyId);
+									} else {
+										String[] locationNamesArray = eachStr.split("\\,");
+										for (int j = 0; j < locationNamesArray.length; j++) {
+											locationName = locationNamesArray[j];
+											validStateMLAConstituencyId = prepareLocationMasterData(locationCode,
+													locationName, parentLocationGuid, existingMasterLocations,
+													exportMasterLocations, newMasterLocations,
+													validStateMLAConstituencyId);
+										}
+									}
+
+								}
+							}
+						}
+					}
+				}
+
+				tableIndex++;
+			}
+		}
+		driver.close();
+		driver.quit();
 	}
 
-	private void processEachStateMLAConstituencyLocationData(String stateName, String stateUrl,
-			Map<String, List<LocationMaster>> stateMasterLocationsCodeMap, List<LocationMaster> existingMasterLocations,
-			List<LocationMaster> excelMasterLocations, List<LocationMaster> newMasterLocations) {
-		driver.get(stateUrl);
-		WebElement scrollTabDiv = driver.findElement(By.className("scroll-tab"));
-		WebElement mCSB2Div = scrollTabDiv.findElement(By.id("mCSB_2"));
-		WebElement mCSB2DivContainerDiv = mCSB2Div.findElement(By.id("mCSB_2_container"));
-		List<WebElement> mlaConstituencyTables = mCSB2DivContainerDiv.findElements(By.className("tableizer-table"));
-		WebElement mlaConstituencyTable = mlaConstituencyTables.get(0);
-		if (mlaConstituencyTables.size() > 1) {
-			mlaConstituencyTable = mlaConstituencyTables.get(1);
-		}
-		WebElement mlaConstituencyTableBody = mlaConstituencyTable.findElement(By.xpath("tbody"));
-		List<WebElement> mlaConstituencyTableBodyTrs = mlaConstituencyTableBody.findElements(By.xpath("tr"));
-
-		Long parentLocationGuid = null;
-		List<LocationMaster> stateLocations = stateMasterLocationsCodeMap.get(stateName);
-		if (stateLocations != null && !stateLocations.isEmpty()) {
-			LocationMaster locationMaster = stateLocations.get(0);
-			parentLocationGuid = locationMaster.getGuid();
-		}
-
-		for (WebElement row : mlaConstituencyTableBodyTrs) {
-
-			List<WebElement> cells = row.findElements(By.xpath("td"));
-			WebElement assemblyConstituencyNo1 = cells.get(0);
-			WebElement assemblyConstituencyName1 = cells.get(1);
-			WebElement assemblyConstituencyNo2 = cells.get(2);
-			WebElement assemblyConstituencyName2 = cells.get(3);
-
-			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", assemblyConstituencyNo1);
-
-			if (assemblyConstituencyName1.getText() != null && !assemblyConstituencyName1.getText().isEmpty()) {
-				LocationMaster loc1 = new LocationMaster();
-				loc1.setLocationCode(Long.parseLong(assemblyConstituencyNo1.getText()));
-				loc1.setLocationName(assemblyConstituencyName1.getText());
-				loc1.setLocationType(ServiceConstants.LOCATION_MLA_CONSTITUENCT_TYPE);
-				loc1.setParentLocationGuid(parentLocationGuid);
-
-				if (!newMasterLocations.contains(loc1) && !existingMasterLocations.contains(loc1)) {
-					newMasterLocations.add(loc1);
-				}
-
-				if (!excelMasterLocations.contains(loc1)) {
-					excelMasterLocations.add(loc1);
-				}
-			}
-			if (assemblyConstituencyName2.getText() != null && !assemblyConstituencyName2.getText().isEmpty()) {
-				LocationMaster loc2 = new LocationMaster();
-				loc2.setLocationCode(Long.parseLong(assemblyConstituencyNo2.getText()));
-				loc2.setLocationName(assemblyConstituencyName2.getText());
-				loc2.setLocationType(ServiceConstants.LOCATION_MLA_CONSTITUENCT_TYPE);
-				loc2.setParentLocationGuid(parentLocationGuid);
-				if (!newMasterLocations.contains(loc2) && !existingMasterLocations.contains(loc2)) {
-					newMasterLocations.add(loc2);
-				}
-				if (!excelMasterLocations.contains(loc2)) {
-					excelMasterLocations.add(loc2);
-				}
+	private Long prepareLocationMasterData(Long locationCode, String locationName, Long parentLocationGuid,
+			List<LocationMaster> existingMasterLocations, List<LocationMaster> exportMasterLocations,
+			List<LocationMaster> newMasterLocations, Long validStateMLAConstituencyId) {
+		if (locationName.contains("(")) {
+			String[] subDistrictCodeArray = locationName.split("\\(");
+			if (subDistrictCodeArray.length > 2) {
+				locationName = subDistrictCodeArray[0] + "(" + subDistrictCodeArray[1];
+			} else {
+				locationName = subDistrictCodeArray[subDistrictCodeArray.length - 2];
 			}
 		}
+		if (locationName.endsWith(".") || locationName.endsWith(",")) {
+			locationName = locationName.substring(0, locationName.length() - 1);
+		}
+		locationName = locationName.trim();
+
+		if (locationCode != null) {
+			validStateMLAConstituencyId = locationCode;
+		} else {
+			locationCode = validStateMLAConstituencyId + 1;
+			validStateMLAConstituencyId++;
+		}
+		LocationMaster locationMaster = new LocationMaster();
+		locationMaster.setLocationCode(locationCode);
+		locationMaster.setLocationName(locationName);
+		locationMaster.setLocationType(ServiceConstants.LOCATION_MLA_CONSTITUENCT_TYPE);
+		locationMaster.setParentLocationGuid(parentLocationGuid);
+
+		if (!newMasterLocations.contains(locationMaster) && !existingMasterLocations.contains(locationMaster)) {
+			newMasterLocations.add(locationMaster);
+		}
+
+		if (!exportMasterLocations.contains(locationMaster)) {
+			exportMasterLocations.add(locationMaster);
+		}
+
+		return validStateMLAConstituencyId;
 	}
 }

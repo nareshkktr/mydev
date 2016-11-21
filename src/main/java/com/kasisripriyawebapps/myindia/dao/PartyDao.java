@@ -13,6 +13,12 @@ import com.kasisripriyawebapps.myindia.exception.InternalServerException;
  */
 public interface PartyDao {
 
-	void importParties(List<Party> politicalParties) throws InternalServerException;
+	void saveParties(List<Party> politicalParties) throws InternalServerException;
+
+	List<Party> getAllParties() throws InternalServerException;
+
+	void updateParties(List<Party> updatedParties) throws InternalServerException;
+
+	void deleteParties(List<Party> existingParties) throws InternalServerException;
 
 }
