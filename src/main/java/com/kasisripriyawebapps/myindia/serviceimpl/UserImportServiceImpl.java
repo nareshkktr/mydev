@@ -628,7 +628,7 @@ public class UserImportServiceImpl implements UserImportService {
 						continue;
 					}
 					int ly = 34;
-					int uy = 126;
+					int uy = 128;
 					for (int j = 0; j < 10; j++) {
 						int lx = 0;
 						int ux = 175;
@@ -756,41 +756,66 @@ public class UserImportServiceImpl implements UserImportService {
 				int noOfLines = lines.length;
 				if (lines != null && noOfLines != 0) {
 
-					String voterIdLine = lines[0].trim();
-					String[] voterIdLineSpaces = voterIdLine.split(" ");
-					if (voterIdLineSpaces.length != 0) {
-						voterId = voterIdLineSpaces[1].trim();
+					int processingLineNo = noOfLines - 1;
+					String sexAgeLine = lines[processingLineNo].trim();
+					String[] sexAgeLineSpaces = sexAgeLine.split(" ");
+					if (sexAgeLineSpaces.length > 3) {
+						age = sexAgeLineSpaces[1];
+						sex = sexAgeLineSpaces[3];
+					} else {
+						processingLineNo--;
+						sexAgeLine = lines[processingLineNo].trim();
+						sexAgeLineSpaces = sexAgeLine.split(" ");
+						if (sexAgeLineSpaces.length > 1) {
+							age = sexAgeLineSpaces[0].trim();
+							sex = sexAgeLineSpaces[1].trim();
+						}
 					}
 
-					if (lines[noOfLines - 4].trim().contains(":")) {
-						String referenceTypeWithS = lines[noOfLines - 4].trim();
-						referenceType = referenceTypeWithS.split(" ")[0].split("'s")[0];
-						referenceName = lines[noOfLines - 5].trim();
+					processingLineNo--;
+					processingLineNo--;
+					houseNo = lines[processingLineNo].trim();
+					processingLineNo--;
 
-						if (lines[noOfLines - 6].trim().contains(":")) {
-							electorName = lines[noOfLines - 7].trim();
+					if (lines[processingLineNo].trim().contains(":")) {
+						String referenceTypeWithS = lines[processingLineNo].trim();
+						referenceType = referenceTypeWithS.split(" ")[0].split("'s")[0];
+						processingLineNo--;
+						referenceName = lines[processingLineNo].trim();
+						processingLineNo--;
+						if (lines[processingLineNo].trim().contains(":")) {
+							processingLineNo--;
+							electorName = lines[processingLineNo].trim();
 						} else {
-							electorName = lines[noOfLines - 8].trim() + " " + lines[noOfLines - 6].trim();
+							processingLineNo--;
+							processingLineNo--;
+							electorName = lines[processingLineNo].trim() + " " + lines[processingLineNo + 2].trim();
 						}
 
 					} else {
-						String referenceTypeWithS = lines[noOfLines - 5].trim();
+						processingLineNo--;
+						String referenceTypeWithS = lines[processingLineNo].trim();
 						referenceType = referenceTypeWithS.split(" ")[0].split("'s")[0];
-						referenceName = lines[noOfLines - 6].trim() + " " + lines[noOfLines - 4].trim();
-
-						if (lines[noOfLines - 7].trim().contains(":")) {
-							electorName = lines[noOfLines - 8].trim();
+						processingLineNo--;
+						referenceName = lines[processingLineNo].trim() + " " + lines[processingLineNo + 2].trim();
+						processingLineNo--;
+						if (lines[processingLineNo].trim().contains(":")) {
+							processingLineNo--;
+							electorName = lines[processingLineNo].trim();
 						} else {
-							electorName = lines[noOfLines - 9].trim() + " " + lines[noOfLines - 7].trim();
+							processingLineNo--;
+							processingLineNo--;
+							electorName = lines[processingLineNo].trim() + " " + lines[processingLineNo + 2].trim();
 						}
 					}
+					processingLineNo--;
 
-					houseNo = lines[noOfLines - 3].trim();
-					String sexAgeLine = lines[noOfLines - 1].trim();
-					String[] sexAgeLineSpaces = sexAgeLine.split(" ");
-					if (sexAgeLineSpaces.length != 0) {
-						age = sexAgeLineSpaces[1];
-						sex = sexAgeLineSpaces[3];
+					String voterIdLine = lines[processingLineNo].trim();
+					String[] voterIdLineSpaces = voterIdLine.split(" ");
+					if (voterIdLineSpaces.length > 1) {
+						voterId = voterIdLineSpaces[1].trim();
+					} else {
+						voterId = voterIdLine;
 					}
 
 					User user = new User();
