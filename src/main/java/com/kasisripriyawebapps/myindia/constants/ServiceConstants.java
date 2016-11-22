@@ -139,5 +139,8 @@ public class ServiceConstants {
 
 	public static final String DELETE_USER = "D E L E T E D";
 	public static final Long DEFAULT_COUNTRY_CODE=(long)-1;
+	
+	public static final String SITTING_LOKSABHA_MP_DESIGNATION = "Sitting Lok Sabha Member Of Parliment";
+    public static final String MP = "Member Of Parliment";
 
 }

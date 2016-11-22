@@ -738,5 +738,19 @@ public class EndPointConstants {
 	public static final String IMPORT_EXPORT_ALL_REFERENCE_LOCATIONS_API_VALUE = "importExportAllReferenceLocations";
 	public static final String IMPORT_EXPORT_ALL_REFERENCE_LOCATIONS_API_NICKNAME = "importExportAllReferenceLocations";
 	public static final String IMPORT_EXPORT_ALL_REFERENCE_LOCATIONS_API_DESCRIPTION = "Import Export All Reference Locations";
+	
+	public static final String IMPORT_ALL_POLITICIANS_REQUEST_MAPPING = "importAllPoliticians";
+	public static final String IMPORT_ALL_POLITICIANS_API_VALUE = "importAllPoliticians";
+	public static final String IMPORT_ALL_POLITICIANS_API_NICKNAME = "importAllPoliticians";
+	public static final String IMPORT_ALL_POLITICIANS_API_TAGS = "importAllPoliticians";
+	public static final String IMPORT_ALL_POLITICIANS_API_DESCRIPTION = "Import All Politcians";
+
+	public static final String IMPORT_LOKSABHA_MP_API_DESCRIPTION = "Import Lok sabha MP";
+
+	public static final String IMPORT_LOKSABHA_MP_API_NICKNAME = "importLoksabhaMP";
+
+	public static final String IMPORT_LOKSABHA_MP_REQUEST_MAPPING = "importLoksabhaMP";
+
+	public static final String IMPORT_LOKSABHA_MP_API_VALUE = "importLoksabhaMP";
 
 }

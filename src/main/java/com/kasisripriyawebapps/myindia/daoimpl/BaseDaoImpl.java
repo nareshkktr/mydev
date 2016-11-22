@@ -177,6 +177,22 @@ public class BaseDaoImpl<PK extends Serializable, T> implements BaseDao<PK, T> {
 		}
 		return objects;
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<T> getAllByCondition(Criterion criterion, SortCriteriaData sortCriteria)
+			throws InternalServerException {
+		List<T> objects = null;
+		Criteria criteria = getCriteria(sortCriteria);
+		if (criterion != null) {
+			criteria.add(criterion);
+		}
+		objects = criteria.list();
+		if (objects != null && !objects.isEmpty()) {
+			return objects;
+		}
+		return null;
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override

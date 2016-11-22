@@ -113,4 +113,6 @@ public interface BaseDao<PK, T> {
 
 	void saveBatch(List<T> entities) throws InternalServerException;
 
+	List<T> getAllByCondition(Criterion criterion, SortCriteriaData sortCriteria) throws InternalServerException;
+
 }
