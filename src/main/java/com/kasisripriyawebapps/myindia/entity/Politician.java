@@ -39,17 +39,14 @@ public class Politician implements Serializable {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Politician(Long guid, String fullName, String designation, String bannerPhotoURL, String photoURL,
-			LocationMaster electedLocation, Long popularityCount, Long supportingCount, Long followingCount,
+	public Politician(Long guid, String fullName, String bannerPhotoURL, String photoURL,
+			 Long supportingCount, Long followingCount,
 			Long shareCount) {
 		super();
 		this.guid = guid;
 		this.fullName = fullName;
-		this.designation = designation;
 		this.bannerPhotoURL = bannerPhotoURL;
 		this.photoURL = photoURL;
-		this.electedLocation = electedLocation;
-		this.popularityCount = popularityCount;
 		this.supportingCount = supportingCount;
 		this.followingCount = followingCount;
 		this.shareCount = shareCount;
@@ -63,25 +60,15 @@ public class Politician implements Serializable {
 	@Column(name = "FULL_NAME")
 	private String fullName;
 
-	@Column(name = "DESIGNATION")
-	private String designation;
-
 	@Column(name = "BANNER_PHOTO_URL")
 	private String bannerPhotoURL;
 
 	@Column(name = "PHOTO_URL")
 	private String photoURL;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "LOCATION_GUID")
-	private LocationMaster electedLocation;
-
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "LOCATION_REF_GUID")
 	private Location nativeLocation;
-
-	@Column(name = "POPULARITY_COUNT")
-	private Long popularityCount;
 
 	@Column(name = "SUPPORTING_COUNT")
 	private Long supportingCount;
@@ -91,16 +78,15 @@ public class Politician implements Serializable {
 
 	@Column(name = "SHARE_COUNT")
 	private Long shareCount;
+	
+	@Column(name = "CURRENT_DESIGNATION")
+	private String currentDesignation;
 
 	@OneToMany(mappedBy = "politician", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<PoliticianImage> politicianImages = new ArrayList<PoliticianImage>(0);
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "PARTY_GUID")
-	private Party party;
-
-	@Column(name = "POLITICIAN_TYPE")
-	private String politicianType;
+	@OneToMany(mappedBy = "politician", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<PoliticianAuthority> politicianAuthorities = new ArrayList<PoliticianAuthority>(0);
 
 	public Long getGuid() {
 		return guid;
@@ -118,14 +104,6 @@ public class Politician implements Serializable {
 		this.fullName = fullName;
 	}
 
-	public String getDesignation() {
-		return designation;
-	}
-
-	public void setDesignation(String designation) {
-		this.designation = designation;
-	}
-
 	public String getBannerPhotoURL() {
 		return bannerPhotoURL;
 	}
@@ -140,22 +118,6 @@ public class Politician implements Serializable {
 
 	public void setPhotoURL(String photoURL) {
 		this.photoURL = photoURL;
-	}
-
-	public LocationMaster getElectedLocation() {
-		return electedLocation;
-	}
-
-	public void setElectedLocation(LocationMaster electedLocation) {
-		this.electedLocation = electedLocation;
-	}
-
-	public Long getPopularityCount() {
-		return popularityCount;
-	}
-
-	public void setPopularityCount(Long popularityCount) {
-		this.popularityCount = popularityCount;
 	}
 
 	public Long getSupportingCount() {
@@ -193,22 +155,6 @@ public class Politician implements Serializable {
 		}
 	}
 
-	public Party getParty() {
-		return party;
-	}
-
-	public void setParty(Party party) {
-		this.party = party;
-	}
-
-	public String getPoliticianType() {
-		return politicianType;
-	}
-
-	public void setPoliticianType(String politicianType) {
-		this.politicianType = politicianType;
-	}
-
 	public Location getNativeLocation() {
 		return nativeLocation;
 	}
@@ -216,5 +162,51 @@ public class Politician implements Serializable {
 	public void setNativeLocation(Location nativeLocation) {
 		this.nativeLocation = nativeLocation;
 	}
+	
+	public List<PoliticianAuthority> getPoliticianAuthorities() {
+		return politicianAuthorities;
+	}
 
+	public void setPoliticianAuthorities(List<PoliticianAuthority> politicianAuthorities) {
+		this.politicianAuthorities.clear();
+		if (politicianAuthorities != null) {
+			this.politicianAuthorities.addAll(politicianAuthorities);
+		}
+	}
+
+	public String getCurrentDesignation() {
+		return currentDesignation;
+	}
+
+	public void setCurrentDesignation(String currentDesignation) {
+		this.currentDesignation = currentDesignation;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((fullName == null) ? 0 : fullName.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Politician other = (Politician) obj;
+		if (fullName == null) {
+			if (other.fullName != null)
+				return false;
+		} else if (!fullName.equals(other.fullName))
+			return false;
+		return true;
+	}
+
+	
+	
 }

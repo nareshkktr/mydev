@@ -61,7 +61,7 @@ public class LocationMaster implements Serializable {
 	private List<Party> parties = new ArrayList<Party>(0);
 
 	@OneToMany(mappedBy = "electedLocation", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<Politician> politicians = new ArrayList<Politician>(0);
+	private List<PoliticianAuthority> politicians = new ArrayList<PoliticianAuthority>(0);
 
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "userPoliticalLocations")
 	private List<UserInfo> locationUsers = new ArrayList<UserInfo>(0);
@@ -142,11 +142,13 @@ public class LocationMaster implements Serializable {
 		}
 	}
 
-	public List<Politician> getPoliticians() {
+	
+
+	public List<PoliticianAuthority> getPoliticians() {
 		return politicians;
 	}
 
-	public void setPoliticians(List<Politician> politicians) {
+	public void setPoliticians(List<PoliticianAuthority> politicians) {
 		this.politicians.clear();
 		if (politicians != null) {
 			this.politicians.addAll(politicians);

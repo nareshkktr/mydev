@@ -87,7 +87,7 @@ public class Party implements Serializable {
 	private List<LocationMaster> locatedIn = new ArrayList<LocationMaster>(0);
 
 	@OneToMany(mappedBy = "party", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Politician> politicians = new ArrayList<Politician>(0);
+	private List<PoliticianAuthority> politicians = new ArrayList<PoliticianAuthority>(0);
 
 	public Long getGuid() {
 		return guid;
@@ -200,11 +200,11 @@ public class Party implements Serializable {
 		this.isNationalParty = isNationalParty;
 	}
 
-	public List<Politician> getPoliticians() {
+	public List<PoliticianAuthority> getPoliticians() {
 		return politicians;
 	}
 
-	public void setPoliticians(List<Politician> politicians) {
+	public void setPoliticians(List<PoliticianAuthority> politicians) {
 		this.politicians.clear();
 		if (politicians != null) {
 			this.politicians.addAll(politicians);
