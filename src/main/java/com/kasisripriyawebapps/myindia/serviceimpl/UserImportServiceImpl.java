@@ -2,7 +2,6 @@ package com.kasisripriyawebapps.myindia.serviceimpl;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -628,8 +627,8 @@ public class UserImportServiceImpl implements UserImportService {
 					if (i < 3) {
 						continue;
 					}
-					int ly = 21;
-					int uy = 125;
+					int ly = 34;
+					int uy = 128;
 					for (int j = 0; j < 10; j++) {
 						int lx = 0;
 						int ux = 175;
@@ -678,10 +677,10 @@ public class UserImportServiceImpl implements UserImportService {
 
 		TextExtractionStrategy strategy;
 
-		int ly = 360;
-		int uy = 490;
+		int ly = 370;
+		int uy = 530;
 		int lx = 320;
-		int ux = 500;
+		int ux = 530;
 
 		Rectangle rect = new Rectangle(lx, ly, ux, uy);
 
@@ -699,48 +698,11 @@ public class UserImportServiceImpl implements UserImportService {
 			int noOfLines = lines.length;
 			if (lines != null && noOfLines != 0) {
 
-				String mainTownLine = lines[0];
-				String mainTown = "";
-				if (mainTownLine != null && !mainTownLine.isEmpty()) {
-					mainTownLine.split(":")[1].trim();
-				}
-
-				String policeStationLine = lines[1];
-				String policeStation = "";
-				if (policeStationLine != null && !policeStationLine.isEmpty()) {
-					policeStationLine.split(" ")[2].trim();
-				}
-
-				String mandalLine = lines[2];
-
-				if (mandalLine.split(":").length < 1) {
-					mandalLine = lines[3];
-				}
-
-				String mandal = "";
-				if (mandalLine != null && !mandalLine.isEmpty()) {
-					mandalLine.split(":")[1].trim();
-				}
-
-				String revenueDivisionLine = lines[4];
-				String revenueDivision = "";
-				if (revenueDivisionLine != null && !revenueDivisionLine.isEmpty()) {
-					revenueDivisionLine.split(":")[1].trim();
-				}
-
-				String pinCodeLine = lines[6];
-
-				if (pinCodeLine.trim().split(":").length < 1) {
-					pinCodeLine = lines[7];
-				}
-
-				String pinCode = "";
-				if (pinCodeLine != null && !pinCodeLine.isEmpty()) {
-					if (pinCodeLine.trim() != null && !pinCodeLine.trim().isEmpty()
-							&& pinCodeLine.trim().split(" ").length > 2) {
-						pinCodeLine = pinCodeLine.split(" ")[2].trim();
-					}
-				}
+				String mainTown = lines[0].trim();
+				String policeStation = lines[2].trim();
+				String mandal = lines[4].trim();
+				String revenueDivision = lines[6];
+				String pinCode = lines[10];
 
 				pdfHeaderData.setMainTown(mainTown);
 				pdfHeaderData.setPoliceStation(policeStation);
@@ -753,7 +715,7 @@ public class UserImportServiceImpl implements UserImportService {
 
 		int ly1 = 710;
 		int uy1 = 730;
-		int lx1 = 380;
+		int lx1 = 360;
 		int ux1 = 500;
 
 		Rectangle rect1 = new Rectangle(lx1, ly1, ux1, uy1);
@@ -788,149 +750,105 @@ public class UserImportServiceImpl implements UserImportService {
 		String houseNo = "";
 		String sex = "";
 
-		int processingLineNo = 0;
-
 		try {
 			if (tableContent != null && !tableContent.trim().isEmpty()) {
 				String[] lines = tableContent.split("\n");
 				int noOfLines = lines.length;
 				if (lines != null && noOfLines != 0) {
 
-					String sexLine = lines[noOfLines - 1];
-					if (!sexLine.equalsIgnoreCase(ServiceConstants.DELETE_USER)) {
-						String[] sexLineColon = sexLine.split(":");
-						if (sexLineColon != null) {
-							if (sexLineColon.length == 1) {
-								sex = lines[noOfLines - 2];
-								processingLineNo = noOfLines - 2;
-							} else {
-								sex = sexLineColon[1].trim();
-								processingLineNo = noOfLines - 1;
-							}
+					int processingLineNo = noOfLines - 1;
+					String sexAgeLine = lines[processingLineNo].trim();
+					String[] sexAgeLineSpaces = sexAgeLine.split(" ");
+					if (sexAgeLineSpaces.length > 3) {
+						age = sexAgeLineSpaces[1];
+						sex = sexAgeLineSpaces[3];
+					} else {
+						processingLineNo--;
+						sexAgeLine = lines[processingLineNo].trim();
+						sexAgeLineSpaces = sexAgeLine.split(" ");
+						if (sexAgeLineSpaces.length > 1) {
+							age = sexAgeLineSpaces[0].trim();
+							sex = sexAgeLineSpaces[1].trim();
 						}
-						String ageLine = lines[processingLineNo - 1];
-						String[] ageLineColon = ageLine.split(":");
-						if (ageLineColon != null) {
-							if (ageLineColon.length == 1) {
-								age = lines[processingLineNo - 2];
-								processingLineNo = processingLineNo - 2;
-							} else {
-								age = ageLineColon[1].trim();
-								processingLineNo = processingLineNo - 1;
-							}
-						}
-
-						String houseNoLine = lines[processingLineNo - 1];
-						String[] houseNoLineColon = houseNoLine.split(":");
-						if (houseNoLineColon != null) {
-							if (houseNoLineColon.length == 1) {
-								houseNo = lines[processingLineNo - 2];
-								processingLineNo = processingLineNo - 2;
-							} else {
-								houseNo = houseNoLineColon[1].trim();
-								processingLineNo = processingLineNo - 1;
-							}
-						}
-
-						Map<String, String> referenceTypeNameMap = getReferenceName(lines, processingLineNo,
-								referenceName, referenceType);
-						referenceType = referenceTypeNameMap.get("referenceType");
-						if (referenceType.contains("'s")) {
-							referenceType = referenceType.split("'s")[0];
-						}
-						referenceName = referenceTypeNameMap.get("referenceName");
-						processingLineNo = Integer.parseInt(referenceTypeNameMap.get("processingLineNo"));
-						Map<String, String> electorNameMap = getElectorName(lines, processingLineNo - 1, electorName);
-						electorName = electorNameMap.get("electorName");
-						processingLineNo = Integer.parseInt(electorNameMap.get("processingLineNo"));
-						processingLineNo = processingLineNo - 1;
-						if (electorName == null || electorName.isEmpty()) {
-							processingLineNo = processingLineNo - 1;
-							electorName = lines[processingLineNo];
-						}
-
-						String voterIdLine = lines[processingLineNo - 1];
-						String[] eachVoterIdLineSpaces = voterIdLine.split(" ");
-						if (eachVoterIdLineSpaces.length != 0) {
-							voterId = eachVoterIdLineSpaces[2].trim();
-						}
-
-						User user = new User();
-						user.setAge(Integer.parseInt(age.trim()));
-						user.setAssemblyConstituencyName(eachURLData.getMlaConstituencyName());
-						user.setAssemblyConstituencyNo(eachURLData.getMlaConstituencyNo());
-						user.setCreatedTimeStamp(CommonUtil.getCurrentGMTTimestamp());
-						user.setDistrict(eachURLData.getDistrictName());
-						user.setElectorName(electorName);
-						user.setGender(sex);
-						user.setHouseNo(houseNo);
-						user.setIdCardNo(voterId);
-						user.setIdCardType(ApplicationConstants.IDENTITY_CARD_TYPE_VOTER_ID);
-						user.setReferenceName(referenceName);
-						user.setReferenceType(referenceType);
-						user.setState(eachURLData.getStateName());
-						user.setPollingStation(eachURLData.getPollingStationName());
-						user.setPollingStationAddress(eachURLData.getPollingStationAddress());
-						user.setPartNo(eachURLData.getPartNo());
-						user.setMainTwon(pdfHeaderData.getMainTown());
-						user.setPoliceStation(pdfHeaderData.getPoliceStation());
-						user.setMandal(pdfHeaderData.getMandal());
-						user.setRevenueDivision(pdfHeaderData.getRevenueDivision());
-						user.setPincode(pdfHeaderData.getPinCode());
-						user.setParliamentaryConstituencyNo(pdfHeaderData.getMpConstituencyNo());
-						user.setParliamentaryConstituencyName(pdfHeaderData.getMpConstituencyName());
-						eachPageUsers.add(user);
 					}
+
+					processingLineNo--;
+					processingLineNo--;
+					houseNo = lines[processingLineNo].trim();
+					processingLineNo--;
+
+					if (lines[processingLineNo].trim().contains(":")) {
+						String referenceTypeWithS = lines[processingLineNo].trim();
+						referenceType = referenceTypeWithS.split(" ")[0].split("'s")[0];
+						processingLineNo--;
+						referenceName = lines[processingLineNo].trim();
+						processingLineNo--;
+						if (lines[processingLineNo].trim().contains(":")) {
+							processingLineNo--;
+							electorName = lines[processingLineNo].trim();
+						} else {
+							processingLineNo--;
+							processingLineNo--;
+							electorName = lines[processingLineNo].trim() + " " + lines[processingLineNo + 2].trim();
+						}
+
+					} else {
+						processingLineNo--;
+						String referenceTypeWithS = lines[processingLineNo].trim();
+						referenceType = referenceTypeWithS.split(" ")[0].split("'s")[0];
+						processingLineNo--;
+						referenceName = lines[processingLineNo].trim() + " " + lines[processingLineNo + 2].trim();
+						processingLineNo--;
+						if (lines[processingLineNo].trim().contains(":")) {
+							processingLineNo--;
+							electorName = lines[processingLineNo].trim();
+						} else {
+							processingLineNo--;
+							processingLineNo--;
+							electorName = lines[processingLineNo].trim() + " " + lines[processingLineNo + 2].trim();
+						}
+					}
+					processingLineNo--;
+
+					String voterIdLine = lines[processingLineNo].trim();
+					String[] voterIdLineSpaces = voterIdLine.split(" ");
+					if (voterIdLineSpaces.length > 1) {
+						voterId = voterIdLineSpaces[1].trim();
+					} else {
+						voterId = voterIdLine;
+					}
+
+					User user = new User();
+					user.setAge(Integer.parseInt(age.trim()));
+					user.setAssemblyConstituencyName(eachURLData.getMlaConstituencyName());
+					user.setAssemblyConstituencyNo(eachURLData.getMlaConstituencyNo());
+					user.setCreatedTimeStamp(CommonUtil.getCurrentGMTTimestamp());
+					user.setDistrict(eachURLData.getDistrictName());
+					user.setElectorName(electorName);
+					user.setGender(sex);
+					user.setHouseNo(houseNo);
+					user.setIdCardNo(voterId);
+					user.setIdCardType(ApplicationConstants.IDENTITY_CARD_TYPE_VOTER_ID);
+					user.setReferenceName(referenceName);
+					user.setReferenceType(referenceType);
+					user.setState(eachURLData.getStateName());
+					user.setPollingStation(eachURLData.getPollingStationName());
+					user.setPollingStationAddress(eachURLData.getPollingStationAddress());
+					user.setPartNo(eachURLData.getPartNo());
+					user.setMainTwon(pdfHeaderData.getMainTown());
+					user.setPoliceStation(pdfHeaderData.getPoliceStation());
+					user.setMandal(pdfHeaderData.getMandal());
+					user.setRevenueDivision(pdfHeaderData.getRevenueDivision());
+					user.setPincode(pdfHeaderData.getPinCode());
+					user.setParliamentaryConstituencyNo(pdfHeaderData.getMpConstituencyNo());
+					user.setParliamentaryConstituencyName(pdfHeaderData.getMpConstituencyName());
+					eachPageUsers.add(user);
 				}
 			}
+
 		} catch (Exception ex) {
 			isProcessed = false;
 		}
 		return isProcessed;
-	}
-
-	private static Map<String, String> getReferenceName(String[] lines, int processingLineNo, String referenceName,
-			String referenceType) {
-		Map<String, String> referenceTypeName = new HashMap<String, String>();
-
-		String tempReferenceTypeName = lines[processingLineNo - 1];
-		if (tempReferenceTypeName.contains(":")) {
-			if (tempReferenceTypeName.split(":").length == 1) {
-				referenceName += "";
-				referenceType = tempReferenceTypeName.trim();
-			} else {
-				referenceName = tempReferenceTypeName.split(":")[1].trim() + referenceName;
-				referenceType = tempReferenceTypeName.split(":")[0].trim();
-			}
-			referenceTypeName.put("referenceName", referenceName);
-			referenceTypeName.put("referenceType", referenceType);
-			referenceTypeName.put("processingLineNo", String.valueOf(processingLineNo));
-
-		} else {
-			referenceName = lines[processingLineNo - 1].trim() + " " + referenceName.trim();
-			referenceTypeName = getReferenceName(lines, processingLineNo - 1, referenceName, referenceType);
-		}
-
-		return referenceTypeName;
-	}
-
-	private static Map<String, String> getElectorName(String[] lines, int processingLineNo, String electorName) {
-		Map<String, String> electorNameMap = new HashMap<String, String>();
-		String tempReferenceTypeName = lines[processingLineNo - 1];
-		if (tempReferenceTypeName.contains(":")) {
-			if (tempReferenceTypeName.split(":").length == 1) {
-				electorName += "";
-			} else {
-				electorName = tempReferenceTypeName.split(":")[1].trim() + " " + electorName;
-			}
-
-			electorNameMap.put("electorName", electorName);
-			electorNameMap.put("processingLineNo", String.valueOf(processingLineNo));
-
-		} else {
-			electorName = lines[processingLineNo - 1].trim() + " " + electorName.trim();
-			electorNameMap = getElectorName(lines, processingLineNo - 1, electorName);
-		}
-		return electorNameMap;
 	}
 }
