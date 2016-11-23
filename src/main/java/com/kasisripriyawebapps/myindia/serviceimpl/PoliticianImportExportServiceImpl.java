@@ -94,6 +94,20 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 		Map<String,List<LocationMaster>> mapAllMpLocations = allMpLocations.stream()
 				.collect(Collectors.groupingBy(locationMasterObject -> locationMasterObject.getLocationName().trim()));
 		
+		//Map for data inconsistencies in locations
+		Map<String,String> dataInconsistencyLocationMap = new HashMap<String,String>();
+		
+		dataInconsistencyLocationMap.put("Hisar", "Hissar");
+		dataInconsistencyLocationMap.put("Mumbai-North-West", "Mumbai North West");
+		dataInconsistencyLocationMap.put("Mumbai South-Central", "Mumbai South Central");
+		dataInconsistencyLocationMap.put("Mumbai-South", "Mumbai South");
+		dataInconsistencyLocationMap.put("Ratnagiri-Sindhudurg", "Ratnagiri–Sindhudurg");
+		dataInconsistencyLocationMap.put("Tiruvallur", "Thiruvallur");
+		dataInconsistencyLocationMap.put("Viluppuram", "Villupuram");
+		dataInconsistencyLocationMap.put("Mayiladuthurai", "Mayiladuturai");
+		dataInconsistencyLocationMap.put("Thoothukkudi", "Thoothukudi");
+		dataInconsistencyLocationMap.put("Mahabubnagar", "Mahbubnagar");
+		
 		Select stateDropDown = new Select(driver.findElement(By.id("ContentPlaceHolder1_ddlstate")));
 		List<WebElement> stateOptions = stateDropDown.getOptions();
 		for (int i = 0; i < stateOptions.size(); i++) {
@@ -130,6 +144,9 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 				
 				if(locationSplit != null && locationSplit.length >0){
 					 extractedLocation = locationSplit[0].trim();
+					 if(dataInconsistencyLocationMap.get(extractedLocation)!=null){
+						 extractedLocation = dataInconsistencyLocationMap.get(extractedLocation);
+					 }
 				}
 				
 				String partyName = eachMemberPartyName.getText().trim();
@@ -218,6 +235,9 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 			}// Politician member by state
 
 		}// end of all states
+		
+		driver.close();
+		driver.quit();
 		
 		// Now find the difference of current active ones and the ones that came new.. those are to be marked as in active and end date
 		if(activePoliticianAuthorities != null){
