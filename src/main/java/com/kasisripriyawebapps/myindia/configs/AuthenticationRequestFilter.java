@@ -4,13 +4,12 @@ import java.io.IOException;
 
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
+import javax.ws.rs.container.PreMatching;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.ext.Provider;
 
-import org.springframework.core.annotation.Order;
-
 @Provider
-@Order(1)
+@PreMatching
 public class AuthenticationRequestFilter implements ContainerRequestFilter {
 
 	@Override
@@ -25,8 +24,7 @@ public class AuthenticationRequestFilter implements ContainerRequestFilter {
 				break;
 			}
 		}
-
-		requestContext.setProperty("access_token", accessToken);
-		System.out.println("accessToken>>>>>>>>" + accessToken+requestContext.getUriInfo().getRequestUri().toString());
+		System.out.println("accessToken>>>" + accessToken);
+		requestContext.getHeaders().add("Authorization", "Bearer " + accessToken);
 	}
 }

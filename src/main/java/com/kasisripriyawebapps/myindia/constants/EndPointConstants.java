@@ -246,28 +246,28 @@ public class EndPointConstants {
 	public static final String ADD_IMAGES_API_DESCRIPTION = "Add Images";
 
 	/** The Constant UPLOAD_ALL_USERS_REQUEST_MAPPING. */
-	public static final String GET_USER_BY_VOTER_ID_NAME_REQUEST_MAPPING = "getUserByVoterIdName";
+	public static final String GET_USER_BY_VOTER_ID_NAME_REQUEST_MAPPING = "getUserByVoterIdAndName";
 
 	/** The Constant UPLOAD_ALL_USERS_API_VALUE. */
-	public static final String GET_USER_BY_VOTER_ID_NAME_API_VALUE = "getUserByVoterIdName";
+	public static final String GET_USER_BY_VOTER_ID_NAME_API_VALUE = "getUserByVoterIdAndName";
 
 	/** The Constant UPLOAD_ALL_USERS_API_NICKNAME. */
-	public static final String GET_USER_BY_VOTER_ID_NAME_API_NICKNAME = "getUserByVoterIdName";
+	public static final String GET_USER_BY_VOTER_ID_NAME_API_NICKNAME = "getUserByVoterIdAndName";
 
 	/** The Constant UPLOAD_ALL_USERS_API_DESCRIPTION. */
 	public static final String GET_USER_BY_VOTER_ID_NAME_API_DESCRIPTION = "Get User Info By Voter Id And Name";
 
 	/** The Constant UPLOAD_ALL_USERS_REQUEST_MAPPING. */
-	public static final String GET_USER_BY_VOTER_ID_NAME_REFERENCE_REQUEST_MAPPING = "getUserByVoterIdNameAndReference";
+	public static final String GET_USER_BY_VOTER_ID_NAME_REFERENCE_REQUEST_MAPPING = "getUserByVoterReferenceAndAge";
 
 	/** The Constant UPLOAD_ALL_USERS_API_VALUE. */
-	public static final String GET_USER_BY_VOTER_ID_NAME_REFERENCE_API_VALUE = "getUserByVoterIdNameAndReference";
+	public static final String GET_USER_BY_VOTER_ID_NAME_REFERENCE_API_VALUE = "getUserByVoterReferenceAndAge";
 
 	/** The Constant UPLOAD_ALL_USERS_API_NICKNAME. */
-	public static final String GET_USER_BY_VOTER_ID_NAME_REFERENCE_API_NICKNAME = "getUserByVoterIdNameAndReference";
+	public static final String GET_USER_BY_VOTER_ID_NAME_REFERENCE_API_NICKNAME = "getUserByVoterReferenceAndAge";
 
 	/** The Constant UPLOAD_ALL_USERS_API_DESCRIPTION. */
-	public static final String GET_USER_BY_VOTER_ID_NAME_REFERENCE_API_DESCRIPTION = "Get User Info By Voter Id,Name,Reference Details";
+	public static final String GET_USER_BY_VOTER_ID_NAME_REFERENCE_API_DESCRIPTION = "Get User Info By Reference And Age Details";
 
 	/** The Constant ACCOUNT_ENDPOINT_REQUEST_MAPPING. */
 	public static final String PROBLEM_TYPE_ENDPOINT_REQUEST_MAPPING = "/problemType";
@@ -707,12 +707,11 @@ public class EndPointConstants {
 	public static final String IMPORT_MP_CONSTITUENCY_LOCATIONS_API_VALUE = "importMPConstituencyLocations";
 	public static final String IMPORT_MP_CONSTITUENCY_LOCATIONS_API_NICKNAME = "importMPConstituencyLocations";
 	public static final String IMPORT_MP_CONSTITUENCY_LOCATIONS_API_DESCRIPTION = "Import MP Constituency Locations";
-	
+
 	public static final String IMPORT_MLA_CONSTITUENCY_LOCATIONS_REQUEST_MAPPING = "importMLAConstituencyLocations";
 	public static final String IMPORT_MLA_CONSTITUENCY_LOCATIONS_API_VALUE = "importMLAConstituencyLocations";
 	public static final String IMPORT_MLA_CONSTITUENCY_LOCATIONS_API_NICKNAME = "importMLAConstituencyLocations";
 	public static final String IMPORT_MLA_CONSTITUENCY_LOCATIONS_API_DESCRIPTION = "Import MLA Constituency Locations";
-
 
 	public static final String IMPORT_URBAN_REFERENCE_LOCATIONS_REQUEST_MAPPING = "importUrbanReferenceLocations";
 	public static final String IMPORT_URBAN_REFERENCE_LOCATIONS_API_VALUE = "importUrbanReferenceLocations";
@@ -738,7 +737,7 @@ public class EndPointConstants {
 	public static final String IMPORT_EXPORT_ALL_REFERENCE_LOCATIONS_API_VALUE = "importExportAllReferenceLocations";
 	public static final String IMPORT_EXPORT_ALL_REFERENCE_LOCATIONS_API_NICKNAME = "importExportAllReferenceLocations";
 	public static final String IMPORT_EXPORT_ALL_REFERENCE_LOCATIONS_API_DESCRIPTION = "Import Export All Reference Locations";
-	
+
 	public static final String IMPORT_ALL_POLITICIANS_REQUEST_MAPPING = "importAllPoliticians";
 	public static final String IMPORT_ALL_POLITICIANS_API_VALUE = "importAllPoliticians";
 	public static final String IMPORT_ALL_POLITICIANS_API_NICKNAME = "importAllPoliticians";
@@ -752,5 +751,19 @@ public class EndPointConstants {
 	public static final String IMPORT_LOKSABHA_MP_REQUEST_MAPPING = "importLoksabhaMP";
 
 	public static final String IMPORT_LOKSABHA_MP_API_VALUE = "importLoksabhaMP";
+
+	/** The Constant UPLOAD_ALL_USERS_REQUEST_MAPPING. */
+	public static final String GET_REFERENCE_LOCATIONS_REQUEST_MAPPING = "getReferenceLocationForMaster";
+
+	/** The Constant UPLOAD_ALL_USERS_API_VALUE. */
+	public static final String GET_REFERENCE_LOCATIONS_API_VALUE = "getReferenceLocationForMaster";
+
+	/** The Constant UPLOAD_ALL_USERS_API_NICKNAME. */
+	public static final String GET_REFERENCE_LOCATIONS_API_NICKNAME = "getReferenceLocationForMaster";
+
+	/** The Constant UPLOAD_ALL_USERS_API_DESCRIPTION. */
+	public static final String GET_REFERENCE_LOCATIONS_API_DESCRIPTION = "Get Location References For A Master Location";
+
+	/** The Constant ACCOUNT_ENDPOINT_REQUEST_MAPPING. */
 
 }

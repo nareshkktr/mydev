@@ -55,8 +55,20 @@ public class AccountEndPoint {
 				&& !validateDuplicateAccountByUserNameRequest(createAccountRequest.getLoginUserName())) {
 			accountId = accountService.createAccount(createAccountRequest);
 		}
+		JSONObject authTokenInfo = null;
+		Account account = accountService.getAccountByUserName(createAccountRequest.getLoginUserName());
+		if (account != null) {
+			authTokenInfo = oAuthService.getAuthTokenInfo(account.getUserName(), account.getPassword());
+		}
+		String accessToken;
+		try {
+			accessToken = authTokenInfo.getString("access_token");
+		} catch (JSONException e) {
+			throw new InternalServerException(e.getMessage());
+		}
+		NewCookie accessTokenCookie = new NewCookie("access_token", accessToken);
 		SaveOrUpdateDeleteObjectResponse saveObjResponse = new SaveOrUpdateDeleteObjectResponse(accountId);
-		return Response.status(Status.OK).entity(saveObjResponse).build();
+		return Response.status(Status.OK).entity(saveObjResponse).cookie(accessTokenCookie).build();
 	}
 
 	@POST
@@ -92,6 +104,12 @@ public class AccountEndPoint {
 			throw new PreConditionRequiredException(ExceptionConstants.LOGIN_USER_NAME_REQUIRED);
 		} else if (createAccountRequest.getPassword() == null) {
 			throw new PreConditionRequiredException(ExceptionConstants.PASSWORD_REQUIRED);
+		} else if (createAccountRequest.getUserGuid() == null) {
+			throw new PreConditionRequiredException(ExceptionConstants.USER_GUID_REQUIRED);
+		} else if (createAccountRequest.getLocationRefGuid() == null) {
+			throw new PreConditionRequiredException(ExceptionConstants.LOCATION_REF_GUID_REQUIRED);
+		} else if (createAccountRequest.getLocationGuid() == null) {
+			throw new PreConditionRequiredException(ExceptionConstants.LOCATION_GUID_REQUIRED);
 		} else if (createAccountRequest.getLoginUserName().isEmpty()) {
 			throw new PreConditionFailedException(ExceptionConstants.LOGIN_USER_NAME_NOT_EMPTY);
 		} else if (createAccountRequest.getPassword().isEmpty()) {
@@ -102,30 +120,6 @@ public class AccountEndPoint {
 		} else if (!CommonUtil.isValidSizeFiled(createAccountRequest.getPassword(),
 				ApplicationConstants.MIN_USER_NAME_LENGTH, ApplicationConstants.MAX_USER_NAME_LENGTH)) {
 			throw new PreConditionFailedException(ExceptionConstants.LOGIN_USER_NAME_NOT_EMPTY);
-		} else if (createAccountRequest.getUserIdentityData().getIdCardType() == null) {
-			throw new PreConditionFailedException(ExceptionConstants.IDENTITY_CARD_TYPE_REQUIRED);
-		} else if (createAccountRequest.getUserIdentityData().getIdCardNo() == null) {
-			throw new PreConditionFailedException(ExceptionConstants.IDENTITY_CARD_NO_REQUIRED);
-		} else if (createAccountRequest.getUserIdentityData().getUserName() == null) {
-			throw new PreConditionFailedException(ExceptionConstants.NAME_REQUIRED);
-		} else if (createAccountRequest.getUserIdentityData().getIdCardType().isEmpty()) {
-			throw new PreConditionRequiredException(ExceptionConstants.IDENTITY_CARD_TYPE_NOT_EMPTY);
-		} else if (createAccountRequest.getUserIdentityData().getIdCardNo().isEmpty()) {
-			throw new PreConditionRequiredException(ExceptionConstants.IDENTITY_CARD_NO_NOT_EMPTY);
-		} else if (createAccountRequest.getUserIdentityData().getUserName().isEmpty()) {
-			throw new PreConditionRequiredException(ExceptionConstants.NAME_NOT_EMPTY);
-		} else if (!CommonUtil.isValueExistInList(createAccountRequest.getUserIdentityData().getIdCardType(),
-				CommonUtil.idCardTypes)) {
-			throw new PreConditionFailedException(ExceptionConstants.IDENTITY_CARD_TYPE_NOT_VALID);
-		}
-		if (createAccountRequest.getUserIdentityData().getReferenceType() == null) {
-			throw new PreConditionFailedException(ExceptionConstants.REFERENCCE_TYPE_REQUIRED);
-		} else if (createAccountRequest.getUserIdentityData().getReferenceName() == null) {
-			throw new PreConditionFailedException(ExceptionConstants.REFERENCE_NAME_REQUIRED);
-		} else if (createAccountRequest.getUserIdentityData().getReferenceType().isEmpty()) {
-			throw new PreConditionFailedException(ExceptionConstants.REFERENCCE_TYPE_SHOULD_NOT_BE_EMPTY);
-		} else if (createAccountRequest.getUserIdentityData().getReferenceName().isEmpty()) {
-			throw new PreConditionFailedException(ExceptionConstants.REFERENCE_NAME_SHOULD_NOT_BE_EMPTY);
 		}
 		return true;
 	}

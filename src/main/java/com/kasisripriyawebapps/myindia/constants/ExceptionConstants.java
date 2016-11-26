@@ -90,7 +90,7 @@ public class ExceptionConstants {
 	public static final String NAME_REQUIRED = "Name Required";
 	public static final String REFERENCCE_TYPE_REQUIRED = "Reference Type Required";
 	public static final String REFERENCE_NAME_REQUIRED = "Reference Name Required";
-	public static final String INVALID_REFERENCE_DETAILS_NAME = "Reference Details Not Found";
+	public static final String INVALID_REFERENCE_DETAILS_NAME = "Reference Name Not Found";
 	public static final String REFERENCCE_TYPE_SHOULD_NOT_BE_EMPTY = "Reference Type Should Not Be Empty";
 	public static final String REFERENCE_NAME_SHOULD_NOT_BE_EMPTY = "Reference Name Should Not Be Empty";
 	public static final String NAME_NOT_EMPTY = "Name Should Not Empty";
@@ -104,4 +104,13 @@ public class ExceptionConstants {
 	public static final String EXCEL_FILE_TYPE_VALIDATION = "Only xls and xlsx file types allowed";
 	public static final String ATLEAST_ONE_FILE_REQUIRED = "Atleast One File Required To Process";
 	public static final String NOT_FOUND = " Not Found";
+	public static final String YEAR_OF_BIRTH_REQUIRED = "Year Of Birth Required";
+	public static final String YEAR_OF_BIRTH_SHOULD_NOT_BE_EMPTY = "Year Of Birth Should Not Be Empty";
+	public static final String INVALID_YEAR_OF_BIRTH = "Year Of Birth Wrong";
+	public static final String LOCATION_GUID_REQUIRED = "Location Guid Required";
+	public static final String LOCATION_TYPE_REQUIRED = "Location Type Required";
+	public static final String LOCATION_GUID_NOT_EMPTY = "Location Guid Should Not Be Empty";
+	public static final String LOCATION_TYPE_NOT_EMPTY = "Location Type Should Not Be Empty";
+	public static final String USER_GUID_REQUIRED = "User Guid Required";
+	public static final String LOCATION_REF_GUID_REQUIRED = "Location Reference Guid Required";
 }

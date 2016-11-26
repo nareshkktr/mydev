@@ -2,11 +2,21 @@ package com.kasisripriyawebapps.myindia.requestresponsemodel;
 
 public class GetUserByPropertyRequest {
 
+	private Long userGuid;
 	private String idCardType;
 	private String idCardNo;
 	private String referenceType;
 	private String referenceName;
 	private String userName;
+	private Integer yearOfBirth;
+
+	public Long getUserGuid() {
+		return userGuid;
+	}
+
+	public void setUserGuid(Long userGuid) {
+		this.userGuid = userGuid;
+	}
 
 	public String getIdCardType() {
 		return idCardType;
@@ -46,6 +56,14 @@ public class GetUserByPropertyRequest {
 
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+
+	public Integer getYearOfBirth() {
+		return yearOfBirth;
+	}
+
+	public void setYearOfBirth(Integer yearOfBirth) {
+		this.yearOfBirth = yearOfBirth;
 	}
 
 }

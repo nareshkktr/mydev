@@ -1,13 +1,31 @@
 package com.kasisripriyawebapps.myindia.requestresponsemodel;
 
+import java.util.List;
+import java.util.Map;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.kasisripriyawebapps.myindia.solr.entity.SolrLocationMaster;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class GetUserByPropertyResponse {
 
+	private Long userGuid;
 	private String referenceType;
 	private String referenceName;
 	private String locationState;
 	private String locationDistrict;
-	private String locationMpConstituency;
-	private String locationMLAConstituency;
+	private String locationMandal;
+
+	private List<SolrLocationMaster> villageLocations = null;
+	private Map<String, List<SolrLocationMaster>> urbanLocations = null;
+
+	public Long getUserGuid() {
+		return userGuid;
+	}
+
+	public void setUserGuid(Long userGuid) {
+		this.userGuid = userGuid;
+	}
 
 	public String getReferenceType() {
 		return referenceType;
@@ -41,20 +59,28 @@ public class GetUserByPropertyResponse {
 		this.locationDistrict = locationDistrict;
 	}
 
-	public String getLocationMpConstituency() {
-		return locationMpConstituency;
+	public String getLocationMandal() {
+		return locationMandal;
 	}
 
-	public void setLocationMpConstituency(String locationMpConstituency) {
-		this.locationMpConstituency = locationMpConstituency;
+	public void setLocationMandal(String locationMandal) {
+		this.locationMandal = locationMandal;
 	}
 
-	public String getLocationMLAConstituency() {
-		return locationMLAConstituency;
+	public List<SolrLocationMaster> getVillageLocations() {
+		return villageLocations;
 	}
 
-	public void setLocationMLAConstituency(String locationMLAConstituency) {
-		this.locationMLAConstituency = locationMLAConstituency;
+	public void setVillageLocations(List<SolrLocationMaster> villageLocations) {
+		this.villageLocations = villageLocations;
+	}
+
+	public Map<String, List<SolrLocationMaster>> getUrbanLocations() {
+		return urbanLocations;
+	}
+
+	public void setUrbanLocations(Map<String, List<SolrLocationMaster>> urbanLocations) {
+		this.urbanLocations = urbanLocations;
 	}
 
 }

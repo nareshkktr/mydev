@@ -33,12 +33,6 @@ public class DatabaseConfig {
 	@Bean
 	public TomcatEmbeddedServletContainerFactory tomcatFactory() {
 
-		System.setProperty("http.proxyHost", "proxy.cat.com");
-		System.setProperty("http.proxyPort", "80");
-
-		System.setProperty("https.proxyHost", "proxy.cat.com");
-		System.setProperty("https.proxyPort", "80");
-
 		return new TomcatEmbeddedServletContainerFactory() {
 
 			@Override
