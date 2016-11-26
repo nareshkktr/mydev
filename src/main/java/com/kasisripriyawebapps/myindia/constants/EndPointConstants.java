@@ -746,11 +746,13 @@ public class EndPointConstants {
 	public static final String IMPORT_ALL_POLITICIANS_API_DESCRIPTION = "Import All Politcians";
 
 	public static final String IMPORT_LOKSABHA_MP_API_DESCRIPTION = "Import Lok sabha MP";
-
 	public static final String IMPORT_LOKSABHA_MP_API_NICKNAME = "importLoksabhaMP";
-
 	public static final String IMPORT_LOKSABHA_MP_REQUEST_MAPPING = "importLoksabhaMP";
-
 	public static final String IMPORT_LOKSABHA_MP_API_VALUE = "importLoksabhaMP";
+
+	public static final String IMPORT_RAJYASABHA_MP_API_NICKNAME = "importRajyasabhaMP";
+	public static final String IMPORT_RAJYASABHA_MP_API_VALUE = "importRajyasabhaMP";
+	public static final String IMPORT_RAJYASABHA_MP_REQUEST_MAPPING = "importRajyasabhaMP";
+	public static final String IMPORT_RAJYASABHA_MP_API_DESCRIPTION = "Import Rajya sabha MP";
 
 }

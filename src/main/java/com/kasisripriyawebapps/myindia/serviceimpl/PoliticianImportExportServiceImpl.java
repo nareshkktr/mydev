@@ -53,6 +53,7 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 	@Override
 	@Transactional
 	public void importExportLoksabhaMPs() throws InternalServerException {
+		
 		driver = new ChromeDriver();
 		driver.get(env.getProperty("india-politicians-mp-loksabha.url"));
 
@@ -62,7 +63,7 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 		
 		List<PoliticianAuthority> politicianAuthorities = null;
 		
-		List<Politician> newPolitician = new ArrayList<Politician>();
+		List<Politician> newPoliticians = new ArrayList<Politician>();
 		
 		List<PoliticianAuthority> newUpdatedMemberOfParliment = new ArrayList<PoliticianAuthority>();
 		
@@ -180,7 +181,7 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 					politicianAuthority.setPolitician(politicianMember);
 					politicianAuthorities.add(politicianAuthority);
 					politicianMember.setPoliticianAuthorities(politicianAuthorities);
-					newPolitician.add(politicianMember);
+					newPoliticians.add(politicianMember);
 				}else{
 					//get the existing politician and get its authorities and decide on update/add/delete
 					Politician currentPolitician = mapAllPoliticians.get(politicianMember.getFullName()).get(0);//Need to handle null.
@@ -214,7 +215,7 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 							}
 							
 							currentPolitician.setPoliticianAuthorities(currentPoliticianAuthorities);
-							newPolitician.add(currentPolitician);
+							newPoliticians.add(currentPolitician);
 							
 						}else{ // There are no authorities associated with the user.
 							politicianAuthorities = new ArrayList<PoliticianAuthority>();
@@ -225,7 +226,7 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 							//Set current designation in the politican object
 							currentPolitician.setCurrentDesignation(ServiceConstants.SITTING_LOKSABHA_MP_DESIGNATION);
 							
-							newPolitician.add(currentPolitician);
+							newPoliticians.add(currentPolitician);
 						}
 					}
 				}
@@ -253,13 +254,212 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 		// DB OPS
 		
 		//Politician to be saved/updated -- newPolitician 
-		if(newPolitician != null && newPolitician.size() > 0)
-			politicianDao.saveOrUpdatePolitician(newPolitician);
+		if(newPoliticians != null && newPoliticians.size() > 0)
+			politicianDao.saveOrUpdatePolitician(newPoliticians);
 		
 		// Politician Authorities to be updated - activePoliticianAuthorities
 		if(activePoliticianAuthorities != null && activePoliticianAuthorities.size() > 0)
 			politicianAuthorityDao.saveOrUpdatePolitician(activePoliticianAuthorities);
 		
-
+		
+		//pullLokSabhaMPData(env.getProperty("india-politicians-mp-loksabha.url"),ServiceConstants.SITTING_LOKSABHA_MP_DESIGNATION);
 	}
+	
+	@Override
+	@Transactional
+	public void importExportRajyasabhaMPs() throws InternalServerException {
+		
+		driver = new ChromeDriver();
+		driver.get(env.getProperty("india-politicians-mp-rajyasabha.url"));
+		
+		WebElement allMmebersRadioButton = driver.findElement(By.id("ctl00_ContentPlaceHolder1_rdblist_1"));
+		
+		allMmebersRadioButton.click();
+		
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			throw new InternalServerException(e.getMessage());
+		}
+		
+		Politician politicianMember = null;
+		
+		PoliticianAuthority politicianAuthority = null;
+		
+		List<PoliticianAuthority> politicianAuthorities = null;
+		
+		List<Politician> newPoliticians = new ArrayList<Politician>();
+		
+		List<PoliticianAuthority> newUpdatedMemberOfParliment = new ArrayList<PoliticianAuthority>();
+		
+		//Load all existing list of politicians
+		List<Politician> allPoliticians = new ArrayList<Politician>();
+				
+		allPoliticians = politicianDao.getAllPoliticians();
+
+		//Create a map of politicians for easy retreival
+		Map<String,List<Politician>> mapAllPoliticians = new HashMap<String,List<Politician>>();
+
+		mapAllPoliticians = allPoliticians.stream()
+				.collect(Collectors.groupingBy(politicianObject -> politicianObject.getFullName()));
+
+		//Load existing current active lok sabha Members from Politician Authority
+		List<PoliticianAuthority> activePoliticianAuthorities = new ArrayList<PoliticianAuthority>();
+
+		activePoliticianAuthorities = politicianAuthorityDao.getActivePoliticianAuthhoritiesByDesignation(ServiceConstants.SITTING_RAJYASABHA_MP_DESIGNATION);
+
+		//Load all party information
+		List<Party> allParties = partyDao.getAllParties();
+
+		Map<String,List<Party>> mapAllParties = allParties.stream()
+				.collect(Collectors.groupingBy(partyObject -> partyObject.getPartyAbbrevation().trim()));
+
+		//Load all Mp Constituencey location information
+		List<LocationMaster> allMpLocations = locationMasterDao.getAllMasterLocationsByType(ServiceConstants.LOCATION_STATE_TYPE);
+
+		Map<String,List<LocationMaster>> mapAllMpLocations = allMpLocations.stream()
+				.collect(Collectors.groupingBy(locationMasterObject -> locationMasterObject.getLocationName().trim()));
+
+		
+		//ctl00_ContentPlaceHolder1_GridView2
+		
+		WebElement pageMainTable = driver.findElement(By.id("ctl00_ContentPlaceHolder1_GridView2"));
+		WebElement pageMainTableBody = pageMainTable.findElements(By.xpath("tbody")).get(0);
+		List<WebElement> memberRows = pageMainTableBody
+				.findElements(By.xpath("tr"));
+		
+		for (WebElement row : memberRows) {
+
+			List<WebElement> cells = row.findElements(By.xpath("td"));
+			
+			if(cells.size() >0){
+				
+				WebElement eachMemberName = cells.get(1);
+				
+				WebElement eachMemberPartyName = cells.get(2);
+				
+				WebElement eachMemberConsituencyState = cells.get(3);
+				
+				System.out.println(eachMemberName.getText());
+				System.out.println(eachMemberPartyName.getText());
+				System.out.println(eachMemberConsituencyState.getText());
+				
+				politicianMember = new Politician();
+				politicianAuthority = new PoliticianAuthority();
+
+				String extractedLocation = eachMemberConsituencyState.getText().trim();
+				
+				String partyName = eachMemberPartyName.getText().trim();
+				
+				if(partyName != null && mapAllParties.get(partyName) != null && mapAllParties.get(partyName).size() >0){
+					Party memberParty = mapAllParties.get(partyName).get(0); 
+					politicianAuthority.setParty(memberParty);
+				}
+				
+				
+				if(extractedLocation != null && mapAllMpLocations.get(extractedLocation) != null && mapAllMpLocations.get(extractedLocation).size()>0){
+					LocationMaster electedLocation = mapAllMpLocations.get(extractedLocation).get(0);
+					politicianAuthority.setElectedLocation(electedLocation);
+				}
+
+				politicianMember.setFullName(eachMemberName.getText());
+				politicianMember.setCurrentDesignation(ServiceConstants.SITTING_RAJYASABHA_MP_DESIGNATION);
+				
+				politicianAuthority.setDesignation(ServiceConstants.SITTING_RAJYASABHA_MP_DESIGNATION);
+				politicianAuthority.setPoliticianType(ServiceConstants.MP);
+
+				//Need to populate start date and is active fields in politician authhority
+				politicianAuthority.setActive(true);
+				politicianAuthority.setStartDate(new Date());
+				
+				newUpdatedMemberOfParliment.add(politicianAuthority);
+
+				//New members
+				if(!allPoliticians.contains(politicianMember)){
+					politicianAuthorities = new ArrayList<PoliticianAuthority>();
+					politicianAuthority.setPolitician(politicianMember);
+					politicianAuthorities.add(politicianAuthority);
+					politicianMember.setPoliticianAuthorities(politicianAuthorities);
+					newPoliticians.add(politicianMember);
+				}else{
+					//get the existing politician and get its authorities and decide on update/add/delete
+					Politician currentPolitician = mapAllPoliticians.get(politicianMember.getFullName()).get(0);//Need to handle null.
+					if(currentPolitician != null){
+						List<PoliticianAuthority> currentPoliticianAuthorities = currentPolitician.getPoliticianAuthorities();
+						if(currentPoliticianAuthorities != null){
+							
+							Boolean exists = false;
+							
+							//Check if the current politician authority exists and is active handled in conatins
+							//Iterate all authorities mark them as inactive if it doesnt match
+							for(PoliticianAuthority pa: currentPoliticianAuthorities){
+								
+								// If there exists an active matching politician authority
+								if(pa.equals(politicianAuthority)){
+									exists = true;
+								}else{ // if doesnt match check if is active if yes mark it inactive and set end date
+									if(pa.isActive()){
+										pa.setEndDate(new Date());
+										pa.setActive(false);
+									}
+								}
+							}
+						
+							if(!exists){
+								politicianAuthority.setPolitician(currentPolitician);
+								currentPoliticianAuthorities.add(politicianAuthority);
+								//Set current designation in the politican object
+								currentPolitician.setCurrentDesignation(ServiceConstants.SITTING_RAJYASABHA_MP_DESIGNATION);
+							}
+							
+							currentPolitician.setPoliticianAuthorities(currentPoliticianAuthorities);
+							newPoliticians.add(currentPolitician);
+							
+						}else{ // There are no authorities associated with the user.
+							politicianAuthorities = new ArrayList<PoliticianAuthority>();
+							politicianAuthority.setPolitician(currentPolitician);
+							politicianAuthorities.add(politicianAuthority);
+							currentPolitician.setPoliticianAuthorities(politicianAuthorities);
+							
+							//Set current designation in the politican object
+							currentPolitician.setCurrentDesignation(ServiceConstants.SITTING_RAJYASABHA_MP_DESIGNATION);
+							
+							newPoliticians.add(currentPolitician);
+						}
+					}
+				}
+				
+				
+			}//For td rows
+		
+			
+		}// For each member
+		
+		driver.close();
+		driver.quit();
+		
+		// Now find the difference of current active ones and the ones that came new.. those are to be marked as in active and end date
+		if(activePoliticianAuthorities != null){
+			activePoliticianAuthorities.removeAll(newUpdatedMemberOfParliment);
+		
+			// Mark the above list as inactive and set end Date
+			for(PoliticianAuthority pa: activePoliticianAuthorities){
+				pa.setActive(false);
+				pa.setEndDate(new Date());
+			}
+		}
+		
+		// DB OPS
+		
+		//Politician to be saved/updated -- newPolitician 
+		if(newPoliticians != null && newPoliticians.size() > 0)
+			politicianDao.saveOrUpdatePolitician(newPoliticians);
+		
+		// Politician Authorities to be updated - activePoliticianAuthorities
+		if(activePoliticianAuthorities != null && activePoliticianAuthorities.size() > 0)
+			politicianAuthorityDao.saveOrUpdatePolitician(activePoliticianAuthorities);
+		
+		
+	}
+	
 }
