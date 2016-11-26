@@ -762,6 +762,10 @@ public class UserImportServiceImpl implements UserImportService {
 					if (sexAgeLineSpaces.length > 3) {
 						age = sexAgeLineSpaces[1];
 						sex = sexAgeLineSpaces[3];
+					} else if (sexAgeLineSpaces.length == 3) {
+						age = sexAgeLineSpaces[1];
+						processingLineNo--;
+						sex = lines[processingLineNo].trim();
 					} else {
 						processingLineNo--;
 						sexAgeLine = lines[processingLineNo].trim();
@@ -786,10 +790,12 @@ public class UserImportServiceImpl implements UserImportService {
 						if (lines[processingLineNo].trim().contains(":")) {
 							processingLineNo--;
 							electorName = lines[processingLineNo].trim();
+
 						} else {
 							processingLineNo--;
 							processingLineNo--;
 							electorName = lines[processingLineNo].trim() + " " + lines[processingLineNo + 2].trim();
+
 						}
 
 					} else {
@@ -802,10 +808,12 @@ public class UserImportServiceImpl implements UserImportService {
 						if (lines[processingLineNo].trim().contains(":")) {
 							processingLineNo--;
 							electorName = lines[processingLineNo].trim();
+
 						} else {
 							processingLineNo--;
 							processingLineNo--;
 							electorName = lines[processingLineNo].trim() + " " + lines[processingLineNo + 2].trim();
+
 						}
 					}
 					processingLineNo--;
@@ -816,6 +824,34 @@ public class UserImportServiceImpl implements UserImportService {
 						voterId = voterIdLineSpaces[1].trim();
 					} else {
 						voterId = voterIdLine;
+					}
+
+					if (electorName != null && !electorName.isEmpty()) {
+						String[] electorNamesArray = electorName.split(" ");
+						if (electorNamesArray != null) {
+							electorName = "";
+							for (int m = 0; m < electorNamesArray.length; m++) {
+								String eachSpaceElectorName = electorNamesArray[m];
+								if (!eachSpaceElectorName.isEmpty()) {
+									electorName += eachSpaceElectorName.trim() + " ";
+								}
+							}
+						}
+						electorName = electorName.toUpperCase().trim();
+					}
+
+					if (referenceName != null && !referenceName.isEmpty()) {
+						String[] referenceNamesArray = referenceName.split(" ");
+						if (referenceNamesArray != null) {
+							referenceName = "";
+							for (int m = 0; m < referenceNamesArray.length; m++) {
+								String eachSpaceReferenceName = referenceNamesArray[m];
+								if (!eachSpaceReferenceName.isEmpty()) {
+									referenceName += eachSpaceReferenceName.trim() + " ";
+								}
+							}
+						}
+						referenceName = referenceName.toUpperCase().trim();
 					}
 
 					User user = new User();

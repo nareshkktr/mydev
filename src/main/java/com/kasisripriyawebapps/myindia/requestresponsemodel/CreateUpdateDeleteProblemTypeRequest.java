@@ -14,14 +14,9 @@ public class CreateUpdateDeleteProblemTypeRequest implements Serializable {
 		// TODO Auto-generated constructor stub
 	}
 
-	public CreateUpdateDeleteProblemTypeRequest(String problemTypeName, String problemTypePhoto) {
-		super();
-		this.problemTypeName = problemTypeName;
-		this.problemTypePhoto = problemTypePhoto;
-	}
-
 	private Long problemTypeId;
 	private String problemTypeName;
+	private String problemTypeDesc;
 	private String problemTypePhoto;
 
 	public Long getProblemTypeId() {
@@ -46,6 +41,14 @@ public class CreateUpdateDeleteProblemTypeRequest implements Serializable {
 
 	public void setProblemTypePhoto(String problemTypePhoto) {
 		this.problemTypePhoto = problemTypePhoto;
+	}
+
+	public String getProblemTypeDesc() {
+		return problemTypeDesc;
+	}
+
+	public void setProblemTypeDesc(String problemTypeDesc) {
+		this.problemTypeDesc = problemTypeDesc;
 	}
 
 }

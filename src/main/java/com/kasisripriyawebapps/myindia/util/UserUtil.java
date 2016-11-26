@@ -203,10 +203,12 @@ public class UserUtil {
 						if (lines[processingLineNo].trim().contains(":")) {
 							processingLineNo--;
 							electorName = lines[processingLineNo].trim();
+
 						} else {
 							processingLineNo--;
 							processingLineNo--;
 							electorName = lines[processingLineNo].trim() + " " + lines[processingLineNo + 2].trim();
+
 						}
 
 					} else {
@@ -219,10 +221,12 @@ public class UserUtil {
 						if (lines[processingLineNo].trim().contains(":")) {
 							processingLineNo--;
 							electorName = lines[processingLineNo].trim();
+
 						} else {
 							processingLineNo--;
 							processingLineNo--;
 							electorName = lines[processingLineNo].trim() + " " + lines[processingLineNo + 2].trim();
+
 						}
 					}
 					processingLineNo--;
@@ -234,12 +238,35 @@ public class UserUtil {
 					} else {
 						voterId = voterIdLine;
 					}
-					
-					System.out.println(age);
 
-					System.out.println(electorName);
-					System.out.println(referenceName);
-					
+					if (electorName != null && !electorName.isEmpty()) {
+						String[] electorNamesArray = electorName.split(" ");
+						if (electorNamesArray != null) {
+							electorName = "";
+							for (int m = 0; m < electorNamesArray.length; m++) {
+								String eachSpaceElectorName = electorNamesArray[m];
+								if (!eachSpaceElectorName.isEmpty()) {
+									electorName += eachSpaceElectorName.trim() + " ";
+								}
+							}
+						}
+						electorName = electorName.toUpperCase().trim();
+					}
+
+					if (referenceName != null && !referenceName.isEmpty()) {
+						String[] referenceNamesArray = referenceName.split(" ");
+						if (referenceNamesArray != null) {
+							referenceName = "";
+							for (int m = 0; m < referenceNamesArray.length; m++) {
+								String eachSpaceReferenceName = referenceNamesArray[m];
+								if (!eachSpaceReferenceName.isEmpty()) {
+									referenceName += eachSpaceReferenceName.trim() + " ";
+								}
+							}
+						}
+						referenceName = referenceName.toUpperCase().trim();
+					}
+
 					User user = new User();
 					user.setAge(Integer.parseInt(age.trim()));
 					user.setAssemblyConstituencyName(eachURLData.getMlaConstituencyName());
@@ -269,8 +296,6 @@ public class UserUtil {
 			}
 
 		} catch (Exception ex) {
-			System.out.println(tableContent);
-			ex.printStackTrace();
 			isProcessed = false;
 		}
 		return isProcessed;
@@ -279,7 +304,7 @@ public class UserUtil {
 	public static void main(String args[]) {
 		ElectroralRollesURL eachURLData = new ElectroralRollesURL();
 		eachURLData.setPdfUrl(
-				"http://ceoaperms.ap.gov.in/Electoral_Rolls/PDFGeneration.aspx?urlPath=D:\\SSR_2017_Draft_Roles\\ANDHRA\\AC_103\\English\\S01A103P050.PDF");
+				"http://ceoaperms.ap.gov.in/Electoral_Rolls/PDFGeneration.aspx?urlPath=D:\\SSR_2017_Draft_Roles\\ANDHRA\\AC_109\\English\\S01A109P065.PDF");
 		List<User> eachPageUsers = new ArrayList<User>();
 		eachPageUsers = parseElectroralData(eachURLData);
 

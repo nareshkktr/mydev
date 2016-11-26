@@ -35,6 +35,7 @@ public class ProblemTypeServiceImpl implements ProblemTypeService {
 		if (validateDuplicateProblemTypeByTypeNameRequest(createUpdateDeleteProblemTypeRequest)) {
 			ProblemType problemType = new ProblemType();
 			problemType.setProblemTypeName(createUpdateDeleteProblemTypeRequest.getProblemTypeName());
+			problemType.setProblemTypeDesc(createUpdateDeleteProblemTypeRequest.getProblemTypeDesc());
 			problemType.setProblemTypePhotoURL(
 					imageService.addImageToLocalDrive(ApplicationConstants.OBJECT_TYPE_PROBLEM_TYPE,
 							createUpdateDeleteProblemTypeRequest.getProblemTypeName(),
