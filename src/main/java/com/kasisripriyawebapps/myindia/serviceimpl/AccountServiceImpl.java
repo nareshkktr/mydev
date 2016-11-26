@@ -7,10 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.google.gson.Gson;
 import com.kasisripriyawebapps.myindia.constants.ExceptionConstants;
 import com.kasisripriyawebapps.myindia.dao.AccountDao;
+import com.kasisripriyawebapps.myindia.dao.LocationDao;
+import com.kasisripriyawebapps.myindia.dao.LocationMasterDao;
 import com.kasisripriyawebapps.myindia.dao.UserDao;
 import com.kasisripriyawebapps.myindia.entity.Account;
+import com.kasisripriyawebapps.myindia.entity.Location;
+import com.kasisripriyawebapps.myindia.entity.LocationMaster;
 import com.kasisripriyawebapps.myindia.entity.User;
 import com.kasisripriyawebapps.myindia.entity.UserInfo;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
@@ -18,6 +23,8 @@ import com.kasisripriyawebapps.myindia.exception.RecordNotFoundException;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.CreateAccountRequest;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.LoginRequest;
 import com.kasisripriyawebapps.myindia.service.AccountService;
+import com.kasisripriyawebapps.myindia.solr.entity.SolrUserMaster;
+import com.kasisripriyawebapps.myindia.solr.repository.UserMasterRepository;
 import com.kasisripriyawebapps.myindia.util.CommonUtil;
 
 @Service
@@ -28,6 +35,15 @@ public class AccountServiceImpl implements AccountService {
 
 	@Autowired
 	UserDao userDao;
+
+	@Autowired
+	LocationMasterDao locationMasterDao;
+
+	@Autowired
+	LocationDao locationDao;
+
+	@Autowired
+	private UserMasterRepository userMasterRepository;
 
 	@Override
 	@Transactional
@@ -41,21 +57,21 @@ public class AccountServiceImpl implements AccountService {
 				.hashPassword(CommonUtil.saltPassword(createAccountRequest.getPassword(), account.getSalt())));
 		account.setCreatedTimeStamp(CommonUtil.getCurrentGMTTimestamp());
 
-		User user = userDao.getUserByIDTypeNoNameAndReference(
-				createAccountRequest.getUserIdentityData().getIdCardType(),
-				createAccountRequest.getUserIdentityData().getIdCardNo(),
-				createAccountRequest.getUserIdentityData().getUserName(),
-				createAccountRequest.getUserIdentityData().getReferenceType(),
-				createAccountRequest.getUserIdentityData().getReferenceName());
+		SolrUserMaster solrUser = userMasterRepository.findByUserGuid(createAccountRequest.getUserGuid());
 
-		UserInfo userInfo = null;
-		if (user != null) {
-			userInfo = new UserInfo();
-			userInfo.setHouseNo(user.getHouseNo());
-			userInfo.setIdCardType(user.getIdCardType());
-			userInfo.setIdCardType(user.getIdCardNo());
+		UserInfo userInfo = new UserInfo();
+		if (solrUser != null) {
+			String solrUserJsonStr = new Gson().toJson(solrUser);
+			userInfo = new Gson().fromJson(solrUserJsonStr, UserInfo.class);
 			userInfo.setCreatedTimeStamp(CommonUtil.getCurrentGMTTimestamp());
 			userInfo.setAccount(account);
+			User user = userDao.getUserByGuid(solrUser.getUserGuid());
+			Location nativeLocation = locationDao.getLocationByGuid(createAccountRequest.getLocationRefGuid());
+			userInfo.setUser(user);
+			userInfo.setNativeLocation(nativeLocation);
+			LocationMaster masterLocation = locationMasterDao
+					.getLocationByGuid(createAccountRequest.getLocationGuid());
+			userInfo.setMasterLocation(masterLocation);
 			account.setUserInfo(userInfo);
 			accountGuid = accountDao.createAccount(account);
 		} else {

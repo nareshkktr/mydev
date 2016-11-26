@@ -62,7 +62,7 @@ public class UserInfo implements Serializable {
 
 	/** The user name. */
 	@Column(name = "USER_NAME")
-	private String userName;
+	private String electorName;
 
 	/** The house no. */
 	@Column(name = "HOUSE_NO")
@@ -92,15 +92,15 @@ public class UserInfo implements Serializable {
 	@OneToOne(fetch = FetchType.LAZY, mappedBy = "userInfo", cascade = CascadeType.ALL)
 	private Account account;
 
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "USER_GUID")
 	private User user;
 
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "LOCATION_REF_GUID")
 	private Location nativeLocation;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "LOCATION_GUID")
 	private LocationMaster masterLocation;
 
@@ -160,12 +160,12 @@ public class UserInfo implements Serializable {
 		this.dateOfBirth = dateOfBirth;
 	}
 
-	public String getUserName() {
-		return userName;
+	public String getElectorName() {
+		return electorName;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setElectorName(String electorName) {
+		this.electorName = electorName;
 	}
 
 	public String getHouseNo() {

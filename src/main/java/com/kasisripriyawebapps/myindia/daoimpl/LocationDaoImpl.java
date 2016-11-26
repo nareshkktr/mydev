@@ -50,4 +50,9 @@ public class LocationDaoImpl extends BaseDaoImpl<Long, Location> implements Loca
 		return getByCondition(criterionObj);
 	}
 
+	@Override
+	public Location getLocationByGuid(Long locationRefGuid) throws InternalServerException {
+		return getById(locationRefGuid);
+	}
+
 }

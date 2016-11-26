@@ -20,7 +20,9 @@ import com.kasisripriyawebapps.myindia.exception.PreConditionRequiredException;
 import com.kasisripriyawebapps.myindia.exception.RecordNotFoundException;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.GetUserByPropertyRequest;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.GetUserByPropertyResponse;
+import com.kasisripriyawebapps.myindia.requestresponsemodel.LocationReferenceMasterResponse;
 import com.kasisripriyawebapps.myindia.service.UserService;
+import com.kasisripriyawebapps.myindia.solr.entity.SolrLocationMaster;
 import com.kasisripriyawebapps.myindia.util.CommonUtil;
 
 import io.swagger.annotations.Api;
@@ -38,12 +40,12 @@ public class UserEndPoint {
 	@ApiOperation(value = EndPointConstants.GET_USER_BY_VOTER_ID_NAME_API_VALUE, nickname = EndPointConstants.GET_USER_BY_VOTER_ID_NAME_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.GET_USER_BY_VOTER_ID_NAME_API_DESCRIPTION)
 	@Path(EndPointConstants.GET_USER_BY_VOTER_ID_NAME_REQUEST_MAPPING)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getUserByVoterIdName(
-			final GetUserByPropertyRequest getUserByPropertyRequest) throws InternalServerException,
-			PreConditionFailedException, PreConditionRequiredException, RecordNotFoundException {
+	public Response getUserByVoterIdAndName(final GetUserByPropertyRequest getUserByPropertyRequest)
+			throws InternalServerException, PreConditionFailedException, PreConditionRequiredException,
+			RecordNotFoundException {
 		GetUserByPropertyResponse saveObjResponse = null;
 		if (validateGetUserByVoterIdName(getUserByPropertyRequest)) {
-			saveObjResponse = userService.getUserByVoterIdName(getUserByPropertyRequest);
+			saveObjResponse = userService.getUserByVoterIdAndName(getUserByPropertyRequest);
 		}
 		return Response.status(Status.OK).entity(saveObjResponse).build();
 	}
@@ -52,15 +54,44 @@ public class UserEndPoint {
 	@ApiOperation(value = EndPointConstants.GET_USER_BY_VOTER_ID_NAME_REFERENCE_API_VALUE, nickname = EndPointConstants.GET_USER_BY_VOTER_ID_NAME_REFERENCE_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.GET_USER_BY_VOTER_ID_NAME_REFERENCE_API_DESCRIPTION)
 	@Path(EndPointConstants.GET_USER_BY_VOTER_ID_NAME_REFERENCE_REQUEST_MAPPING)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getUserByVoterIdNameAndReference(
-			final GetUserByPropertyRequest getUserByPropertyRequest) throws InternalServerException,
-			PreConditionFailedException, PreConditionRequiredException, RecordNotFoundException {
+	public Response getUserByVoterReferenceAndAge(final GetUserByPropertyRequest getUserByPropertyRequest)
+			throws InternalServerException, PreConditionFailedException, PreConditionRequiredException,
+			RecordNotFoundException {
 		GetUserByPropertyResponse saveObjResponse = null;
-		if (validateGetUserByVoterIdName(getUserByPropertyRequest)
-				&& validateGetUserByVoterIdNameReference(getUserByPropertyRequest)) {
-			saveObjResponse = userService.getUserByVoterIdNameAndReference(getUserByPropertyRequest);
+		if (validateGetUserByVoterIdNameReference(getUserByPropertyRequest)) {
+			saveObjResponse = userService.getUserByVoterReferenceAndAge(getUserByPropertyRequest);
 		}
 		return Response.status(Status.OK).entity(saveObjResponse).build();
+	}
+
+	@POST
+	@ApiOperation(value = EndPointConstants.GET_REFERENCE_LOCATIONS_API_VALUE, nickname = EndPointConstants.GET_REFERENCE_LOCATIONS_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.GET_REFERENCE_LOCATIONS_API_DESCRIPTION)
+	@Path(EndPointConstants.GET_REFERENCE_LOCATIONS_REQUEST_MAPPING)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getReferenceLocationForMaster(final SolrLocationMaster solrLocationMaster)
+			throws InternalServerException, PreConditionFailedException, PreConditionRequiredException,
+			RecordNotFoundException {
+		LocationReferenceMasterResponse saveObjResponse = null;
+		if (validateGetReferenceLocationForMaster(solrLocationMaster)) {
+			saveObjResponse = userService.getReferenceLocationForMaster(solrLocationMaster);
+		}
+		return Response.status(Status.OK).entity(saveObjResponse).build();
+	}
+
+	private boolean validateGetReferenceLocationForMaster(SolrLocationMaster solrLocationMaster)
+			throws PreConditionFailedException, PreConditionRequiredException {
+		if (solrLocationMaster == null) {
+			throw new PreConditionFailedException(ExceptionConstants.REQUEST_NOT_NULL);
+		} else if (solrLocationMaster.getLocationGuid() == null) {
+			throw new PreConditionFailedException(ExceptionConstants.LOCATION_GUID_REQUIRED);
+		} else if (solrLocationMaster.getLocationType() == null) {
+			throw new PreConditionFailedException(ExceptionConstants.LOCATION_TYPE_REQUIRED);
+		} else if (solrLocationMaster.getLocationGuid().equals(0)) {
+			throw new PreConditionRequiredException(ExceptionConstants.LOCATION_GUID_NOT_EMPTY);
+		} else if (solrLocationMaster.getLocationType().isEmpty()) {
+			throw new PreConditionRequiredException(ExceptionConstants.LOCATION_TYPE_NOT_EMPTY);
+		}
+		return true;
 	}
 
 	private boolean validateGetUserByVoterIdName(GetUserByPropertyRequest getUserByPropertyRequest)
@@ -91,10 +122,14 @@ public class UserEndPoint {
 			throw new PreConditionFailedException(ExceptionConstants.REFERENCCE_TYPE_REQUIRED);
 		} else if (getUserByPropertyRequest.getReferenceName() == null) {
 			throw new PreConditionFailedException(ExceptionConstants.REFERENCE_NAME_REQUIRED);
+		} else if (getUserByPropertyRequest.getYearOfBirth() == null) {
+			throw new PreConditionFailedException(ExceptionConstants.YEAR_OF_BIRTH_REQUIRED);
 		} else if (getUserByPropertyRequest.getReferenceType().isEmpty()) {
 			throw new PreConditionFailedException(ExceptionConstants.REFERENCCE_TYPE_SHOULD_NOT_BE_EMPTY);
 		} else if (getUserByPropertyRequest.getReferenceName().isEmpty()) {
 			throw new PreConditionFailedException(ExceptionConstants.REFERENCE_NAME_SHOULD_NOT_BE_EMPTY);
+		} else if (getUserByPropertyRequest.getYearOfBirth().equals(0)) {
+			throw new PreConditionFailedException(ExceptionConstants.YEAR_OF_BIRTH_SHOULD_NOT_BE_EMPTY);
 		}
 		return true;
 	}

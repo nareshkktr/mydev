@@ -3,17 +3,21 @@
  */
 package com.kasisripriyawebapps.myindia.service;
 
-import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 import com.kasisripriyawebapps.myindia.exception.RecordNotFoundException;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.GetUserByPropertyRequest;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.GetUserByPropertyResponse;
+import com.kasisripriyawebapps.myindia.requestresponsemodel.LocationReferenceMasterResponse;
+import com.kasisripriyawebapps.myindia.solr.entity.SolrLocationMaster;
 
 public interface UserService {
 
-	GetUserByPropertyResponse getUserByVoterIdName(GetUserByPropertyRequest getUserByPropertyRequest)
-			throws InternalServerException, RecordNotFoundException;
+	GetUserByPropertyResponse getUserByVoterIdAndName(GetUserByPropertyRequest getUserByPropertyRequest)
+			throws RecordNotFoundException;
 
-	GetUserByPropertyResponse getUserByVoterIdNameAndReference(GetUserByPropertyRequest getUserByPropertyRequest)
-			throws InternalServerException, RecordNotFoundException;
+	GetUserByPropertyResponse getUserByVoterReferenceAndAge(GetUserByPropertyRequest getUserByPropertyRequest)
+			throws RecordNotFoundException;
+
+	LocationReferenceMasterResponse getReferenceLocationForMaster(SolrLocationMaster solrLocationMaster)
+			throws RecordNotFoundException;
 
 }

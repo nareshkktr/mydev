@@ -13,7 +13,9 @@ public class CreateAccountRequest {
 
 	private String loginUserName;
 	private String password;
-	private GetUserByPropertyRequest userIdentityData;
+	private Long userGuid;
+	private Long locationRefGuid;
+	private Long locationGuid;
 
 	public String getLoginUserName() {
 		return loginUserName;
@@ -31,12 +33,28 @@ public class CreateAccountRequest {
 		this.password = password;
 	}
 
-	public GetUserByPropertyRequest getUserIdentityData() {
-		return userIdentityData;
+	public Long getUserGuid() {
+		return userGuid;
 	}
 
-	public void setUserIdentityData(GetUserByPropertyRequest userIdentityData) {
-		this.userIdentityData = userIdentityData;
+	public void setUserGuid(Long userGuid) {
+		this.userGuid = userGuid;
+	}
+
+	public Long getLocationRefGuid() {
+		return locationRefGuid;
+	}
+
+	public void setLocationRefGuid(Long locationRefGuid) {
+		this.locationRefGuid = locationRefGuid;
+	}
+
+	public Long getLocationGuid() {
+		return locationGuid;
+	}
+
+	public void setLocationGuid(Long locationGuid) {
+		this.locationGuid = locationGuid;
 	}
 
 }

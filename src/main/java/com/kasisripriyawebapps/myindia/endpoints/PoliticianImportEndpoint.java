@@ -32,5 +32,15 @@ public class PoliticianImportEndpoint {
 		politicianImportExportService.importExportLoksabhaMPs();
 		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
 	}
+	
+	@POST
+	@ApiOperation(value = EndPointConstants.IMPORT_RAJYASABHA_MP_API_VALUE, nickname = EndPointConstants.IMPORT_RAJYASABHA_MP_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.IMPORT_RAJYASABHA_MP_API_DESCRIPTION)
+	@Path(EndPointConstants.IMPORT_RAJYASABHA_MP_REQUEST_MAPPING)
+	public Response importAllRajyasabhaMP()
+			throws InternalServerException {
+		politicianImportExportService.importExportRajyasabhaMPs();
+		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
+	}
+	
 
 }

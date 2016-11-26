@@ -31,6 +31,9 @@ public class ProblemType implements Serializable {
 	@Column(name = "PROBLEM_TYPE_NAME")
 	private String problemTypeName;
 
+	@Column(name = "PROBLEM_TYPE_DESC")
+	private String problemTypeDesc;
+
 	@Column(name = "PROBLEM_TYPE_PHOTO_URL")
 	private String problemTypePhotoURL;
 
@@ -81,6 +84,14 @@ public class ProblemType implements Serializable {
 		if (problems != null) {
 			this.problems.addAll(problems);
 		}
+	}
+
+	public String getProblemTypeDesc() {
+		return problemTypeDesc;
+	}
+
+	public void setProblemTypeDesc(String problemTypeDesc) {
+		this.problemTypeDesc = problemTypeDesc;
 	}
 
 }

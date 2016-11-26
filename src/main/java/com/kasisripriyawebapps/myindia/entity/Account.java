@@ -6,6 +6,7 @@ package com.kasisripriyawebapps.myindia.entity;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -52,7 +53,7 @@ public class Account implements Serializable {
 	@Column(name = "CREATED_TIMESTAMP")
 	private Timestamp createdTimeStamp;
 
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "USER_INFO_GUID")
 	private UserInfo userInfo;
 

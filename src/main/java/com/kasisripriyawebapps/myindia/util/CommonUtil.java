@@ -25,6 +25,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -534,7 +536,23 @@ public class CommonUtil {
 		return str;
 	}
 
+	public static int getCurrentYear() {
+		Date date = new Date();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		int year = cal.get(Calendar.YEAR);
+		return year;
+	}
+
 	public static void main(String args[]) {
+
+		Date date = new Date();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		int year = cal.get(Calendar.YEAR);
+
+		System.out.println(year);
+
 		String str = "Tuting-Yingkiong, Pangin, Nari-Koyu, Pasighat (West), Pasighat (East), Mebo, Mariyang-Geku, Anini, Dambuk, Roing,Tezu, Hayuliang, Chowkham, Namsai, Lekang, Bordumsa-Diyum, Miao, Nampong, Changlang South,Changlang North, Namsang, Khonsa East, Khonsa West, Borduria-Bagapani, Kanubari, Longding-Pumao, Pongchou-Wakka";
 		String[] part = str.split("(?<=\\D)(?=\\d)");
 

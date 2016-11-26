@@ -143,4 +143,6 @@ public class ServiceConstants {
 	public static final String SITTING_LOKSABHA_MP_DESIGNATION = "Sitting Lok Sabha Member Of Parliment";
     public static final String MP = "Member Of Parliment";
 
+	public static final String SITTING_RAJYASABHA_MP_DESIGNATION = "Sitting Rajya Sabha Member Of Parliment";
+
 }

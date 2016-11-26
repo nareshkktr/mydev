@@ -139,4 +139,9 @@ public class LocationMasterDaoImpl extends BaseDaoImpl<Long, LocationMaster> imp
 		sortCriteria.setIsAscending(true);
 		return getAllByConditions(criterions, sortCriteria);
 	}
+
+	@Override
+	public LocationMaster getLocationByGuid(Long locationGuid) throws InternalServerException {
+		return getById(locationGuid);
+	}
 }

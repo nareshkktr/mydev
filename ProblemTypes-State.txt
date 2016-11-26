@@ -1,0 +1,180 @@
+1 Government of Andaman & Nicobar
+-------1 State Government(Miscellaneous) - Publi Distribution
+-------2 State Government(Miscellaneous) - BPL Card/Aadhar card
+-------3 State Government(Miscellaneous) - Corruption
+-------4 State Government(Miscellaneous) - Others
+2 Government of Andhra Pradesh
+-------1 State Government(Miscellaneous) - Publi Distribution
+-------2 State Government(Miscellaneous) - BPL Card/Aadhar card
+-------3 State Government(Miscellaneous) - Corruption
+-------4 State Government(Miscellaneous) - Others
+3 Government of Arunachal Pradesh
+-------1 State Government(Miscellaneous) - Publi Distribution
+-------2 State Government(Miscellaneous) - BPL Card/Aadhar card
+-------3 State Government(Miscellaneous) - Corruption
+-------4 State Government(Miscellaneous) - Others
+4 Government of Assam
+-------1 State Government(Miscellaneous) - Publi Distribution
+-------2 State Government(Miscellaneous) - BPL Card/Aadhar card
+-------3 State Government(Miscellaneous) - Corruption
+-------4 State Government(Miscellaneous) - Others
+5 Government of Bihar
+-------1 State Government(Miscellaneous) - Publi Distribution
+-------2 State Government(Miscellaneous) - BPL Card/Aadhar card
+-------3 State Government(Miscellaneous) - Corruption
+-------4 State Government(Miscellaneous) - Others
+6 Government of Chattisgarh
+-------1 State Government(Miscellaneous) - Publi Distribution
+-------2 State Government(Miscellaneous) - BPL Card/Aadhar card
+-------3 State Government(Miscellaneous) - Corruption
+-------4 State Government(Miscellaneous) - Others
+7 Government of Goa
+-------1 State Government(Miscellaneous) - Publi Distribution
+-------2 State Government(Miscellaneous) - BPL Card/Aadhar card
+-------3 State Government(Miscellaneous) - Corruption
+-------4 State Government(Miscellaneous) - Others
+8 Government of Gujarat
+-------1 State Government(Miscellaneous) - Publi Distribution
+-------2 State Government(Miscellaneous) - BPL Card/Aadhar card
+-------3 State Government(Miscellaneous) - Corruption
+-------4 State Government(Miscellaneous) - Others
+9 Government of Haryana
+-------1 State Government(Miscellaneous) - Publi Distribution
+-------2 State Government(Miscellaneous) - BPL Card/Aadhar card
+-------3 State Government(Miscellaneous) - Corruption
+-------4 State Government(Miscellaneous) - Others
+10 Government of Himachal Pradesh
+-------1 State Government(Miscellaneous) - Publi Distribution
+-------2 State Government(Miscellaneous) - BPL Card/Aadhar card
+-------3 State Government(Miscellaneous) - Corruption
+-------4 State Government(Miscellaneous) - Others
+11 Government of Jammu and Kashmir
+-------1 State Government(Miscellaneous) - Publi Distribution
+-------2 State Government(Miscellaneous) - BPL Card/Aadhar card
+-------3 State Government(Miscellaneous) - Corruption
+-------4 State Government(Miscellaneous) - Others
+12 Government of Jharkhand
+-------1 State Government(Miscellaneous) - Publi Distribution
+-------2 State Government(Miscellaneous) - BPL Card/Aadhar card
+-------3 State Government(Miscellaneous) - Corruption
+-------4 State Government(Miscellaneous) - Others
+13 Government of Karnataka
+-------1 State Government(Miscellaneous) - Publi Distribution
+-------2 State Government(Miscellaneous) - BPL Card/Aadhar card
+-------3 State Government(Miscellaneous) - Corruption
+-------4 State Government(Miscellaneous) - Others
+14 Government of Kerala
+-------1 State Government(Miscellaneous) - Publi Distribution
+-------2 State Government(Miscellaneous) - BPL Card/Aadhar card
+-------3 State Government(Miscellaneous) - Corruption
+-------4 State Government(Miscellaneous) - Others
+15 Government of Madhya Pradesh
+-------1 State Government(Miscellaneous) - Publi Distribution
+-------2 State Government(Miscellaneous) - BPL Card/Aadhar card
+-------3 State Government(Miscellaneous) - Corruption
+-------4 State Government(Miscellaneous) - Others
+16 Government of Maharashtra
+-------1 State Government(Miscellaneous) - Publi Distribution
+-------2 State Government(Miscellaneous) - BPL Card/Aadhar card
+-------3 State Government(Miscellaneous) - Corruption
+-------4 State Government(Miscellaneous) - Others
+17 Government of Manipur
+-------1 State Government(Miscellaneous) - Publi Distribution
+-------2 State Government(Miscellaneous) - BPL Card/Aadhar card
+-------3 State Government(Miscellaneous) - Corruption
+-------4 State Government(Miscellaneous) - Others
+18 Government of Meghalaya
+-------1 State Government(Miscellaneous) - Publi Distribution
+-------2 State Government(Miscellaneous) - BPL Card/Aadhar card
+-------3 State Government(Miscellaneous) - Corruption
+-------4 State Government(Miscellaneous) - Others
+19 Government of Mizoram
+-------1 State Government(Miscellaneous) - Publi Distribution
+-------2 State Government(Miscellaneous) - BPL Card/Aadhar card
+-------3 State Government(Miscellaneous) - Corruption
+-------4 State Government(Miscellaneous) - Others
+20 Government of Nagaland
+-------1 State Government(Miscellaneous) - Publi Distribution
+-------2 State Government(Miscellaneous) - BPL Card/Aadhar card
+-------3 State Government(Miscellaneous) - Corruption
+-------4 State Government(Miscellaneous) - Others
+21 Government of NCT of Delhi
+-------1 State Government(Miscellaneous) - Publi Distribution
+-------2 State Government(Miscellaneous) - BPL Card/Aadhar card
+-------3 State Government(Miscellaneous) - Corruption
+-------4 State Government(Miscellaneous) - Others
+22 Government of Odisha
+-------1 State Government(Miscellaneous) - Publi Distribution
+-------2 State Government(Miscellaneous) - BPL Card/Aadhar card
+-------3 State Government(Miscellaneous) - Corruption
+-------4 State Government(Miscellaneous) - Others
+23 Government of Puducherry
+-------1 State Government(Miscellaneous) - Publi Distribution
+-------2 State Government(Miscellaneous) - BPL Card/Aadhar card
+-------3 State Government(Miscellaneous) - Corruption
+-------4 State Government(Miscellaneous) - Others
+24 Government of Punjab
+-------1 State Government(Miscellaneous) - Publi Distribution
+-------2 State Government(Miscellaneous) - BPL Card/Aadhar card
+-------3 State Government(Miscellaneous) - Corruption
+-------4 State Government(Miscellaneous) - Others
+25 Government of Rajasthan
+-------1 State Government(Miscellaneous) - Publi Distribution
+-------2 State Government(Miscellaneous) - BPL Card/Aadhar card
+-------3 State Government(Miscellaneous) - Corruption
+-------4 State Government(Miscellaneous) - Others
+26 Government of Sikkim
+-------1 State Government(Miscellaneous) - Publi Distribution
+-------2 State Government(Miscellaneous) - BPL Card/Aadhar card
+-------3 State Government(Miscellaneous) - Corruption
+-------4 State Government(Miscellaneous) - Others
+27 Government of Tamil Nadu
+-------1 State Government(Miscellaneous) - Publi Distribution
+-------2 State Government(Miscellaneous) - BPL Card/Aadhar card
+-------3 State Government(Miscellaneous) - Corruption
+-------4 State Government(Miscellaneous) - Others
+28 Government of Telangana
+-------1 State Government(Miscellaneous) - Publi Distribution
+-------2 State Government(Miscellaneous) - BPL Card/Aadhar card
+-------3 State Government(Miscellaneous) - Corruption
+-------4 State Government(Miscellaneous) - Others
+29 Government of Tripura
+-------1 State Government(Miscellaneous) - Publi Distribution
+-------2 State Government(Miscellaneous) - BPL Card/Aadhar card
+-------3 State Government(Miscellaneous) - Corruption
+-------4 State Government(Miscellaneous) - Others
+30 Government of Union Territory of Chandigarh
+-------1 State Government(Miscellaneous) - Publi Distribution
+-------2 State Government(Miscellaneous) - BPL Card/Aadhar card
+-------3 State Government(Miscellaneous) - Corruption
+-------4 State Government(Miscellaneous) - Others
+31 Government of Union Territory of Dadra & Nagar Haveli
+-------1 State Government(Miscellaneous) - Publi Distribution
+-------2 State Government(Miscellaneous) - BPL Card/Aadhar card
+-------3 State Government(Miscellaneous) - Corruption
+-------4 State Government(Miscellaneous) - Others
+32 Government of Union Territory of Daman & Diu
+-------1 State Government(Miscellaneous) - Publi Distribution
+-------2 State Government(Miscellaneous) - BPL Card/Aadhar card
+-------3 State Government(Miscellaneous) - Corruption
+-------4 State Government(Miscellaneous) - Others
+33 Government of Union Territory of Lakshadweep
+-------1 State Government(Miscellaneous) - Publi Distribution
+-------2 State Government(Miscellaneous) - BPL Card/Aadhar card
+-------3 State Government(Miscellaneous) - Corruption
+-------4 State Government(Miscellaneous) - Others
+34 Government of Uttar Pradesh
+-------1 State Government(Miscellaneous) - Publi Distribution
+-------2 State Government(Miscellaneous) - BPL Card/Aadhar card
+-------3 State Government(Miscellaneous) - Corruption
+-------4 State Government(Miscellaneous) - Others
+35 Government of Uttarakhand
+-------1 State Government(Miscellaneous) - Publi Distribution
+-------2 State Government(Miscellaneous) - BPL Card/Aadhar card
+-------3 State Government(Miscellaneous) - Corruption
+-------4 State Government(Miscellaneous) - Others
+36 Government of West Bengal
+-------1 State Government(Miscellaneous) - Publi Distribution
+-------2 State Government(Miscellaneous) - BPL Card/Aadhar card
+-------3 State Government(Miscellaneous) - Corruption
+-------4 State Government(Miscellaneous) - Others

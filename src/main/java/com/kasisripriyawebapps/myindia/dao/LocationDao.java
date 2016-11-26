@@ -20,4 +20,6 @@ public interface LocationDao {
 	Location getLocationByTypeAndGuid(String masterLocationType, Long masterLocationGuid)
 			throws InternalServerException;
 
+	Location getLocationByGuid(Long locationRefGuid) throws InternalServerException;
+
 }

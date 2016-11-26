@@ -30,6 +30,9 @@ public interface LocationMasterDao {
 	List<LocationMaster> getAllMasterLocationsByTypeAndParentLocations(String locationSubDistrictType,
 			List<Long> distirctGuids) throws InternalServerException;
 
-	List<LocationMaster> getAllMasterLocationsByTypesAndParentLocation(List<String> urbanLocationTypes, Long parentLocationGuid) throws InternalServerException;
+	List<LocationMaster> getAllMasterLocationsByTypesAndParentLocation(List<String> urbanLocationTypes,
+			Long parentLocationGuid) throws InternalServerException;
+
+	LocationMaster getLocationByGuid(Long locationGuid) throws InternalServerException;
 
 }
