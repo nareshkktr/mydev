@@ -185,6 +185,7 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 					//get the existing politician and get its authorities and decide on update/add/delete
 					Politician currentPolitician = mapAllPoliticians.get(politicianMember.getFullName()).get(0);//Need to handle null.
 					if(currentPolitician != null){
+						politicianAuthority.setPolitician(currentPolitician);
 						List<PoliticianAuthority> currentPoliticianAuthorities = currentPolitician.getPoliticianAuthorities();
 						if(currentPoliticianAuthorities != null){
 							
@@ -207,7 +208,7 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 							
 							//
 							if(!exists){
-								politicianAuthority.setPolitician(currentPolitician);
+								
 								currentPoliticianAuthorities.add(politicianAuthority);
 								//Set current designation in the politican object
 								currentPolitician.setCurrentDesignation(ServiceConstants.SITTING_LOKSABHA_MP_DESIGNATION);
@@ -218,7 +219,6 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 							
 						}else{ // There are no authorities associated with the user.
 							politicianAuthorities = new ArrayList<PoliticianAuthority>();
-							politicianAuthority.setPolitician(currentPolitician);
 							politicianAuthorities.add(politicianAuthority);
 							currentPolitician.setPoliticianAuthorities(politicianAuthorities);
 							

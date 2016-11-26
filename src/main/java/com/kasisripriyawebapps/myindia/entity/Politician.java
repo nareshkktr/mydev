@@ -168,10 +168,7 @@ public class Politician implements Serializable {
 	}
 
 	public void setPoliticianAuthorities(List<PoliticianAuthority> politicianAuthorities) {
-		this.politicianAuthorities.clear();
-		if (politicianAuthorities != null) {
 			this.politicianAuthorities.addAll(politicianAuthorities);
-		}
 	}
 
 	public String getCurrentDesignation() {
