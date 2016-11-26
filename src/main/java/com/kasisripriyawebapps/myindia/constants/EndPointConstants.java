@@ -745,14 +745,16 @@ public class EndPointConstants {
 	public static final String IMPORT_ALL_POLITICIANS_API_DESCRIPTION = "Import All Politcians";
 
 	public static final String IMPORT_LOKSABHA_MP_API_DESCRIPTION = "Import Lok sabha MP";
-
 	public static final String IMPORT_LOKSABHA_MP_API_NICKNAME = "importLoksabhaMP";
-
 	public static final String IMPORT_LOKSABHA_MP_REQUEST_MAPPING = "importLoksabhaMP";
-
 	public static final String IMPORT_LOKSABHA_MP_API_VALUE = "importLoksabhaMP";
 
-	/** The Constant UPLOAD_ALL_USERS_REQUEST_MAPPING. */
+	public static final String IMPORT_RAJYASABHA_MP_API_NICKNAME = "importRajyasabhaMP";
+	public static final String IMPORT_RAJYASABHA_MP_API_VALUE = "importRajyasabhaMP";
+	public static final String IMPORT_RAJYASABHA_MP_REQUEST_MAPPING = "importRajyasabhaMP";
+	public static final String IMPORT_RAJYASABHA_MP_API_DESCRIPTION = "Import Rajya sabha MP";
+
+/** The Constant UPLOAD_ALL_USERS_REQUEST_MAPPING. */
 	public static final String GET_REFERENCE_LOCATIONS_REQUEST_MAPPING = "getReferenceLocationForMaster";
 
 	/** The Constant UPLOAD_ALL_USERS_API_VALUE. */
@@ -765,5 +767,7 @@ public class EndPointConstants {
 	public static final String GET_REFERENCE_LOCATIONS_API_DESCRIPTION = "Get Location References For A Master Location";
 
 	/** The Constant ACCOUNT_ENDPOINT_REQUEST_MAPPING. */
+
+
 
 }

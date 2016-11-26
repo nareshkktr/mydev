@@ -1,0 +1,847 @@
+1 Agriculture and Cooperation (Department)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+2 Agriculture Research and Education (Department)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+3 Animal Husbandry, Dairying and Fisheries (Department)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+4 Atomic Energy (Department)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+5 Ayush  (Ministry)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+6 Bio Technology (Department)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+7 Central Board of Direct Taxes (Income Tax) (Department)
+-------1 Employee Related
+-------2 Harassment/Atrocities
+-------3 Allegation Of Corruption/Malpractices
+-------4 Legal Related
+-------5 Quality of Service
+-------6 Land Related
+-------7 Schemes Related
+-------8 Policy and Regulatory
+-------9 Inefficiency in refunds process
+-------10 Issues with IT return/PAN Issuance Process
+-------11 Technical Issues with Website and Helpline
+-------12 IT Officers inefficient/inaccessible
+8 Central Board of Excise and Customs (Department)
+-------1 Employee Related
+-------2 Harassment/Atrocities
+-------3 Allegation Of Corruption/Malpractices
+-------4 Legal Related
+-------5 Quality of Service
+-------6 Land Related
+-------7 Schemes Related
+-------8 Policy and Regulatory
+-------9 Inefficiency in pension release process
+-------10 Alleged malpratices at customs office
+-------11 Issues with service quality
+9 Chemicals and Petrochemicals (Department)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+10 Civil Aviation  (Ministry)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+11 Coal  (Ministry)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+12 Commerce (Department)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+13 Consumer Affairs (Department)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+14 Corporate Affairs  (Ministry)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+15 Culture  (Ministry)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+16 Defence (Department)
+-------1 Employee Related
+-------2 Harassment/Atrocities
+-------3 Allegation Of Corruption/Malpractices
+-------4 Legal Related
+-------5 Quality of Service
+-------6 Land Related
+-------7 Schemes Related
+-------8 Policy and Regulatory
+-------9 Corruption inaction by defence officials
+-------10 Infrastructure issues
+17 Defence Finance (Department)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+18 Defence Production (Department)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+19 Defence Research and Development (Department)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+20 Development of North Eastern Region  (Ministry)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+21 Disinvestment(M/o Finance) (Department)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+22 Drinking Water and Sanitation  (Ministry)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+23 Earth Sciences  (Ministry)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+24 Economic Affairs (Department)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+25 Electronics & Information Technology (Department)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+26 Empowerment of Persons with Disabilities (Department)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+27 Environment, Forest and Climate Change  (Ministry)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+28 Ex Servicemen Welfare (Department)
+-------1 Employee Related
+-------2 Harassment/Atrocities
+-------3 Allegation Of Corruption/Malpractices
+-------4 Legal Related
+-------5 Quality of Service
+-------6 Land Related
+-------7 Schemes Related
+-------8 Policy and Regulatory
+-------9 Pension related issues
+-------10 Quality of higher education 
+29 Expenditure (Department)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+30 External Affairs  (Ministry)
+-------1 Employee Related
+-------2 Harassment/Atrocities
+-------3 Allegation Of Corruption/Malpractices
+-------4 Legal Related
+-------5 Quality of Service
+-------6 Land Related
+-------7 Schemes Related
+-------8 External Affairs/Overseas Affairs - Passport
+-------9 External Affairs/Overseas Affairs - Visa
+-------10 External Affairs/Overseas Affairs - Hajj
+-------11 External Affairs/Overseas Affairs - Employment abroad
+-------12 External Affairs/Overseas Affairs - Missing/ arrested abroad
+-------13 Policy and Regulatory
+-------14 Inefficiency in fresh passport process
+-------15 Long delays in passport re-issue or renewal
+-------16 Issues with RPO Service Quality
+31 Fertilizers (Department)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+32 Financial Services (Banking Division) (Department)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Legal Related
+-------5 Quality of Service
+-------6 Land Related
+-------7 Financial Services - Education Loan
+-------8 Financial Services -   Housing
+33 Financial Services (Insurance Division) (Department)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+34 Food and Public Distribution (Department)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+35 Food Processing Industries  (Ministry)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+36 Health & Family Welfare (Department)
+-------1 Employee Related
+-------2 Harassment/Atrocities
+-------3 Allegation Of Corruption/Malpractices
+-------4 Legal Related
+-------5 Quality of Service
+-------6 Land Related
+-------7 Schemes Related
+-------8 Policy and Regulatory
+-------9 CGHS Centre Service quality
+-------10 CGHS re-imbursements(Servicemen and Pensioners)
+-------11 CGHS drugs availability and purchasing
+-------12 MCI enforcement of norms
+-------13 FMG(Foreign Medical Graduates) Examination
+37 Health Research (Department)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+38 Heavy Industry (Department)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+39 Higher Education (Department)
+-------1 Employee Related
+-------2 Harassment/Atrocities
+-------3 Allegation Of Corruption/Malpractices
+-------4 Legal Related
+-------5 Quality of Service
+-------6 Land Related
+-------7 Schemes Related
+-------8 Education - Higher Education 
+-------9 Education - Technical Education 
+-------10 Education - Others 
+-------11 Policy and Regulatory
+-------12 Fellowship,scholarships not being paid on time
+-------13 Quality of higher education
+-------14 Lack of job opportunities for courses
+-------15 VC appointment issues
+-------16 Delay in awarding of degrees
+40 Home Affairs  (Ministry)
+-------1 Employee Related
+-------2 Harassment/Atrocities
+-------3 Allegation Of Corruption/Malpractices
+-------4 Legal Related
+-------5 Quality of Service
+-------6 Land Related
+-------7 Schemes Related
+-------8 Policy and Regulatory
+-------9 Quality of Police Services
+-------10 Issues with women safety and security
+-------11 Operational and financial issues with CAPF
+-------12 Foreign Nationals Issues
+41 Housing and Poverty Alleviation  (Ministry)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+42 Industrial Policy & Promotion (Department)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+43 Information and Broadcasting  (Ministry)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+44 Justice (Department)
+-------1 Employee Related
+-------2 Harassment/Atrocities
+-------3 Allegation Of Corruption/Malpractices
+-------4 Legal Matters/Judiciary - Complaint Against Judge
+-------5 Legal Matters/Judiciary - Non Compliance of Court Order
+-------6 Legal Related
+-------7 Quality of Service
+-------8 Land Related
+-------9 Schemes Related
+-------10 Policy and Regulatory
+-------11 Delay in execution of cases in courts
+-------12 Alleged corruption in courts
+-------13 Unfair judgement by courts
+45 Labour and Employment  (Ministry)
+-------1 Employee Related
+-------2 Harassment/Atrocities
+-------3 Allegation Of Corruption/Malpractices
+-------4 Legal Related
+-------5 Quality of Service
+-------6 Land Related
+-------7 Schemes Related
+-------8 Policy and Regulatory
+-------9 Slow,unclear processing in EPFO
+-------10 Private Sector Negligence-PF related
+-------11 Private Sector Negligence-Labour Laws
+-------12 Pension related issues
+-------13 EPF site is not updated/not working
+46 Land Resources (Department)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+47 Legal Affairs (Department)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+48 Legislative Department (Department)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+49 Micro Small and Medium  Enterprises  (Ministry)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+50 Mines  (Ministry)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+51 Minority Affairs  (Ministry)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+52 New and Renewable Energy  (Ministry)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+53 NITI Aayog (Department)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+54 O/o the Comptroller & Auditor General of India (Department)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+55 Official Language (Department)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+56 Panchayati Raj  (Ministry)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+57 Parliamentary Affairs  (Ministry)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+58 Personnel and Training (Department)
+-------1 Employee Related
+-------2 Harassment/Atrocities
+-------3 Allegation Of Corruption/Malpractices
+-------4 Legal Related
+-------5 Quality of Service
+-------6 Land Related
+-------7 Schemes Related
+-------8 Policy and Regulatory
+-------9 CGL exams related issues
+-------10 SSC exam related issues 
+-------11 Reservation system ineffectiveness
+59 Petroleum and Natural Gas  (Ministry)
+-------1 Employee Related
+-------2 Harassment/Atrocities
+-------3 Allegation Of Corruption/Malpractices
+-------4 Legal Related
+-------5 Quality of Service
+-------6 Land Related
+-------7 Schemes Related
+-------8 Policy and Regulatory
+-------9 LPG connection issues
+-------10 Petrol Pump/LPG Dealership Issues
+60 Pharmaceutical (Department)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+61 Posts (Department)
+-------1 Employee Related
+-------2 Harassment/Atrocities
+-------3 Allegation Of Corruption/Malpractices
+-------4 Legal Related
+-------5 Quality of Service
+-------6 Land Related
+-------7 Schemes Related
+-------8 Policy and Regulatory
+-------9 Sub-optimal postal service
+-------10 Administrative issues
+-------11 Financial scheme issues
+-------12 Recruitment and employement issues
+-------13 Others
+62 Power  (Ministry)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+63 Public Enterprises (Department)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+64 Railways, ( Railway Board)  (Ministry)
+-------1 Employee Related
+-------2 Harassment/Atrocities
+-------3 Allegation Of Corruption/Malpractices
+-------4 Legal Related
+-------5 Quality of Service
+-------6 Land Related
+-------7 Schemes Related
+-------8 Railway - Railway Line
+-------9 Railway - Over bridge
+-------10 Railway - Request for train
+-------11 Railway - Ticket related for train
+-------12 Railway - Passenger Amenities
+-------13 Railway - Others
+-------14 Policy and Regulatory
+-------15 Inefficiency in refunds process
+-------16 Long delays in pension release
+-------17 Congestion on IRCTC website
+-------18 Issues with trains service quality
+-------19 Unclean Railway stations
+65 Revenue (Department)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+66 Road Transport and Highways  (Ministry)
+-------1 Employee Related
+-------2 Harassment/Atrocities
+-------3 Allegation Of Corruption/Malpractices
+-------4 Legal Related
+-------5 Quality of Service
+-------6 Land Related
+-------7 Schemes Related
+-------8 Policy and Regulatory
+-------9 Quality of National Highways below par
+-------10 Inadequacy in public transport service
+67 Rural Development (Department)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+68 School Education and Literacy (Department)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Legal Related
+-------5 Quality of Service
+-------6 Land Related
+-------7 Schemes Related
+-------8 Policy and Regulatory
+69 Science and Technology (Department)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+70 Scientific & Industrial Research (Department)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+71 Shipping  (Ministry)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+72 Skill Development and Entrepreneurship  (Ministry)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+73 Social Justice and Empowerment (Department)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+74 Space (Department)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+75 Sports (Department)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+76 Statistics and Programme Implementation  (Ministry)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+77 Steel  (Ministry)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+78 Telecommunications (Department)
+-------1 Employee Related
+-------2 Harassment/Atrocities
+-------3 Allegation Of Corruption/Malpractices
+-------4 Legal Related
+-------5 Quality of Service
+-------6 Land Related
+-------7 Schemes Related
+-------8 Policy and Regulatory
+-------9 Landline and boradband service issues
+-------10 Complaints redressal below par(BSNL,MTNL)
+-------11 Issues with mobile services(Pvt.+BSNL,MTNL)
+-------12 Faults with bills(BSNL,MTNL)
+79 Textiles  (Ministry)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+80 Tourism  (Ministry)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+81 Tribal Affairs  (Ministry)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+82 Unique Identification Authority of India (Department)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+83 Urban Development  (Ministry)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+84 Water Resources, River Development & Ganga Rejuvenuation,  (Ministry)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+85 Women and Child Development  (Ministry)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
+86 Youth Affairs (Department)
+-------1 Policy and Regulatory
+-------2 Quality of Service
+-------3 Schemes Related
+-------4 Land Related
+-------5 Legal Related
+-------6 Employee Related
+-------7 Harassment/Atrocities
+-------8 Allegation Of Corruption/Malpractices
