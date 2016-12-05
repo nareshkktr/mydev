@@ -1,0 +1,21 @@
+<div>
+
+	<h4>User Validation</h4>
+	
+	What is your Father/Husband Name:<input type="text" [(ngModel)]="fhName"/>
+	<br/>
+	House No: <input type="text" [(ngModel)]="houseNo"/>
+	<br/>
+	Year of Birth: <select [(ngModel)]="yob">
+  						<option *ngFor="let year of years" value= {{year}}>
+     						{{year}}
+  						</option>
+					</select>
+	<br/>
+	<button (click)="validateUser()">Validate User</button>
+
+</div>
+
+<!--
+<a routerLink="/" >Home</a>
+<a routerLink="/about" >About</a> -->

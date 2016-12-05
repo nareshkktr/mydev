@@ -1,0 +1,19 @@
+<div>
+	
+	<user-identity *ngIf="progressAction == 'userIdentity'"  (userIdentityStatus)="userIdentityStatus($event)">
+	</user-identity>
+
+	<user-validation *ngIf="progressAction == 'userValidation'" (userValidationStatus)="userValidationStatus($event)">
+	</user-validation>
+
+	<user-location-setup *ngIf="progressAction == 'userLocationSetup'" (userLocationSetupStatus)="userLocationSetupStatus($event)">
+	</user-location-setup>
+	
+	<user-account-setup [title]="title" *ngIf="progressAction == 'userAccountSetup'" (userAccountSetupStatus)="userAccountSetupStatus($event)">
+	</user-account-setup>
+
+</div>
+
+<!--
+<a routerLink="/" >Home</a>
+<a routerLink="/about" >About</a> -->
