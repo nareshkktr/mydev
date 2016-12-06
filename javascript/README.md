@@ -74,5 +74,13 @@ app/
 - We use descriptive naming for list, detail etc as appropriate.
 - If there are services used across application it will be inside shared folder under a sub folder called service.
 
+# Installation Steps
+
+- Install Node version v6.7.0
+- Install NPM version v3.10.3
+- From inside javascript folder give `npm install`
+- From inside javascript folder give `ng build`
+- From inside javascript folder give `ng serve`
+- Load the page at `http://localhost:4200/`
 
 # More content coming soon.... Stay Tuned..
