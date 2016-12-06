@@ -510,16 +510,16 @@ public class EndPointConstants {
 	public static final String GET_ALL_PROBLEMS_API_DESCRIPTION = "Get All Problems";
 
 	/** The Constant CREATE_ACCOUNT_REQUEST_MAPPING. */
-	public static final String GET_ALL_SEARCH_RESULTS_REQUEST_MAPPING = "getAllSearchResults";
+	public static final String GET_ALL_GLOBAL_SEARCH_RESULTS_REQUEST_MAPPING = "getAllGlobalSearchResults";
 
 	/** The Constant CREATE_ACCOUNT_API_VALUE. */
-	public static final String GET_ALL_SEARCH_RESULTS_API_VALUE = "getAllSearchResults";
+	public static final String GET_ALL_GLOBAL_SEARCH_RESULTS_API_VALUE = "getAllGlobalSearchResults";
 
 	/** The Constant CREATE_ACCOUNT_API_NICKNAME. */
-	public static final String GET_ALL_SEARCH_RESULTS_API_NICKNAME = "getAllSearchResults";
+	public static final String GET_ALL_GLOBAL_SEARCH_RESULTS_API_NICKNAME = "getAllGlobalSearchResults";
 
 	/** The Constant CREATE_ACCOUNT_API_DESCRIPTION. */
-	public static final String GET_ALL_SEARCH_RESULTS_API_DESCRIPTION = "Get All Search Results";
+	public static final String GET_ALL_GLOBAL_SEARCH_RESULTS_API_DESCRIPTION = "Get All Global Search Results";
 
 	/** The Constant CREATE_ACCOUNT_REQUEST_MAPPING. */
 	public static final String GET_ALL_SHARE_OBJECTS_REQUEST_MAPPING = "getAllShareObjects";
@@ -754,7 +754,7 @@ public class EndPointConstants {
 	public static final String IMPORT_RAJYASABHA_MP_REQUEST_MAPPING = "importRajyasabhaMP";
 	public static final String IMPORT_RAJYASABHA_MP_API_DESCRIPTION = "Import Rajya sabha MP";
 
-/** The Constant UPLOAD_ALL_USERS_REQUEST_MAPPING. */
+	/** The Constant UPLOAD_ALL_USERS_REQUEST_MAPPING. */
 	public static final String GET_REFERENCE_LOCATIONS_REQUEST_MAPPING = "getReferenceLocationForMaster";
 
 	/** The Constant UPLOAD_ALL_USERS_API_VALUE. */
@@ -768,6 +768,52 @@ public class EndPointConstants {
 
 	/** The Constant ACCOUNT_ENDPOINT_REQUEST_MAPPING. */
 
+	/** The Constant CREATE_ACCOUNT_REQUEST_MAPPING. */
+	public static final String SHARE_OBJECT_REQUEST_MAPPING = "shareObject";
 
+	/** The Constant CREATE_ACCOUNT_API_VALUE. */
+	public static final String SHARE_OBJECT_API_VALUE = "shareObject";
+
+	/** The Constant CREATE_ACCOUNT_API_NICKNAME. */
+	public static final String SHARE_OBJECT_API_NICKNAME = "shareObject";
+
+	/** The Constant CREATE_ACCOUNT_API_DESCRIPTION. */
+	public static final String SHARE_OBJECT_API_DESCRIPTION = "Share To Social Network";
+
+	/** The Constant ACCOUNT_ENDPOINT_REQUEST_MAPPING. */
+	public static final String SUPPORT_ENDPOINT_REQUEST_MAPPING = "/support";
+
+	/** The Constant ACCOUNT_ENDPOINT_API_VALUE. */
+	public static final String SUPPORT_ENDPOINT_API_VALUE = "support";
+
+	/** The Constant ACCOUNT_ENDPOINT_API_TAGS. */
+	public static final String SUPPORT_ENDPOINT_API_TAGS = "support";
+
+	/** The Constant ACCOUNT_ENDPOINT_API_DESCRIPTION. */
+	public static final String SUPPORT_ENDPOINT_API_DESCRIPTION = "Support Management API";
+
+	/** The Constant CREATE_ACCOUNT_REQUEST_MAPPING. */
+	public static final String SUPPORT_OBJECT_REQUEST_MAPPING = "supportObject";
+
+	/** The Constant CREATE_ACCOUNT_API_VALUE. */
+	public static final String SUPPORT_OBJECT_API_VALUE = "supportObject";
+
+	/** The Constant CREATE_ACCOUNT_API_NICKNAME. */
+	public static final String SUPPORT_OBJECT_API_NICKNAME = "supportObject";
+
+	/** The Constant CREATE_ACCOUNT_API_DESCRIPTION. */
+	public static final String SUPPORT_OBJECT_API_DESCRIPTION = "Support Politician/Party/Problem/Event";
+
+	/** The Constant CREATE_ACCOUNT_REQUEST_MAPPING. */
+	public static final String UNSUPPORT_OBJECT_REQUEST_MAPPING = "unSupportObject";
+
+	/** The Constant CREATE_ACCOUNT_API_VALUE. */
+	public static final String UNSUPPORT_OBJECT_API_VALUE = "unSupportObject";
+
+	/** The Constant CREATE_ACCOUNT_API_NICKNAME. */
+	public static final String UNSUPPORT_OBJECT_API_NICKNAME = "unSupportObject";
+
+	/** The Constant CREATE_ACCOUNT_API_DESCRIPTION. */
+	public static final String UNSUPPORT_OBJECT_API_DESCRIPTION = "UnSupport Politician/Party/Problem/Event";
 
 }

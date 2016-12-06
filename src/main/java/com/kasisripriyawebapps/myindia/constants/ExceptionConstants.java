@@ -42,7 +42,7 @@ public class ExceptionConstants {
 	public static final String PASSWORD_NOT_VAILD = "Invalid Password.Password Should Be Min 6 Characters Size";
 
 	/** The Constant IDENTITY_CARD_TYPE_NOT_VALID. */
-	public static final String IDENTITY_CARD_TYPE_NOT_VALID = "Invalid Identity Card Type.Card Should Be Either ADHAR or VOTER ID";
+	public static final String IDENTITY_CARD_TYPE_NOT_VALID = "Invalid Identity Card Type.Identity Card Type Should Be Either ADHAR or VOTER ID";
 
 	/** The Constant IDENTITY_CARD_NO_NOT_VALID. */
 	public static final String IDENTITY_CARD_NO_NOT_VALID = "Invalid Identity Card No";

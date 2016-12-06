@@ -54,6 +54,9 @@ public class Share implements Serializable {
 	@Column(name = "SHARE_OBJECT_GUID")
 	private Long shareObjectGuid;
 
+	@Column(name = "SHARE_TO")
+	private String shareTo;
+
 	/** The created time stamp. */
 	@Column(name = "CREATED_TIMESTAMP")
 	private Timestamp createdTimeStamp;
@@ -172,5 +175,12 @@ public class Share implements Serializable {
 		this.createdTimeStamp = createdTimeStamp;
 	}
 
-	
+	public String getShareTo() {
+		return shareTo;
+	}
+
+	public void setShareTo(String shareTo) {
+		this.shareTo = shareTo;
+	}
+
 }

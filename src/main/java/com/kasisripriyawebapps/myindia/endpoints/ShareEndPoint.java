@@ -4,6 +4,7 @@
 package com.kasisripriyawebapps.myindia.endpoints;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -14,12 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.kasisripriyawebapps.myindia.constants.EndPointConstants;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
+import com.kasisripriyawebapps.myindia.requestresponsemodel.ActionCountResponse;
+import com.kasisripriyawebapps.myindia.requestresponsemodel.ShareUnShareRequest;
 import com.kasisripriyawebapps.myindia.service.ShareService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ShareEndPoint.
  */
@@ -38,5 +40,15 @@ public class ShareEndPoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllShareObjects() throws InternalServerException {
 		return Response.status(Status.OK).entity(null).build();
+	}
+
+	@POST
+	@ApiOperation(value = EndPointConstants.SHARE_OBJECT_API_VALUE, nickname = EndPointConstants.SHARE_OBJECT_API_NICKNAME, httpMethod = EndPointConstants.HTTP_GET, notes = EndPointConstants.SHARE_OBJECT_API_DESCRIPTION)
+	@Path(EndPointConstants.SHARE_OBJECT_REQUEST_MAPPING)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response shareObject(ShareUnShareRequest shareUnShareRequest) throws InternalServerException {
+		Integer shareCount = shareService.shareObject(shareUnShareRequest);
+		ActionCountResponse actionCountResponse = new ActionCountResponse(shareCount);
+		return Response.status(Status.OK).entity(actionCountResponse).build();
 	}
 }

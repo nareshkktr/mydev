@@ -118,7 +118,9 @@ public class UserEndPoint {
 
 	private boolean validateGetUserByVoterIdNameReference(GetUserByPropertyRequest getUserByPropertyRequest)
 			throws PreConditionFailedException, PreConditionRequiredException {
-		if (getUserByPropertyRequest.getReferenceType() == null) {
+		if (getUserByPropertyRequest == null) {
+			throw new PreConditionFailedException(ExceptionConstants.REQUEST_NOT_NULL);
+		} else if (getUserByPropertyRequest.getReferenceType() == null) {
 			throw new PreConditionFailedException(ExceptionConstants.REFERENCCE_TYPE_REQUIRED);
 		} else if (getUserByPropertyRequest.getReferenceName() == null) {
 			throw new PreConditionFailedException(ExceptionConstants.REFERENCE_NAME_REQUIRED);

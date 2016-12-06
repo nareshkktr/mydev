@@ -132,18 +132,13 @@ public class UserServiceImpl implements UserService {
 		if (solrLocationMaster.getLocationType().equalsIgnoreCase(ServiceConstants.LOCATION_VILLAGE_TYPE)) {
 			referenceLocations = locationReferenceRepository
 					.findByLocationVillage(solrLocationMaster.getLocationGuid());
-
 			if (referenceLocations != null) {
-
 				List<Long> villagePanchayathGuids = referenceLocations.stream()
 						.map(SolrLocationReference::getLocationVillagePanchayat).collect(Collectors.toList());
-
 				List<SolrLocationMaster> villagePanchayathMasterLocations = locationMasterRepository
 						.findByLocationGuidIn(villagePanchayathGuids);
-
 				locationReferenceMasterResponse.setParentLocations(villagePanchayathMasterLocations);
 			}
-
 		} else if (solrLocationMaster.getLocationType()
 				.equalsIgnoreCase(ServiceConstants.LOCATION_MUNCIPAL_CORPORATION_TYPE)) {
 			referenceLocations = locationReferenceRepository
