@@ -1,19 +1,51 @@
-<div>
-	
-	<user-identity *ngIf="progressAction == 'userIdentity'"  (userIdentityStatus)="userIdentityStatus($event)">
-	</user-identity>
-
-	<user-validation *ngIf="progressAction == 'userValidation'" (userValidationStatus)="userValidationStatus($event)">
-	</user-validation>
-
-	<user-location-setup *ngIf="progressAction == 'userLocationSetup'" (userLocationSetupStatus)="userLocationSetupStatus($event)">
-	</user-location-setup>
-	
-	<user-account-setup [title]="title" *ngIf="progressAction == 'userAccountSetup'" (userAccountSetupStatus)="userAccountSetupStatus($event)">
-	</user-account-setup>
-
+<div class="page-content">
+    <div class="container">
+        <div class="example">
+            <div class="grid">
+                <div class="row cells2">
+                    <div class="cell">
+                        <img src="assets/voter-id-card.png"/>
+                    </div>
+                    <div class="cell">
+                        <div class="row cells1">
+                            <div class="cell">
+                                <h4 class="align-center" >
+                                    Voter Information
+                                </h4>
+                            </div>
+                        </div>
+                        <div class="row cells1">
+                            <div class="cell">
+                                <div class="input-control modern text iconic" data-role="input">
+                                    <input type="text">
+                                    <span class="label">Your Elector's ID</span>
+                                    <span class="informer">Please enter your Voter ID</span>
+                                    <span class="placeholder">Elector's ID</span>
+                                    <span class="icon mif-user"></span>
+                                    <button class="button helper-button clear"><span class="mif-cross"></span></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row cells1">
+                            <div class="cell">
+                                <div class="input-control modern text iconic" data-role="input">
+                                    <input type="text">
+                                    <span class="label">Your Elector's Name</span>
+                                    <span class="informer">Please enter your Voter Name</span>
+                                    <span class="placeholder">Elector's Name</span>
+                                    <span class="icon mif-user"></span>
+                                    <button class="button helper-button clear"><span class="mif-cross"></span></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row cells1">
+                            <div class="cell align-center">
+                                <button class="button primary">Retrieve Elector</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
-<!--
-<a routerLink="/" >Home</a>
-<a routerLink="/about" >About</a> -->

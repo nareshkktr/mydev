@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'footer',
+  selector: 'myindia-footer',
   template:`
     <h1>{{title}}</h1>
   `

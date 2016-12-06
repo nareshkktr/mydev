@@ -1,0 +1,44 @@
+.page-content{
+    padding-top: 100px;
+}
+.example {
+    max-width: 930px !important;
+    margin: 0 auto !important;
+    box-sizing: content-box;
+    outline: none;
+
+}
+.prepend-icon{
+    left: 25px !important;
+}
+
+.input-control.modern{
+    border-bottom: 1px solid black;
+}
+.input-control.modern input{
+    border:none !important;
+}
+.input-control.modern.iconic .icon {
+    left: 12px !important;
+    margin-top: -2px !important;;
+}
+.page-content{
+    background-image: url(assets/bg.jpg);
+    background-attachment: fixed;
+    background-position: 50% 50%;
+    background-size: cover;
+    height: 630px;
+}
+.input-control.modern .placeholder {
+    font-size: 0.8rem !important;
+    color: black !important;
+    top: 1.6rem !important;
+    left: 32px !important;
+}
+.input-control.modern input {
+    top: 1.3rem !important;
+    left: 26px !important;;
+}
+.input-control.modern {
+    width: 87%;
+}

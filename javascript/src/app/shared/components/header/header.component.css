@@ -1,0 +1,20 @@
+.search_box_text{
+    border-radius: 8px;
+    height: 85% !important;
+    background-color: #3c3f41;
+    border:2px solid white !important;
+}
+.search_box{
+    margin-right: 35px;
+}
+.mif-user:before {
+    position: absolute;
+    left: -16px;
+    bottom: 2px;
+}
+.location_search{
+    background-color: #3c3f41;
+    border: none !important;
+    margin-left: 23px;
+    margin-top: 3px;
+}

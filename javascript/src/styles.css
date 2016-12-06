@@ -1,1 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
+
+@import './../node_modules/metro-ui/build/css/metro.min.css';
+@import './../node_modules/metro-ui/build/css/metro-icons.min.css';
+@import './../node_modules/metro-ui/build/css/metro-responsive.min.css';
+@import './../node_modules/metro-ui/build/css/metro-schemes.min.css'; 
+
+
+html, body {
+    background-attachment: fixed;
+    background-position: 50% 50%;
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+}
