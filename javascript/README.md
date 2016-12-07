@@ -82,6 +82,7 @@ app/
 - From inside javascript folder give `ng build` to build the files and get the dist folder
 - From inside javascript folder give `ng serve` to serve the files on server
 - Alternatively, to run from tomcat server, give `npm start` it builds and copies the files to static folder.
+- If you want the files to be served on UI server, along with build and post use `npm startLocal`
 - Load the page at `http://localhost:4200/` or if hosted via tomcat load it at `http://localhost:8080/`
 
 # More content coming soon.... Stay Tuned..
