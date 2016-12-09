@@ -1,51 +1,265 @@
 <div class="page-content">
-    <div class="container">
-        <div class="example">
-            <div class="grid">
-                <div class="row cells2">
-                    <div class="cell">
-                        <img src="assets/voter-id-card.png"/>
-                    </div>
-                    <div class="cell">
-                        <div class="row cells1">
-                            <div class="cell">
-                                <h4 class="align-center" >
-                                    Voter Information
-                                </h4>
-                            </div>
-                        </div>
-                        <div class="row cells1">
-                            <div class="cell">
-                                <div class="input-control modern text iconic" data-role="input">
-                                    <input type="text">
-                                    <span class="label">Your Elector's ID</span>
-                                    <span class="informer">Please enter your Voter ID</span>
-                                    <span class="placeholder">Elector's ID</span>
-                                    <span class="icon mif-user"></span>
-                                    <button class="button helper-button clear"><span class="mif-cross"></span></button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row cells1">
-                            <div class="cell">
-                                <div class="input-control modern text iconic" data-role="input">
-                                    <input type="text">
-                                    <span class="label">Your Elector's Name</span>
-                                    <span class="informer">Please enter your Voter Name</span>
-                                    <span class="placeholder">Elector's Name</span>
-                                    <span class="icon mif-user"></span>
-                                    <button class="button helper-button clear"><span class="mif-cross"></span></button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row cells1">
-                            <div class="cell align-center">
-                                <button class="button primary">Retrieve Elector</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="container">
+		<div class="example">
+			<div class="wizard2" data-role="wizard2">
+				<div class="step">
+					<div class="step-content">
+						<div class="grid">
+							<form data-role="validator">
+								<div class="row cells2">
+									<div class="cell">
+										<img src="assets/voter-id-card.png" />
+									</div>
+									<div class="cell">
+										<div class="row cells1">
+											<div class="cell">
+												<h4 class="align-center">Voter Information</h4>
+											</div>
+										</div>
+										<div class="row cells1">
+											<div class="cell">
+												<div class="input-control modern text iconic"
+													data-role="input">
+													<input type="text" data-validate-func="required"
+														data-validate-arg="6"
+														data-validate-hint="This field can not be empty!"
+														data-validate-hint-position="top"> <span
+														class="label">Your Elector's ID</span> <span
+														class="informer">Please enter your Voter ID</span> <span
+														class="placeholder">Elector's ID</span> <span
+														class="icon mif-user"></span> <span
+														class="input-state-error mif-warning"></span> <span
+														class="input-state-success mif-checkmark"></span>
+													<button class="button helper-button clear">
+														<span class="mif-cross"></span>
+													</button>
+												</div>
+											</div>
+										</div>
+										<div class="row cells1">
+											<div class="cell">
+												<div class="input-control modern text iconic"
+													data-role="input">
+													<input type="text" data-validate-func="required"
+														data-validate-arg="6"
+														data-validate-hint="This field can not be empty!"
+														data-validate-hint-position="top"> <span
+														class="label">Your Elector's Name</span> <span
+														class="informer">Please enter your Voter Name</span> <span
+														class="placeholder">Elector's Name</span> <span
+														class="icon mif-user"></span> <span
+														class="input-state-error mif-warning"></span> <span
+														class="input-state-success mif-checkmark"></span>
+													<button class="button helper-button clear">
+														<span class="mif-cross"></span>
+													</button>
+												</div>
+											</div>
+										</div>
+
+										<div class="row cells1">
+											<div class="cell align-center">
+												<button class="button primary">Retrieve Elector</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="step">
+					<div class="step-content">
+						<div class="grid">
+							<form data-role="validator">
+								<div class="row cells2">
+									<div class="cell">
+										<img src="assets/voter-id-card.png" />
+									</div>
+									<div class="cell">
+										<div class="row cells1">
+											<div class="cell">
+												<h4 class="align-center">Validate Elector</h4>
+											</div>
+										</div>
+										<div class="row cells1">
+											<div class="cell">
+												<div class="input-control modern text iconic"
+													data-role="input">
+													<input type="text" data-validate-func="required"
+														data-validate-arg="6"
+														data-validate-hint="This field can not be empty!"
+														data-validate-hint-position="top"> <span
+														class="label">Your Mother's Name</span> <span
+														class="informer">Please enter your Mother's Name</span> <span
+														class="placeholder">Mother's Name</span> <span
+														class="icon mif-user"></span> <span
+														class="input-state-error mif-warning"></span> <span
+														class="input-state-success mif-checkmark"></span>
+													<button class="button helper-button clear">
+														<span class="mif-cross"></span>
+													</button>
+												</div>
+											</div>
+										</div>
+										<div class="row cells1">
+											<div class="cell">
+												<div class="input-control select year_of_birth_box">
+													<select>
+														<option>Year Of Birth</option>
+														<option>1</option>
+														<option>2</option>
+														<option>3</option>
+													</select>
+												</div>
+											</div>
+										</div>
+										<div class="row cells1">
+											<div class="cell align-center">
+												<button class="button primary">Validate User</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="step">
+					<div class="step-content">
+						<div class="grid">
+							<div class="row cells2">
+								<div class="cell">
+									<img src="assets/voter-id-card.png" />
+								</div>
+								<div class="cell">
+									<div class="row cells1">
+										<div class="cell">
+											<h4 class="align-center">Choose Location</h4>
+										</div>
+									</div>
+									<div class="row cells1">
+										<div class="cell">
+											<div class="input-control modern text iconic"
+												data-role="input">
+												<input type="text"> <span class="label">Your
+													Elector's ID</span> <span class="informer">Please enter
+													your Voter ID</span> <span class="placeholder">Elector's ID</span>
+												<span class="icon mif-user"></span>
+												<button class="button helper-button clear">
+													<span class="mif-cross"></span>
+												</button>
+											</div>
+										</div>
+									</div>
+									<div class="row cells1">
+										<div class="cell">
+											<div class="input-control modern text iconic"
+												data-role="input">
+												<input type="text"> <span class="label">Your
+													Elector's Name</span> <span class="informer">Please enter
+													your Voter Name</span> <span class="placeholder">Elector's
+													Name</span> <span class="icon mif-user"></span>
+												<button class="button helper-button clear">
+													<span class="mif-cross"></span>
+												</button>
+											</div>
+										</div>
+									</div>
+									<div class="row cells1">
+										<div class="cell align-center">
+											<button class="button primary">Retrieve Elector</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="step">
+					<div class="step-content">
+						<div class="grid">
+							<form data-role="validator">
+								<div class="row cells2">
+									<div class="cell">
+										<img src="assets/voter-id-card.png" />
+									</div>
+									<div class="cell">
+										<div class="row cells1">
+											<div class="cell">
+												<h4 class="align-center">Account Information</h4>
+											</div>
+										</div>
+										<div class="row cells1">
+											<div class="cell">
+												<div class="input-control modern text iconic"
+													data-role="input">
+													<input type="text" data-validate-func="required"
+														data-validate-arg="6"
+														data-validate-hint="This field can not be empty!"
+														data-validate-hint-position="top"> <span
+														class="label">Your User Name</span> <span class="informer">Please
+														Choose Your User Name</span> <span class="placeholder">User
+														Name</span> <span class="icon mif-user"></span> <span
+														class="input-state-error mif-warning"></span> <span
+														class="input-state-success mif-checkmark"></span>
+													<button class="button helper-button clear">
+														<span class="mif-cross"></span>
+													</button>
+												</div>
+											</div>
+										</div>
+										<div class="row cells1">
+											<div class="cell">
+												<div class="input-control modern password iconic"
+													data-role="input">
+													<input type="password" data-validate-func="required"
+														data-validate-arg="6"
+														data-validate-hint="This field can not be empty!"
+														data-validate-hint-position="top"> <span
+														class="label">Your Password</span> <span class="informer">Please
+														Choose Your Password</span> <span class="placeholder">Password</span>
+													<span class="icon mif-lock" style="left: -4px !important"></span>
+													<span class="input-state-error mif-warning"></span> <span
+														class="input-state-success mif-checkmark"></span>
+													<button class="button helper-button reveal">
+														<span class="mif-looks"></span>
+													</button>
+												</div>
+											</div>
+										</div>
+										<div class="row cells1">
+											<div class="cell">
+												<div class="input-control modern password iconic"
+													data-role="input">
+													<input type="password" data-validate-func="required"
+														data-validate-arg="6"
+														data-validate-hint="This field can not be empty!"
+														data-validate-hint-position="top"> <span
+														class="label">Confrim Your Password</span> <span
+														class="informer">Please Confirm Your Password</span> <span
+														class="placeholder">Confirm Password</span> <span
+														class="icon mif-lock" style="left: -4px !important"></span>
+													<span class="input-state-error mif-warning"></span> <span
+														class="input-state-success mif-checkmark"></span>
+													<button class="button helper-button reveal">
+														<span class="mif-looks"></span>
+													</button>
+												</div>
+											</div>
+										</div>
+										<div class="row cells1">
+											<div class="cell align-center">
+												<button class="button primary">Sign Up</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>

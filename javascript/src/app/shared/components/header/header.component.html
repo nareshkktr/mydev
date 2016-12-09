@@ -1,35 +1,56 @@
 <header class="app-bar fixed-top darcula" data-role="appbar">
-    <div>
-        <a href="/" class="app-bar-element branding"><img src="assets/logo.png" style="height: 28px; display: inline-block; margin-right: 10px;"> My India</a>
-        <ul class="app-bar-menu small-dropdown">
-            <li data-flexorderorigin="0" data-flexorder="1">
-                <a href="#" class="dropdown-toggle">Pulipadu</a>
-                <ul class="d-menu" data-role="dropdown" data-no-close="true">
-                    <li>
-                        <div class="input-control text">
-                            <input type="text" placeholder="Search..." class="location_search">
-                        </div>
-                    </li>
-                    <li class="divider"></li>
-                    <li><a href="typography.html">Hyderabad</a></li>
-                    <li><a href="tables.html">Chennai</a></li>
-                    <li><a href="inputs.html">Delhi</a></li>
-                    <li><a href="buttons.html">Kolkata</a></li>
-                    <li><a href="images.html">Mumbai</a></li>
-                    <li><a href="font.html">Vizag</a></li>
-                </ul>
-            </li>
-        </ul>
-        <ul class="app-bar-menu place-right" data-flexdirection="reverse">
-            <li>
-                <div class="input-control text search_box">
-                    <input [(ngModel)]="searchText" type="text" (keyup)="search($event)" placeholder="Start your search here..." class="search_box_text">
-                </div>
-            </li>
-            <li><a routerLink="/signUp"><span class="mif-user icon">&nbsp;</span>Sign Up</a></li>
-        </ul>
-        <nav class="app-bar-pullmenu hidden flexstyle-app-bar-menu" style="display: none;">
-            <ul class="app-bar-pullmenubar hidden app-bar-menu"></ul>
-        </nav>
-    </div>
+	<div>
+		<a href="/" class="app-bar-element branding"><img
+			src="assets/logo.png"
+			style="height: 28px; display: inline-block; margin-right: 10px;">
+			My India</a> <span class="app-bar-divider"></span>
+		<ul class="app-bar-menu small-dropdown">
+			<li data-flexorderorigin="0" data-flexorder="1"><a href="#"
+				class="dropdown-toggle">Pulipadu</a>
+				<ul class="d-menu" data-role="dropdown" data-no-close="true">
+					<li class="change_location">
+						<div class="input-control text">
+							<input type="text" placeholder="Search..."
+								class="location_search">
+						</div>
+					</li>
+					<li class="divider"></li>
+					<li><a href="typography.html">Hyderabad</a></li>
+					<li><a href="tables.html">Chennai</a></li>
+					<li><a href="inputs.html">Delhi</a></li>
+					<li><a href="buttons.html">Kolkata</a></li>
+					<li><a href="images.html">Mumbai</a></li>
+					<li><a href="font.html">Vizag</a></li>
+				</ul></li>
+		</ul>
+		<ul class="app-bar-menu place-right" data-flexdirection="reverse">
+			<li class="search_li">
+				<div class="input-control text search_box">
+					 <input [(ngModel)]="searchText" type="text" (keyup)="search($event)" placeholder="Start your search here..." class="search_box_text">
+				</div>
+			</li>
+			<li class="user_name_li"><span class="dropdown-toggle"><span
+					class="mif-user user_icon"></span>Kasireddy</span>
+				<div
+					class="app-bar-drop-container padding10 place-right no-margin-top block-shadow fg-dark"
+					data-role="dropdown" data-no-close="true" style="width: 220px">
+					<ul class="unstyled-list fg-dark user_options">
+						<li><a href="" class="fg-white1 fg-hover-yellow">Profile</a></li>
+						<li><a href="" class="fg-white2 fg-hover-yellow">Security</a></li>
+						<li><a href="" class="fg-white3 fg-hover-yellow">Sign Out</a></li>
+					</ul>
+				</div></li>
+
+			<li class="login_signup_li"><a routerLink="/signUp"><button
+						class="button rounded">
+						<span class="mif-user-plus"></span>SignUp
+					</button></a> <a routerLink="/login"><button class="button rounded">
+						<span class="mif-user-minus"></span>Login
+					</button></a></li>
+		</ul>
+		<nav class="app-bar-pullmenu hidden flexstyle-app-bar-menu"
+			style="display: none;">
+			<ul class="app-bar-pullmenubar hidden app-bar-menu"></ul>
+		</nav>
+	</div>
 </header>
