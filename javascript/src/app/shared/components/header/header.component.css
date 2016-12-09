@@ -1,20 +1,70 @@
-.search_box_text{
-    border-radius: 8px;
-    height: 85% !important;
-    background-color: #3c3f41;
-    border:2px solid white !important;
+.search_box_text {
+	border-radius: 8px;
+	height: 85% !important;
+	background-color: #3c3f41;
+	border: 2px solid white !important;
 }
-.search_box{
-    margin-right: 35px;
+
+.search_box {
+	margin-right: 35px;
 }
-.mif-user:before {
-    position: absolute;
-    left: -16px;
-    bottom: 2px;
+
+.icon.mif-user:before {
+	position: absolute;
+	left: -16px;
+	bottom: 2px;
 }
-.location_search{
-    background-color: #3c3f41;
-    border: none !important;
-    margin-left: 23px;
-    margin-top: 3px;
+
+.location_search {
+	background-color: #3c3f41;
+	border: none !important;
+	margin-left: 23px;
+	margin-top: 3px;
+	width: 85% !important;
+}
+
+.user_name_li {
+	padding-left: 10px !important;
+	display: none !important;
+}
+
+.search_li:hover {
+	background-color: #3c3f41 !important;
+	outline: none;
+	color: ghostwhite;
+}
+
+.change_location:hover {
+	background-color: #3c3f41 !important;
+	outline: none;
+}
+
+.search_li:hover input[type=text] {
+	color: ghostwhite;
+}
+
+.change_location input[type=text] {
+	color: ghostwhite;
+}
+
+.user_icon {
+	margin-right: 10px;
+	margin-bottom: 3px;
+}
+
+.user_options li {
+	margin-bottom: 10px !important;
+}
+
+.user_options li a {
+	color: ghostwhite !important;
+}
+
+.login_signup_li {
+	margin-right: 10px;
+}
+
+.login_signup_li a {
+	padding-left: 5px !important;
+	padding-right: 0px !important;
 }

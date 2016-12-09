@@ -1,44 +1,75 @@
-.page-content{
-    padding-top: 100px;
-}
 .example {
-    max-width: 930px !important;
-    margin: 0 auto !important;
-    box-sizing: content-box;
-    outline: none;
-
-}
-.prepend-icon{
-    left: 25px !important;
+	max-width: 930px !important;
+	margin: 0 auto !important;
+	box-sizing: content-box;
+	outline: none;
+	padding: 0px !important;
 }
 
-.input-control.modern{
-    border-bottom: 1px solid black;
+.prepend-icon {
+	left: 25px !important;
 }
-.input-control.modern input{
-    border:none !important;
-}
-.input-control.modern.iconic .icon {
-    left: 12px !important;
-    margin-top: -2px !important;;
-}
-.page-content{
-    background-image: url(assets/bg.jpg);
-    background-attachment: fixed;
-    background-position: 50% 50%;
-    background-size: cover;
-    height: 630px;
-}
-.input-control.modern .placeholder {
-    font-size: 0.8rem !important;
-    color: black !important;
-    top: 1.6rem !important;
-    left: 32px !important;
-}
-.input-control.modern input {
-    top: 1.3rem !important;
-    left: 26px !important;;
-}
+
 .input-control.modern {
-    width: 87%;
+	border-bottom: 1px solid black;
+	height: 3.1rem;
+	/* margin: .625rem 0; */
+}
+
+.input-control.modern input {
+	border: none !important;
+}
+
+.input-control.modern.iconic .icon {
+	left: -3px !important;
+	margin-top: -2px !important;;
+}
+
+.page-content {
+	background-image: url(assets/bg.jpg);
+	background-attachment: fixed;
+	background-position: 50% 50%;
+	background-size: cover;
+	height: 100% !important;
+	padding-top: 100px;
+}
+
+html, body {
+	background-attachment: fixed;
+	background-position: 50% 50%;
+	background-size: cover;
+	margin: 0;
+	padding: 0;
+}
+
+.input-control.modern .placeholder {
+	font-size: 0.8rem !important;
+	color: black !important;
+	top: 1.6rem !important;
+	left: 32px !important;
+}
+
+.input-control.modern input {
+	top: 1.3rem !important;
+	left: 26px !important;;
+}
+
+.input-control.modern {
+	width: 87%;
+}
+
+.user_name_li {
+	padding-left: 10px !important;
+	display: none !important;
+}
+
+.year_of_birth_box {
+	margin-left: 30px !important;
+	width: 87% !important;
+}
+
+.year_of_birth_box select {
+	padding-right: 20px;
+	border-bottom: 1px solid black !important;
+	border: none;
 }
