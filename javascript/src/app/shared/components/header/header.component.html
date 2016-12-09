@@ -23,7 +23,7 @@
         <ul class="app-bar-menu place-right" data-flexdirection="reverse">
             <li>
                 <div class="input-control text search_box">
-                    <input type="text" placeholder="Start your search here..." class="search_box_text">
+                    <input [(ngModel)]="searchText" type="text" (keyup)="search($event)" placeholder="Start your search here..." class="search_box_text">
                 </div>
             </li>
             <li><a routerLink="/signUp"><span class="mif-user icon">&nbsp;</span>Sign Up</a></li>
