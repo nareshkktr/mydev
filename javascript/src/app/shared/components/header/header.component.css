@@ -43,12 +43,11 @@
 }
 
 .login_signin_button {
-	color: black !important;
-    margin-left: 10px;
-    font-size: 12px;
+	color: ghostwhite !important;
+    margin-left: 1px;
+    font-size: 14px;
     border-radius: 5px;
     letter-spacing: 1px;
-    
 }
 
 .edit_location_icon {
