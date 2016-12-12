@@ -15,6 +15,9 @@ import { UserIdentityComponent } from './shared/components/userIdentity/userIden
 import { UserValidationComponent } from './shared/components/userValidation/userValidation.component';
 import { UserLocationSetupComponent } from './shared/components/userLocationSetup/userLocationSetup.component';
 import { UserAccountSetupComponent } from './shared/components/userAccountSetup/userAccountSetup.component';
+import { SearchResultsComponent } from './shared/components/searchResults/searchResults.component';
+
+
 import { SwaggerService } from './shared/services/swagger.service';
 import { AppComponent } from './app.component';
 import { AppRoutes } from './app.routes';
@@ -35,7 +38,8 @@ import { AppRoutes } from './app.routes';
     UserIdentityComponent,
     UserValidationComponent,
     UserLocationSetupComponent,
-    UserAccountSetupComponent
+    UserAccountSetupComponent,
+    SearchResultsComponent
   ],
   imports: [
     BrowserModule,

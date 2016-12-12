@@ -11,35 +11,35 @@ var Swagger = require('swagger-client');
 export class SwaggerService {
 
     private apiMetaData:any;
-    static instance: SwaggerService;
+    private observer: Observable<any>;
 
 
      constructor () {
           console.log('initialize swaagger service');
-          this.fetchAPIMetaData().subscribe(services => {
-                                          this.apiMetaData = services;
-                                       },
-                                       err => {
-                                        // Log errors if any
-                                           Observable.throw(err);
-                                        }
-                              );
      }
 
      // Fetch the user
     fetchAPIMetaData() : Observable<any> {
 
         if(this.apiMetaData){
-            return Observable.of(this.apiMetaData);
+          return new Observable(observer => {
+              observer.next(this.apiMetaData);
+          });
         }else{
-            return Observable.of(new Swagger({
-              url: 'http://localhost:8080/api/swagger.json',
-              success: function() {
-                    console.log("sucess");
+            let observer = new Observable(observer =>{
+              var self = this;
+              var swagger = new Swagger({
+                url: 'http://localhost:8080/api/swagger.json',
+                success: function() {
+                      self.apiMetaData = swagger;
+                      observer.next(swagger);
+                      observer.complete();
                 }
-            }));
-        }
+              });
+            });
 
+            return observer;
+        }
      }
 
 }
