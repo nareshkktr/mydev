@@ -1,0 +1,23 @@
+<md-toolbar class="location-change-toolbar"> <md-icon
+	class="app-toolbar-icon">place</md-icon> <span
+	class="location-change-title"> Change Location </span> <md-icon
+	class="app-toolbar-close-icon" (click)="dialogRef.close()">close</md-icon>
+</md-toolbar>
+<div class="change-location-content">
+	<div>
+		<md-input [(ngModel)]="locationText" type="text"
+			placeholder="Search Location" class="location-search-input">
+		<span md-prefix> <i class="material-icons app-input-icon">search</i>
+			&nbsp;
+		</span> </md-input>
+	</div>
+	<div class="change-location-footer">
+		<button md-fab class="change-location-close"
+			(click)="dialogRef.close()">
+			<md-icon>close circle</md-icon>
+		</button>
+		<button md-fab class="change-location-ok" (click)="dialogRef.close()">
+			<md-icon>check circle</md-icon>
+		</button>
+	</div>
+</div>

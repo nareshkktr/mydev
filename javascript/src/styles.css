@@ -1,15 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
-
-@import './../node_modules/metro-ui/build/css/metro.min.css';
-@import './../node_modules/metro-ui/build/css/metro-icons.min.css';
-@import './../node_modules/metro-ui/build/css/metro-responsive.min.css';
-@import './../node_modules/metro-ui/build/css/metro-schemes.min.css'; 
-
+@import
+	'./../node_modules/@angular/material/core/theming/prebuilt/indigo-pink.css'
+	;
 
 html, body {
-    background-attachment: fixed;
-    background-position: 50% 50%;
-    background-size: cover;
-    margin: 0;
-    padding: 0;
+	margin: 0;
+	padding: 0;
+	font-family: "Segoe UI", "Open Sans", sans-serif, serif !important;
+	line-height: 1.1 !important;
+	font-weight: 400 !important;
+	font-style: normal !important;
 }

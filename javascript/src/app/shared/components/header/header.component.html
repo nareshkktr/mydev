@@ -1,57 +1,65 @@
-<header class="app-bar fixed-top darcula" data-role="appbar">
-	<div>
-		<a href="/" class="app-bar-element branding"><img
-			src="assets/logo.png"
-			style="height: 28px; display: inline-block; margin-right: 10px;">
-			My India</a> <span class="app-bar-divider"></span>
-		<ul class="app-bar-menu small-dropdown">
-			<li data-flexorderorigin="0" data-flexorder="1"><a href="#"
-				class="dropdown-toggle">Pulipadu</a>
-				<ul class="d-menu" data-role="dropdown" data-no-close="true">
-					<li class="change_location">
-						<div class="input-control text">
-							<input type="text" placeholder="Search..."
-								class="location_search">
-						</div>
-					</li>
-					<li class="divider"></li>
-					<li><a href="typography.html">Hyderabad</a></li>
-					<li><a href="tables.html">Chennai</a></li>
-					<li><a href="inputs.html">Delhi</a></li>
-					<li><a href="buttons.html">Kolkata</a></li>
-					<li><a href="images.html">Mumbai</a></li>
-					<li><a href="font.html">Vizag</a></li>
-				</ul></li>
-		</ul>
-		<ul class="app-bar-menu place-right" data-flexdirection="reverse">
-			<li class="search_li">
-				<div class="input-control text search_box">
-					<input type="text" placeholder="Start your search here..."
-						class="search_box_text">
-				</div>
-			</li>
-			<li class="user_name_li"><span class="dropdown-toggle"><span
-					class="mif-user user_icon"></span>Kasireddy</span>
-				<div
-					class="app-bar-drop-container padding10 place-right no-margin-top block-shadow fg-dark"
-					data-role="dropdown" data-no-close="true" style="width: 220px">
-					<ul class="unstyled-list fg-dark user_options">
-						<li><a href="" class="fg-white1 fg-hover-yellow">Profile</a></li>
-						<li><a href="" class="fg-white2 fg-hover-yellow">Security</a></li>
-						<li><a href="" class="fg-white3 fg-hover-yellow">Sign Out</a></li>
-					</ul>
-				</div></li>
+<md-toolbar class="app-toolbar"> <md-icon
+	class="app-toolbar-icon" style="padding-right: 50px;">menu</md-icon> <md-card class="app_logo_card">
+<img md-card-image src="assets/logo.png" class="app_logo_img"> </md-card> <span
+	class="app_name">MyIndia</span> <span class="user_location">
+	Pulipadu,Darsi </span> <md-icon class="edit_location_icon"
+	(click)="openChooseLocationDailog()">place</md-icon> <span
+	class="fill-remaining"></span> <md-input class="search_container"
+	[(ngModel)]="gloablSearhText" type="text"
+	placeholder="Search In MyIndia....."> <span md-prefix> <i
+	class="material-icons app-input-icon">search</i> &nbsp;
+</span> </md-input>
+<button md-raised-button class="login_signin_button">Register</button>
+<button md-raised-button class="login_signin_button">Login</button>
+</md-toolbar>
+<md-toolbar class="app-toolbar"> <md-icon
+	class="app-toolbar-icon" style="padding-right: 50px;">menu</md-icon> <md-card class="app_logo_card">
+<img md-card-image src="assets/logo.png" class="app_logo_img"> </md-card> <span
+	class="app_name">MyIndia</span> <span class="user_location">
+	Pulipadu,Darsi </span> <md-icon class="edit_location_icon"
+	(click)="openChooseLocationDailog()">place</md-icon> <span
+	class="fill-remaining"></span> <md-input class="search_container"
+	[(ngModel)]="gloablSearhText" type="text"
+	placeholder="Search In MyIndia....."> <span md-prefix> <i
+	class="material-icons app-input-icon">search</i> &nbsp;
+</span> </md-input>
+<md-icon class="logged-in-user-icon">person</md-icon>
+<span class="logged-in-user-name">
+		Kandula Kasireddy
+</span>
+<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" class="logged-in-user-options-icon"><path d="M5 8l4 4 4-4z"/></svg>
+</md-toolbar>
+<md-toolbar class="app-toolbar"> <md-card class="app_logo_card">
+<img md-card-image src="assets/logo.png" class="app_logo_img"> </md-card> <span
+	class="app_name">MyIndia</span> <span class="user_location">
+	Pulipadu,Darsi </span> <md-icon class="edit_location_icon"
+	(click)="openChooseLocationDailog()">place</md-icon> <span
+	class="fill-remaining"></span> <md-input class="search_container"
+	[(ngModel)]="gloablSearhText" type="text"
+	placeholder="Search In MyIndia....."> <span md-prefix> <i
+	class="material-icons app-input-icon">search</i> &nbsp;
+</span> </md-input>
+<button md-raised-button class="login_signin_button">Register</button>
+<button md-raised-button class="login_signin_button">Login</button>
+</md-toolbar>
+<md-toolbar class="app-toolbar"> <md-card class="app_logo_card">
+<img md-card-image src="assets/logo.png" class="app_logo_img"> </md-card> <span
+	class="app_name">MyIndia</span> <span class="user_location">
+	Pulipadu,Darsi </span> <md-icon class="edit_location_icon"
+	(click)="openChooseLocationDailog()">place</md-icon> <span
+	class="fill-remaining"></span> <md-input class="search_container"
+	[(ngModel)]="gloablSearhText" type="text"
+	placeholder="Search In MyIndia....."> <span md-prefix> <i
+	class="material-icons app-input-icon">search</i> &nbsp;
+</span> </md-input>
+<md-icon class="logged-in-user-icon">person</md-icon>
+<span class="logged-in-user-name">
+		Kandula Kasireddy
+</span>
+<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" class="logged-in-user-options-icon"><path d="M5 8l4 4 4-4z"/></svg>
+</md-toolbar>
 
-			<li class="login_signup_li"><a routerLink="/signUp"><button
-						class="button rounded">
-						<span class="mif-user-plus"></span>SignUp
-					</button></a> <a routerLink="/login"><button class="button rounded">
-						<span class="mif-user-minus"></span>Login
-					</button></a></li>
-		</ul>
-		<nav class="app-bar-pullmenu hidden flexstyle-app-bar-menu"
-			style="display: none;">
-			<ul class="app-bar-pullmenubar hidden app-bar-menu"></ul>
-		</nav>
-	</div>
-</header>
+
+
+
+

@@ -3,24 +3,23 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
+import { MaterialModule } from '@angular/material';
 
-import { HeaderComponent } from './shared/components/header/header.component';
+
+import { HeaderComponent,LocationChangeDialogContent} from './shared/components/header/header.component';
 import { FooterComponent } from './shared/components/footer/footer.component';
-
 import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
-
 import { SignUpComponent } from './shared/components/signUp/signUp.component';
 import { UserIdentityComponent } from './shared/components/userIdentity/userIdentity.component';
 import { UserValidationComponent } from './shared/components/userValidation/userValidation.component';
 import { UserLocationSetupComponent } from './shared/components/userLocationSetup/userLocationSetup.component';
 import { UserAccountSetupComponent } from './shared/components/userAccountSetup/userAccountSetup.component';
-
 import { SwaggerService } from './shared/services/swagger.service';
-
 import { AppComponent } from './app.component';
+import { AppRoutes } from './app.routes';
 
-import { AppRoutes } from './app.routes'
+
 
 
 
@@ -28,6 +27,7 @@ import { AppRoutes } from './app.routes'
   declarations: [
     AppComponent,
     HeaderComponent,
+    LocationChangeDialogContent,
     FooterComponent,
     HomeComponent,
     AboutComponent,
@@ -41,8 +41,10 @@ import { AppRoutes } from './app.routes'
     BrowserModule,
     FormsModule,
     HttpModule,
-    RouterModule.forRoot(AppRoutes)
+    RouterModule.forRoot(AppRoutes),
+    MaterialModule.forRoot(),
   ],
+  entryComponents: [LocationChangeDialogContent],
   providers: [SwaggerService],
   bootstrap: [AppComponent]
 })
