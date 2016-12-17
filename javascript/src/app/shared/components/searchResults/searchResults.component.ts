@@ -1,7 +1,5 @@
 import { Component,EventEmitter,Input,Output } from '@angular/core';
-
 import { SearchResultsService } from './searchResults.service';
-
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -13,14 +11,16 @@ import { ActivatedRoute } from '@angular/router';
 
 export class SearchResultsComponent{
 
-  private searchResults: any;
+  private allSearchResults: any;
   private searchTerm: any;
+  private searchObjectTypes: any;
+  private totalResults: any;
+  private searchObjectTypesResultsCount: any;
 
   constructor(private SearchResultsService:SearchResultsService,private route: ActivatedRoute) {
 
      console.log('inside search results');
-     // this.searchTerm = route.snapshot.data['term'];
-     // this.search();
+  
      route.params.subscribe(
       data => {
         this.searchTerm = data['term'];
@@ -29,15 +29,28 @@ export class SearchResultsComponent{
   }
 
   search(){
-      if(this.searchTerm.length > 3){
+      if(this.searchTerm.length >=3){
   	  	this.SearchResultsService.search(this.searchTerm).subscribe(results =>{
-              this.searchResults = JSON.parse(results);
+              let searchResults = JSON.parse(results);
+              this.searchObjectTypes = Object.keys(searchResults);
+              this.totalResults=0; 
+              this.searchObjectTypesResultsCount = [];
+              this.allSearchResults = [];
+              for(let i=0;i<this.searchObjectTypes.length;i++){
+              		let eachSearchTypeResultLength=searchResults[this.searchObjectTypes[i]].length;		
+              		this.searchObjectTypesResultsCount.push(eachSearchTypeResultLength);
+              		this.totalResults+=eachSearchTypeResultLength;
+              		this.allSearchResults.push(searchResults[this.searchObjectTypes[i]]);
+              }
+              if(this.searchObjectTypes.length>0){
+              	this.allSearchResults=this.allSearchResults[0];
+              }
         },
         error => {
               console.log('Search Error'+error);
         });
       }else{
-        this.searchResults = [];
+        this.allSearchResults = [];
       }
   }
 }

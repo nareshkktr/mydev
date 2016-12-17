@@ -15,4 +15,6 @@ public interface LocationService {
 
 	List<SolrLocationMaster> getSearchResultsByLocationName(String searchTerm) throws InternalServerException;
 
+	List<SolrLocationMaster> getPopularLocations() throws InternalServerException;
+
 }

@@ -31,6 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -609,6 +610,34 @@ public class CommonUtil {
 			}
 		}
 		return locationName;
+	}
+	
+	public static boolean isListNotNullAndNotEmpty(List<?> inputList) {
+		if (inputList != null && !inputList.isEmpty()) {
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean isSetNotNullAndNotEmpty(Set<?> inputSet) {
+		if (inputSet != null && !inputSet.isEmpty()) {
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean containsIgnoreCase(String str, String searchStr) {
+		if (str == null || searchStr == null) {
+			return false;
+		}
+		int len = searchStr.length();
+		int max = str.length() - len;
+		for (int i = 0; i <= max; i++) {
+			if (str.regionMatches(true, i, searchStr, 0, len)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

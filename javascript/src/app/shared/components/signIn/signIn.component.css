@@ -1,0 +1,98 @@
+.page-content {
+	background-image: url(assets/bg.jpg);
+	background-attachment: fixed;
+	background-position: 50% 50%;
+	background-size: cover;
+	width: 100%;
+	position: absolute;
+	top: 60px;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	margin: 0;
+	padding: 0;
+}
+
+.sign-in-container {
+	background-color: #536379;
+	border: 1px dotted #3c3f41;
+	position: absolute;
+	margin: auto;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	width: 450px;
+	height: 400px;
+	font-family: "Segoe UI", "Open Sans", sans-serif, serif !important;
+	    border-radius: 50%;
+}
+.login_input{
+	font-size:13px !important;
+	width:100%;
+	color:ghostwhite;
+}
+/deep/ .sign-in-container .md-input-underline{
+	border-color:ghostwhite !important;
+}
+/deep/ .sign-in-container .md-input-placeholder{
+	color: ghostwhite !important;
+	top:5px !important;
+}
+.sign-in-content{
+	padding-top: 35px !important;
+    padding-left: 51px;
+    padding-right: 52px;
+}
+.signup-content{
+	border-top: 1px dotted black;
+    font-family: "Segoe UI", "Open Sans", sans-serif, serif !important;
+    font-size: 15px;
+    letter-spacing: 1px;
+    text-align: center;
+    padding-top: 20px;
+    margin-top: 25px;
+    color:ghostwhite;
+    cursor: pointer;
+}
+.signup-content a{
+	color: ghostwhite;
+    text-decoration: none;
+}
+.app_logo_img {
+	width: 75px;
+    height: 60px;
+    margin-top: 1px !important;
+    margin-bottom: 10px !important;
+}
+.app_logo_card {
+	background-color: transparent;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0px !important;
+}
+.login_signin_button{ 
+	color: black !important;
+    font-size: 16px !important;
+    background-color: ghostwhite;
+    letter-spacing: 1px;
+    padding: 5px !important;
+    padding-right: 40px !important;
+    padding-left: 40px !important;
+}
+.forgot-password-lbl{
+	font-size: 14px;
+    font-weight: normal;
+    color: ghostwhite;
+    cursor: pointer;
+}
+.forgot-password-content{
+	text-align: center;
+    padding-top: 15px;
+}
+.sign-in-content caption{
+	color:ghostwhite;
+	font-weight: 900;
+    letter-spacing: 1px;
+    padding-bottom: 10px;
+}

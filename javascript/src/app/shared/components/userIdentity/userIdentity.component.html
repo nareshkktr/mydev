@@ -1,15 +1,33 @@
-<div>
-
-	<h4>User Identification</h4>
-	
-	Voter Id:<input type="text" [(ngModel)]="voterId"/>
-	<br/>
-	Name: (As in Voter Id): <input type="text" [(ngModel)]="name"/>
-	<br/>
-	<button (click)="retreiveUser()">Retreive User</button>
-
+<div class="sign-up-content">
+	<div layout="row">
+		<div flex="50" flexXs="100">
+			<img src="assets/voter-id-card.png" class="signup_img" />
+		</div>
+		<div flex="50" flexXs="100" class="sign-up-content-container">
+			<table style="width: 100%" cellspacing="5">
+				<caption>Elector (Voter) Information</caption>
+				<tr>
+					<td><md-input class="signup_input" [(ngModel)]="loginUserName"
+							type="text" placeholder="Elecotr's (Voter) ID"
+							name="loginUserName"> <span md-suffix> <i
+							class="material-icons login-input-icon">person</i> &nbsp;
+						</span> </md-input></td>
+				</tr>
+				<tr>
+					<td><md-input class="signup_input"
+							[(ngModel)]="loginUserPassword" type="password"
+							placeholder="Elecotr's (Voter) Name" name="loginUserPassword">
+						<span md-suffix> <i class="material-icons login-input-icon">person</i>
+							&nbsp;
+						</span> </md-input></td>
+				</tr>
+				<tr>
+					<td colspan="2" align="center">
+						<button md-raised-button class="login_signin_button"
+							(click)="validateElectorInfo()">Retrieve Elector</button>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
 </div>
-
-<!--
-<a routerLink="/" >Home</a>
-<a routerLink="/about" >About</a> -->

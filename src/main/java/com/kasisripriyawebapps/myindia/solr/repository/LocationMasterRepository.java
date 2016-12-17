@@ -21,4 +21,6 @@ public interface LocationMasterRepository extends SolrCrudRepository<SolrLocatio
 
 	List<SolrLocationMaster> findByLocationNameContains(String searchTerm);
 
+	List<SolrLocationMaster> findByLocationTypeIn(List<String> stateLocationTypes);
+
 }

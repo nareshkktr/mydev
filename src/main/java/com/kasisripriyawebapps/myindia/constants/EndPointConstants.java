@@ -815,20 +815,29 @@ public class EndPointConstants {
 
 	/** The Constant CREATE_ACCOUNT_API_DESCRIPTION. */
 	public static final String UNSUPPORT_OBJECT_API_DESCRIPTION = "UnSupport Politician/Party/Problem/Event";
-	
-	
+
 	/** The Constant GET__SEARCH_RESULTS_BY_LOCATION_NAME_REQUEST_MAPPING. */
-	public static final String GET__SEARCH_RESULTS_BY_LOCATION_NAME_REQUEST_MAPPING = "getSearchResultsByLocationName";
+	public static final String GET_SEARCH_RESULTS_BY_LOCATION_NAME_REQUEST_MAPPING = "getSearchResultsByLocationName";
 
 	/** The Constant GET__SEARCH_RESULTS_BY_LOCATION_NAME_API_VALUE. */
-	public static final String GET__SEARCH_RESULTS_BY_LOCATION_NAME_API_VALUE = "getSearchResultsByLocationName";
+	public static final String GET_SEARCH_RESULTS_BY_LOCATION_NAME_API_VALUE = "getSearchResultsByLocationName";
 
 	/** The Constant GET__SEARCH_RESULTS_BY_LOCATION_NAME_API_NICKNAME. */
-	public static final String GET__SEARCH_RESULTS_BY_LOCATION_NAME_API_NICKNAME = "getSearchResultsByLocationName";
+	public static final String GET_SEARCH_RESULTS_BY_LOCATION_NAME_API_NICKNAME = "getSearchResultsByLocationName";
 
 	/** The Constant GET__SEARCH_RESULTS_BY_LOCATION_NAME_API_DESCRIPTION. */
-	public static final String GET__SEARCH_RESULTS_BY_LOCATION_NAME_API_DESCRIPTION = "Get Search Results By Lcaotion Name.";
+	public static final String GET_SEARCH_RESULTS_BY_LOCATION_NAME_API_DESCRIPTION = "Get Search Results By Location Name.";
 
+	/** The Constant GET__SEARCH_RESULTS_BY_LOCATION_NAME_REQUEST_MAPPING. */
+	public static final String GET_POPULAR_LOCATIONS_REQUEST_MAPPING = "getPopularLocations";
 
+	/** The Constant GET__SEARCH_RESULTS_BY_LOCATION_NAME_API_VALUE. */
+	public static final String GET_POPULAR_LOCATIONS_API_VALUE = "getPopularLocations";
+
+	/** The Constant GET__SEARCH_RESULTS_BY_LOCATION_NAME_API_NICKNAME. */
+	public static final String GET_POPULAR_LOCATIONS_API_NICKNAME = "getPopularLocations";
+
+	/** The Constant GET__SEARCH_RESULTS_BY_LOCATION_NAME_API_DESCRIPTION. */
+	public static final String GET_POPULAR_LOCATIONS_API_DESCRIPTION = "Get Popular Locations";
 
 }

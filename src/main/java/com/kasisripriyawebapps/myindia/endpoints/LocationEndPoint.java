@@ -36,14 +36,23 @@ public class LocationEndPoint extends BaseEndPoint {
 	/** The location service. */
 	@Autowired
 	LocationService locationService;
-	
+
 	@GET
-	@ApiOperation(value = EndPointConstants.GET__SEARCH_RESULTS_BY_LOCATION_NAME_API_VALUE, nickname = EndPointConstants.GET__SEARCH_RESULTS_BY_LOCATION_NAME_API_NICKNAME, httpMethod = EndPointConstants.HTTP_GET, notes = EndPointConstants.GET__SEARCH_RESULTS_BY_LOCATION_NAME_API_DESCRIPTION)
-	@Path(EndPointConstants.GET__SEARCH_RESULTS_BY_LOCATION_NAME_REQUEST_MAPPING)
+	@ApiOperation(value = EndPointConstants.GET_SEARCH_RESULTS_BY_LOCATION_NAME_API_VALUE, nickname = EndPointConstants.GET_SEARCH_RESULTS_BY_LOCATION_NAME_API_NICKNAME, httpMethod = EndPointConstants.HTTP_GET, notes = EndPointConstants.GET_SEARCH_RESULTS_BY_LOCATION_NAME_API_DESCRIPTION)
+	@Path(EndPointConstants.GET_SEARCH_RESULTS_BY_LOCATION_NAME_REQUEST_MAPPING)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getSearchResultsByLocationName(@QueryParam("searchTerm") String searchTerm)
 			throws InternalServerException {
 		List<SolrLocationMaster> searchResults = locationService.getSearchResultsByLocationName(searchTerm);
+		return Response.status(Status.OK).entity(searchResults).build();
+	}
+
+	@GET
+	@ApiOperation(value = EndPointConstants.GET_POPULAR_LOCATIONS_API_VALUE, nickname = EndPointConstants.GET_POPULAR_LOCATIONS_API_NICKNAME, httpMethod = EndPointConstants.HTTP_GET, notes = EndPointConstants.GET_POPULAR_LOCATIONS_API_DESCRIPTION)
+	@Path(EndPointConstants.GET_POPULAR_LOCATIONS_REQUEST_MAPPING)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getPopularLocations() throws InternalServerException {
+		List<SolrLocationMaster> searchResults = locationService.getPopularLocations();
 		return Response.status(Status.OK).entity(searchResults).build();
 	}
 

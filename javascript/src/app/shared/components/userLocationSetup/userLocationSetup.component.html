@@ -1,29 +1,51 @@
-<div>
-
-	<h4>User Lcoation</h4>
-	
-	Country: TBD
-	<br/>
-	State: TBD
-	<br/>
-	District: TBD
-	<br/>
-	Select Village/MC/M/TP: 
-		<select>
-		    <optgroup label="Category 1">
-		        <option>Item 1</option>
-		        <option>Item 2</option>
-		    </optgroup>
-		    <optgroup label="Category 2">
-		        <option>Item 3</option>
-		        <option>Item 4</option>
-		    </optgroup>
-		</select>
-	<br/>
-	<button (click)="validateUser()">Validate User</button>
-
+<div class="sign-up-content">
+	<div layout="row">
+		<div flex="50" flexXs="100">
+			<img src="assets/voter-id-card.png" class="signup_img" />
+		</div>
+		<div flex="50" flexXs="100" class="sign-up-content-container">
+			<table style="width: 100%" cellspacing="18"
+				class="sign-up-location-content-container">
+				<caption>Elector (Voter) Location Information</caption>
+				<tr>
+					<td><span> Country </span></td>
+					<td><span> : </span></td>
+					<td><span> India </span></td>
+				</tr>
+				<tr>
+					<td><span> State </span></td>
+					<td><span> : </span></td>
+					<td><span> Andhra Pradesh </span></td>
+				</tr>
+				<tr>
+					<td><span> District </span></td>
+					<td><span> : </span></td>
+					<td><span> Prakasam </span></td>
+				</tr>
+				<tr>
+					<td><span> Mandal </span></td>
+					<td><span> : </span></td>
+					<td><span> Mundlamuru </span></td>
+				</tr>
+				<tr>
+					<td colspan="3" align="center"><md-select
+							class="signup_input_select" placeholder="Rural Location">
+						<md-option *ngFor="let year of years" [value]="year">
+						{{ year }} </md-option> </md-select></td>
+				</tr>
+				<tr>
+					<td colspan="3" align="center"><md-select
+							class="signup_input_select" placeholder="Urban Location">
+						<md-option *ngFor="let year of years" [value]="year">
+						{{ year }} </md-option> </md-select></td>
+				</tr>
+				<tr>
+					<td colspan="3" align="center">
+						<button md-raised-button class="login_signin_button"
+							(click)="validateElectorInfo()">Validate Location</button>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
 </div>
-
-<!--
-<a routerLink="/" >Home</a>
-<a routerLink="/about" >About</a> -->

@@ -1,0 +1,34 @@
+import { Component,Input } from '@angular/core';
+import { SignInService } from './signIn.service';
+
+@Component({
+  selector: 'sign-in',
+  templateUrl:'./signIn.component.html',
+  styleUrls: ['./signIn.component.css'],
+  providers: [SignInService]
+})
+
+export class SignInComponent{
+
+  private title="Sign In";
+
+  constructor(private signInService:SignInService) {
+  }
+  
+  @Input() loginUserName:string;
+  @Input() loginUserPassword:string;
+  
+  signIn(){
+  		this.loginUserName=undefined?"":this.loginUserName;
+  		this.loginUserPassword=undefined?"":this.loginUserPassword;
+  		
+  		this.signInService.doSignIn(this.loginUserName,this.loginUserPassword).subscribe(result =>{
+              console.log(JSON.parse(result));
+              alert("Login Success");
+        },
+        error => {
+              alert(error.statusText);
+        });
+  }
+  
+}

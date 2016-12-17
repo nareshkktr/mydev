@@ -4,6 +4,7 @@
 package com.kasisripriyawebapps.myindia.endpoints;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -42,7 +43,7 @@ public class SearchEndPoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllGlobalSearchResults(@QueryParam("searchTerm") String searchTerm)
 			throws InternalServerException {
-		List<SolrGlobalSearchMaster> searchResults = searchService.getAllGlobalSearchResults(searchTerm);
+		Map<String, List<SolrGlobalSearchMaster>> searchResults = searchService.getAllGlobalSearchResults(searchTerm);
 		return Response.status(Status.OK).entity(searchResults).build();
 	}
 }

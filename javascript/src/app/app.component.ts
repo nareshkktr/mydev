@@ -9,3 +9,6 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'app works!';
 } 
+declare var module: {
+   id: string;
+}

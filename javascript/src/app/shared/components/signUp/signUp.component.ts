@@ -1,46 +1,26 @@
-import { Component,Input } from '@angular/core';
+import { Component,ViewEncapsulation } from '@angular/core';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'sign-up',
   templateUrl:'./signUp.component.html',
-  styleUrls: ['./signUp.component.css']
+  styleUrls: ['./signUp.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 
 export class SignUpComponent{
 
-  @Input() userIdentity:any;
-  private progressAction:String;
-  private userData:any;
-  private title="Sign Up";
-
-  constructor() {
-  	this.progressAction = "userIdentity";
-  }
-
-  userIdentityStatus(response: any) {
-   	if(response.status){
-   		this.userData = response.userData.items;
-   		this.progressAction='userValidation';
-   	}
-  }
-
-  userValidationStatus(status: boolean){
-  	if(status){
-  		this.progressAction='userLocationSetup';
-  	}
-  }
+ tabLinks = [
+    {label: 'Elector Identity Info', link: 'userIdentity'},
+    {label: 'Validate Elector Info', link: 'userValidation'},
+    {label: 'Location Info', link: 'userLocationSetup'},
+    {label: 'Account Info', link: 'userAccountSetup'},
+  ];
   
-  userLocationSetupStatus(status:boolean){
-  	if(status){
-  		this.progressAction='userAccountSetup';
-  	}
-  }
+  activeLinkIndex = 0;
 
-  userAccountSetupStatus(status:boolean){
-  	if(status){
-  		this.progressAction='';
-  		//Redirect to home pge..
-  	}
+  constructor(private router: Router) {
+    this.activeLinkIndex =
+        this.tabLinks.indexOf(this.tabLinks.find(tab => router.url.indexOf(tab.link) != -1));
   }
-
 }

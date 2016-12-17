@@ -1,3 +1,22 @@
-<ul>
-      <li *ngFor="let result of searchResults">{{result.objectName}}-{{result.objectType}}</li>
-</ul>
+<div class="page-content">
+	<div class="search-results-container">
+		<div class="results-found">
+			<div class="no-results-found">
+				<span class="search-results-lbl"> {{totalResults}} Results
+					Found For Your Search Text: </span> <span class="search-results-term-lbl">
+					{{searchTerm}} </span>
+			</div>
+			<div class="search-type-results-found">
+				<div *ngFor="let searchObjectType of searchObjectTypes;let i=index"
+					class="search-type-result-found">
+					<span>{{searchObjectType}} &nbsp;({{searchObjectTypesResultsCount[i]}})</span>
+				</div>
+			</div>
+		</div>
+		<div class="results-content">
+			<div *ngFor="let searchObject of allSearchResults" class="search-result-found">
+				<div>{{searchObject.objectName}}</div>
+			</div>
+		</div>
+	</div>
+</div>

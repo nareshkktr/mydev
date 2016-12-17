@@ -1,0 +1,58 @@
+.page-content {
+	padding: 10px;
+}
+
+.search-results-container {
+	
+}
+
+.results-found {
+	height: 85px;
+	background-color: #536379;
+}
+
+.results-content {
+	padding: 10px;
+	border: 1px solid #536379;
+}
+
+.no-results-found {
+	color: ghostwhite;
+	padding: 10px;
+	font-size: 20px;
+}
+
+.search-type-results-found {
+	padding: 10px;
+	color: ghostwhite;
+	font-size: 12px;
+}
+
+.search-type-result-found {
+	float: left;
+	margin-right: 8px;
+	text-transform: capitalize;
+}
+
+.search-results-term-lbl {
+	font-size: 14px;
+	padding-left: 3px;
+}
+
+.search-type-result-found {
+	font-size: 11px;
+	float: left;
+	margin-right: 20px;
+	background-color: ghostwhite;
+	padding: 5px;
+	color: black;
+}
+
+.search-result-found {
+	letter-spacing: 1px;
+	padding-bottom: 10px;
+	cursor: pointer;
+	text-decoration: underline;
+	color: blue;
+	font-size: 14px;
+}

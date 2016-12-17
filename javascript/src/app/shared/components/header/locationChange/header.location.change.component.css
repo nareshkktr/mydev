@@ -1,35 +1,37 @@
 .location-change-toolbar {
 	padding-left: 3px !important;
-	background-color: #3c3f41 !important;
+	background-color: #536379 !important;
 	color: ghostwhite;
 	letter-spacing: 1px;
 	font-size: 20px;
+	font-family: "Segoe UI", "Open Sans", sans-serif, serif !important;
 }
 
 /deep/ md-dialog-container {
 	padding: 0px !important;
-	min-width: 350px !important;
+	min-width: 450px !important;
+	min-height:400px !important;
+	overflow-x:hidden !important;
+	border-radius:10px; 
 }
 
 .change-location-content {
-	padding-top: 20px !important;
-	padding-left: 20px;
-	padding-right: 20px;
-	padding-bottom: 5px;
+	    padding-top: 5px !important;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 5px;
+    font-family: "Segoe UI", "Open Sans", sans-serif, serif !important;
 }
-
-.change-location-footer {
-    padding-top: 30px;
-    margin-right: 0%;
-    text-align: center;
-}
-.change-location-footer button{
+.location-change-toolbar-header-buttons button{
 	width: 40px;
     height: 40px;
-    background-color: #297929;
-	color: ghostwhite;
+    background-color: ghostwhite;
+	color: black;
 }.location-search-input {
 	width: 100%;
+	font-size: 13px;
+    color: black !important;
+    font-family: "Segoe UI", "Open Sans", sans-serif, serif !important;
 }
 .location-change-title {
 	padding-left: 3px !important;
@@ -41,8 +43,34 @@
     padding-left: 4px;
     height: 13px;
 }
-.app-toolbar-close-icon{
-	text-align: right;
-    width: 40%;
-    cursor:pointer;
+.location-change-toolbar-header-buttons{
+	width: 53%;
+    text-align: right;
+}
+.search-results{
+	max-height: 235px;
+    overflow-y: auto;
+    font-size: 12px;
+    margin-top: 12px;
+}
+.search-results div{
+	padding: 8px;
+    border-bottom: 1px dotted black;
+    cursor: pointer;
+    font-family: "Segoe UI", "Open Sans", sans-serif, serif !important;
+}
+.search-results div:HOVER{
+	color: ghostwhite;
+	background-color:#212121;
+}
+
+.md-input-underline {
+	border-color: black !important;
+	color: black !important;
+}
+
+.md-input-placeholder {
+	color: black !important;
+	top: 5px !important;
+	color: black;
 }

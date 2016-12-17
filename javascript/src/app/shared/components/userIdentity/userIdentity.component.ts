@@ -1,6 +1,6 @@
 import { Component,EventEmitter,Input,Output } from '@angular/core';
 import { UserIdentityService } from './userIdentity.service'
-
+import {Router} from '@angular/router';
 @Component({
   selector: 'user-identity',
   templateUrl:'./userIdentity.component.html',
@@ -18,9 +18,13 @@ export class UserIdentityComponent{
 
   private eventResponse;
 
-  constructor(private userIdentityService:UserIdentityService) {
+  constructor(private userIdentityService:UserIdentityService,private router: Router) {
   	this.userData = {};
   }
+
+validateElectorInfo(){
+	this.router.navigate(['../signUp/userValidation']);
+}
 
   retreiveUser(){
   	this.userIdentityService.retreiveUser(this.voterId,this.name)
