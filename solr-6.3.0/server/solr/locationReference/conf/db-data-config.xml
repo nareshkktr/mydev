@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataConfig>
+    <dataSource   type="JdbcDataSource"
+                  driver="com.mysql.jdbc.Driver"
+                  url="jdbc:mysql://myindiadbinstance.c3oo3384cijt.us-west-2.rds.amazonaws.com:3306/myindia?autoReconnect=true"
+                  user="root"
+                  password="myindia2016"
+				  testWhileIdle="true"
+				  timeBetweenEvictionRunsMillis="6000"
+				  validationQuery="SELECT 1"/>
+
+    <document name="doc">
+        <entity name="LOCATION_REFERENCE"
+				pk="LOCATION_REF_GUID"
+                query="select * from LOCATION_REFERENCE">
+            <field column="LOCATION_REF_GUID" name="locationRefGuid" />
+			<field column="LOCATION_COUNTRY" name="locationCountry" />
+            <field column="LOCATION_STATE" name="locationState" />
+			<field column="LOCATION_DISTRICT" name="locationDistrict" />
+			<field column="LOCATION_SUB_DISTIRCT" name="locationSubDistrict" />
+			<field column="LOCATION_MUNICIPAL_CORPORATION" name="locationMunicipalCorporation" />
+            <field column="LOCATION_MUNICIPALITY" name="locationMunicipality" />
+			<field column="LOCATION_TOWN_PANCHAYAT" name="locationTownPanchayat" />
+			<field column="LOCATION_VILLAGE_PANCHAYATH" name="locationVillagePanchayat" />
+			<field column="LOCATION_VILLAGE" name="locationVillage" />
+       </entity>
+    </document>
+</dataConfig>
