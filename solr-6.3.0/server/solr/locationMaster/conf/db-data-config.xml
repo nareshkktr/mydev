@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataConfig>
+    <dataSource   type="JdbcDataSource"
+                  driver="com.mysql.jdbc.Driver"
+                  url="jdbc:mysql://myindiadbinstance.c3oo3384cijt.us-west-2.rds.amazonaws.com:3306/myindia?autoReconnect=true"
+                  user="root"
+                  password="myindia2016"
+				  testWhileIdle="true"
+				  timeBetweenEvictionRunsMillis="6000"
+				  validationQuery="SELECT 1"/>
+
+    <document name="doc">
+        <entity name="LOCATION_MASTER"
+				pk="LOCATION_GUID"
+                query="select * from LOCATION_MASTER">
+            <field column="LOCATION_GUID" name="locationGuid" />
+			<field column="LOCATION_CODE" name="locationCode" />
+            <field column="LOCATION_NAME" name="locationName" />
+			<field column="LOCATION_TYPE" name="locationType" />
+			<field column="PARENT_LOCATION_GUID" name="parentLocationGuid" />
+       </entity>
+    </document>
+</dataConfig>
