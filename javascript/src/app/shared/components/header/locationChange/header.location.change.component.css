@@ -1,6 +1,6 @@
 .location-change-toolbar {
 	padding-left: 3px !important;
-	background-color: #536379 !important;
+	background-color: #116a9e  !important;
 	color: ghostwhite;
 	letter-spacing: 1px;
 	font-size: 20px;
@@ -35,6 +35,9 @@
 }
 .location-change-title {
 	padding-left: 3px !important;
+}
+.location-change-icon{
+	    vertical-align: middle;
 }
 /deep/ .change-location-content [md-fab] i, [md-fab] md-icon {
     padding: 16px 0;

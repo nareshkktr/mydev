@@ -1,35 +1,47 @@
 <div class="page-content">
 	<div class="sign-in-container">
 		<div class="sign-in-content">
-			<form>
-				<table style="width: 100%" cellspacing="5">
-					<caption>Welcome Back To MyIndia!</caption>
-					<tr>
-						<td><md-input class="login_input" [(ngModel)]="loginUserName"
-								type="text" placeholder="User Name" name="loginUserName"> <span md-suffix>
-								<i class="material-icons login-input-icon">person</i> &nbsp;
-							</span> </md-input></td>
-					</tr>
-					<tr>
-						<td><md-input class="login_input"
-								[(ngModel)]="loginUserPassword" type="password"
-								placeholder="Password" name="loginUserPassword"> <span md-suffix> <i
-								class="material-icons login-input-icon">lock</i> &nbsp;
-							</span> </md-input></td>
-					</tr>
-					<tr>
-						<td colspan="2" align="center">
-							<button md-raised-button class="login_signin_button"
-								(click)="signIn()">Sign In</button>
-						</td>
-					</tr>
-				</table>
-			</form>
-			<div class="forgot-password-content">
-				<label class="forgot-password-lbl">Forgot Password?</label>
+			<div class="form-top">
+				<div>
+					<img alt="Universal Admission" src="assets/logo.png"
+						class="account_app_logo" />
+				</div>
+				<div class="app_name">
+					<label>MyIndia</label>
+				</div>
 			</div>
-			<div class="signup-content">
-				<a routerLink="../signUp/userIdentity">New To MyIndia? Sign Up</a>
+			<div class="form-bottom">
+				<form>
+					<table style="width: 100%" cellspacing="5">
+						<tr>
+							<td><md-input class="login_input"
+									[(ngModel)]="loginUserName" type="text" placeholder="User Name"
+									name="loginUserName"> <span md-prefix> <i
+									class="material-icons login-input-icon">person</i> &nbsp;
+								</span> </md-input></td>
+						</tr>
+						<tr>
+							<td><md-input class="login_input"
+									[(ngModel)]="loginUserPassword" type="password"
+									placeholder="Password" name="loginUserPassword"> <span
+									md-prefix> <i class="material-icons login-input-icon">lock</i>
+									&nbsp;
+								</span> </md-input></td>
+						</tr>
+						<tr>
+							<td colspan="2" align="center">
+								<button md-raised-button class="login_signin_button"
+									(click)="signIn()">Sign In</button>
+							</td>
+						</tr>
+					</table>
+				</form>
+				<div class="forgot-password-content">
+					<label class="forgot-password-lbl">Forgot Password?</label>
+				</div>
+				<div class="signup-content">
+					<a routerLink="../signUp/userIdentity">New To MyIndia? Sign Up</a>
+				</div>
 			</div>
 		</div>
 	</div>

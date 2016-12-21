@@ -1,15 +1,12 @@
 <div class="sign-up-content">
 	<div layout="row">
-		<div flex="50" flexXs="100">
-			<img src="assets/voter-id-card.png" class="signup_img" />
-		</div>
-		<div flex="50" flexXs="100" class="sign-up-content-container">
+		<div flex="100" flexXs="100" class="sign-up-content-container">
 			<table style="width: 100%" cellspacing="5">
 				<caption>Elector (Voter) Information</caption>
 				<tr>
 					<td><md-input class="signup_input" [(ngModel)]="loginUserName"
 							type="text" placeholder="Elecotr's (Voter) ID"
-							name="loginUserName"> <span md-suffix> <i
+							name="loginUserName"> <span md-prefix> <i
 							class="material-icons login-input-icon">person</i> &nbsp;
 						</span> </md-input></td>
 				</tr>
@@ -17,7 +14,7 @@
 					<td><md-input class="signup_input"
 							[(ngModel)]="loginUserPassword" type="password"
 							placeholder="Elecotr's (Voter) Name" name="loginUserPassword">
-						<span md-suffix> <i class="material-icons login-input-icon">person</i>
+						<span md-prefix> <i class="material-icons login-input-icon">person</i>
 							&nbsp;
 						</span> </md-input></td>
 				</tr>

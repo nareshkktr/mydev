@@ -1,8 +1,4 @@
 .page-content {
-	background-image: url(assets/bg.jpg);
-	background-attachment: fixed;
-	background-position: 50% 50%;
-	background-size: cover;
 	width: 100%;
 	position: absolute;
 	top: 60px;
@@ -14,14 +10,14 @@
 }
 
 .sign-up-container {
-	background-color: #536379;
+	background-color: #75b997;
 	position: absolute;
 	margin: auto;
 	top: 0;
 	right: 0;
 	bottom: 0;
 	left: 0;
-	max-width: 930px !important;
+	max-width: 650px !important;
 	height: 430px;
 	font-family: "Segoe UI", "Open Sans", sans-serif, serif !important;
 }
@@ -33,13 +29,14 @@
 	font-family: "Segoe UI", "Open Sans", sans-serif, serif !important;
 	padding-bottom: 10px;
 }
-.signup_input_select{
+
+.signup_input_select {
 	font-size: 13px !important;
 	width: 100%;
 	color: ghostwhite !important;
 	font-family: "Segoe UI", "Open Sans", sans-serif, serif !important;
 	padding-bottom: 10px;
-	margin-top:18px;
+	margin-top: 18px;
 }
 
 .sign-up-container .md-input-underline {
@@ -66,11 +63,16 @@
 }
 
 .sign-up-content-container {
-	padding-left: 55px;
+	padding: 55px;
+}
+
+.sign-up-content-container table {
+	width: 87% !important;
+	margin-left: 9%;
 }
 
 .demo-nav-bar {
-	background-color: #f9f9f9;
+	background-color: #bef0be;
 }
 
 [md-tab-link] {
@@ -81,13 +83,13 @@
 }
 
 [md-tab-link]:HOVER {
-	background-color: #536379;
+	background-color: #116a9e;
 	color: ghostwhite;
 }
 
 md-ink-bar {
 	height: 5px !important;
-	background-color: #32cc32;
+	background-color: #116a9e;
 	color: ghostwhite !important;
 }
 
@@ -96,8 +98,9 @@ md-ink-bar {
 	font-family: "Segoe UI", "Open Sans", sans-serif, serif !important;
 }
 
-.sign-up-content {
-	padding: 20px;
+.sign-up-content .md-input-infix {
+	position: relative !important;
+	width: 93% !important;
 }
 
 .sign-up-container .md-select-arrow {
@@ -111,10 +114,11 @@ md-ink-bar {
 
 .sign-up-container .md-select-trigger {
 	color: ghostwhite !important;
-	border-bottom:1px solid ghostwhite;
+	border-bottom: 1px solid ghostwhite;
 }
+
 .sign-up-container .md-select-value {
-    left: 11px !important;
-    color: ghostwhite !important;
-    width: 94% !important;
+	left: 11px !important;
+	color: ghostwhite !important;
+	width: 94% !important;
 }

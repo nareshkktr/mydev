@@ -1,8 +1,4 @@
 .page-content {
-	background-image: url(assets/bg.jpg);
-	background-attachment: fixed;
-	background-position: 50% 50%;
-	background-size: cover;
 	width: 100%;
 	position: absolute;
 	top: 60px;
@@ -14,85 +10,99 @@
 }
 
 .sign-in-container {
-	background-color: #536379;
-	border: 1px dotted #3c3f41;
 	position: absolute;
 	margin: auto;
 	top: 0;
 	right: 0;
 	bottom: 0;
 	left: 0;
-	width: 450px;
-	height: 400px;
+	width: 420px;
+	height: 470px;
 	font-family: "Segoe UI", "Open Sans", sans-serif, serif !important;
-	    border-radius: 50%;
+	background-color: #394963;
+	-moz-border-radius: 85px;
+	-webkit-border-radius: 85px;
+	border-radius: 85px;
+	
 }
-.login_input{
-	font-size:13px !important;
-	width:100%;
-	color:ghostwhite;
-}
-/deep/ .sign-in-container .md-input-underline{
-	border-color:ghostwhite !important;
-}
-/deep/ .sign-in-container .md-input-placeholder{
-	color: ghostwhite !important;
-	top:5px !important;
-}
-.sign-in-content{
-	padding-top: 35px !important;
-    padding-left: 51px;
-    padding-right: 52px;
-}
-.signup-content{
-	border-top: 1px dotted black;
-    font-family: "Segoe UI", "Open Sans", sans-serif, serif !important;
-    font-size: 15px;
-    letter-spacing: 1px;
-    text-align: center;
-    padding-top: 20px;
-    margin-top: 25px;
-    color:ghostwhite;
-    cursor: pointer;
-}
-.signup-content a{
+
+.login_input {
+	font-size: 13px !important;
+	width: 100%;
 	color: ghostwhite;
-    text-decoration: none;
+	font-family: "Segoe UI", "Open Sans", sans-serif, serif !important;
 }
-.app_logo_img {
-	width: 75px;
-    height: 60px;
-    margin-top: 1px !important;
-    margin-bottom: 10px !important;
+
+/deep/ .sign-in-container .md-input-underline {
+	border-color: ghostwhite !important;
 }
-.app_logo_card {
-	background-color: transparent;
-    border: none !important;
-    box-shadow: none !important;
-    padding: 0px !important;
+
+/deep/ .sign-in-container .md-input-placeholder {
+	color: ghostwhite !important;
+	top: 5px !important;
 }
-.login_signin_button{ 
-	color: black !important;
-    font-size: 16px !important;
-    background-color: ghostwhite;
-    letter-spacing: 1px;
-    padding: 5px !important;
-    padding-right: 40px !important;
-    padding-left: 40px !important;
+/deep/ .sign-in-container .md-input-infix {
+    position: relative !important;
+    width: 88% !important;
 }
-.forgot-password-lbl{
-	font-size: 14px;
-    font-weight: normal;
-    color: ghostwhite;
-    cursor: pointer;
-}
-.forgot-password-content{
+.signup-content {
+	border-top: 1px dotted ghostwhite;
+	font-family: "Segoe UI", "Open Sans", sans-serif, serif !important;
+	font-size: 15px;
+	letter-spacing: 1px;
 	text-align: center;
-    padding-top: 15px;
+	padding-top: 20px;
+	margin-top: 25px;
+	padding-bottom: 20px;
+	color: ghostwhite;
+	cursor: pointer;
 }
-.sign-in-content caption{
-	color:ghostwhite;
-	font-weight: 900;
+
+.signup-content a {
+	color: ghostwhite;
+	text-decoration: none;
+}
+
+.login_signin_button {
+	color: black !important;
+	font-size: 16px !important;
+	background-color: ghostwhite;
+	letter-spacing: 1px;
+	padding: 5px !important;
+	padding-right: 40px !important;
+	padding-left: 40px !important;
+}
+
+.forgot-password-lbl {
+	font-size: 14px;
+	font-weight: normal;
+	color: ghostwhite;
+	cursor: pointer;
+}
+
+.forgot-password-content {
+	text-align: center;
+	padding-top: 15px;
+}
+
+.form-top {
+	overflow: hidden;
+	text-align: center;
+	padding-top: 10px;
+}
+
+.form-bottom {
+	padding: 0px 35px 0px 35px;
+    text-align: left;
+    margin-top: 40px;
+}
+
+.account_app_logo {
+	width: 80px !important;
+}
+.app_name{
+	color: ghostwhite;
+    font-size: 25px;
     letter-spacing: 1px;
-    padding-bottom: 10px;
+    margin-top: 5px;
 }
