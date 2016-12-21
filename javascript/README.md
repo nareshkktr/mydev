@@ -78,6 +78,7 @@ app/
 
 - Install Node version v6.7.0
 - Install NPM version v3.10.3
+- Install angular CLI with - `npm install -g angular-cli`
 - From inside javascript folder give `npm install`
 - From inside javascript folder give `ng build` to build the files and get the dist folder
 - From inside javascript folder give `ng serve` to serve the files on server

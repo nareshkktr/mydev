@@ -1,5 +1,6 @@
 import { Component,Input } from '@angular/core';
 import { SignInService } from './signIn.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'sign-in',
@@ -11,8 +12,13 @@ import { SignInService } from './signIn.service';
 export class SignInComponent{
 
   private title="Sign In";
+  private signInForm : any;
 
-  constructor(private signInService:SignInService) {
+  constructor(private signInService:SignInService,fb: FormBuilder) {
+    this.signInForm = fb.group({
+      loginUserName: [null,Validators.required],
+      loginUserPassword: [null,Validators.compose([Validators.required,Validators.minLength(8)])]
+    });
   }
   
   @Input() loginUserName:string;
