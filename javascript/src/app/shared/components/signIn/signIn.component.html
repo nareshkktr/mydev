@@ -1,25 +1,32 @@
 <div class="page-content">
 	<div class="sign-in-container">
 		<div class="sign-in-content">
-			<form>
+			<form [formGroup]="signInForm">
 				<table style="width: 100%" cellspacing="5">
 					<caption>Welcome Back To MyIndia!</caption>
 					<tr>
-						<td><md-input class="login_input" [(ngModel)]="loginUserName"
-								type="text" placeholder="User Name" name="loginUserName"> <span md-suffix>
+						<td><md-input class="login_input" 
+								type="text" placeholder="User Name" name="loginUserName" [formControl]="signInForm.controls['loginUserName']" required> <span md-suffix>
 								<i class="material-icons login-input-icon">person</i> &nbsp;
-							</span> </md-input></td>
+							</span> </md-input>
+						<div  style="color:red; font-size:13px !important;" *ngIf="signInForm.controls['loginUserName'].hasError('required') && signInForm.controls['loginUserName'].touched" class="alert alert-danger">You must provide a username.</div>
+						</td>
+   
 					</tr>
 					<tr>
 						<td><md-input class="login_input"
-								[(ngModel)]="loginUserPassword" type="password"
-								placeholder="Password" name="loginUserPassword"> <span md-suffix> <i
+								type="password"
+								placeholder="Password" name="loginUserPassword" [formControl]="signInForm.controls['loginUserPassword']" required> <span md-suffix> <i
 								class="material-icons login-input-icon">lock</i> &nbsp;
-							</span> </md-input></td>
+							</span> </md-input>
+							<div  style="color:red; font-size:13px !important;" *ngIf="signInForm.controls['loginUserPassword'].hasError('required') && signInForm.controls['loginUserPassword'].touched" class="alert alert-danger">You must provide a password.</div>
+
+							<div  style="color:red; font-size:13px !important;" *ngIf="signInForm.controls['loginUserPassword'].hasError('minlength') && signInForm.controls['loginUserPassword'].touched" class="alert alert-danger">Password must have a minimum length of 8.</div>
+						</td>
 					</tr>
 					<tr>
 						<td colspan="2" align="center">
-							<button md-raised-button class="login_signin_button"
+							<button [disabled]="!signInForm.valid" md-raised-button class="login_signin_button"
 								(click)="signIn()">Sign In</button>
 						</td>
 					</tr>
