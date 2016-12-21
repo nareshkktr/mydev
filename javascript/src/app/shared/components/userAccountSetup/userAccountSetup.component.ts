@@ -1,5 +1,6 @@
 import { Component,EventEmitter,Input,Output } from '@angular/core';
-import { UserAccountSetupService } from './UserAccountSetup.service'
+import { UserAccountSetupService } from './UserAccountSetup.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'user-account-setup',
@@ -17,9 +18,15 @@ export class UserAccountSetupComponent{
   @Output() userAccountSetupStatus = new EventEmitter<any>();
 
   private userLocationData;
+  private userAccountSetupForm: any;
 
-  constructor(private userAccountSetupService:UserAccountSetupService) {
+  constructor(private userAccountSetupService:UserAccountSetupService,fb: FormBuilder) {
   	this.userLocationData = {};
+    this.userAccountSetupForm = fb.group({
+      loginUserName: [null,Validators.required],
+      loginUserPassword: [null,Validators.compose([Validators.required,Validators.minLength(8)])],
+      loginUserConfirmPassword: [null,Validators.compose([Validators.required,Validators.minLength(8)])]
+    });
   }
 
   validateUser(){

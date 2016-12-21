@@ -1,4 +1,5 @@
 <div class="sign-up-content">
+	<form [formGroup]="userIdentityForm">
 	<div layout="row">
 		<div flex="100" flexXs="100" class="sign-up-content-container">
 			<table style="width: 100%" cellspacing="5">
@@ -6,25 +7,30 @@
 				<tr>
 					<td><md-input class="signup_input" [(ngModel)]="loginUserName"
 							type="text" placeholder="Elecotr's (Voter) ID"
-							name="loginUserName"> <span md-prefix> <i
+							name="loginUserName" [formControl]="userIdentityForm.controls['loginUserName']" required> <span md-prefix> <i
 							class="material-icons login-input-icon">person</i> &nbsp;
-						</span> </md-input></td>
+						</span> </md-input>
+						<div  style="color:red; font-size:13px !important;" *ngIf="userIdentityForm.controls['loginUserName'].hasError('required') && userIdentityForm.controls['loginUserName'].touched" class="alert alert-danger">You must provide Elector ID.</div>
+					</td>
 				</tr>
 				<tr>
 					<td><md-input class="signup_input"
 							[(ngModel)]="loginUserPassword" type="password"
-							placeholder="Elecotr's (Voter) Name" name="loginUserPassword">
+							placeholder="Elecotr's (Voter) Name" name="loginUserPassword" [formControl]="userIdentityForm.controls['loginUserPassword']" required>
 						<span md-prefix> <i class="material-icons login-input-icon">person</i>
 							&nbsp;
-						</span> </md-input></td>
+						</span> </md-input>
+						<div  style="color:red; font-size:13px !important;" *ngIf="userIdentityForm.controls['loginUserPassword'].hasError('required') && userIdentityForm.controls['loginUserPassword'].touched" class="alert alert-danger">You must provide the Elector Name.</div>
+					</td>
 				</tr>
 				<tr>
 					<td colspan="2" align="center">
-						<button md-raised-button class="login_signin_button"
+						<button [disabled]="!userIdentityForm.valid" md-raised-button class="login_signin_button"
 							(click)="validateElectorInfo()">Retrieve Elector</button>
 					</td>
 				</tr>
 			</table>
 		</div>
 	</div>
+</form>
 </div>

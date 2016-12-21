@@ -1,6 +1,8 @@
 import { Component,EventEmitter,Input,Output } from '@angular/core';
 import { UserIdentityService } from './userIdentity.service'
 import {Router} from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
 @Component({
   selector: 'user-identity',
   templateUrl:'./userIdentity.component.html',
@@ -18,8 +20,14 @@ export class UserIdentityComponent{
 
   private eventResponse;
 
-  constructor(private userIdentityService:UserIdentityService,private router: Router) {
+  private userIdentityForm: any;
+
+  constructor(private userIdentityService:UserIdentityService,private router: Router,fb: FormBuilder) {
   	this.userData = {};
+    this.userIdentityForm = fb.group({
+      loginUserName: [null,Validators.required],
+      loginUserPassword: [null,Validators.required]
+    });
   }
 
 validateElectorInfo(){
