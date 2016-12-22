@@ -1,52 +1,45 @@
 <div class="sign-up-content">
-	<form>
-	<div layout="row">
+	<form [formGroup]="userLocationSetupForm">
+		<div layout="row">
 
-		<div flex="100" flexXs="100" class="sign-up-content-container"
-			style="padding: 20px 55px 55px 55px">
-			<table style="width: 100%" cellspacing="18"
-				class="sign-up-location-content-container">
-				<caption>Elector (Voter) Location Information</caption>
-				<tr>
-					<td><span> Country </span></td>
-					<td><span> : </span></td>
-					<td><span> India </span></td>
-				</tr>
-				<tr>
-					<td><span> State </span></td>
-					<td><span> : </span></td>
-					<td><span> Andhra Pradesh </span></td>
-				</tr>
-				<tr>
-					<td><span> District </span></td>
-					<td><span> : </span></td>
-					<td><span> Prakasam </span></td>
-				</tr>
-				<tr>
-					<td><span> Mandal </span></td>
-					<td><span> : </span></td>
-					<td><span> Mundlamuru </span></td>
-				</tr>
-				<tr>
-					<td colspan="3" align="center"><md-select
-							class="signup_input_select" placeholder="Rural Location">
-						<md-option *ngFor="let year of years" [value]="year">
-						{{ year }} </md-option> </md-select></td>
-				</tr>
-				<tr>
-					<td colspan="3" align="center"><md-select
-							class="signup_input_select" placeholder="Urban Location">
-						<md-option *ngFor="let year of years" [value]="year">
-						{{ year }} </md-option> </md-select></td>
-				</tr>
-				<tr>
-					<td colspan="3" align="center">
-						<button md-raised-button class="login_signin_button"
-							(click)="validateElectorInfo()">Validate Location</button>
-					</td>
-				</tr>
-			</table>
+			<div flex="100" flexXs="100" class="sign-up-content-container"
+				style="padding: 20px 55px 55px 55px">
+				<table style="width: 100%" cellspacing="18"
+					class="sign-up-location-content-container">
+					<caption>Elector (Voter) Location Information</caption>
+					<tr>
+						<td><span> State </span></td>
+						<td><span> : </span></td>
+						<td><span> Andhra Pradesh </span></td>
+					</tr>
+					<tr>
+						<td><span> District </span></td>
+						<td><span> : </span></td>
+						<td><span> Prakasam </span></td>
+					</tr>
+					<tr>
+						<td><span> Mandal </span></td>
+						<td><span> : </span></td>
+						<td><span> Mundlamuru </span></td>
+					</tr>
+					<tr>
+						<td><span> Native Location </span></td>
+						<td><span> : </span></td>
+						<td><md-select class="signup_input_select"
+								placeholder=" Native Location" [(ngModel)]="locationInfo" [formControl]="userLocationSetupForm.controls['locationInfo']" required> <md-option
+								*ngFor="let year of years" [value]="year"> {{ year
+							}} </md-option> </md-select>
+							<div  style="color:red; font-size:13px !important;" *ngIf="userLocationSetupForm.controls['locationInfo'].hasError('required') && userLocationSetupForm.controls['locationInfo'].touched" class="alert alert-danger">You must provide the native location.</div>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" align="center">
+							<button [disabled]="!userLocationSetupForm.valid" md-raised-button class="login_signin_button"
+								(click)="validateElectorInfo()">Validate Location</button>
+						</td>
+					</tr>
+				</table>
+			</div>
 		</div>
-	</div>
-</form>
+	</form>
 </div>

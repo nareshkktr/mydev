@@ -1,6 +1,6 @@
 import { Component,EventEmitter,Input,Output } from '@angular/core';
 import { UserAccountSetupService } from './UserAccountSetup.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'user-account-setup',
@@ -24,9 +24,21 @@ export class UserAccountSetupComponent{
   	this.userLocationData = {};
     this.userAccountSetupForm = fb.group({
       loginUserName: [null,Validators.required],
-      loginUserPassword: [null,Validators.compose([Validators.required,Validators.minLength(8)])],
-      loginUserConfirmPassword: [null,Validators.compose([Validators.required,Validators.minLength(8)])]
+      loginUserPassword: [null,Validators.compose([Validators.required,Validators.minLength(8),Validators.pattern('^.*(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[~!@#$%^&*(),./?]).*$')])],
+      loginUserConfirmPassword: [null,Validators.compose([Validators.required,this.validateConfirmPwd(this)])]
     });
+  }
+
+  validateConfirmPwd(obj: any) {
+
+    return function(input: FormControl) {
+      return input.value == obj.loginUserPassword ?
+          null :
+          {validateConfirmPwd: {
+            valid: false
+          }};
+    };
+
   }
 
   validateUser(){

@@ -16,8 +16,7 @@ public class GetUserByPropertyResponse {
 	private String locationDistrict;
 	private String locationMandal;
 
-	private List<SolrLocationMaster> villageLocations = null;
-	private Map<String, List<SolrLocationMaster>> urbanLocations = null;
+	private Map<String, List<SolrLocationMaster>> locations = null;
 
 	public Long getUserGuid() {
 		return userGuid;
@@ -67,20 +66,12 @@ public class GetUserByPropertyResponse {
 		this.locationMandal = locationMandal;
 	}
 
-	public List<SolrLocationMaster> getVillageLocations() {
-		return villageLocations;
+	public Map<String, List<SolrLocationMaster>> getLocations() {
+		return locations;
 	}
 
-	public void setVillageLocations(List<SolrLocationMaster> villageLocations) {
-		this.villageLocations = villageLocations;
-	}
-
-	public Map<String, List<SolrLocationMaster>> getUrbanLocations() {
-		return urbanLocations;
-	}
-
-	public void setUrbanLocations(Map<String, List<SolrLocationMaster>> urbanLocations) {
-		this.urbanLocations = urbanLocations;
+	public void setLocations(Map<String, List<SolrLocationMaster>> locations) {
+		this.locations = locations;
 	}
 
 }

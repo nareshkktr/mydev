@@ -1,5 +1,6 @@
 import { Component,EventEmitter,Input,Output } from '@angular/core';
-import { UserValidationService } from './userValidation.service'
+import { UserValidationService } from './userValidation.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'user-validation',
@@ -18,10 +19,15 @@ export class UserValidationComponent{
   private userValidationData;
   private years = [];
   private numberOfYears = 100;
+  private userValidationForm: any;
 
-  constructor(private userValidationService:UserValidationService) {
+  constructor(private userValidationService:UserValidationService,fb: FormBuilder) {
   	this.userValidationData = {};
     this.populateYears();
+    this.userValidationForm = fb.group({
+      referenceName: [null,Validators.required],
+      year: [null,Validators.required]
+    });
   }
 
   populateYears(){

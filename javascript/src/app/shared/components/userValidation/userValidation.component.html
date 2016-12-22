@@ -1,5 +1,5 @@
 <div class="sign-up-content">
-	<form>
+	<form [formGroup]="userValidationForm">
 		<div layout="row">
 			<div flex="100" flexXs="100" class="sign-up-content-container">
 				<table style="width: 100%" cellspacing="5">
@@ -7,20 +7,28 @@
 					<tr>
 						<td><md-input class="signup_input"
 								[(ngModel)]="referenceName" type="text"
-								placeholder="Elecotr's (Voter) ID" name="referenceName">
+								placeholder="Elecotr's (Voter) ID" name="referenceName" [formControl]="userValidationForm.controls['referenceName']" required>
 							<span md-prefix> <i
 								class="material-icons login-input-icon">person</i> &nbsp;
-							</span> </md-input></td>
+							</span> </md-input>
+							<div  style="color:red; font-size:13px !important;" *ngIf="userValidationForm.controls['referenceName'].hasError('required') && userValidationForm.controls['referenceName'].touched" class="alert alert-danger">You must provide the Elector ID.</div>
+						</td>
 					</tr>
 					<tr>
-						<td><md-select class="signup_input_select"
-								placeholder="Date Of Birth"> <md-option
-								*ngFor="let year of years" [value]="year"> {{ year
-							}} </md-option> </md-select></td>
+						<td>
+							<span md-prefix>
+							<i class="material-icons">date_range</i>
+							</span>
+							<md-select class="signup_input_select"
+								placeholder="Date Of Birth" [formControl]="userValidationForm.controls['year']" required> <md-option
+								*ngFor="let year of years" [value]="year" > {{ year
+							}} </md-option> </md-select>
+							<div  style="color:red; font-size:13px !important;" *ngIf="userValidationForm.controls['year'].hasError('required') && userValidationForm.controls['year'].touched" class="alert alert-danger">You must provide the Year of Birth.</div>
+						</td>
 					</tr>
 					<tr>
 						<td colspan="2" align="center">
-							<button md-raised-button class="login_signin_button"
+							<button [disabled]="!userValidationForm.valid" md-raised-button class="login_signin_button"
 								routerLink="../userValidation">Validate Elector</button>
 						</td>
 					</tr>

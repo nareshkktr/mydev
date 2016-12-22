@@ -1,5 +1,6 @@
 import { Component,EventEmitter,Input,Output } from '@angular/core';
-import { UserLocationSetupService } from './userLocationSetup.service'
+import { UserLocationSetupService } from './userLocationSetup.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'user-location-setup',
@@ -17,8 +18,13 @@ export class UserLocationSetupComponent{
 
   private userLocationData;
 
-  constructor(private userLocationSetupService:UserLocationSetupService) {
+  private userLocationSetupForm: any;
+
+  constructor(private userLocationSetupService:UserLocationSetupService,fb: FormBuilder) {
   	this.userLocationData = {};
+    this.userLocationSetupForm = fb.group({
+      locationInfo: [null,Validators.required]
+    });
   }
 
   validateUser(){

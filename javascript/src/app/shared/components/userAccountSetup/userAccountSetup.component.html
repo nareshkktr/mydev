@@ -24,6 +24,8 @@
 							<div  style="color:red; font-size:13px !important;" *ngIf="userAccountSetupForm.controls['loginUserPassword'].hasError('required') && userAccountSetupForm.controls['loginUserPassword'].touched" class="alert alert-danger">You must provide a password.</div>
 
 							<div  style="color:red; font-size:13px !important;" *ngIf="userAccountSetupForm.controls['loginUserPassword'].hasError('minlength') && userAccountSetupForm.controls['loginUserPassword'].touched" class="alert alert-danger">Password must have a minimum length of 8.</div>
+
+							<div  style="color:red; font-size:13px !important;" *ngIf="userAccountSetupForm.controls['loginUserPassword'].hasError('pattern') && userAccountSetupForm.controls['loginUserPassword'].touched" class="alert alert-danger">Password must have atleast one number, one lowercase character ,one uppercase character and one special character.</div>
 						</td>
 					</tr>
 					<tr>
@@ -34,6 +36,8 @@
 								class="material-icons login-input-icon">lock</i> &nbsp;
 							</span> </md-input>
 							<div  style="color:red; font-size:13px !important;" *ngIf="userAccountSetupForm.controls['loginUserConfirmPassword'].hasError('required') && userAccountSetupForm.controls['loginUserConfirmPassword'].touched" class="alert alert-danger">You must confirm the password.</div>
+
+							<div  style="color:red; font-size:13px !important;" *ngIf="userAccountSetupForm.controls['loginUserConfirmPassword'].hasError('validateConfirmPwd') && userAccountSetupForm.controls['loginUserConfirmPassword'].touched" class="alert alert-danger">Passwords don't match!</div>
 						</td>
 					</tr>
 					<tr>

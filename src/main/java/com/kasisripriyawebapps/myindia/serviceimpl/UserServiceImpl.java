@@ -97,11 +97,13 @@ public class UserServiceImpl implements UserService {
 	}
 
 	private void setLocationInformationToRequest(GetUserByPropertyResponse response, SolrUserMaster solrUser) {
+
 		SolrLocationMaster mandalLocationMaster = locationMasterRepository
 				.findByLocationTypeAndLocationName(ServiceConstants.LOCATION_SUB_DISTRICT_TYPE, solrUser.getMandal());
+
+		List<SolrLocationMaster> allLocations = new ArrayList<SolrLocationMaster>();
 		List<SolrLocationMaster> villageLocations = locationMasterRepository.findByLocationTypeAndParentLocationGuid(
 				ServiceConstants.LOCATION_VILLAGE_TYPE, mandalLocationMaster.getLocationGuid());
-		response.setVillageLocations(villageLocations);
 
 		List<String> stateLocationTypes = new ArrayList<String>();
 		stateLocationTypes.add(ServiceConstants.LOCATION_STATE_TYPE);
@@ -118,9 +120,12 @@ public class UserServiceImpl implements UserService {
 		List<SolrLocationMaster> urbanLocations = locationMasterRepository
 				.findByLocationTypeInAndParentLocationGuid(urbanLocationTypes, stateLocationMaster.getLocationGuid());
 
-		final Map<String, List<SolrLocationMaster>> urbanLocationsMap = urbanLocations.stream()
-				.collect(Collectors.groupingBy(urbanLocation -> urbanLocation.getLocationType()));
-		response.setUrbanLocations(urbanLocationsMap);
+		allLocations.addAll(villageLocations);
+		allLocations.addAll(urbanLocations);
+
+		final Map<String, List<SolrLocationMaster>> locationsMap = allLocations.stream()
+				.collect(Collectors.groupingBy(allLocation -> allLocation.getLocationType()));
+		response.setLocations(locationsMap);
 	}
 
 	@Override
