@@ -5,28 +5,28 @@
 			<table style="width: 100%" cellspacing="5">
 				<caption>Elector (Voter) Information</caption>
 				<tr>
-					<td><md-input class="signup_input" [(ngModel)]="loginUserName"
+					<td><md-input class="signup_input" [(ngModel)]="electorID"
 							type="text" placeholder="Elecotr's (Voter) ID"
-							name="loginUserName" [formControl]="userIdentityForm.controls['loginUserName']" required> <span md-prefix> <i
+							name="electorID" [formControl]="userIdentityForm.controls['electorID']" required> <span md-prefix> <i
 							class="material-icons login-input-icon">person</i> &nbsp;
 						</span> </md-input>
-						<div  style="color:red; font-size:13px !important;" *ngIf="userIdentityForm.controls['loginUserName'].hasError('required') && userIdentityForm.controls['loginUserName'].touched" class="alert alert-danger">You must provide Elector ID.</div>
+						<div  style="color:red; font-size:13px !important;" *ngIf="userIdentityForm.controls['electorID'].hasError('required') && userIdentityForm.controls['electorID'].touched" class="alert alert-danger">You must provide Elector ID.</div>
 					</td>
 				</tr>
 				<tr>
 					<td><md-input class="signup_input"
-							[(ngModel)]="loginUserPassword" type="password"
-							placeholder="Elecotr's (Voter) Name" name="loginUserPassword" [formControl]="userIdentityForm.controls['loginUserPassword']" required>
+							[(ngModel)]="electorName" type="text"
+							placeholder="Elecotr's (Voter) Name" name="electorName" [formControl]="userIdentityForm.controls['electorName']" required>
 						<span md-prefix> <i class="material-icons login-input-icon">person</i>
 							&nbsp;
 						</span> </md-input>
-						<div  style="color:red; font-size:13px !important;" *ngIf="userIdentityForm.controls['loginUserPassword'].hasError('required') && userIdentityForm.controls['loginUserPassword'].touched" class="alert alert-danger">You must provide the Elector Name.</div>
+						<div  style="color:red; font-size:13px !important;" *ngIf="userIdentityForm.controls['electorName'].hasError('required') && userIdentityForm.controls['electorName'].touched" class="alert alert-danger">You must provide the Elector Name.</div>
 					</td>
 				</tr>
 				<tr>
 					<td colspan="2" align="center">
 						<button [disabled]="!userIdentityForm.valid" md-raised-button class="login_signin_button"
-							(click)="validateElectorInfo()">Retrieve Elector</button>
+							(click)="retreiveUser()">Retrieve Elector</button>
 					</td>
 				</tr>
 			</table>
