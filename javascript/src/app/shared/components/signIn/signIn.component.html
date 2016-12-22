@@ -32,8 +32,6 @@
 									&nbsp;
 								</span> </md-input>
 								<div  style="color:red; font-size:13px !important;" *ngIf="signInForm.controls['loginUserPassword'].hasError('required') && signInForm.controls['loginUserPassword'].touched" class="alert alert-danger">You must provide a password.</div>
-
-								<div  style="color:red; font-size:13px !important;" *ngIf="signInForm.controls['loginUserPassword'].hasError('minlength') && signInForm.controls['loginUserPassword'].touched" class="alert alert-danger">Password must have a minimum length of 8.</div>
 							</td>
 						</tr>
 						<tr>

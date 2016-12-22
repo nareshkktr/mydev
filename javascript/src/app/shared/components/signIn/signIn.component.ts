@@ -17,7 +17,7 @@ export class SignInComponent{
   constructor(private signInService:SignInService,fb: FormBuilder) {
     this.signInForm = fb.group({
       loginUserName: [null,Validators.required],
-      loginUserPassword: [null,Validators.compose([Validators.required,Validators.minLength(8)])]
+      loginUserPassword: [null,Validators.compose([Validators.required])]
     });
   }
   
