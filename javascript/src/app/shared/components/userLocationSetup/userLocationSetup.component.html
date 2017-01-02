@@ -10,32 +10,32 @@
 					<tr>
 						<td><span> State </span></td>
 						<td><span> : </span></td>
-						<td><span> Andhra Pradesh </span></td>
+						<td><span> {{ userLocationData.locationState }} </span></td>
 					</tr>
 					<tr>
 						<td><span> District </span></td>
 						<td><span> : </span></td>
-						<td><span> Prakasam </span></td>
+						<td><span> {{ userLocationData.locationDistrict }}  </span></td>
 					</tr>
 					<tr>
 						<td><span> Mandal </span></td>
 						<td><span> : </span></td>
-						<td><span> Mundlamuru </span></td>
+						<td><span> {{ userLocationData.locationMandal }} </span></td>
 					</tr>
-					<tr>
+					<!--<tr>
 						<td><span> Native Location </span></td>
 						<td><span> : </span></td>
 						<td><md-select class="signup_input_select"
 								placeholder=" Native Location" [(ngModel)]="locationInfo" [formControl]="userLocationSetupForm.controls['locationInfo']" required> <md-option
-								*ngFor="let year of years" [value]="year"> {{ year
+								*ngFor="let location of userLocationData.locations" [value]="location"> {{ year
 							}} </md-option> </md-select>
 							<div  style="color:red; font-size:13px !important;" *ngIf="userLocationSetupForm.controls['locationInfo'].hasError('required') && userLocationSetupForm.controls['locationInfo'].touched" class="alert alert-danger">You must provide the native location.</div>
 						</td>
-					</tr>
+					</tr> -->
 					<tr>
 						<td colspan="3" align="center">
 							<button [disabled]="!userLocationSetupForm.valid" md-raised-button class="login_signin_button"
-								(click)="validateElectorInfo()">Validate Location</button>
+								(click)="saveLocation()">Save Location</button>
 						</td>
 					</tr>
 				</table>

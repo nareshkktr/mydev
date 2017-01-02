@@ -21,7 +21,7 @@ export class UserIdentityService {
         let observer = new Observable(observer =>{
               this.SwaggerService.fetchAPIMetaData().subscribe(services =>{
                    services.user.getUserByVoterIdAndName({body:retreiveUserReq},function(results){
-                           observer.next(results.data);
+                           observer.next(results.obj);
                            observer.complete();
                    },function(error){
                        observer.error(error);

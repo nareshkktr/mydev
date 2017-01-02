@@ -7,7 +7,7 @@
 					<tr>
 						<td><md-input class="signup_input"
 								[(ngModel)]="referenceName" type="text"
-								placeholder="Elecotr's (Voter) ID" name="referenceName" [formControl]="userValidationForm.controls['referenceName']" required>
+								placeholder={{referenceNameText}} name="referenceName" [formControl]="userValidationForm.controls['referenceName']" required>
 							<span md-prefix> <i
 								class="material-icons login-input-icon">person</i> &nbsp;
 							</span> </md-input>
@@ -19,7 +19,7 @@
 							<span md-prefix>
 							<i class="material-icons">date_range</i>
 							</span>
-							<md-select class="signup_input_select"
+							<md-select [(ngModel)]="yob" class="signup_input_select"
 								placeholder="Date Of Birth" [formControl]="userValidationForm.controls['year']" required> <md-option
 								*ngFor="let year of years" [value]="year" > {{ year
 							}} </md-option> </md-select>
@@ -29,7 +29,7 @@
 					<tr>
 						<td colspan="2" align="center">
 							<button [disabled]="!userValidationForm.valid" md-raised-button class="login_signin_button"
-								routerLink="../userValidation">Validate Elector</button>
+								(click)="validateUser()">Validate Elector</button>
 						</td>
 					</tr>
 				</table>

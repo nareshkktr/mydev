@@ -1,6 +1,9 @@
 import { Component,EventEmitter,Input,Output } from '@angular/core';
 import { UserLocationSetupService } from './userLocationSetup.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {Router} from '@angular/router';
+
+import { SharedDataService } from '../../services/sharedData.service';
 
 @Component({
   selector: 'user-location-setup',
@@ -11,35 +14,36 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 export class UserLocationSetupComponent{
 
-  @Input() fhName: any;
-  @Input() houseNo: any;
-  @Input() yob: any;
-  @Output() userLocationSetupStatus = new EventEmitter<any>();
+  @Input() locationInfo: any;
 
   private userLocationData;
 
   private userLocationSetupForm: any;
 
-  constructor(private userLocationSetupService:UserLocationSetupService,fb: FormBuilder) {
-  	this.userLocationData = {};
+  constructor(private userLocationSetupService:UserLocationSetupService,fb: FormBuilder
+    ,private sharedDataService:SharedDataService,private router:Router) {
+  	
+    if(this.sharedDataService.getData() && this.sharedDataService.getData().locations){
+      this.userLocationData = this.sharedDataService.getData();
+    }
+    else{
+      this.router.navigate(['../signUp/userIdentity']);
+    }
     this.userLocationSetupForm = fb.group({
       locationInfo: [null,Validators.required]
     });
+
   }
 
-  validateUser(){
-  	this.userLocationSetupService.validateUser(this.fhName,this.houseNo,this.yob)
-                           .subscribe(
-                               userLocationData => {
-                               	this.userLocationData = userLocationData;
-                               	this.userLocationSetupStatus.emit(true);
-                               }, //Bind to view
- 							
-                                err => {
-                                    // Log errors if any
-                                    console.log(err);
-                                    this.userLocationSetupStatus.emit(false);
-                                });
+  saveLocation(){
+  	this.userLocationSetupService.saveLocation(this.locationInfo).subscribe(result =>{
+              this.sharedDataService.setData(result);
+              this.router.navigate(['../signUp/userValidation']);
+        },
+        error => {
+              alert(error.statusText);
+        });
+  }
   }
 
 }

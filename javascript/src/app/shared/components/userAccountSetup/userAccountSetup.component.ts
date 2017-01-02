@@ -2,6 +2,10 @@ import { Component,EventEmitter,Input,Output } from '@angular/core';
 import { UserAccountSetupService } from './UserAccountSetup.service';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 
+import { SharedDataService } from '../../services/sharedData.service';
+
+import {Router} from '@angular/router';
+
 @Component({
   selector: 'user-account-setup',
   templateUrl:'./userAccountSetup.component.html',
@@ -11,17 +15,28 @@ import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms'
 
 export class UserAccountSetupComponent{
 
-  @Input() title: any;
-  @Input() fhName: any;
-  @Input() houseNo: any;
-  @Input() yob: any;
-  @Output() userAccountSetupStatus = new EventEmitter<any>();
+  @Input() loginUserName: any;
+  @Input() loginUserPassword: any;
+  @Input() loginUserConfirmPassword: any;
 
-  private userLocationData;
+  private userGuid:any;
+  private locationGuid:any;
+  private locationRefGuid:any;  
+
   private userAccountSetupForm: any;
 
-  constructor(private userAccountSetupService:UserAccountSetupService,fb: FormBuilder) {
-  	this.userLocationData = {};
+  constructor(private userAccountSetupService:UserAccountSetupService,fb: FormBuilder,
+    private sharedDataService:SharedDataService,private router:Router) {
+
+    if(this.sharedDataService.getData()) //add anothercondition)
+    {
+      this.userGuid = this.sharedDataService.getData().userGuid;
+      this.locationGuid = this.sharedDataService.getData().locationGuid;
+      this.locationRefGuid = this.sharedDataService.getData().locationRefGuid;
+    }else{
+       this.router.navigate(['../signUp/userIdentity']);
+    }
+  	
     this.userAccountSetupForm = fb.group({
       loginUserName: [null,Validators.required],
       loginUserPassword: [null,Validators.compose([Validators.required,Validators.minLength(8),Validators.pattern('^.*(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[~!@#$%^&*(),./?]).*$')])],
@@ -41,19 +56,14 @@ export class UserAccountSetupComponent{
 
   }
 
-  validateUser(){
-  	this.userAccountSetupService.validateUser(this.fhName,this.houseNo,this.yob)
-                           .subscribe(
-                               userLocationData => {
-                               	this.userLocationData = userLocationData;
-                               	this.userAccountSetupStatus.emit(true);
-                               }, //Bind to view
- 							
-                                err => {
-                                    // Log errors if any
-                                    console.log(err);
-                                    this.userAccountSetupStatus.emit(false);
-                                });
+  createAccount(){
+    this.userAccountSetupService.createAccount(this.loginUserName,this.loginUserPassword,this.userGuid,this.locationGuid,this.locationRefGuid).subscribe(result =>{
+              this.sharedDataService.setData(result);
+              this.router.navigate(['../signUp/userValidation']);
+        },
+        error => {
+              alert(error.statusText);
+        });
   }
 
 }

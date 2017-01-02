@@ -7,23 +7,31 @@ import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
+import { SwaggerService } from '../../services/swagger.service';
+
 @Injectable()
 export class UserValidationService {
      // Resolve HTTP using the constructor
-     constructor (private http: Http) {}
-     // private instance variable to hold base url
-     private gihubAPIUrl = 'https://api.github.com/search/repositories'; 
+     constructor (private SwaggerService:SwaggerService) {}
+     
 
      // Fetch the user
-     validateUser(fhName:any,houseNo:any,yob:any) : Observable<any> {
-
-         // ...using get request
-         return this.http.get(this.gihubAPIUrl+"?q="+fhName)
-                        // ...and calling .json() on the response to return data
-                         .map((res:Response) => res.json())
-                         //...errors if any
-                         .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
-
+     validateUser(referenceName:any,yob:any,referenceType:string,userGuid: any) : Observable<any> {
+        let validateUserReq={referenceName:referenceName,yearOfBirth:yob,referenceType:referenceType,userGuid:userGuid};
+        let observer = new Observable(observer =>{  
+              this.SwaggerService.fetchAPIMetaData().subscribe(services =>{
+                   services.user.getUserByVoterReferenceAndAge({body:validateUserReq},function(results){
+                           observer.next(results.obj);
+                           observer.complete();
+                   },function(error){
+                       observer.error(error);
+                   }); 
+              },
+              error =>{
+                  observer.error(error);
+              });
+        });
+            return observer;
      }
 
 }
