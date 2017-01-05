@@ -64,6 +64,7 @@ static WebDriver driver;
 			
 		}**/
 		
+		/**
 		//For Rajya Sabha
 		driver = new ChromeDriver();
 		driver.get("http://164.100.47.5/Newmembers/memberstatewise.aspx");
@@ -104,7 +105,58 @@ static WebDriver driver;
 			}
 		
 			
+		} **/
+		
+		//For MLA
+		driver = new ChromeDriver();
+		driver.get("http://www.elections.in/government/member-of-legislative-assembly.html");
+		
+		List<WebElement> allStates = driver.findElements(By.className("sets"));
+		
+		for(WebElement we: allStates){
+			we.click();
+			
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				throw new InternalServerException(e.getMessage());
+			}
+			
+			WebElement pageMainTable = driver.findElement(By.className("tableizer-table"));
+			WebElement pageMainTableBody = pageMainTable.findElements(By.xpath("tbody")).get(0);
+			List<WebElement> memberRows = pageMainTableBody
+					.findElements(By.xpath("tr"));
+			
+			int i =0;
+			
+			for (WebElement row : memberRows) {
+				
+				if(i>=1){
+					List<WebElement> cells = row.findElements(By.xpath("td"));
+					
+					if(cells.size() >0){
+						WebElement eachMemberName = cells.get(1);
+						
+						WebElement eachMemberPartyName = cells.get(2);
+						
+						WebElement eachMemberConsituencyState = cells.get(3);
+						
+						System.out.println(eachMemberName.getText());
+						System.out.println(eachMemberPartyName.getText());
+						System.out.println(eachMemberConsituencyState.getText());
+					}
+				}
+				i++;
+				
+					
+			} 
+			
+			
+			
 		}
+		
+		
+		
 	}
 
 }

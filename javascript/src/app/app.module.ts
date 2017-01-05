@@ -18,6 +18,7 @@ import { SearchResultsComponent } from './shared/components/searchResults/search
 import { SignUpComponent } from './shared/components/signUp/signUp.component';
 
 import { SwaggerService } from './shared/services/swagger.service';
+import { SharedDataService } from './shared/services/sharedData.service';
 import { AppComponent } from './app.component';
 import { AppRoutes } from './app.routes';
 
@@ -47,7 +48,7 @@ import { AppRoutes } from './app.routes';
     MaterialModule.forRoot(),
   ],
   entryComponents: [LocationChangeDialogContent],
-  providers: [SwaggerService],
+  providers: [SwaggerService,SharedDataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
