@@ -753,6 +753,11 @@ public class EndPointConstants {
 	public static final String IMPORT_RAJYASABHA_MP_API_VALUE = "importRajyasabhaMP";
 	public static final String IMPORT_RAJYASABHA_MP_REQUEST_MAPPING = "importRajyasabhaMP";
 	public static final String IMPORT_RAJYASABHA_MP_API_DESCRIPTION = "Import Rajya sabha MP";
+	
+	public static final String IMPORT_MLA_API_NICKNAME = "importMLA";
+	public static final String IMPORT_MLA_API_VALUE = "importMLA";
+	public static final String IMPORT_MLA_REQUEST_MAPPING = "importMLA";
+	public static final String IMPORT_MLA_API_DESCRIPTION = "Import MLA";
 
 	/** The Constant UPLOAD_ALL_USERS_REQUEST_MAPPING. */
 	public static final String GET_REFERENCE_LOCATIONS_REQUEST_MAPPING = "getReferenceLocationForMaster";

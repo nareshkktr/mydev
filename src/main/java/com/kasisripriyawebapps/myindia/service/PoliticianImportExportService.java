@@ -6,6 +6,8 @@ public interface PoliticianImportExportService {
 	
 	void importExportLoksabhaMPs() throws InternalServerException;
 
-	void importExportRajyasabhaMPs() throws InternalServerException; 
+	void importExportRajyasabhaMPs() throws InternalServerException;
+
+	void importExportMLA() throws InternalServerException; 
 
 }
