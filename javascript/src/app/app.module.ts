@@ -18,36 +18,37 @@ import { SearchResultsComponent } from './shared/components/searchResults/search
 import { SignUpComponent } from './shared/components/signUp/signUp.component';
 
 import { SwaggerService } from './shared/services/swagger.service';
+import { SharedDataService } from './shared/services/sharedData.service';
 import { AppComponent } from './app.component';
 import { AppRoutes } from './app.routes';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HeaderComponent,
-    LocationChangeDialogContent,
-    FooterComponent,
-    HomeComponent,
-    AboutComponent,
-    SignInComponent,
-    SignUpComponent,
-    UserIdentityComponent,
-    UserValidationComponent,
-    UserLocationSetupComponent,
-    UserAccountSetupComponent,
-    SearchResultsComponent
-  ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    HttpModule,
-    LayoutModule,
-    ReactiveFormsModule,
-    RouterModule.forRoot(AppRoutes),
-    MaterialModule.forRoot(),
-  ],
-  entryComponents: [LocationChangeDialogContent],
-  providers: [SwaggerService],
-  bootstrap: [AppComponent]
+declarations: [
+AppComponent,
+HeaderComponent,
+LocationChangeDialogContent,
+FooterComponent,
+HomeComponent,
+AboutComponent,
+SignInComponent,
+SignUpComponent,
+UserIdentityComponent,
+UserValidationComponent,
+UserLocationSetupComponent,
+UserAccountSetupComponent,
+SearchResultsComponent
+],
+imports: [
+BrowserModule,
+FormsModule,
+HttpModule,
+LayoutModule,
+ReactiveFormsModule,
+RouterModule.forRoot(AppRoutes),
+MaterialModule.forRoot(),
+],
+entryComponents: [LocationChangeDialogContent],
+providers: [SwaggerService,SharedDataService],
+bootstrap: [AppComponent]
 })
 export class AppModule { }

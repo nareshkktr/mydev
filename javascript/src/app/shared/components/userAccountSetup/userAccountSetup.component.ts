@@ -15,29 +15,32 @@ import {Router} from '@angular/router';
 
 export class UserAccountSetupComponent{
 
+  @Input() loginUserEmail: any;
   @Input() loginUserName: any;
   @Input() loginUserPassword: any;
   @Input() loginUserConfirmPassword: any;
 
   private userGuid:any;
-  private locationGuid:any;
-  private locationRefGuid:any;  
+  private childLocation:any;
+  private parentLocation:any;  
 
   private userAccountSetupForm: any;
 
   constructor(private userAccountSetupService:UserAccountSetupService,fb: FormBuilder,
     private sharedDataService:SharedDataService,private router:Router) {
 
-    if(this.sharedDataService.getData()) //add anothercondition)
+    if(this.sharedDataService.getData())
     {
+    
       this.userGuid = this.sharedDataService.getData().userGuid;
-      this.locationGuid = this.sharedDataService.getData().locationGuid;
-      this.locationRefGuid = this.sharedDataService.getData().locationRefGuid;
+      this.childLocation = this.sharedDataService.getData().childLocationData;
+      this.parentLocation = this.sharedDataService.getData().userParentLocationData;
     }else{
        this.router.navigate(['../signUp/userIdentity']);
     }
   	
     this.userAccountSetupForm = fb.group({
+      loginUserEmail: [null,Validators.required],
       loginUserName: [null,Validators.required],
       loginUserPassword: [null,Validators.compose([Validators.required,Validators.minLength(8),Validators.pattern('^.*(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[~!@#$%^&*(),./?]).*$')])],
       loginUserConfirmPassword: [null,Validators.compose([Validators.required,this.validateConfirmPwd(this)])]
@@ -57,7 +60,7 @@ export class UserAccountSetupComponent{
   }
 
   createAccount(){
-    this.userAccountSetupService.createAccount(this.loginUserName,this.loginUserPassword,this.userGuid,this.locationGuid,this.locationRefGuid).subscribe(result =>{
+    this.userAccountSetupService.createAccount(this.loginUserEmail,this.loginUserName,this.loginUserPassword,this.userGuid,this.childLocation,this.parentLocation).subscribe(result =>{
               this.sharedDataService.setData(result);
               this.router.navigate(['../signUp/userValidation']);
         },

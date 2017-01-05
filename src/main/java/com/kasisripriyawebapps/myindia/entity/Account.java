@@ -33,23 +33,21 @@ public class Account implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long guid;
 
-	/** The email address. */
+	@Column(name = "USER_EMAIL")
+	private String userEmail;
+
 	@Column(name = "USER_NAME")
 	private String userName;
 
-	/** The password. */
 	@Column(name = "PASSWORD")
 	private String password;
 
-	/** The salt. */
 	@Column(name = "SALT")
 	private String salt;
 
-	/** The type. */
 	@Column(name = "TYPE")
 	private String type;
 
-	/** The created time stamp. */
 	@Column(name = "CREATED_TIMESTAMP")
 	private Timestamp createdTimeStamp;
 
@@ -218,6 +216,14 @@ public class Account implements Serializable {
 
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+
+	public String getUserEmail() {
+		return userEmail;
+	}
+
+	public void setUserEmail(String userEmail) {
+		this.userEmail = userEmail;
 	}
 
 }
