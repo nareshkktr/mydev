@@ -6,6 +6,16 @@
 					<caption>Elector (Voter) Account Information</caption>
 					<tr>
 						<td><md-input class="signup_input"
+								[(ngModel)]="loginUserEmail" type="text"
+								placeholder="Email" name="loginUserEmail" [formControl]="userAccountSetupForm.controls['loginUserEmail']" required>
+							<span md-prefix> <i
+								class="material-icons login-input-icon">person</i> &nbsp;
+							</span> </md-input>
+							<div  style="color:red; font-size:13px !important;" *ngIf="userAccountSetupForm.controls['loginUserEmail'].hasError('required') && userAccountSetupForm.controls['loginUserEmail'].touched" class="alert alert-danger">You must provide a Email.</div>
+						</td>
+					</tr>
+					<tr>
+						<td><md-input class="signup_input"
 								[(ngModel)]="loginUserName" type="text"
 								placeholder="User Name" name="loginUserName" [formControl]="userAccountSetupForm.controls['loginUserName']" required>
 							<span md-prefix> <i
@@ -43,7 +53,7 @@
 					<tr>
 						<td colspan="2" align="center">
 							<button [disabled]="!userAccountSetupForm.valid"  md-raised-button class="login_signin_button"
-								routerLink="../userValidation">Create Account</button>
+								(click)="createAccount()">Create Account</button>
 						</td>
 					</tr>
 				</table>

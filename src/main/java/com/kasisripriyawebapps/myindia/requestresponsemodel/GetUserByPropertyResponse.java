@@ -16,7 +16,7 @@ public class GetUserByPropertyResponse {
 	private String locationDistrict;
 	private String locationMandal;
 
-	private Map<String, List<SolrLocationMaster>> locations = null;
+	private List<SolrLocationMaster> locations = null;
 
 	public Long getUserGuid() {
 		return userGuid;
@@ -66,11 +66,11 @@ public class GetUserByPropertyResponse {
 		this.locationMandal = locationMandal;
 	}
 
-	public Map<String, List<SolrLocationMaster>> getLocations() {
+	public List<SolrLocationMaster> getLocations() {
 		return locations;
 	}
 
-	public void setLocations(Map<String, List<SolrLocationMaster>> locations) {
+	public void setLocations(List<SolrLocationMaster> locations) {
 		this.locations = locations;
 	}
 

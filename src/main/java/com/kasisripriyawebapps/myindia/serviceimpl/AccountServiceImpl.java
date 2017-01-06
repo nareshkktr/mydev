@@ -56,21 +56,25 @@ public class AccountServiceImpl implements AccountService {
 		account.setPassword(CommonUtil
 				.hashPassword(CommonUtil.saltPassword(createAccountRequest.getPassword(), account.getSalt())));
 		account.setCreatedTimeStamp(CommonUtil.getCurrentGMTTimestamp());
-
+		account.setUserEmail(createAccountRequest.getEmailAddress());
 		SolrUserMaster solrUser = userMasterRepository.findByUserGuid(createAccountRequest.getUserGuid());
-
+		account.setType("VOTER");
 		UserInfo userInfo = new UserInfo();
 		if (solrUser != null) {
 			String solrUserJsonStr = new Gson().toJson(solrUser);
 			userInfo = new Gson().fromJson(solrUserJsonStr, UserInfo.class);
 			userInfo.setCreatedTimeStamp(CommonUtil.getCurrentGMTTimestamp());
 			userInfo.setAccount(account);
-			User user = userDao.getUserByGuid(solrUser.getUserGuid());
-			Location nativeLocation = locationDao.getLocationByGuid(createAccountRequest.getLocationRefGuid());
+			User user = userDao.getUserByGuid(createAccountRequest.getUserGuid());
+			Location nativeLocation = locationDao.getLocationByGuidAndParentGuid(
+					createAccountRequest.getChildLocation().getLocationType(),
+					createAccountRequest.getChildLocation().getLocationGuid(),
+					createAccountRequest.getParentLocation().getLocationType(),
+					createAccountRequest.getParentLocation().getLocationGuid());
 			userInfo.setUser(user);
 			userInfo.setNativeLocation(nativeLocation);
 			LocationMaster masterLocation = locationMasterDao
-					.getLocationByGuid(createAccountRequest.getLocationGuid());
+					.getLocationByGuid(createAccountRequest.getChildLocation().getLocationGuid());
 			userInfo.setMasterLocation(masterLocation);
 			account.setUserInfo(userInfo);
 			accountGuid = accountDao.createAccount(account);

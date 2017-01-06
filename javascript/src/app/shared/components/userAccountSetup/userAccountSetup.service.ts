@@ -16,11 +16,11 @@ export class UserAccountSetupService {
      
 
      // Create tha ccount
-     createAccount(username:any,password:any,userguid:any,locationguid:any,locationrefguid:any) : Observable<any> {
-        let retreiveUserReq={idCardNo:voterId,userName:name,idCardType:'VOTER ID'};
+     createAccount(loginUserEmail:any,username:any,password:any,userguid:any,childLocation:any,parentLocation:any) : Observable<any> {
+        let retreiveUserReq={emailAddress:loginUserEmail,loginUserName:username,password:password,userGuid:userguid,childLocation:childLocation,parentLocation:parentLocation};
         let observer = new Observable(observer =>{
               this.SwaggerService.fetchAPIMetaData().subscribe(services =>{
-                   services.user.getUserByVoterIdAndName({body:retreiveUserReq},function(results){
+                   services.account.createAccount({body:retreiveUserReq},function(results){
                            observer.next(results.obj);
                            observer.complete();
                    },function(error){

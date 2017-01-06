@@ -22,4 +22,7 @@ public interface LocationDao {
 
 	Location getLocationByGuid(Long locationRefGuid) throws InternalServerException;
 
+	Location getLocationByGuidAndParentGuid(String childLocationType, Long childLocationGuid, String parentLocationType,
+			Long parentLocationGuid) throws InternalServerException;
+
 }

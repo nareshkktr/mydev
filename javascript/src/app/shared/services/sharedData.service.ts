@@ -9,7 +9,6 @@ export class SharedDataService {
 
     private data:any;
 
-
      constructor () {
           console.log('initialize shared data service');
      }

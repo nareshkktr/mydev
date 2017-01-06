@@ -3,6 +3,7 @@
  */
 package com.kasisripriyawebapps.myindia.daoimpl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.criterion.Criterion;
@@ -14,6 +15,7 @@ import com.kasisripriyawebapps.myindia.constants.ServiceConstants;
 import com.kasisripriyawebapps.myindia.dao.LocationDao;
 import com.kasisripriyawebapps.myindia.entity.Location;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
+import com.kasisripriyawebapps.myindia.util.CommonUtil;
 
 /**
  * The Class LocationDaoImpl.
@@ -53,6 +55,26 @@ public class LocationDaoImpl extends BaseDaoImpl<Long, Location> implements Loca
 	@Override
 	public Location getLocationByGuid(Long locationRefGuid) throws InternalServerException {
 		return getById(locationRefGuid);
+	}
+
+	@Override
+	public Location getLocationByGuidAndParentGuid(String childLocationType, Long childLocationGuid,
+			String parentLocationType, Long parentLocationGuid) throws InternalServerException {
+
+		List<Criterion> criterions = new ArrayList<Criterion>();
+
+		if (childLocationType.equalsIgnoreCase(ServiceConstants.LOCATION_VILLAGE_TYPE)) {
+			if (parentLocationType.equalsIgnoreCase(ServiceConstants.LOCATION_VILLAGE_PANCHAYATH_TYPE)) {
+
+				Criterion criterionObj = Restrictions.eq("locationVillage", childLocationGuid);
+				Criterion criterionObjOne = Restrictions.eq("locationVillagePanchayat", parentLocationGuid);
+
+				criterions.add(criterionObj);
+				criterions.add(criterionObjOne);
+			}
+		}
+
+		return getByConditions(criterions);
 	}
 
 }

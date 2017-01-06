@@ -20,7 +20,7 @@ export class UserLocationSetupService {
         let retreiveUserReq={};
         let observer = new Observable(observer =>{
               this.SwaggerService.fetchAPIMetaData().subscribe(services =>{
-                   services.user.getUserByVoterIdAndName({body:retreiveUserReq},function(results){
+                   services.user.getReferenceLocationForMaster({body:locationInfo},function(results){
                            observer.next(results.obj);
                            observer.complete();
                    },function(error){
@@ -33,5 +33,4 @@ export class UserLocationSetupService {
         });
             return observer;
      }
-
 }

@@ -106,9 +106,7 @@ public class AccountEndPoint {
 			throw new PreConditionRequiredException(ExceptionConstants.PASSWORD_REQUIRED);
 		} else if (createAccountRequest.getUserGuid() == null) {
 			throw new PreConditionRequiredException(ExceptionConstants.USER_GUID_REQUIRED);
-		} else if (createAccountRequest.getLocationRefGuid() == null) {
-			throw new PreConditionRequiredException(ExceptionConstants.LOCATION_REF_GUID_REQUIRED);
-		} else if (createAccountRequest.getLocationGuid() == null) {
+		} else if (createAccountRequest.getChildLocation().getLocationGuid() == null) {
 			throw new PreConditionRequiredException(ExceptionConstants.LOCATION_GUID_REQUIRED);
 		} else if (createAccountRequest.getLoginUserName().isEmpty()) {
 			throw new PreConditionFailedException(ExceptionConstants.LOGIN_USER_NAME_NOT_EMPTY);

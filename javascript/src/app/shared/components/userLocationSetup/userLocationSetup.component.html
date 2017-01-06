@@ -15,27 +15,49 @@
 					<tr>
 						<td><span> District </span></td>
 						<td><span> : </span></td>
-						<td><span> {{ userLocationData.locationDistrict }}  </span></td>
+						<td><span> {{ userLocationData.locationDistrict }} </span></td>
 					</tr>
 					<tr>
-						<td><span> Mandal </span></td>
+						<td><span> Mandal (Taluk) </span></td>
 						<td><span> : </span></td>
 						<td><span> {{ userLocationData.locationMandal }} </span></td>
 					</tr>
-					<!--<tr>
+					<tr>
 						<td><span> Native Location </span></td>
 						<td><span> : </span></td>
 						<td><md-select class="signup_input_select"
-								placeholder=" Native Location" [(ngModel)]="locationInfo" [formControl]="userLocationSetupForm.controls['locationInfo']" required> <md-option
-								*ngFor="let location of userLocationData.locations" [value]="location"> {{ year
-							}} </md-option> </md-select>
-							<div  style="color:red; font-size:13px !important;" *ngIf="userLocationSetupForm.controls['locationInfo'].hasError('required') && userLocationSetupForm.controls['locationInfo'].touched" class="alert alert-danger">You must provide the native location.</div>
-						</td>
-					</tr> -->
-					<tr>
+								[(ngModel)]="locationInfo"
+								[formControl]="userLocationSetupForm.controls['locationInfo']"
+								required placeholder="Select Native Location"> <md-option
+								*ngFor="let location of userLocationData.locations"
+								[value]="location"> {{ location.locationName }} -
+							{{location.locationType}} </md-option> </md-select>
+							<div style="color: red; font-size: 13px !important;"
+								*ngIf="userLocationSetupForm.controls['locationInfo'].hasError('required') && userLocationSetupForm.controls['locationInfo'].touched"
+								class="alert alert-danger">You must provide the native
+								location.</div></td>
+					</tr>
+					<tr *ngIf="showParentLocationRow">
+						<td><span>{{ userParentLocationData.locationType }}</span></td>
+						<td><span> : </span></td>
+						<td>{{ userParentLocationData.locationName }}</td>
+					</tr>
+					<tr *ngIf="!showParentLocationRow">
 						<td colspan="3" align="center">
-							<button [disabled]="!userLocationSetupForm.valid" md-raised-button class="login_signin_button"
+							<button [disabled]="!userLocationSetupForm.valid"
+								md-raised-button class="login_signin_button"
 								(click)="saveLocation()">Save Location</button>
+					</td>
+					</tr>
+					<tr *ngIf="showParentLocationRow">
+						<td colspan="3" align="center">
+							<button [disabled]="!userLocationSetupForm.valid"
+								md-raised-button class="login_signin_button"
+								(click)="confirmLocation()">Confirm Location</button>
+						&nbsp;&nbsp;&nbsp;
+							<button [disabled]="!userLocationSetupForm.valid"
+								md-raised-button class="login_signin_button"
+								(click)="showParentLocationRow=!showParentLocationRow">Cancel</button>
 						</td>
 					</tr>
 				</table>

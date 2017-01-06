@@ -3,6 +3,8 @@
  */
 package com.kasisripriyawebapps.myindia.requestresponsemodel;
 
+import com.kasisripriyawebapps.myindia.solr.entity.SolrLocationMaster;
+
 import io.swagger.annotations.ApiModel;
 
 /**
@@ -11,11 +13,12 @@ import io.swagger.annotations.ApiModel;
 @ApiModel(value = "CreateAccountRequest", description = "To Create Account For An User")
 public class CreateAccountRequest {
 
+	private String emailAddress;
 	private String loginUserName;
 	private String password;
 	private Long userGuid;
-	private Long locationRefGuid;
-	private Long locationGuid;
+	private SolrLocationMaster childLocation;
+	private SolrLocationMaster parentLocation;
 
 	public String getLoginUserName() {
 		return loginUserName;
@@ -41,20 +44,28 @@ public class CreateAccountRequest {
 		this.userGuid = userGuid;
 	}
 
-	public Long getLocationRefGuid() {
-		return locationRefGuid;
+	public String getEmailAddress() {
+		return emailAddress;
 	}
 
-	public void setLocationRefGuid(Long locationRefGuid) {
-		this.locationRefGuid = locationRefGuid;
+	public void setEmailAddress(String emailAddress) {
+		this.emailAddress = emailAddress;
 	}
 
-	public Long getLocationGuid() {
-		return locationGuid;
+	public SolrLocationMaster getChildLocation() {
+		return childLocation;
 	}
 
-	public void setLocationGuid(Long locationGuid) {
-		this.locationGuid = locationGuid;
+	public void setChildLocation(SolrLocationMaster childLocation) {
+		this.childLocation = childLocation;
+	}
+
+	public SolrLocationMaster getParentLocation() {
+		return parentLocation;
+	}
+
+	public void setParentLocation(SolrLocationMaster parentLocation) {
+		this.parentLocation = parentLocation;
 	}
 
 }
