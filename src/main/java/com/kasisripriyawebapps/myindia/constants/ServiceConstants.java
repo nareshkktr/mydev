@@ -148,5 +148,6 @@ public class ServiceConstants {
 	public static final String SITTING_MLA_DESIGNATION = "Sitting Member Of Legislative Assembly";
 
 	public static final String MLA = "Member of Legislative Assembly";
-
+	
+	public static final String CHIEF_MINISTER = "chief minister";
 }

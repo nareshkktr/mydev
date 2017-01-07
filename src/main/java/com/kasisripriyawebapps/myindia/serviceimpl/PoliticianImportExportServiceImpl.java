@@ -268,7 +268,43 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 		
 		processPoliticians(ServiceConstants.SITTING_MLA_DESIGNATION,ServiceConstants.LOCATION_MLA_CONSTITUENCT_TYPE,politicianData);
 	}
-	
+	@Override
+	@Transactional
+	public void importExportChiefMinistors() throws InternalServerException {
+		
+		List<PoliticianExportModel> politicianData = new ArrayList<PoliticianExportModel>();
+		driver = new ChromeDriver();
+		driver.get("https://en.wikipedia.org/wiki/List_of_current_Indian_chief_ministers");
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			throw new InternalServerException(e.getMessage());
+		}
+		WebElement webElement = driver.findElement(By.cssSelector("table.sortable"));
+			List<WebElement> rows=webElement.findElements(By.tagName("tr"));
+			for(WebElement webElement_1:rows){
+				List<WebElement> colums=webElement_1.findElements(By.tagName("td"));
+				if(colums.size() >0){
+					
+					WebElement locationName= colums.get(0);
+					WebElement fullName = colums.get(1);
+					WebElement partyName = colums.get(4);
+					
+					PoliticianExportModel politicianObj = new PoliticianExportModel();
+					politicianObj.setPoliticianName(fullName.getText());
+					politicianObj.setLocationName(locationName.getText());
+					politicianObj.setPartyName(partyName.getText());
+					politicianObj.setDesignation(ServiceConstants.CHIEF_MINISTER);
+					politicianObj.setPoliticianType(ServiceConstants.CHIEF_MINISTER);
+					politicianData.add(politicianObj);
+					
+				}	
+			}
+			driver.close();
+			driver.quit();
+			processPoliticians(ServiceConstants.CHIEF_MINISTER,ServiceConstants.LOCATION_STATE_TYPE,politicianData);
+	  
+	}	
 	@Transactional
 	private void processPoliticians(String politicianType,String locationType,List<PoliticianExportModel> politicianData) throws InternalServerException {
 		

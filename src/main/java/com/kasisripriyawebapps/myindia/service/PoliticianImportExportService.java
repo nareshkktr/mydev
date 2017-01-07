@@ -9,5 +9,6 @@ public interface PoliticianImportExportService {
 	void importExportRajyasabhaMPs() throws InternalServerException;
 
 	void importExportMLA() throws InternalServerException; 
-
+	
+	void importExportChiefMinistors() throws InternalServerException;
 }
