@@ -1,0 +1,3 @@
+
+LOAD DATA LOCAL INFILE 'C:\\Users\\venkasb\\Desktop\\MyIndia\\Problem Types.csv' INTO TABLE PROBLEM_TYPE
+  FIELDS TERMINATED BY ',';
