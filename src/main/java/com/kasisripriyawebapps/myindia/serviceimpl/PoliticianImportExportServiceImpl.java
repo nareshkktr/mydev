@@ -369,18 +369,21 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 				 }
 			}
 			
-			String partyName = eachMemberPartyName.trim();
+			if(eachMemberPartyName != null){
 			
-			if(dataInconsistencyPartyMap.containsKey(partyName)){
-				partyName = dataInconsistencyPartyMap.get(partyName);
-			}
-			
-			if(partyName != null && mapAllPartiesByName.get(partyName) != null && mapAllPartiesByName.get(partyName).size() >0){
-				Party memberParty = mapAllPartiesByName.get(partyName).get(0); 
-				politicianAuthority.setParty(memberParty);
-			}else if(partyName != null && mapAllPartiesByAbbreviation.get(partyName) != null && mapAllPartiesByAbbreviation.get(partyName).size() >0){
-				Party memberParty = mapAllPartiesByAbbreviation.get(partyName).get(0); 
-				politicianAuthority.setParty(memberParty);
+				String partyName = eachMemberPartyName.trim();
+				
+				if(dataInconsistencyPartyMap.containsKey(partyName)){
+					partyName = dataInconsistencyPartyMap.get(partyName);
+				}
+				
+				if(partyName != null && mapAllPartiesByName.get(partyName) != null && mapAllPartiesByName.get(partyName).size() >0){
+					Party memberParty = mapAllPartiesByName.get(partyName).get(0); 
+					politicianAuthority.setParty(memberParty);
+				}else if(partyName != null && mapAllPartiesByAbbreviation.get(partyName) != null && mapAllPartiesByAbbreviation.get(partyName).size() >0){
+					Party memberParty = mapAllPartiesByAbbreviation.get(partyName).get(0); 
+					politicianAuthority.setParty(memberParty);
+				}
 			}
 			
 			
