@@ -58,5 +58,13 @@ public class PoliticianImportEndpoint {
 		politicianImportExportService.importExportChiefMinistors();
 		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
 }
+	@POST
+	@ApiOperation(value = EndPointConstants.IMPORT_GOVERNOR_API_VALUE, nickname = EndPointConstants.IMPORT_GOVERNOR_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.IMPORT_GOVERNOR_API_DESCRIPTION)
+	@Path(EndPointConstants.IMPORT_GOVERNOR_REQUEST_MAPPING)
+	public Response importAllStateGoverners()
+			throws InternalServerException {
+		politicianImportExportService.importExportGoverners();
+		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
+}
 	
 }
