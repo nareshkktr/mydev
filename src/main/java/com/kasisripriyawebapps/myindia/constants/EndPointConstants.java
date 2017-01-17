@@ -783,6 +783,11 @@ public class EndPointConstants {
 	public static final String IMPORT_CHIEF_MINISTER_API_VALUE = "importChiefMinister";
 	public static final String IMPORT_CHIEF_MINISTER_REQUEST_MAPPING = "importChiefMinister";
 	public static final String IMPORT_CHIEF_MINISTER_API_DESCRIPTION = "Import Chief Ministers";
+	
+	public static final String IMPORT_GOVERNOR_API_NICKNAME = "importGovernors";
+	public static final String IMPORT_GOVERNOR_API_VALUE = "importGovernors";
+	public static final String IMPORT_GOVERNOR_REQUEST_MAPPING = "importGovernors";
+	public static final String IMPORT_GOVERNOR_API_DESCRIPTION = "Import Governors";
 
 	/** The Constant CREATE_ACCOUNT_API_NICKNAME. */
 	public static final String SHARE_OBJECT_API_NICKNAME = "shareObject";

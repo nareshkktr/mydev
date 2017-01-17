@@ -289,14 +289,20 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 					WebElement locationName= colums.get(0);
 					WebElement fullName = colums.get(1);
 					WebElement partyName = colums.get(4);
-					
+					String state="";
+					String[] stateArray = locationName.getText().split("\\n");
+					 if(stateArray!=null && stateArray.length>0){
+			             state = stateArray[0].trim();
+			         }
+					 state= state.toUpperCase();
 					PoliticianExportModel politicianObj = new PoliticianExportModel();
 					politicianObj.setPoliticianName(fullName.getText());
-					politicianObj.setLocationName(locationName.getText());
+					politicianObj.setLocationName(state);
 					politicianObj.setPartyName(partyName.getText());
 					politicianObj.setDesignation(ServiceConstants.CHIEF_MINISTER);
 					politicianObj.setPoliticianType(ServiceConstants.CHIEF_MINISTER);
 					politicianData.add(politicianObj);
+					System.out.println(state + " *********** " + fullName.getText());
 					
 				}	
 			}
@@ -305,13 +311,95 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 			processPoliticians(ServiceConstants.CHIEF_MINISTER,ServiceConstants.LOCATION_STATE_TYPE,politicianData);
 	  
 	}
-	
+	@Override
+	@Transactional
+	public void importExportGoverners() throws InternalServerException {
+		
+		List<PoliticianExportModel> politicianData = new ArrayList<PoliticianExportModel>();
+		driver = new ChromeDriver();
+		driver.get("https://en.wikipedia.org/wiki/List_of_current_Indian_governors");
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			throw new InternalServerException(e.getMessage());
+		}
+		List<WebElement> partyTables = driver.findElements(By.cssSelector("table.wikitable"));
+		if (partyTables != null && !partyTables.isEmpty()) {
+			for (WebElement eachPartyTable : partyTables) {
+				if (eachPartyTable != null) {
+					WebElement eachPartyTableTbody = eachPartyTable.findElements(By.xpath("tbody")).get(0);
+					List<WebElement> eachPartyTableTBodyTrList = eachPartyTableTbody.findElements(By.xpath("tr"));
+					if (eachPartyTableTBodyTrList != null && !eachPartyTableTBodyTrList.isEmpty()) {
+						for (WebElement row : eachPartyTableTBodyTrList) {
+							
+							List<WebElement> cells = row.findElements(By.xpath("td"));
+							try {
+								Thread.sleep(1000);
+							} catch (InterruptedException e) {
+								throw new InternalServerException(e.getMessage());
+							}
+							
+							WebElement locationName = null;
+							WebElement fullName = null;
+							String state = "";
+							String name = "";
+							String[] stateArray = null;
+							String[] nameArray = null;
+							
+								locationName = cells.get(0);
+								fullName = cells.get(1);
+
+								stateArray = locationName.getText().split("\\n");
+								nameArray = fullName.getText().split("\\n");
+								
+								if (stateArray != null && stateArray.length > 0) {
+									for (int i = 0; i < stateArray.length - 1; i++) {
+										state = stateArray[i].trim();
+
+									}
+								}
+								if (nameArray != null && nameArray.length > 0) {
+									 name = nameArray[0].trim();
+								}
+							 /*else if (tableIndex == 1) {
+								locationName = cells.get(0);
+								fullName = cells.get(1);
+								state = locationName.getText();
+								stateArray = locationName.getText().split("\\n");
+								
+								if (stateArray != null && stateArray.length > 0) {
+									for (int i = 0; i <= stateArray.length - 1; i++) {
+										state = stateArray[i+1].trim();
+
+									}
+								}
+								name = fullName.getText().trim();
+							}*/
+							state= state.toUpperCase();
+							PoliticianExportModel politicianObj = new PoliticianExportModel();
+							politicianObj.setPoliticianName(name);
+							politicianObj.setLocationName(state);
+							politicianObj.setDesignation(ServiceConstants.GOVERNORS);
+							politicianObj.setPoliticianType(ServiceConstants.GOVERNORS);
+							politicianData.add(politicianObj);
+							System.out.println(state + " *********** " + name);
+						}
+					}
+				}
+
+			}
+		}
+			driver.close();
+			driver.quit();
+			processPoliticians(ServiceConstants.GOVERNORS,ServiceConstants.LOCATION_STATE_TYPE,politicianData);
+	  
+	}
+
 	@Override
 	@Transactional
 	public void importMinistries() throws InternalServerException {
 		
 	}
-	
 	@Transactional
 	private void processPoliticians(String politicianType,String locationType,List<PoliticianExportModel> politicianData) throws InternalServerException {
 		

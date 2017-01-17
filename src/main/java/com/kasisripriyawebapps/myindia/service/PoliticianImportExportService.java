@@ -13,4 +13,6 @@ public interface PoliticianImportExportService {
 	void importExportChiefMinistors() throws InternalServerException;
 
 	void importMinistries() throws InternalServerException;
+
+	void importExportGoverners() throws InternalServerException;
 }

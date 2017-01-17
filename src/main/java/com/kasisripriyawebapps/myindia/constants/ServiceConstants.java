@@ -149,5 +149,6 @@ public class ServiceConstants {
 
 	public static final String MLA = "Member of Legislative Assembly";
 	
-	public static final String CHIEF_MINISTER = "chief minister";
+	public static final String CHIEF_MINISTER = "Chief Minister";
+	public static final String GOVERNORS = "Governor";
 }
