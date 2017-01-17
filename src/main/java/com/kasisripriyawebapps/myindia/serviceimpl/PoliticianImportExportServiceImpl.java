@@ -304,7 +304,14 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 			driver.quit();
 			processPoliticians(ServiceConstants.CHIEF_MINISTER,ServiceConstants.LOCATION_STATE_TYPE,politicianData);
 	  
-	}	
+	}
+	
+	@Override
+	@Transactional
+	public void importMinistries() throws InternalServerException {
+		
+	}
+	
 	@Transactional
 	private void processPoliticians(String politicianType,String locationType,List<PoliticianExportModel> politicianData) throws InternalServerException {
 		

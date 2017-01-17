@@ -107,6 +107,7 @@ static WebDriver driver;
 			
 		} **/
 		
+		/**
 		//For MLA
 		driver = new ChromeDriver();
 		driver.get("http://www.elections.in/government/member-of-legislative-assembly.html");
@@ -153,8 +154,29 @@ static WebDriver driver;
 			
 			
 			
-		}
+		}**/
 		
+		//For Ministries
+		driver = new ChromeDriver();
+		driver.get("http://www.pmindia.gov.in/en/news_updates/portfolios-of-the-union-council-of-ministers-2/");
+		
+		WebElement pageMainTable = driver.findElement(By.className("pms-list"));
+		WebElement pageMainTableBody = pageMainTable.findElements(By.xpath("tbody")).get(0);
+		List<WebElement> memberRows = pageMainTableBody
+				.findElements(By.xpath("tr"));
+		
+		for (WebElement row : memberRows) {
+			
+			List<WebElement> cells = row.findElements(By.xpath("td"));
+			
+			if(cells.size() >=2){
+				
+				WebElement eachMemberConsituencyState = cells.get(2);
+				
+				System.out.println(eachMemberConsituencyState.getText());
+			}
+			
+		}
 		
 		
 	}
