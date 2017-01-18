@@ -131,7 +131,10 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 		driver.close();
 		driver.quit();
 		
-		processPoliticians(ServiceConstants.SITTING_LOKSABHA_MP_DESIGNATION,ServiceConstants.LOCATION_MP_CONSTITUENCT_TYPE,politicianData);
+		List<String> locationTypes = new ArrayList<String>();
+		locationTypes.add(ServiceConstants.LOCATION_MP_CONSTITUENCT_TYPE);
+		
+		processPoliticians(ServiceConstants.SITTING_LOKSABHA_MP_DESIGNATION,locationTypes,politicianData);
 	}
 	
 	@Override
@@ -188,7 +191,11 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 		driver.close();
 		driver.quit();
 		
-		processPoliticians(ServiceConstants.SITTING_RAJYASABHA_MP_DESIGNATION,ServiceConstants.LOCATION_STATE_TYPE,politicianData);
+		List<String> locationTypes = new ArrayList<String>();
+		locationTypes.add(ServiceConstants.LOCATION_STATE_TYPE);
+		locationTypes.add(ServiceConstants.LOCATION_UNION_TERRITORY_TYPE);
+		
+		processPoliticians(ServiceConstants.SITTING_RAJYASABHA_MP_DESIGNATION,locationTypes,politicianData);
 		
 	}
 	
@@ -266,7 +273,10 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 		driver.close();
 		driver.quit();
 		
-		processPoliticians(ServiceConstants.SITTING_MLA_DESIGNATION,ServiceConstants.LOCATION_MLA_CONSTITUENCT_TYPE,politicianData);
+		List<String> locationTypes = new ArrayList<String>();
+		locationTypes.add(ServiceConstants.LOCATION_MLA_CONSTITUENCT_TYPE);
+		
+		processPoliticians(ServiceConstants.SITTING_MLA_DESIGNATION,locationTypes,politicianData);
 	}
 	@Override
 	@Transactional
@@ -274,7 +284,7 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 		
 		List<PoliticianExportModel> politicianData = new ArrayList<PoliticianExportModel>();
 		driver = new ChromeDriver();
-		driver.get("https://en.wikipedia.org/wiki/List_of_current_Indian_chief_ministers");
+		driver.get(env.getProperty("india-politicians-cm.url"));
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {
@@ -294,6 +304,10 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 					 if(stateArray!=null && stateArray.length>0){
 			             state = stateArray[0].trim();
 			         }
+					 stateArray = state.split("\\[");
+					 if(stateArray!=null && stateArray.length>0){
+			             state = stateArray[0].trim();
+			         }
 					 state= state.toUpperCase();
 					PoliticianExportModel politicianObj = new PoliticianExportModel();
 					politicianObj.setPoliticianName(fullName.getText());
@@ -308,7 +322,12 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 			}
 			driver.close();
 			driver.quit();
-			processPoliticians(ServiceConstants.CHIEF_MINISTER,ServiceConstants.LOCATION_STATE_TYPE,politicianData);
+			
+			List<String> locationTypes = new ArrayList<String>();
+			locationTypes.add(ServiceConstants.LOCATION_STATE_TYPE);
+			locationTypes.add(ServiceConstants.LOCATION_UNION_TERRITORY_TYPE);
+			
+			processPoliticians(ServiceConstants.CHIEF_MINISTER,locationTypes,politicianData);
 	  
 	}
 	@Override
@@ -317,7 +336,7 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 		
 		List<PoliticianExportModel> politicianData = new ArrayList<PoliticianExportModel>();
 		driver = new ChromeDriver();
-		driver.get("https://en.wikipedia.org/wiki/List_of_current_Indian_governors");
+		driver.get(env.getProperty("india-politicians-gov.url"));
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {
@@ -391,7 +410,12 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 		}
 			driver.close();
 			driver.quit();
-			processPoliticians(ServiceConstants.GOVERNORS,ServiceConstants.LOCATION_STATE_TYPE,politicianData);
+			
+			List<String> locationTypes = new ArrayList<String>();
+			locationTypes.add(ServiceConstants.LOCATION_STATE_TYPE);
+			locationTypes.add(ServiceConstants.LOCATION_UNION_TERRITORY_TYPE);
+			
+			processPoliticians(ServiceConstants.GOVERNORS,locationTypes,politicianData);
 	  
 	}
 
@@ -401,7 +425,7 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 		
 	}
 	@Transactional
-	private void processPoliticians(String politicianType,String locationType,List<PoliticianExportModel> politicianData) throws InternalServerException {
+	private void processPoliticians(String politicianType,List<String> locationType,List<PoliticianExportModel> politicianData) throws InternalServerException {
 		
 		Politician politicianMember = null;
 		
@@ -439,7 +463,10 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 				.collect(Collectors.groupingBy(partyObject -> partyObject.getPartyAbbrevation().trim()));
 		
 		//Load all location information by location type
-		List<LocationMaster> allMpLocations = locationMasterDao.getAllMasterLocationsByType(locationType);
+		List<LocationMaster> allMpLocations = new ArrayList<LocationMaster>();
+		
+		for(int i=0;i<locationType.size();i++)
+			allMpLocations.addAll(locationMasterDao.getAllMasterLocationsByType(locationType.get(i)));
 		
 		Map<String,List<LocationMaster>> mapAllMpLocations = allMpLocations.stream()
 				.collect(Collectors.groupingBy(locationMasterObject -> locationMasterObject.getLocationName().trim()));
