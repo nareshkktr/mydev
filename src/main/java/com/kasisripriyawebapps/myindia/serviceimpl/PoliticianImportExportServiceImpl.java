@@ -573,5 +573,12 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 			politicianAuthorityDao.saveOrUpdatePolitician(activePoliticianAuthorities);
 
 	}
+
+	@Override
+	@Transactional
+	public void importVillageSarpanchas() throws InternalServerException {
+		
+		
+	}
 	
 }
