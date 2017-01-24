@@ -10,7 +10,8 @@
   "scripts": {
     "start": "brunch watch --server",
     "build":"brunch build&&xcopy public ..\\src\\main\\resources\\static /s /e /h /y",
-    "startLocal": "startLocalScript.bat"
+    "startLocal": "startLocalScript.bat",
+    "copyHtmlFiles": "copyHtmlFiles.bat"
   },
   "dependencies": {},
   "devDependencies": {

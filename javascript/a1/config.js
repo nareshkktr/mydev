@@ -1,6 +1,12 @@
 exports.config ={ 
   paths: {
-    "public": 'public'
+    "public": 'public',
+     watched: [
+      'app',
+      'assets',
+      'styles',
+      'vendor',
+    ]
   },
   npm: {
     enabled: false
@@ -30,6 +36,14 @@ exports.config ={
       order: {
         before: [],
         after: []
+      }
+    }
+  },
+  plugins: {
+    autoReload: {
+      match: {
+        stylesheets: ['*.css','*.html'],
+        javascripts: ['*.js']
       }
     }
   }
