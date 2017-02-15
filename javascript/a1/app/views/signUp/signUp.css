@@ -1,0 +1,107 @@
+#signup-container {
+	background-color: #ebebeb;
+	height: 100%;
+}
+
+#signup_bg_img {
+	margin: 0 auto;
+}
+
+#signup_form {
+	display: flex;
+	height: 100%;
+	align-items: center;
+}
+
+#signup_bg_row {
+	display: flex;
+	height: 100%;
+	align-items: center;
+}
+
+#signup_bg_cell {
+	display: flex;
+	height: 100%;
+	align-items: center;
+}
+
+#signup_form form {
+	width: 75%;
+}
+
+#signup_form form .form-group {
+	margin-bottom: 17px;
+}
+
+#signup_form form .form-group label {
+	color: black;
+	text-align: left !important;
+	padding-bottom: 3px;
+	letter-spacing: 1px;
+}
+
+#signup_form form .app_name_img img {
+	width: 90px;
+	height: 90px;
+	border-radius: 50%;
+	border: 5px solid #f94c59;
+	vertical-align: middle;
+}
+
+#signup_form form .app_name_img label {
+	color: #f94c59;
+	letter-spacing: 1px;
+	font-size: 32px;
+	font-family: 'Niconne', cursive;
+}
+
+#signup_form form #login-btn, #connect-btn {
+	float: right;
+	letter-spacing: 1px;
+	padding-left: 18px;
+	padding-right: 18px;
+	padding-top: 6px;
+	padding-bottom: 6px;
+}
+
+#signup_form form #connect-btn {
+	float: left;
+}
+
+#signup_form form #login-btn, #connect-btn {
+	float: right;
+	letter-spacing: 1px;
+	padding-left: 18px;
+	padding-right: 18px;
+	padding-top: 6px;
+	padding-bottom: 6px;
+}
+
+#signup_form form .connected_row {
+	border-top: 1px groove white;
+	margin-top: 30px;
+	padding-top: 15px;
+}
+
+.app_signup_moto {
+	text-align: center;
+	padding-top: 25px;
+	font-weight: 900;
+	letter-spacing: 1.5px;
+	word-wrap: break-word;
+	font-size: 22px;
+	padding-bottom: 25px;
+}
+
+#app_moto_img {
+	width: 100%;
+}
+
+.moto_highlite {
+	color: #f94c59;
+	text-align: center;
+	font-weight: 900;
+	letter-spacing: 1.5px;
+	word-wrap: break-word;
+	font-size: 22px;
+}

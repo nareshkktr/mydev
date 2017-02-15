@@ -6,14 +6,7 @@
     homeController.$inject = ['swaggerShareService'];
 
     function homeController(swaggerShareService) {
-    	alert('In home controller');
-
-    	//swaggerShareService.getAPIMetaData('http://'+window.location.host+'/',setAPIMetaData);
-    	swaggerShareService.getAPIMetaData('http://localhost:8080/',setAPIMetaData);
-
-    	function setAPIMetaData(metaInfo){
-    		alert(metaInfo);
-    	}
+    	
     }
 
 })();

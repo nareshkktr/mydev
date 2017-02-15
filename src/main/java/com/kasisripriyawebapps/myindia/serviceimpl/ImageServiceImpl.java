@@ -113,7 +113,7 @@ public class ImageServiceImpl implements ImageService {
 		} else if (createUpdateImageRequest.getObjectType()
 				.equalsIgnoreCase(ApplicationConstants.OBJECT_TYPE_PROBLEM)) {
 			ProblemImage imageEntity = new ProblemImage();
-			imageEntity.setImageName(createUpdateImageRequest.getImageName());
+			//imageEntity.setImageName(createUpdateImageRequest.getImageName());
 			imageEntity.setImageURL(fileUrl);
 			imageEntity.setCreatedTimeStamp(CommonUtil.getCurrentGMTTimestamp());
 			imageObj = imageEntity;

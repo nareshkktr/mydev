@@ -1,8 +1,9 @@
 (function() {
      'use strict';
-	
-	angular.module('myindia-app', ['ui.router']);
-
+	var myIndiaApp=angular.module('myindia-app', ['ui.router','ui.bootstrap']);
+	myIndiaApp.run(function($state, $rootScope){
+		   $rootScope.$state = $state;
+		})
 })();
 (function() {
     'use strict';
@@ -71,34 +72,42 @@
 
 })();
 (function() {
-    'use strict';
+	'use strict';
 
-    angular.module('myindia-app').config(routeConfig);
+	angular.module('myindia-app').config(routeConfig);
 
-    routeConfig.$inject = ['$stateProvider','$urlRouterProvider'];
+	routeConfig.$inject = [ '$stateProvider', '$urlRouterProvider' ];
 
-    function routeConfig($stateProvider, $urlRouterProvider) {
-        
-        $urlRouterProvider.otherwise('/home');
-        
-        $stateProvider
-            
-            // HOME STATES AND NESTED VIEWS ========================================
-            .state('home', {
-                url: '/home',
-                templateUrl: resource+'partials/home.html',
-                controller: 'homeController',
-                controllerAs: 'hc'
-            })
-            
-            // ABOUT PAGE AND MULTIPLE NAMED VIEWS =================================
-            .state('about', {
-                // we'll get to this in a bit       
-            });
-            
-    };
+	function routeConfig($stateProvider, $urlRouterProvider) {
 
-}) ();
+		$urlRouterProvider.otherwise('/home');
+
+		$stateProvider
+
+		// HOME STATES AND NESTED VIEWS ========================================
+		.state('home', {
+			url : '/home',
+			templateUrl : resource + 'partials/home.html',
+			controller : 'homeController',
+			controllerAs : 'hc'
+		}).state('signIn', {
+			url : '/signIn',
+			templateUrl : resource + 'partials/signIn.html',
+			controller : 'signInController',
+			controllerAs : 'signIn'
+		}).state('signUp', {
+			url : '/signUp',
+			templateUrl : resource + 'partials/signUp.html',
+			controller : 'signUpController',
+			controllerAs : 'sUpc'
+		}).state('search', {
+			url : '/search',
+			templateUrl : resource + 'partials/globalSearch.html',
+			controller : 'globalSearchController',
+			controllerAs : 'gSc'
+		});
+	}
+})();
 (function() {
     'use strict';
 
@@ -108,11 +117,13 @@
 
     function swaggerShareService($q) {
 
+        var apiMetaData = {};
+
     	var swaggerShareService = {
     		getAPIMetaData : getAPIMetaData
     	};
 
-    	var apiMetaData = {};
+        return swaggerShareService;
 
     	function getAPIMetaData(hostName,setMetaData){
 
@@ -129,9 +140,9 @@
 
     	function fetchAPIMetaData(hostName){
     		
-    		var deferred = $q.defer();
+    		let deferred = $q.defer();
 
-    		var swagger = new SwaggerClient({
+    		let swagger = new SwaggerClient({
                 url: hostName+'api/swagger.json',
                 success: function() {
                       deferred.resolve(swagger);
@@ -144,9 +155,27 @@
 
     	}
 
-        return swaggerShareService;
-
+        
     }
+
+})();
+(function() {
+	'use strict';
+
+	angular.module('myindia-app').controller("globalSearchController",
+			globalSearchController);
+
+	globalSearchController.$inject = [ 'swaggerShareService' ];
+
+	function globalSearchController(swaggerShareService) {
+
+		swaggerShareService.getAPIMetaData('http://localhost:8080/',
+				setAPIMetaData);
+
+		function setAPIMetaData(metaInfo) {
+			alert(metaInfo);
+		}
+	}
 
 })();
 (function() {
@@ -157,15 +186,102 @@
     homeController.$inject = ['swaggerShareService'];
 
     function homeController(swaggerShareService) {
-    	alert('In home controller');
+    	
+    }
 
-    	//swaggerShareService.getAPIMetaData('http://'+window.location.host+'/',setAPIMetaData);
-    	swaggerShareService.getAPIMetaData('http://localhost:8080/',setAPIMetaData);
+})();
+(function() {
+    'use strict';
 
-    	function setAPIMetaData(metaInfo){
-    		alert(metaInfo);
+    angular.module('myindia-app').controller("signInController", signInController);
+
+    signInController.$inject = ['signInService'];
+
+    function signInController(signInService) {
+
+    	var signIn = this;
+ 		signIn.login = login;
+
+    	function login(){
+    		signInService.login(signIn.userName,signIn.password).then(loginSuccess).catch(loginFailiure);
+
+    		function loginSuccess(){
+    			alert("Login Success");
+    		}
+
+    		function loginFailed(){
+    			alert("Login Failed...");
+    		}
     	}
     }
+
+})();
+(function() {
+    'use strict';
+
+    angular.module('myindia-app').factory("signInService", signInService);
+
+    signInService.$inject = ['$q','swaggerShareService'];
+
+    function signInService($q,swaggerShareService) {
+
+        var services = {};
+
+    	var signInService = {
+    		login : login
+    	};
+
+        //Call and save the data
+        swaggerShareService.getAPIMetaData('http://localhost:8080/',setAPIMetaData);
+
+        return signInService;
+
+        function setAPIMetaData(metaInfo){
+            services = metaInfo;
+        }
+
+    	function login(userName,password){
+
+            let requestBody = {
+                loginUserName: userName,
+                password: password
+            }
+            let deferred = $q.defer();
+
+            services.account.login({body:JSON.stringify(requestBody)},loginSuccess,loginFailure);
+        
+            return deferred;
+
+            function loginSuccess(data){
+                deferred.resolve(data);
+            }
+
+            function loginFailiure(error){
+                deferred.reject(error);
+            }
+
+    	}
+        
+    }
+
+})();
+(function() {
+	'use strict';
+
+	angular.module('myindia-app').controller("signUpController",
+			signUpController);
+
+	signUpController.$inject = [ 'swaggerShareService' ];
+
+	function signUpController(swaggerShareService) {
+
+		swaggerShareService.getAPIMetaData('http://localhost:8080/',
+				setAPIMetaData);
+
+		function setAPIMetaData(metaInfo) {
+			alert(metaInfo);
+		}
+	}
 
 })();
 

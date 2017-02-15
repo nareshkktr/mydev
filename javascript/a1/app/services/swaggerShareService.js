@@ -7,11 +7,13 @@
 
     function swaggerShareService($q) {
 
+        var apiMetaData = {};
+
     	var swaggerShareService = {
     		getAPIMetaData : getAPIMetaData
     	};
 
-    	var apiMetaData = {};
+        return swaggerShareService;
 
     	function getAPIMetaData(hostName,setMetaData){
 
@@ -28,9 +30,9 @@
 
     	function fetchAPIMetaData(hostName){
     		
-    		var deferred = $q.defer();
+    		let deferred = $q.defer();
 
-    		var swagger = new SwaggerClient({
+    		let swagger = new SwaggerClient({
                 url: hostName+'api/swagger.json',
                 success: function() {
                       deferred.resolve(swagger);
@@ -43,8 +45,7 @@
 
     	}
 
-        return swaggerShareService;
-
+        
     }
 
 })();

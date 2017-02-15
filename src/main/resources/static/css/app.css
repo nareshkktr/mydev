@@ -1,0 +1,577 @@
+@CHARSET "ISO-8859-1";
+
+#app_footer {
+	background-color: #f94c59;
+	position: fixed;
+	width: 100%;
+	bottom: 0px;
+	padding: 10px;
+	color: #ebebeb;
+}
+
+.app_name_img {
+	text-align: center;
+}
+
+.app_name_img img {
+	width: 50px;
+	height: 40px;
+	border-radius: 50%;
+	vertical-align: middle;
+}
+
+.app_name_img label {
+	color: white;
+	letter-spacing: 1px;
+	font-size: 20px;
+	margin-left: 10px;
+	font-family: 'Niconne', cursive;
+}
+
+.copty_right_col {
+	letter-spacing: 1px;
+	padding-top: 10px;
+	text-align: center;
+}
+
+.copty_right_col label {
+	font-family: 'Niconne', cursive;
+	margin-left: 5px;
+}
+
+.social_icons_col {
+	text-align: center;
+	padding-top: 10px;
+}
+
+.social_icons_col i {
+	font-size: 17px;
+	padding-left: 10px;
+}
+@CHARSET "ISO-8859-1";
+
+body {
+	font-family: 'Slabo 27px', serif !important;
+}
+
+.app_header {
+	background-color: #f94c59 !important;
+	margin-bottom: 0px !important;
+}
+
+.app_header .navbar-form {
+	line-height: 50px;
+	margin: 0px !important;
+}
+
+.app_header a {
+	line-height: 50px;
+	padding-top: 0px !important;
+	padding-bottom: 0px !important;
+}
+
+.app_search_icon {
+	position: absolute;
+	color: #c0bdbd;
+	left: 12px;
+	margin-top: 12px;
+	font-size: 12px !important;
+	z-index: 200;
+}
+
+#app-header {
+	background-color: #f94c59;
+	margin-bottom: 0px;
+	margin-top: 92px;
+}
+
+.app-name {
+	font-family: 'Niconne', cursive;
+	color: #ebebeb;
+	font-size: 28px !important;
+	letter-spacing: 2px;
+	padding-left: 7px;
+}
+
+.app-content {
+	display: flex;
+	flex-direction: column;
+	height: 100vh;
+}
+
+#global-search label {
+	position: absolute;
+	left: 10px;
+	top: 6px;
+	font-size: 12px;
+	color: #78787c;
+}
+
+#logged-in-user-icon {
+	border-radius: 50%;
+	width: 38px;
+	border: 2px solid #fda68a;
+}
+
+#global-search #global-search-input, #search .hint {
+	padding-left: 30px;
+	padding-right: 45px;
+	border-radius: 23px;
+	font-size: 11px;
+	height: 29px;
+	color: #78787c;
+}
+
+.dropdown a:HOVER {
+	background-color: #32b38c !important;;
+}
+
+#logged-in-location {
+	font-family: cursive;
+	color: white;
+	font-size: 15px;
+	letter-spacing: 1px;
+}
+
+#header-edit-location-icon {
+	padding-left: 4px;
+	color: #fda68a;
+	vertical-align: middle;
+	cursor: pointer;
+	font-size: 27px;
+}
+
+.caret {
+	color: #fda68a;
+	vertical-align: middle;
+	font-size: 18px;
+}
+
+#header-notification-icons {
+	margin-left: 15px;
+}
+
+#header-notification-icons li {
+	color: white;
+	padding-left: 15px !important;
+	margin-left: 0px;
+	margin-right: 0px;
+}
+
+#header-notification-icons li i {
+	font-size: 27px !important;
+	vertical-align: middle;
+}
+
+#header-notification-icons span {
+	font-size: 9px;
+	background-color: #ebebeb;
+	border: 2px solid #ebebeb;
+	padding-left: 1px;
+	padding-top: 0px;
+	border-radius: 50%;
+	position: absolute;
+	top: -9px;
+	left: 30px;
+	padding-right: 3px;
+	padding-bottom: 0px;
+	color: #f94c59;
+	font-weight: 600;
+}
+
+#header-add-objects-icon {
+	font-size: 23px;
+	margin-left: 10px;
+}
+
+#header-add-objects-icon i {
+	color: #f94c59;
+	font-size: 23px;
+	background-color: #ebebeb;
+	border-radius: 50%;
+	padding-left: 4px;
+	padding-right: 4px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+	font-weight: 900;
+	border: 2px solid #f94c59;
+}
+
+#app-header .dropdown-menu>li>a {
+	padding: 8px 15px !important;
+	font-size: 11px;
+	font-weight: 600;
+}
+
+#app-header .dropdown-menu .divider {
+	margin: 0px 0 !important;
+}
+
+#app-header .dropdown-menu {
+	padding: 0px 0 !important;
+}
+
+.app-body-container {
+	flex: 1;
+	margin-top: 60px;
+}
+
+.signin_app_body_container {
+	margin-bottom: 60px;
+	flex: 1;
+}
+
+.app_btn {
+	background-color: #f94c59;
+	color: #ebebeb;
+	border-radius: 50px;
+}
+
+select, textarea, input[type="text"], input[type="password"], input[type="datetime"],
+	input[type="datetime-local"], input[type="date"], input[type="month"],
+	input[type="time"], input[type="week"], input[type="number"], input[type="email"],
+	input[type="url"], input[type="search"], input[type="tel"], input[type="color"],
+	.uneditable-input {
+	-webkit-box-shadow: 1px 5px 0px 1px rgba(0, 0, 0, .075) !important;
+	box-shadow: 1px 5px 0px 1px rgba(0, 0, 0, .075) !important;
+	font-size: 13px !important;
+}
+
+button, input[type="checkbox"] {
+	-webkit-box-shadow: 1px 5px 0px 1px rgba(249, 76, 89, 0.57);
+	box-shadow: 1px 5px 0px 1px rgba(249, 76, 89, 0.57);
+}
+
+button:focus {
+	color: white !important;
+}
+
+.form-control {
+	height: 37px !important;
+}
+
+textarea:focus, input[type="text"]:focus, input[type="password"]:focus,
+	input[type="datetime"]:focus, input[type="datetime-local"]:focus, input[type="date"]:focus,
+	input[type="month"]:focus, input[type="time"]:focus, input[type="week"]:focus,
+	input[type="number"]:focus, input[type="email"]:focus, input[type="url"]:focus,
+	input[type="search"]:focus, input[type="tel"]:focus, input[type="color"]:focus,
+	.uneditable-input:focus {
+	border-color: #f94c59;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px #f94c59;
+	outline: 0 none;
+}
+
+input[type="text"], input[type="password"], select {
+	padding-left: 35px;
+	background-color: white;
+}
+
+.form-control {
+	border-radius: 10px !important;
+}
+
+.app_name_font {
+	font-family: 'Niconne', cursive;
+}
+
+.app_header .navbar-brand {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+}
+
+.navbar-brand>img {
+	height: 100%;
+	width: auto;
+	border-radius: 50%;
+	width: 50px;
+	height: 40px;
+	border-radius: 50%;
+	vertical-align: middle;
+	list-height: 50px;
+}
+
+.app_header a:HOVER {
+	background-color: #f94c59 !important;
+}
+
+.app_header .dropdown-menu {
+	padding: 0px 0! important;
+}
+
+.app_header .dropdown-menu li a {
+	padding: 10px !important;
+}
+.app_header .dropdown-menu li a:HOVER {
+	color: #ebebeb !important;
+}
+
+.app_header .dropdown-menu .divider {
+	margin: 0px !important;
+}
+
+#login-container {
+	background-color: #ebebeb;
+	height: 100%;
+}
+
+#login_bg_img {
+	margin: 0 auto;
+}
+
+#login_form {
+	display: flex;
+	height: 100%;
+	align-items: center;
+}
+
+#login_bg_row {
+	display: flex;
+	height: 100%;
+	align-items: center;
+}
+
+#login_bg_cell {
+	display: flex;
+	height: 100%;
+	align-items: center;
+}
+
+#login_form form {
+	width: 75%;
+}
+
+#login_form form .form-group {
+	margin-bottom: 30px;
+}
+
+#login_form form .form-group label {
+	color: black;
+	text-align: left !important;
+	padding-bottom: 3px;
+	font-size: 13px;
+}
+
+#login_form form .app_name_img img {
+	width: 90px;
+	height: 90px;
+	border-radius: 50%;
+	border: 5px solid #f94c59;
+	vertical-align: middle;
+}
+
+#login_form form .app_name_img label {
+	color: #f94c59;
+	letter-spacing: 1px;
+	font-size: 32px;
+	font-family: 'Niconne', cursive;
+}
+
+.login_icon {
+	position: absolute;
+	color: grey;
+	left: 28px;
+	margin-top: 40px;
+	font-size: 12px !important;
+}
+
+.password_row {
+	margin-bottom: 10px !important;
+}
+
+.forgot_password_row {
+	text-align: right;
+	font-size: 13px;
+}
+
+.forgot_password_row label {
+	cursor: pointer;
+}
+
+#login_form form #login-btn, #connect-btn {
+	float: right;
+	letter-spacing: 1px;
+	padding-left: 18px;
+	padding-right: 18px;
+	padding-top: 6px;
+	padding-bottom: 6px;
+}
+
+#remember_me_lbl {
+	letter-spacing: 1px;
+	margin-top: 6px;
+	font-size: 13px;
+}
+
+#login_form form .connected_row {
+	border-top: 1px groove white;
+	margin-top: 15px;
+	padding-top: 15px;
+}
+
+#sign_up_connect_lbl {
+	letter-spacing: 1px;
+	font-size: 13px;
+}
+
+#login_form form input[type="checkbox"] {
+	display: none;
+	display: inline-block;
+	cursor: pointer;
+	font-size: 13px;
+	margin-right: 10px;
+	line-height: 18px;
+}
+
+#login_form form .login_checkbox {
+	display: inline-block;
+	cursor: pointer;
+	font-size: 13px;
+	margin-right: 10px;
+	line-height: 18px;
+	margin-top: 8px;
+}
+
+#login_form form .login_checkbox:before {
+	content: "";
+	display: inline-block;
+	width: 15px;
+	height: 15px;
+	vertical-align: middle;
+	background-color: #f94c59;
+	color: #f3f3f3;
+	text-align: center;
+	box-shadow: 3px 3px 3px 0px rgba(0, 0, 0, .3), 0px 1px 0px 0px
+		rgba(255, 255, 255, .8);
+	-webkit-box-shadow: 3px 3px 3px 0px rgba(0, 0, 0, .3), 0px 1px 0px 0px
+		rgba(255, 255, 255, .8);
+	border-radius: 3px;
+	margin-right: 10px;
+	border-radius: 3px
+}
+
+#login_form form input[type=checkbox]:checked+.login_checkbox:before {
+	content: "\2713";
+	text-shadow: 1px 1px 1px rgba(0, 0, 0, .2);
+	font-size: 15px;
+}
+
+#login_form form input[type=checkbox] {
+	display: none;
+}
+
+.sign_up_connect_lbl {
+	margin-top: 12px;
+}
+#signup-container {
+	background-color: #ebebeb;
+	height: 100%;
+}
+
+#signup_bg_img {
+	margin: 0 auto;
+}
+
+#signup_form {
+	display: flex;
+	height: 100%;
+	align-items: center;
+}
+
+#signup_bg_row {
+	display: flex;
+	height: 100%;
+	align-items: center;
+}
+
+#signup_bg_cell {
+	display: flex;
+	height: 100%;
+	align-items: center;
+}
+
+#signup_form form {
+	width: 75%;
+}
+
+#signup_form form .form-group {
+	margin-bottom: 17px;
+}
+
+#signup_form form .form-group label {
+	color: black;
+	text-align: left !important;
+	padding-bottom: 3px;
+	letter-spacing: 1px;
+}
+
+#signup_form form .app_name_img img {
+	width: 90px;
+	height: 90px;
+	border-radius: 50%;
+	border: 5px solid #f94c59;
+	vertical-align: middle;
+}
+
+#signup_form form .app_name_img label {
+	color: #f94c59;
+	letter-spacing: 1px;
+	font-size: 32px;
+	font-family: 'Niconne', cursive;
+}
+
+#signup_form form #login-btn, #connect-btn {
+	float: right;
+	letter-spacing: 1px;
+	padding-left: 18px;
+	padding-right: 18px;
+	padding-top: 6px;
+	padding-bottom: 6px;
+}
+
+#signup_form form #connect-btn {
+	float: left;
+}
+
+#signup_form form #login-btn, #connect-btn {
+	float: right;
+	letter-spacing: 1px;
+	padding-left: 18px;
+	padding-right: 18px;
+	padding-top: 6px;
+	padding-bottom: 6px;
+}
+
+#signup_form form .connected_row {
+	border-top: 1px groove white;
+	margin-top: 30px;
+	padding-top: 15px;
+}
+
+.app_signup_moto {
+	text-align: center;
+	padding-top: 25px;
+	font-weight: 900;
+	letter-spacing: 1.5px;
+	word-wrap: break-word;
+	font-size: 22px;
+	padding-bottom: 25px;
+}
+
+#app_moto_img {
+	width: 100%;
+}
+
+.moto_highlite {
+	color: #f94c59;
+	text-align: center;
+	font-weight: 900;
+	letter-spacing: 1.5px;
+	word-wrap: break-word;
+	font-size: 22px;
+}
+
+/*# sourceMappingURL=app.css.map*/

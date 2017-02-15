@@ -1,24 +1,36 @@
 <!DOCTYPE html>
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-  <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
-  <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-  <title>My India</title>
-  
+<meta charset="utf-8">
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+<meta name="viewport"
+  content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+<title>My India</title>
+
+
+
+<link
+  href="https://fonts.googleapis.com/css?family=Niconne|Alegreya|Alegreya+Sans|Arapey|Arvo|Bree+Serif|Courgette|Crete+Round|Cuprum|Dancing+Script|Domine|Droid+Serif|EB+Garamond|Economica|Inconsolata|Josefin+Sans|Libre+Baskerville|Maven+Pro|Merriweather|Noticia+Text|Noto+Serif|Old+Standard+TT|PT+Sans|PT+Serif|Playfair+Display|Pontano+Sans|Roboto+Slab|Ropa+Sans|Sanchez|Shadows+Into+Light|Slabo+27px|Tenali+Ramakrishna|Ubuntu+Condensed"
+  rel="stylesheet">
+
+
+<link type="text/css" rel="stylesheet" href="css/app.css" />
+<link type="text/css" rel="stylesheet" href="css/vendor.css" />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+  rel="stylesheet">
 </head>
 <body ng-app="myindia-app">
-
   <script>
-    var resource="assets/";
+    var resource = "assets/";
   </script>
-
-	<myindia-header></myindia-header>
-
-	<div ui-view></div>
-
-	<myindia-footer></myindia-footer>
-
+  <div class="app-content">
+    <myindia-header
+      ng-if="!$state.includes('signIn') && !$state.includes('signUp')"></myindia-header>
+    <div ui-view
+      ng-class="(!$state.includes('signIn') && !$state.includes('signUp') ) ? 'app-body-container': 'signin_app_body_container'"></div>
+    <myindia-footer
+      ng-if="$state.includes('signIn') || $state.includes('signUp') "></myindia-footer>
+  </div>
   <script src="js/vendor.js"></script>
   <script src="js/app.js"></script>
 </body>

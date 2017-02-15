@@ -39,20 +39,74 @@ public class Problem implements Serializable {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Problem(Long guid, LocationMaster createdLocation, String problemShortDescription,
-			String problemLongDescription, String photoURL, Long noOfAffectedPeople, Timestamp createdTimeStamp,
-			Timestamp updatedTimeStamp, Long createdBy, Long updatedBy) {
+	
+
+	public Problem(LocationMaster createdLocation, String problemShortDescription, String problemLongDescription,
+			String rootCause, String problemStatus, String problemSeverity, String photoURL, Long noOfAffectedPeople,
+			Long amountInvolved, Timestamp createdTimeStamp, Timestamp updatedTimeStamp,
+			Timestamp manualEscalationTimestamp, Boolean escalationEnabled, Long createdBy, Long updatedBy,
+			List<ProblemImage> problemImages, ProblemType problemType, List<ProblemHistory> problemHistory) {
 		super();
-		this.guid = guid;
 		this.createdLocation = createdLocation;
 		this.problemShortDescription = problemShortDescription;
 		this.problemLongDescription = problemLongDescription;
+		this.rootCause = rootCause;
+		this.problemStatus = problemStatus;
+		this.problemSeverity = problemSeverity;
 		this.photoURL = photoURL;
 		this.noOfAffectedPeople = noOfAffectedPeople;
+		this.amountInvolved = amountInvolved;
 		this.createdTimeStamp = createdTimeStamp;
 		this.updatedTimeStamp = updatedTimeStamp;
+		this.manualEscalationTimestamp = manualEscalationTimestamp;
+		this.escalationEnabled = escalationEnabled;
 		this.createdBy = createdBy;
 		this.updatedBy = updatedBy;
+		this.problemImages = problemImages;
+		this.problemType = problemType;
+		this.problemHistory = problemHistory;
+	}
+
+
+
+	public String getRootCause() {
+		return rootCause;
+	}
+
+	public void setRootCause(String rootCause) {
+		this.rootCause = rootCause;
+	}
+
+	public String getProblemStatus() {
+		return problemStatus;
+	}
+
+	public void setProblemStatus(String problemStatus) {
+		this.problemStatus = problemStatus;
+	}
+
+	public String getProblemSeverity() {
+		return problemSeverity;
+	}
+
+	public void setProblemSeverity(String problemSeverity) {
+		this.problemSeverity = problemSeverity;
+	}
+
+	public Long getAmountInvolved() {
+		return amountInvolved;
+	}
+
+	public void setAmountInvolved(Long amountInvolved) {
+		this.amountInvolved = amountInvolved;
+	}
+
+	public Timestamp getManualEscalationTimestamp() {
+		return manualEscalationTimestamp;
+	}
+
+	public void setManualEscalationTimestamp(Timestamp manualEscalationTimestamp) {
+		this.manualEscalationTimestamp = manualEscalationTimestamp;
 	}
 
 	@Id
@@ -61,7 +115,7 @@ public class Problem implements Serializable {
 	private Long guid;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "LOCATION_GUID")
+	@JoinColumn(name = "PROBLEM_LOCATION_GUID")
 	private LocationMaster createdLocation;
 
 	@Column(name = "SHORT_DESCRIPTION")
@@ -69,27 +123,46 @@ public class Problem implements Serializable {
 
 	@Column(name = "LONG_DESCRIPTION")
 	private String problemLongDescription;
+	
+	@Column(name = "ROOT_CAUSE")
+	private String rootCause;
+	
+	@Column(name = "PROBLEM_STATUS")
+	private String problemStatus;
+	
+	@Column(name = "PROLEM_SEVERITY")
+	private String problemSeverity;
 
 	@Column(name = "PHOTO_URL")
 	private String photoURL;
 
-	@Column(name = "NO_OF_EFFECTED_PEOPLE")
+	@Column(name = "PEOPLE_AFFECTED_COUNT")
 	private Long noOfAffectedPeople;
+	
+	@Column(name = "AMOUNT_INVOLVED")
+	private Long amountInvolved;
 
 	/** The created time stamp. */
 	@Column(name = "CREATED_TIMESTAMP")
 	private Timestamp createdTimeStamp;
 
 	/** The updated time stamp. */
-	@Column(name = "UPDATED_TIMESTAMP")
+	@Column(name = "MODIFIED_TIMESTAMP")
 	private Timestamp updatedTimeStamp;
+	
+	/** The updated time stamp. */
+	@Column(name = "MANUAL_ESCALATION_TIME")
+	private Timestamp manualEscalationTimestamp;
+	
+	@Column(name = "ESCALATION_ENABLED")
+	private Boolean escalationEnabled;
 
 	/** The created by. */
 	@Column(name = "CREATED_BY")
 	private Long createdBy;
 
 	/** The updated by. */
-	@Column(name = "UPDATED_BY")
+	@Column(name = "MODIFIED_BY")
 	private Long updatedBy;
 
 	@OneToMany(mappedBy = "problem", fetch = FetchType.LAZY, cascade = CascadeType.ALL)

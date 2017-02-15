@@ -1,0 +1,153 @@
+#login-container {
+	background-color: #ebebeb;
+	height: 100%;
+}
+
+#login_bg_img {
+	margin: 0 auto;
+}
+
+#login_form {
+	display: flex;
+	height: 100%;
+	align-items: center;
+}
+
+#login_bg_row {
+	display: flex;
+	height: 100%;
+	align-items: center;
+}
+
+#login_bg_cell {
+	display: flex;
+	height: 100%;
+	align-items: center;
+}
+
+#login_form form {
+	width: 75%;
+}
+
+#login_form form .form-group {
+	margin-bottom: 30px;
+}
+
+#login_form form .form-group label {
+	color: black;
+	text-align: left !important;
+	padding-bottom: 3px;
+	font-size: 13px;
+}
+
+#login_form form .app_name_img img {
+	width: 90px;
+	height: 90px;
+	border-radius: 50%;
+	border: 5px solid #f94c59;
+	vertical-align: middle;
+}
+
+#login_form form .app_name_img label {
+	color: #f94c59;
+	letter-spacing: 1px;
+	font-size: 32px;
+	font-family: 'Niconne', cursive;
+}
+
+.login_icon {
+	position: absolute;
+	color: grey;
+	left: 28px;
+	margin-top: 40px;
+	font-size: 12px !important;
+}
+
+.password_row {
+	margin-bottom: 10px !important;
+}
+
+.forgot_password_row {
+	text-align: right;
+	font-size: 13px;
+}
+
+.forgot_password_row label {
+	cursor: pointer;
+}
+
+#login_form form #login-btn, #connect-btn {
+	float: right;
+	letter-spacing: 1px;
+	padding-left: 18px;
+	padding-right: 18px;
+	padding-top: 6px;
+	padding-bottom: 6px;
+}
+
+#remember_me_lbl {
+	letter-spacing: 1px;
+	margin-top: 6px;
+	font-size: 13px;
+}
+
+#login_form form .connected_row {
+	border-top: 1px groove white;
+	margin-top: 15px;
+	padding-top: 15px;
+}
+
+#sign_up_connect_lbl {
+	letter-spacing: 1px;
+	font-size: 13px;
+}
+
+#login_form form input[type="checkbox"] {
+	display: none;
+	display: inline-block;
+	cursor: pointer;
+	font-size: 13px;
+	margin-right: 10px;
+	line-height: 18px;
+}
+
+#login_form form .login_checkbox {
+	display: inline-block;
+	cursor: pointer;
+	font-size: 13px;
+	margin-right: 10px;
+	line-height: 18px;
+	margin-top: 8px;
+}
+
+#login_form form .login_checkbox:before {
+	content: "";
+	display: inline-block;
+	width: 15px;
+	height: 15px;
+	vertical-align: middle;
+	background-color: #f94c59;
+	color: #f3f3f3;
+	text-align: center;
+	box-shadow: 3px 3px 3px 0px rgba(0, 0, 0, .3), 0px 1px 0px 0px
+		rgba(255, 255, 255, .8);
+	-webkit-box-shadow: 3px 3px 3px 0px rgba(0, 0, 0, .3), 0px 1px 0px 0px
+		rgba(255, 255, 255, .8);
+	border-radius: 3px;
+	margin-right: 10px;
+	border-radius: 3px
+}
+
+#login_form form input[type=checkbox]:checked+.login_checkbox:before {
+	content: "\2713";
+	text-shadow: 1px 1px 1px rgba(0, 0, 0, .2);
+	font-size: 15px;
+}
+
+#login_form form input[type=checkbox] {
+	display: none;
+}
+
+.sign_up_connect_lbl {
+	margin-top: 12px;
+}

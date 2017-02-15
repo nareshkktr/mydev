@@ -1,0 +1,50 @@
+@CHARSET "ISO-8859-1";
+
+#app_footer {
+	background-color: #f94c59;
+	position: fixed;
+	width: 100%;
+	bottom: 0px;
+	padding: 10px;
+	color: #ebebeb;
+}
+
+.app_name_img {
+	text-align: center;
+}
+
+.app_name_img img {
+	width: 50px;
+	height: 40px;
+	border-radius: 50%;
+	vertical-align: middle;
+}
+
+.app_name_img label {
+	color: white;
+	letter-spacing: 1px;
+	font-size: 20px;
+	margin-left: 10px;
+	font-family: 'Niconne', cursive;
+}
+
+.copty_right_col {
+	letter-spacing: 1px;
+	padding-top: 10px;
+	text-align: center;
+}
+
+.copty_right_col label {
+	font-family: 'Niconne', cursive;
+	margin-left: 5px;
+}
+
+.social_icons_col {
+	text-align: center;
+	padding-top: 10px;
+}
+
+.social_icons_col i {
+	font-size: 17px;
+	padding-left: 10px;
+}

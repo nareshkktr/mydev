@@ -1,1 +1,55 @@
-<div>Header</div>
+<nav class="navbar navbar-fixed-top app_header" role="navigation">
+	<div class="navbar-header pull-left">
+		<a class="navbar-brand"><img src="assets/app_icon.jpg" /> <span
+			class="app-name">MyIndia</span></a>
+
+		<ul class="nav pull-left">
+			<li uib-dropdown class="dropdown pull-right"><a href
+				id="user-profile-dropdown" uib-dropdown-toggle> <span
+					id="logged-in-location">Pulipadu,A.P</span> <i
+					id="header-edit-location-icon" class="material-icons">location_on</i>
+			</a></li>
+		</ul>
+	</div>
+	<div class="navbar-header pull-right">
+		<div class="pull-left">
+			<form class="navbar-form" role="search">
+				<div class="input-group">
+					<i class="fa fa-search app_search_icon" aria-hidden="true"></i> <input
+						type="text" class="form-control" placeholder="Search"
+						name="srch-term" id="srch-term">
+				</div>
+				<div class="input-group">
+					<ul class="nav pull-left">
+						<li uib-dropdown class="dropdown pull-left"><a href
+							id="header-add-objects-icon" uib-dropdown-toggle> <i
+								class="material-icons">add</i>
+						</a>
+							<ul class="dropdown-menu" uib-dropdown-menu role="menu"
+								aria-labelledby="header-add-objects-icon">
+								<li role="menuitem"><a href="#">Problem</a></li>
+								<li role="menuitem"><a href="#">Event</a></li>
+								<li role="menuitem"><a href="#">Group</a></li>
+							</ul></li>
+						<li uib-dropdown class="dropdown pull-right"><a href
+							id="user-profile-dropdown" uib-dropdown-toggle> <img
+								id="logged-in-user-icon"
+								src="http://2.bp.blogspot.com/-2WoowzxsUf4/VnAociz0xvI/AAAAAAAABmk/0foKF-ZDIuQ/s1600/pawan-kalyan.jpg">
+								<b class="caret"></b>
+						</a>
+							<ul class="dropdown-menu" uib-dropdown-menu role="menu"
+								aria-labelledby="user-profile-dropdown">
+								<li role="menuitem"><a href="#">Kasireddy Kandula</a></li>
+								<li class="divider"></li>
+								<li role="menuitem"><a href="#">Help</a></li>
+								<li role="menuitem"><a href="#">Settings</a></li>
+								<li class="divider"></li>
+								<li role="menuitem"><a href="#">Log out</a></li>
+							</ul></li>
+					</ul>
+				</div>
+			</form>
+		</div>
+
+	</div>
+</nav>
