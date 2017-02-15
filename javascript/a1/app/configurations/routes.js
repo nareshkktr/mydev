@@ -16,7 +16,7 @@
 			url : '/home',
 			templateUrl : resource + 'partials/home.html',
 			controller : 'homeController',
-			controllerAs : 'hc'
+			controllerAs : 'home'
 		}).state('signIn', {
 			url : '/signIn',
 			templateUrl : resource + 'partials/signIn.html',
@@ -26,12 +26,22 @@
 			url : '/signUp',
 			templateUrl : resource + 'partials/signUp.html',
 			controller : 'signUpController',
-			controllerAs : 'sUpc'
+			controllerAs : 'signUp'
+		})
+		.state('signUp.validate', {
+			url : '/validate',
+			templateUrl : resource + 'partials/validateElector.html'
+		}).state('signUp.setup', {
+			url : '/setup',
+			templateUrl : resource + 'partials/accountSetup.html'
 		}).state('search', {
 			url : '/search',
+			params : {
+				'searchTerm' : ''
+			},
 			templateUrl : resource + 'partials/globalSearch.html',
 			controller : 'globalSearchController',
-			controllerAs : 'gSc'
+			controllerAs : 'search'
 		});
 	}
 })();

@@ -4,6 +4,13 @@ body {
 	font-family: 'Slabo 27px', serif !important;
 }
 
+.page-container {
+	background-color: #ebebeb;
+	height: 100%;
+	width: 100%;
+	padding: 10px 30px 30px 30px;
+}
+
 .app_header {
 	background-color: #f94c59 !important;
 	margin-bottom: 0px !important;
@@ -15,7 +22,7 @@ body {
 }
 
 .app_header a {
-	line-height: 50px;
+	line-height: 48px;
 	padding-top: 0px !important;
 	padding-bottom: 0px !important;
 }
@@ -85,7 +92,7 @@ body {
 
 #header-edit-location-icon {
 	padding-left: 4px;
-	color: #fda68a;
+	color: white;
 	vertical-align: middle;
 	cursor: pointer;
 	font-size: 27px;
@@ -163,11 +170,11 @@ body {
 
 .app-body-container {
 	flex: 1;
-	margin-top: 60px;
+	margin-top: 52px;
 }
 
 .signin_app_body_container {
-	margin-bottom: 60px;
+	margin-bottom: 52px;
 	flex: 1;
 }
 
@@ -249,12 +256,13 @@ input[type="text"], input[type="password"], select {
 }
 
 .app_header .dropdown-menu {
-	padding: 0px 0! important;
+	padding: 0px 0 ! important;
 }
 
 .app_header .dropdown-menu li a {
 	padding: 10px !important;
 }
+
 .app_header .dropdown-menu li a:HOVER {
 	color: #ebebeb !important;
 }

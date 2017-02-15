@@ -17,7 +17,8 @@
 				<div class="input-group">
 					<i class="fa fa-search app_search_icon" aria-hidden="true"></i> <input
 						type="text" class="form-control" placeholder="Search"
-						name="srch-term" id="srch-term">
+						ng-model="header.searchTerm"
+						my-india-enter-key="header.gotoSearch()">
 				</div>
 				<div class="input-group">
 					<ul class="nav pull-left">

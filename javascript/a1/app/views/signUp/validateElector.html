@@ -1,0 +1,50 @@
+<div class="form-group">
+					<label for="elector_id_input">Elector's ID</label> <i
+						class="fa fa-user login_icon" aria-hidden="true"></i> <input
+						type="text" name="elector_id_input" ng-model="electorId" placeholder="Elecotr's ID"
+						class="form-control" id="elector_id_input" ng-required="true">
+
+					<p ng-show="signup_form.elector_id_input.$invalid && signup_form.elector_id_input.$touched" class="help-block"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> &nbsp;Elector Id is required.</p>
+
+				</div>
+				<div class="form-group">
+					<label for="elector_name_input">Elector's Name</label> <i
+						class="fa fa-user login_icon" aria-hidden="true"></i> <input
+						type="password" name="elector_name_input"
+						placeholder="Elecotr's Name" ng-model="electorName" class="form-control"
+						id="elector_name_input" ng-required="true">
+
+					<p ng-show="signup_form.elector_name_input.$invalid && signup_form.elector_name_input.$touched" class="help-block"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> &nbsp;Elector Name is required.</p>
+
+				</div>
+				<div class="form-group">
+					<label for="reference_name_input">Reference Name</label> <i
+						class="fa fa-user login_icon" aria-hidden="true"></i> <input
+						type="text" name="reference_name_input"
+						placeholder="Reference Name" ng-model="referenceName" class="form-control"
+						id="reference_name_input" ng-required="true">
+
+					<p ng-show="signup_form.reference_name_input.$invalid && signup_form.reference_name_input.$touched" class="help-block"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> &nbsp;Reference Name is required.</p>
+
+				</div>
+				<div class="form-group" ng-init="gender='Male'">
+					<label for="search_college">Gender</label> <br /> <label
+						class="radio-inline" ><input type="radio"
+						name="form_user_gender" value="Male" ng-model="gender">Male</label> <label
+						class="radio-inline"><input type="radio"
+						name="form_user_gender" value="Female" ng-model="gender">Female</label>
+				</div>
+				<div class="form-group">
+					<label for="year_of_birth_input">Year of birth</label> <select
+						name="year_of_birth_input" class="form-control"
+						id="year_of_birth_input" ng-required="true" ng-model="yob"  ng-options="opt for opt in ['1991']" >
+						<option value="">Select Year of Birth</option>
+					</select>
+
+					<p ng-show="signup_form.year_of_birth_input.$invalid && signup_form.year_of_birth_input.$touched" class="help-block"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> &nbsp;Year of Birth is required.</p>
+				</div>
+				<div class="form-group">
+					&nbsp;
+					<button type="button" class="btn app_btn" ng-click="signUp.validateUser()"
+						id="connect-btn" ng-disabled="signup_form.$invalid">Proceed</button>
+				</div>
