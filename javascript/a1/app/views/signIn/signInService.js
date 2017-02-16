@@ -14,7 +14,7 @@
     	};
 
         //Call and save the data
-        swaggerShareService.getAPIMetaData('http://localhost:8080/',setAPIMetaData);
+        swaggerShareService.getAPIMetaData(setAPIMetaData);
 
         return signInService;
 
@@ -35,7 +35,7 @@
             return deferred.promise;
 
             function loginSuccess(data){
-                deferred.resolve(data);
+                deferred.resolve(data.obj);
             }
 
             function loginFailure(error){

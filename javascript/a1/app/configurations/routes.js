@@ -41,7 +41,7 @@
 			},
 			templateUrl : resource + 'partials/globalSearch.html',
 			controller : 'globalSearchController',
-			controllerAs : 'search'
+			controllerAs : 'globalSearch'
 		});
 	}
 })();

@@ -2,11 +2,16 @@
 	'use strict';
 	angular.module('myindia-app').controller("headerController",
 			headerController);
-	headerController.$inject = [ '$state', '$scope' ];
-	function headerController($state, $scope) {
+	
+	headerController.$inject = [ '$state'];
+
+	function headerController($state) {
+
 		var header = this;
 		header.searchTerm = '';
-		header.gotoSearch = function() {
+		header.gotoSearch = gotoSearch;
+
+		function gotoSearch() {
 			$state.go('search', {
 				searchTerm : header.searchTerm
 			});

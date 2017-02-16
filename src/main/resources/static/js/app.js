@@ -1,9 +1,38 @@
 (function() {
      'use strict';
-	var myIndiaApp=angular.module('myindia-app', ['ui.router','ui.bootstrap']);
+	var myIndiaApp=angular.module('myindia-app', ['ui.router','ui.bootstrap','ngAnimate']);
 	myIndiaApp.run(function($state, $rootScope){
 		   $rootScope.$state = $state;
 		})
+})();
+
+(function() {
+	'use strict';
+
+	angular.module('myindia-app').directive("myIndiaEnterKey", myIndiaEnterKey);
+
+	function myIndiaEnterKey() {
+
+		function link(scope, element, attrs) {
+			element.bind("keydown keypress", function(event) {
+				var keyCode = event.which || event.keyCode;
+
+				// If enter key is pressed
+				if (keyCode === 13) {
+					scope.$apply(function() {
+						// Evaluate the expression
+						scope.$eval(attrs.myIndiaEnterKey);
+					});
+
+					event.preventDefault();
+				}
+			});
+		}
+		return {
+			restrict : 'A',
+			link : link
+		}
+	}
 })();
 (function() {
     'use strict';
@@ -39,38 +68,49 @@
 
 })();
 (function() {
-    'use strict';
+	'use strict';
+	angular.module('myindia-app').controller("headerController",
+			headerController);
+	
+	headerController.$inject = [ '$state'];
 
-    angular.module('myindia-app').controller("headerController", headerController);
+	function headerController($state) {
 
+		var header = this;
+		header.searchTerm = '';
+		header.gotoSearch = gotoSearch;
 
-    function headerController() {
-
-    }
-
+		function gotoSearch() {
+			$state.go('search', {
+				searchTerm : header.searchTerm
+			});
+		};
+	}
 })();
+
 (function() {
-    'use strict';
+	'use strict';
 
-    angular.module('myindia-app').directive("myindiaHeader", myIndiaHeader);
+	angular.module('myindia-app').directive("myindiaHeader", myIndiaHeader);
 
+	function myIndiaHeader() {
 
-    function myIndiaHeader() {
+		function link(scope, element, attrs) {
 
-        function link(scope, element, attrs) {
-        	
-        };
-        
-        return {
-            restrict:'E',
-            link:link,
-            templateUrl: resource+'partials/header.html', 
-            controller:'headerController'
-    		
-    	}	
-    }
+		}
+		;
+
+		return {
+			restrict : 'E',
+			link : link,
+			templateUrl : resource + 'partials/header.html',
+			controller : 'headerController',
+			controllerAs : 'header'
+		}
+	}
 
 })();
+
 (function() {
 	'use strict';
 
@@ -89,7 +129,7 @@
 			url : '/home',
 			templateUrl : resource + 'partials/home.html',
 			controller : 'homeController',
-			controllerAs : 'hc'
+			controllerAs : 'home'
 		}).state('signIn', {
 			url : '/signIn',
 			templateUrl : resource + 'partials/signIn.html',
@@ -99,15 +139,26 @@
 			url : '/signUp',
 			templateUrl : resource + 'partials/signUp.html',
 			controller : 'signUpController',
-			controllerAs : 'sUpc'
+			controllerAs : 'signUp'
+		})
+		.state('signUp.validate', {
+			url : '/validate',
+			templateUrl : resource + 'partials/validateElector.html'
+		}).state('signUp.setup', {
+			url : '/setup',
+			templateUrl : resource + 'partials/accountSetup.html'
 		}).state('search', {
 			url : '/search',
+			params : {
+				'searchTerm' : ''
+			},
 			templateUrl : resource + 'partials/globalSearch.html',
 			controller : 'globalSearchController',
-			controllerAs : 'gSc'
+			controllerAs : 'globalSearch'
 		});
 	}
 })();
+
 (function() {
     'use strict';
 
@@ -119,13 +170,15 @@
 
         var apiMetaData = {};
 
+        var hostName = 'http://localhost:8080/';
+
     	var swaggerShareService = {
     		getAPIMetaData : getAPIMetaData
     	};
 
         return swaggerShareService;
 
-    	function getAPIMetaData(hostName,setMetaData){
+    	function getAPIMetaData(setMetaData){
 
     		if(apiMetaData.metaInfo){
     			setMetaData(apiMetaData.metaInfo);
@@ -165,17 +218,84 @@
 	angular.module('myindia-app').controller("globalSearchController",
 			globalSearchController);
 
-	globalSearchController.$inject = [ 'swaggerShareService' ];
+	globalSearchController.$inject = [ '$state', 'globalSearchService' ];
 
-	function globalSearchController(swaggerShareService) {
+	function globalSearchController($state,globalSearchService) {
+		
+		var globalSearch=this;
+		globalSearch.searchTerm=$state.params.searchTerm;
+		globalSearch.searchResults = [];
+		
+		//Call the search service
+		globalSearchService.search(globalSearch.searchTerm).then(searchSuccess).catch(searchError);
 
-		swaggerShareService.getAPIMetaData('http://localhost:8080/',
-				setAPIMetaData);
+		function searchSuccess(data){
+			globalSearch.searchResults = data;
 
-		function setAPIMetaData(metaInfo) {
-			alert(metaInfo);
+			globalSearch.searchResults.PEOPLE = [];
+			
+			if(globalSearch.searchResults.USER){
+				globalSearch.searchResults.PEOPLE = globalSearch.searchResults.PEOPLE.concat(globalSearch.searchResults.USER);
+			}
+			if (globalSearch.searchResults.PARTY) {
+				globalSearch.searchResults.PEOPLE = globalSearch.searchResults.PEOPLE.concat(globalSearch.searchResults.PARTY);
+			}
+			if (globalSearch.searchResults.POLITICIAN) {
+				globalSearch.searchResults.PEOPLE = globalSearch.searchResults.PEOPLE.concat(globalSearch.searchResults.POLITICIAN);
+			};
+
 		}
+
+		function searchError(error){
+			alert(error);
+		}
+		
 	}
+})();
+
+(function() {
+    'use strict';
+
+    angular.module('myindia-app').factory("globalSearchService", globalSearchService);
+
+    globalSearchService.$inject = ['$q','swaggerShareService'];
+
+    function globalSearchService($q,swaggerShareService) {
+
+        var services = {};
+
+    	var globalSearchService = {
+    		search : search
+    	};
+
+        //Call and save the data
+        swaggerShareService.getAPIMetaData(setAPIMetaData);
+
+        return globalSearchService;
+
+        function setAPIMetaData(metaInfo){
+            services = metaInfo;
+        }
+
+    	function search(searchTerm){
+
+            let deferred = $q.defer();
+
+            services.search.getAllGlobalSearchResults({searchTerm:searchTerm},searchSuccess,searchFailure);
+        
+            return deferred.promise;
+
+            function searchSuccess(data){
+                deferred.resolve(data.obj);
+            }
+
+            function searchFailure(error){
+                deferred.reject(error);
+            }
+
+    	}
+        
+    }
 
 })();
 (function() {
@@ -186,30 +306,38 @@
     homeController.$inject = ['swaggerShareService'];
 
     function homeController(swaggerShareService) {
-    	
+ 
+    	//swaggerShareService.getAPIMetaData('http://'+window.location.host+'/',setAPIMetaData);
+    	swaggerShareService.getAPIMetaData(setAPIMetaData);
+
+    	function setAPIMetaData(metaInfo){
+    		alert(metaInfo);
+    	}
     }
 
 })();
+
 (function() {
     'use strict';
 
     angular.module('myindia-app').controller("signInController", signInController);
 
-    signInController.$inject = ['signInService'];
+    signInController.$inject = ['signInService','$state'];
 
-    function signInController(signInService) {
+    function signInController(signInService,$state) {
 
     	var signIn = this;
  		signIn.login = login;
 
     	function login(){
-    		signInService.login(signIn.userName,signIn.password).then(loginSuccess).catch(loginFailiure);
+    		signInService.login(signIn.userName,signIn.password).then(loginSuccess).catch(loginFailure);
 
     		function loginSuccess(){
     			alert("Login Success");
+    			$state.go('home');
     		}
 
-    		function loginFailed(){
+    		function loginFailure(){
     			alert("Login Failed...");
     		}
     	}
@@ -232,7 +360,7 @@
     	};
 
         //Call and save the data
-        swaggerShareService.getAPIMetaData('http://localhost:8080/',setAPIMetaData);
+        swaggerShareService.getAPIMetaData(setAPIMetaData);
 
         return signInService;
 
@@ -250,13 +378,13 @@
 
             services.account.login({body:JSON.stringify(requestBody)},loginSuccess,loginFailure);
         
-            return deferred;
+            return deferred.promise;
 
             function loginSuccess(data){
-                deferred.resolve(data);
+                deferred.resolve(data.obj);
             }
 
-            function loginFailiure(error){
+            function loginFailure(error){
                 deferred.reject(error);
             }
 
@@ -270,19 +398,15 @@
 
 	angular.module('myindia-app').controller("signUpController",
 			signUpController);
+	signUpController.$inject = [ '$state' ];
 
-	signUpController.$inject = [ 'swaggerShareService' ];
-
-	function signUpController(swaggerShareService) {
-
-		swaggerShareService.getAPIMetaData('http://localhost:8080/',
-				setAPIMetaData);
-
-		function setAPIMetaData(metaInfo) {
-			alert(metaInfo);
+	function signUpController($state) {
+		var signUp = this;
+		signUp.validateUser = function() {
+			$state.transitionTo('signUp.setup');
 		}
 	}
-
 })();
+
 
 //# sourceMappingURL=app.js.map
