@@ -4,8 +4,8 @@
 package com.kasisripriyawebapps.myindia.serviceimpl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,32 +101,37 @@ public class UserServiceImpl implements UserService {
 		SolrLocationMaster mandalLocationMaster = locationMasterRepository
 				.findByLocationTypeAndLocationName(ServiceConstants.LOCATION_SUB_DISTRICT_TYPE, solrUser.getMandal());
 
-		List<SolrLocationMaster> allLocations = new ArrayList<SolrLocationMaster>();
-		List<SolrLocationMaster> villageLocations = locationMasterRepository.findByLocationTypeAndParentLocationGuid(
-				ServiceConstants.LOCATION_VILLAGE_TYPE, mandalLocationMaster.getLocationGuid());
+		List<SolrLocationReference> referenceLocations = locationReferenceRepository
+				.findByLocationSubDistrict(mandalLocationMaster.getLocationGuid());
 
-		List<String> stateLocationTypes = new ArrayList<String>();
-		stateLocationTypes.add(ServiceConstants.LOCATION_STATE_TYPE);
-		stateLocationTypes.add(ServiceConstants.LOCATION_UNION_TERRITORY_TYPE);
+		List<Long> allLocationsGuids = new ArrayList<Long>();
 
-		SolrLocationMaster stateLocationMaster = locationMasterRepository
-				.findByLocationTypeInAndLocationName(stateLocationTypes, solrUser.getState().toUpperCase());
+		List<Long> villageLocationGuids = referenceLocations.stream().map(SolrLocationReference::getLocationVillage)
+				.collect(Collectors.toList());
 
-		List<String> urbanLocationTypes = new ArrayList<String>();
-		urbanLocationTypes.add(ServiceConstants.LOCATION_MUNCIPAL_CORPORATION_TYPE);
-		urbanLocationTypes.add(ServiceConstants.LOCATION_MUNCIPALITY_TYPE);
-		urbanLocationTypes.add(ServiceConstants.LOCATION_TOWN_PANCHAYATH_TYPE);
+		List<Long> municipalCorporationLocationGuids = referenceLocations.stream()
+				.map(SolrLocationReference::getLocationMunicipalCorporation).collect(Collectors.toList());
 
-		List<SolrLocationMaster> urbanLocations = locationMasterRepository
-				.findByLocationTypeInAndParentLocationGuid(urbanLocationTypes, stateLocationMaster.getLocationGuid());
+		List<Long> municipalityLocationGuids = referenceLocations.stream()
+				.map(SolrLocationReference::getLocationMunicipality).collect(Collectors.toList());
 
-		allLocations.addAll(villageLocations);
-		allLocations.addAll(urbanLocations);
+		List<Long> townPanchyathLocationGuids = referenceLocations.stream()
+				.map(SolrLocationReference::getLocationTownPanchayat).collect(Collectors.toList());
+
+		allLocationsGuids.addAll(villageLocationGuids);
+		allLocationsGuids.addAll(municipalCorporationLocationGuids);
+		allLocationsGuids.addAll(municipalityLocationGuids);
+		allLocationsGuids.addAll(townPanchyathLocationGuids);
+
+		allLocationsGuids.removeAll(Collections.singleton(null));
+
+		List<SolrLocationMaster> allLocations = locationMasterRepository.findByLocationGuidIn(allLocationsGuids);
 
 		response.setLocations(allLocations);
 	}
 
 	@Override
+	@Transactional
 	public LocationReferenceMasterResponse getReferenceLocationForMaster(SolrLocationMaster solrLocationMaster)
 			throws RecordNotFoundException {
 		LocationReferenceMasterResponse locationReferenceMasterResponse = new LocationReferenceMasterResponse();
@@ -155,5 +160,41 @@ public class UserServiceImpl implements UserService {
 			locationReferenceMasterResponse.setParentLocations(masterLocations);
 		}
 		return locationReferenceMasterResponse;
+	}
+
+	@Transactional
+	@Override
+	public GetUserByPropertyResponse getUserByVoterCardDetails(GetUserByPropertyRequest getUserByPropertyRequest)
+			throws RecordNotFoundException {
+		GetUserByPropertyResponse response = new GetUserByPropertyResponse();
+		SolrUserMaster solrUser = userMasterRepository.findByIdCardNo(getUserByPropertyRequest.getIdCardNo());
+		if (solrUser != null) {
+			if (getUserByPropertyRequest.getUserName().equalsIgnoreCase(solrUser.getElectorName())) {
+				if (getUserByPropertyRequest.getReferenceName().equalsIgnoreCase(solrUser.getReferenceName())) {
+					if (getUserByPropertyRequest.getGender().equalsIgnoreCase(solrUser.getGender())) {
+						int currentYear = CommonUtil.getCurrentYear();
+						int yearOfBirth = getUserByPropertyRequest.getYearOfBirth();
+						if ((currentYear - yearOfBirth - 1) == solrUser.getAge()) {
+							response.setUserGuid(getUserByPropertyRequest.getUserGuid());
+							response.setLocationState(solrUser.getState());
+							response.setLocationDistrict(solrUser.getDistrict());
+							response.setLocationMandal(solrUser.getMandal());
+							setLocationInformationToRequest(response, solrUser);
+						} else {
+							throw new RecordNotFoundException(ExceptionConstants.INVALID_YEAR_OF_BIRTH);
+						}
+					} else {
+						throw new RecordNotFoundException(ExceptionConstants.INVALID_GENDER);
+					}
+				} else {
+					throw new RecordNotFoundException(ExceptionConstants.INVALID_REFERENCE_DETAILS_NAME);
+				}
+			} else {
+				throw new RecordNotFoundException(ExceptionConstants.INVALID_ID_CARD_NO_NAME);
+			}
+		} else {
+			throw new RecordNotFoundException(ExceptionConstants.INVALID_ID_CARD_NO);
+		}
+		return response;
 	}
 }

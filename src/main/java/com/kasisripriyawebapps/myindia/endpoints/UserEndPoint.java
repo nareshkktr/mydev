@@ -37,6 +37,20 @@ public class UserEndPoint {
 	UserService userService;
 
 	@POST
+	@ApiOperation(value = EndPointConstants.GET_USER_BY_VOTER_CARD_DETAILS_API_VALUE, nickname = EndPointConstants.GET_USER_BY_VOTER_CARD_DETAILS_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.GET_USER_BY_VOTER_CARD_DETAILS_API_DESCRIPTION)
+	@Path(EndPointConstants.GET_USER_BY_VOTER_CARD_DETAILS_REQUEST_MAPPING)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getUserByVoterCardDetails(final GetUserByPropertyRequest getUserByPropertyRequest)
+			throws InternalServerException, PreConditionFailedException, PreConditionRequiredException,
+			RecordNotFoundException {
+		GetUserByPropertyResponse saveObjResponse = null;
+		if (validateGetUserByVoterCardDetails(getUserByPropertyRequest)) {
+			saveObjResponse = userService.getUserByVoterCardDetails(getUserByPropertyRequest);
+		}
+		return Response.status(Status.OK).entity(saveObjResponse).build();
+	}
+
+	@POST
 	@ApiOperation(value = EndPointConstants.GET_USER_BY_VOTER_ID_NAME_API_VALUE, nickname = EndPointConstants.GET_USER_BY_VOTER_ID_NAME_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.GET_USER_BY_VOTER_ID_NAME_API_DESCRIPTION)
 	@Path(EndPointConstants.GET_USER_BY_VOTER_ID_NAME_REQUEST_MAPPING)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -76,6 +90,34 @@ public class UserEndPoint {
 			saveObjResponse = userService.getReferenceLocationForMaster(solrLocationMaster);
 		}
 		return Response.status(Status.OK).entity(saveObjResponse).build();
+	}
+
+	private boolean validateGetUserByVoterCardDetails(GetUserByPropertyRequest getUserByPropertyRequest)
+			throws PreConditionFailedException, PreConditionRequiredException {
+
+		if (getUserByPropertyRequest.getUserName() == null) {
+			throw new PreConditionFailedException(ExceptionConstants.NAME_REQUIRED);
+		} else if (getUserByPropertyRequest.getUserName().isEmpty()) {
+			throw new PreConditionRequiredException(ExceptionConstants.NAME_NOT_EMPTY);
+		} else if (getUserByPropertyRequest.getIdCardNo() == null) {
+			throw new PreConditionFailedException(ExceptionConstants.IDENTITY_CARD_NO_REQUIRED);
+		} else if (getUserByPropertyRequest.getIdCardNo().isEmpty()) {
+			throw new PreConditionRequiredException(ExceptionConstants.IDENTITY_CARD_NO_NOT_EMPTY);
+		} else if (getUserByPropertyRequest.getReferenceName() == null) {
+			throw new PreConditionFailedException(ExceptionConstants.REFERENCE_NAME_REQUIRED);
+		} else if (getUserByPropertyRequest.getYearOfBirth() == null) {
+			throw new PreConditionFailedException(ExceptionConstants.YEAR_OF_BIRTH_REQUIRED);
+		} else if (getUserByPropertyRequest.getReferenceName().isEmpty()) {
+			throw new PreConditionFailedException(ExceptionConstants.REFERENCE_NAME_SHOULD_NOT_BE_EMPTY);
+		} else if (getUserByPropertyRequest.getYearOfBirth().equals(0)) {
+			throw new PreConditionFailedException(ExceptionConstants.YEAR_OF_BIRTH_SHOULD_NOT_BE_EMPTY);
+		} else if (getUserByPropertyRequest.getGender() == null) {
+			throw new PreConditionFailedException(ExceptionConstants.GENDER_REQUIRED);
+		} else if (getUserByPropertyRequest.getGender().isEmpty()) {
+			throw new PreConditionFailedException(ExceptionConstants.GENDER_SHOULD_NOT_BE_EMPTY);
+		}
+
+		return true;
 	}
 
 	private boolean validateGetReferenceLocationForMaster(SolrLocationMaster solrLocationMaster)

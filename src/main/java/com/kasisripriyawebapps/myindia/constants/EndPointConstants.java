@@ -753,7 +753,7 @@ public class EndPointConstants {
 	public static final String IMPORT_RAJYASABHA_MP_API_VALUE = "importRajyasabhaMP";
 	public static final String IMPORT_RAJYASABHA_MP_REQUEST_MAPPING = "importRajyasabhaMP";
 	public static final String IMPORT_RAJYASABHA_MP_API_DESCRIPTION = "Import Rajya sabha MP";
-	
+
 	public static final String IMPORT_MLA_API_NICKNAME = "importMLA";
 	public static final String IMPORT_MLA_API_VALUE = "importMLA";
 	public static final String IMPORT_MLA_REQUEST_MAPPING = "importMLA";
@@ -778,12 +778,12 @@ public class EndPointConstants {
 
 	/** The Constant CREATE_ACCOUNT_API_VALUE. */
 	public static final String SHARE_OBJECT_API_VALUE = "shareObject";
-	
+
 	public static final String IMPORT_CHIEF_MINISTER_API_NICKNAME = "importChiefMinister";
 	public static final String IMPORT_CHIEF_MINISTER_API_VALUE = "importChiefMinister";
 	public static final String IMPORT_CHIEF_MINISTER_REQUEST_MAPPING = "importChiefMinister";
 	public static final String IMPORT_CHIEF_MINISTER_API_DESCRIPTION = "Import Chief Ministers";
-	
+
 	public static final String IMPORT_GOVERNOR_API_NICKNAME = "importGovernors";
 	public static final String IMPORT_GOVERNOR_API_VALUE = "importGovernors";
 	public static final String IMPORT_GOVERNOR_REQUEST_MAPPING = "importGovernors";
@@ -854,5 +854,17 @@ public class EndPointConstants {
 
 	/** The Constant GET__SEARCH_RESULTS_BY_LOCATION_NAME_API_DESCRIPTION. */
 	public static final String GET_POPULAR_LOCATIONS_API_DESCRIPTION = "Get Popular Locations";
+
+	/** The Constant GET__SEARCH_RESULTS_BY_LOCATION_NAME_REQUEST_MAPPING. */
+	public static final String GET_USER_BY_VOTER_CARD_DETAILS_REQUEST_MAPPING = "getUserByVoterCardDetails";
+
+	/** The Constant GET__SEARCH_RESULTS_BY_LOCATION_NAME_API_VALUE. */
+	public static final String GET_USER_BY_VOTER_CARD_DETAILS_API_VALUE = "getUserByVoterCardDetails";
+
+	/** The Constant GET__SEARCH_RESULTS_BY_LOCATION_NAME_API_NICKNAME. */
+	public static final String GET_USER_BY_VOTER_CARD_DETAILS_NICKNAME = "getUserByVoterCardDetails";
+
+	/** The Constant GET__SEARCH_RESULTS_BY_LOCATION_NAME_API_DESCRIPTION. */
+	public static final String GET_USER_BY_VOTER_CARD_DETAILS_API_DESCRIPTION = "Get User Details By Voter ID Card Details";
 
 }

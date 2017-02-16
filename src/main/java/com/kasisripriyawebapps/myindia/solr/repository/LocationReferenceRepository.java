@@ -16,4 +16,6 @@ public interface LocationReferenceRepository extends SolrCrudRepository<SolrLoca
 
 	List<SolrLocationReference> findByLocationTownPanchayat(Long locationGuid);
 
+	List<SolrLocationReference> findByLocationSubDistrict(Long locationGuid);
+
 }

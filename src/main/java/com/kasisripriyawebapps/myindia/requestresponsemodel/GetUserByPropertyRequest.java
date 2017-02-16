@@ -8,6 +8,7 @@ public class GetUserByPropertyRequest {
 	private String referenceType;
 	private String referenceName;
 	private String userName;
+	private String gender;
 	private Integer yearOfBirth;
 
 	public Long getUserGuid() {
@@ -64,6 +65,14 @@ public class GetUserByPropertyRequest {
 
 	public void setYearOfBirth(Integer yearOfBirth) {
 		this.yearOfBirth = yearOfBirth;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
 	}
 
 }
