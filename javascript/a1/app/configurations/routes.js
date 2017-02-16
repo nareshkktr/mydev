@@ -27,12 +27,14 @@
 			templateUrl : resource + 'partials/signUp.html',
 			controller : 'signUpController',
 			controllerAs : 'signUp'
-		})
-		.state('signUp.validate', {
+		}).state('signUp.validate', {
 			url : '/validate',
 			templateUrl : resource + 'partials/validateElector.html'
-		}).state('signUp.setup', {
-			url : '/setup',
+		}).state('signUp.locationSetup', {
+			url : '/locationSetup',
+			templateUrl : resource + 'partials/userLocationSetup.html'
+		}).state('signUp.accountSetup', {
+			url : '/accountSetup',
 			templateUrl : resource + 'partials/accountSetup.html'
 		}).state('search', {
 			url : '/search',

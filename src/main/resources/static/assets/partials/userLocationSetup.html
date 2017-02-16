@@ -1,0 +1,34 @@
+<div class="form-group">
+	
+	<label for="search_college">State: &nbsp;</label>  <label for="search_college">{{signUp.elector.location.locationState}}</label>
+
+</div>
+
+<div class="form-group">
+	
+	<label for="search_college">District: &nbsp;</label>  <label for="search_college">{{signUp.elector.location.locationDistrict}}</label>
+
+</div>
+
+<div class="form-group">
+	
+	<label for="search_college">Mandal:&nbsp;</label>  <label for="search_college">{{signUp.elector.location.locationMandal}}</label>
+
+</div>
+
+<div class="form-group">
+	<label for="search_college">Village/MC/M/TP</label> <select class="form-control" name="leaf_location" ng-model="leafLocation" ng-options="location.locationName group by location.locationType for location in signUp.elector.location.locations" ng-required="true">
+		<option value=''>Select Location</option>
+	</select> 
+	
+	<div ng-messages="signup_form.leaf_location.$error" ng-if="signup_form.leaf_location.$touched">
+	    <p ng-message="required" class="help-block"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> &nbsp;Location is required.</p>
+	</div>
+
+</div>
+
+<div class="form-group">
+	&nbsp;
+	<button type="button" class="btn app_btn" ng-click="signUp.setupLocation()"
+		id="connect-btn" ng-disabled="signup_form.$invalid">Pin It!</button>
+</div>

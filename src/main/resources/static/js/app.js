@@ -1,11 +1,39 @@
 (function() {
      'use strict';
-	var myIndiaApp=angular.module('myindia-app', ['ui.router','ui.bootstrap','ngAnimate']);
+	var myIndiaApp=angular.module('myindia-app', ['ui.router','ui.bootstrap','ngAnimate','ngMessages']);
 	myIndiaApp.run(function($state, $rootScope){
 		   $rootScope.$state = $state;
 		})
 })();
 
+(function() {
+    'use strict';
+
+    angular.module('myindia-app').directive("compareEqualValidator", compareEqualValidator);
+
+    function compareEqualValidator() {
+        
+        var compareEqualValidator = {
+          link: link,
+          require: 'ngModel'
+        };
+        
+        return compareEqualValidator;
+
+        function link(scope, element, attrs, ngModel) {
+          /* */
+
+          ngModel.$parsers.unshift(function (value) {
+            console.log(value);
+            if(scope.signUp.userPassword)
+              ngModel.$setValidity('compareEqualValidator', scope.signUp.userPassword === value);
+             return value;
+          });
+
+        }
+    }
+
+})();
 (function() {
 	'use strict';
 
@@ -140,12 +168,14 @@
 			templateUrl : resource + 'partials/signUp.html',
 			controller : 'signUpController',
 			controllerAs : 'signUp'
-		})
-		.state('signUp.validate', {
+		}).state('signUp.validate', {
 			url : '/validate',
 			templateUrl : resource + 'partials/validateElector.html'
-		}).state('signUp.setup', {
-			url : '/setup',
+		}).state('signUp.locationSetup', {
+			url : '/locationSetup',
+			templateUrl : resource + 'partials/userLocationSetup.html'
+		}).state('signUp.accountSetup', {
+			url : '/accountSetup',
 			templateUrl : resource + 'partials/accountSetup.html'
 		}).state('search', {
 			url : '/search',
@@ -398,15 +428,100 @@
 
 	angular.module('myindia-app').controller("signUpController",
 			signUpController);
-	signUpController.$inject = [ '$state' ];
 
-	function signUpController($state) {
+	signUpController.$inject = [ '$state','validateElectorService' ];
+
+	function signUpController($state,validateElectorService) {
+		
 		var signUp = this;
-		signUp.validateUser = function() {
-			$state.transitionTo('signUp.setup');
+		signUp.validateElector = validateElector;
+		signUp.elector = {};
+		signUp.years = [];
+		signUp.numberOfYears = 100;
+		signUp.gender = 'Male';
+		signUp.passwordRegex = "^.*(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[~!@#$%^&*(),./?]).*$";
+
+		populateYears();
+
+		function validateElector(){
+
+			// Make an API call to valdiate user
+			validateElectorService.validate(signUp.electorId,signUp.electorName,signUp.referenceName,signUp.gender,signUp.yob)
+									.then(validationSuccess).catch(validationFailure);
+
+			function validationSuccess(data){
+				signUp.elector.location = data;
+				$state.transitionTo('signUp.locationSetup');
+			}
+
+			function validationFailure(error){
+				alert(error);
+			}
+			
+		}
+
+		function populateYears(){
+	    	let currentYear = new Date().getFullYear();
+		    //populate default ste of years.
+		    for(let start=0;start<signUp.numberOfYears;start++){
+		       signUp.years.push(currentYear--);
+		    }
 		}
 	}
 })();
 
+(function() {
+    'use strict';
+
+    angular.module('myindia-app').factory("validateElectorService", validateElectorService);
+
+    validateElectorService.$inject = ['$q','swaggerShareService'];
+
+    function validateElectorService($q,swaggerShareService) {
+
+        var services = {};
+
+    	var validateElectorService = {
+    		validate : validate
+    	};
+
+        //Call and save the data
+        swaggerShareService.getAPIMetaData(setAPIMetaData);
+
+        return validateElectorService;
+
+        function setAPIMetaData(metaInfo){
+            services = metaInfo;
+        }
+
+    	function validate(electorId,electorName,referenceName,gender,yob){
+
+            let requestBody = {
+                idCardNo: electorId,
+                userName: electorName,
+                referenceName: referenceName,
+                gender: gender,
+                yearOfBirth: yob
+            };
+
+            let deferred = $q.defer();
+
+            services.user.getUserByVoterCardDetails({body:JSON.stringify(requestBody)},validationSuccess,validationFailure);
+        
+            return deferred.promise;
+
+            function validationSuccess(data){
+                deferred.resolve(data.obj);
+            }
+
+            function validationFailure(error){
+                deferred.reject(error);
+            }
+
+    	}
+        
+    }
+
+})();
 
 //# sourceMappingURL=app.js.map
