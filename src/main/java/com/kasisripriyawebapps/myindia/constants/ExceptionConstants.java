@@ -113,4 +113,7 @@ public class ExceptionConstants {
 	public static final String LOCATION_TYPE_NOT_EMPTY = "Location Type Should Not Be Empty";
 	public static final String USER_GUID_REQUIRED = "User Guid Required";
 	public static final String LOCATION_REF_GUID_REQUIRED = "Location Reference Guid Required";
+	public static final String GENDER_REQUIRED = "Gender Required";
+	public static final String GENDER_SHOULD_NOT_BE_EMPTY = "Gender Should Not Be Empty";
+	public static final String INVALID_GENDER = "Invalid Gender";
 }

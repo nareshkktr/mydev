@@ -13,4 +13,6 @@ public interface UserMasterRepository extends Repository<SolrUserMaster, Long> {
 	SolrUserMaster findByUserGuidAndReferenceName(Long userGuid, String referenceName);
 
 	SolrUserMaster findByUserGuid(Long userGuid);
+
+	SolrUserMaster findByIdCardNo(String idCardNo);
 }

@@ -20,4 +20,7 @@ public interface UserService {
 	LocationReferenceMasterResponse getReferenceLocationForMaster(SolrLocationMaster solrLocationMaster)
 			throws RecordNotFoundException;
 
+	GetUserByPropertyResponse getUserByVoterCardDetails(GetUserByPropertyRequest getUserByPropertyRequest)
+			throws RecordNotFoundException;
+
 }
