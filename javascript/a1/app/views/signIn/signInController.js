@@ -3,9 +3,9 @@
 
     angular.module('myindia-app').controller("signInController", signInController);
 
-    signInController.$inject = ['signInService'];
+    signInController.$inject = ['signInService','$state'];
 
-    function signInController(signInService) {
+    function signInController(signInService,$state) {
 
     	var signIn = this;
  		signIn.login = login;
@@ -15,6 +15,7 @@
 
     		function loginSuccess(){
     			alert("Login Success");
+    			$state.go('home');
     		}
 
     		function loginFailure(){

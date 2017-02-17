@@ -8,7 +8,7 @@
     function homeController(swaggerShareService) {
  
     	//swaggerShareService.getAPIMetaData('http://'+window.location.host+'/',setAPIMetaData);
-    	swaggerShareService.getAPIMetaData('http://localhost:8080/',setAPIMetaData);
+    	swaggerShareService.getAPIMetaData(setAPIMetaData);
 
     	function setAPIMetaData(metaInfo){
     		alert(metaInfo);

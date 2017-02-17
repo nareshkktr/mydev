@@ -9,13 +9,15 @@
 
         var apiMetaData = {};
 
+        var hostName = 'http://localhost:8080/';
+
     	var swaggerShareService = {
     		getAPIMetaData : getAPIMetaData
     	};
 
         return swaggerShareService;
 
-    	function getAPIMetaData(hostName,setMetaData){
+    	function getAPIMetaData(setMetaData){
 
     		if(apiMetaData.metaInfo){
     			setMetaData(apiMetaData.metaInfo);
