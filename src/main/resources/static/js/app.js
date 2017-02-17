@@ -424,17 +424,117 @@
 
 })();
 (function() {
+    'use strict';
+
+    angular.module('myindia-app').factory("createAccountService", createAccountService);
+
+    createAccountService.$inject = ['$q','swaggerShareService'];
+
+    function createAccountService($q,swaggerShareService) {
+
+        var services = {};
+
+    	var createAccountService = {
+    		create : create
+    	};
+
+        //Call and save the data
+        swaggerShareService.getAPIMetaData(setAPIMetaData);
+
+        return createAccountService;
+
+        function setAPIMetaData(metaInfo){
+            services = metaInfo;
+        }
+
+    	function create(userGuid,userName,password,childLocation,parentLocation){
+
+            let requestBody = {
+                loginUserName: userName,
+                password: password,
+                userGuid: userGuid,
+                childLocation: childLocation,
+                parentLocation: parentLocation
+            };
+
+            let deferred = $q.defer();
+
+            services.account.createAccount({body:JSON.stringify(requestBody)},createAccountSuccess,createAccountFailure);
+        
+            return deferred.promise;
+
+            function createAccountSuccess(data){
+                deferred.resolve(data.obj);
+            }
+
+            function createAccountFailure(error){
+                deferred.reject(error);
+            }
+
+    	}
+        
+    }
+
+})();
+(function() {
+    'use strict';
+
+    angular.module('myindia-app').factory("identifyConflictParentLocationsService", identifyConflictParentLocationsService);
+
+    identifyConflictParentLocationsService.$inject = ['$q','swaggerShareService'];
+
+    function identifyConflictParentLocationsService($q,swaggerShareService) {
+
+        var services = {};
+
+    	var identifyConflictParentLocationsService = {
+    		setup : setup
+    	};
+
+        //Call and save the data
+        swaggerShareService.getAPIMetaData(setAPIMetaData);
+
+        return identifyConflictParentLocationsService;
+
+        function setAPIMetaData(metaInfo){
+            services = metaInfo;
+        }
+
+    	function setup(locationObj){
+
+            let deferred = $q.defer();
+
+            services.user.getReferenceLocationForMaster({body:JSON.stringify(locationObj)},identifyConflictParentLocationsServiceSuccess,identifyConflictParentLocationsServiceFailure);
+        
+            return deferred.promise;
+
+            function identifyConflictParentLocationsServiceSuccess(data){
+                deferred.resolve(data.obj);
+            }
+
+            function identifyConflictParentLocationsServiceFailure(error){
+                deferred.reject(error);
+            }
+
+    	}
+        
+    }
+
+})();
+(function() {
 	'use strict';
 
 	angular.module('myindia-app').controller("signUpController",
 			signUpController);
 
-	signUpController.$inject = [ '$state','validateElectorService' ];
+	signUpController.$inject = [ '$state','validateElectorService','identifyConflictParentLocationsService','createAccountService' ];
 
-	function signUpController($state,validateElectorService) {
+	function signUpController($state,validateElectorService,identifyConflictParentLocationsService,createAccountService) {
 		
 		var signUp = this;
 		signUp.validateElector = validateElector;
+		signUp.validationLocationForConflict = validationLocationForConflict;
+		signUp.createAccount = createAccount;
 		signUp.elector = {};
 		signUp.years = [];
 		signUp.numberOfYears = 100;
@@ -458,6 +558,45 @@
 				alert(error);
 			}
 			
+		}
+
+		function validationLocationForConflict(){
+
+			if(signUp.elector.conflictParentLocations && signUp.parentLocation){
+				$state.transitionTo('signUp.accountSetup');
+			}
+
+			// Indetify if there are conflicting parents 
+			identifyConflictParentLocationsService.setup(signUp.leafLocation).then(identifyConflictParentLocationsSuccess)
+												.catch(identifyConflictParentLocationsFailure);
+
+
+			function identifyConflictParentLocationsSuccess(data){
+				if(data.parentLocations && data.parentLocations.length == 1){
+					signUp.parentLocation = data.parentLocations[0];
+					$state.transitionTo('signUp.accountSetup');
+				}  
+				//If not there are multiple location populate them.
+				signUp.elector.conflictParentLocations = data.parentLocations;
+			}
+
+			function identifyConflictParentLocationsFailure(error){
+				alert(error);
+			}
+		}
+
+		function createAccount(){
+			
+			createAccountService.create(signUp.elector.location.userGuid,signUp.userName,signUp.userPassword,signUp.leafLocation,signUp.parentLocation)
+								.then(createAccountSuccess).catch(createAccountFailure);
+
+			function createAccountSuccess(data){
+				$state.transitionTo('home');
+			}
+
+			function createAccountFailure(error){
+				alert(error);
+			}
 		}
 
 		function populateYears(){

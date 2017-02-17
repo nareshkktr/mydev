@@ -4,12 +4,14 @@
 	angular.module('myindia-app').controller("signUpController",
 			signUpController);
 
-	signUpController.$inject = [ '$state','validateElectorService' ];
+	signUpController.$inject = [ '$state','validateElectorService','identifyConflictParentLocationsService','createAccountService' ];
 
-	function signUpController($state,validateElectorService) {
+	function signUpController($state,validateElectorService,identifyConflictParentLocationsService,createAccountService) {
 		
 		var signUp = this;
 		signUp.validateElector = validateElector;
+		signUp.validationLocationForConflict = validationLocationForConflict;
+		signUp.createAccount = createAccount;
 		signUp.elector = {};
 		signUp.years = [];
 		signUp.numberOfYears = 100;
@@ -33,6 +35,45 @@
 				alert(error);
 			}
 			
+		}
+
+		function validationLocationForConflict(){
+
+			if(signUp.elector.conflictParentLocations && signUp.parentLocation){
+				$state.transitionTo('signUp.accountSetup');
+			}
+
+			// Indetify if there are conflicting parents 
+			identifyConflictParentLocationsService.setup(signUp.leafLocation).then(identifyConflictParentLocationsSuccess)
+												.catch(identifyConflictParentLocationsFailure);
+
+
+			function identifyConflictParentLocationsSuccess(data){
+				if(data.parentLocations && data.parentLocations.length == 1){
+					signUp.parentLocation = data.parentLocations[0];
+					$state.transitionTo('signUp.accountSetup');
+				}  
+				//If not there are multiple location populate them.
+				signUp.elector.conflictParentLocations = data.parentLocations;
+			}
+
+			function identifyConflictParentLocationsFailure(error){
+				alert(error);
+			}
+		}
+
+		function createAccount(){
+			
+			createAccountService.create(signUp.elector.location.userGuid,signUp.userName,signUp.userPassword,signUp.leafLocation,signUp.parentLocation)
+								.then(createAccountSuccess).catch(createAccountFailure);
+
+			function createAccountSuccess(data){
+				$state.transitionTo('home');
+			}
+
+			function createAccountFailure(error){
+				alert(error);
+			}
 		}
 
 		function populateYears(){

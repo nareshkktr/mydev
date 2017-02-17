@@ -175,7 +175,7 @@ public class UserServiceImpl implements UserService {
 						int currentYear = CommonUtil.getCurrentYear();
 						int yearOfBirth = getUserByPropertyRequest.getYearOfBirth();
 						if ((currentYear - yearOfBirth - 1) == solrUser.getAge()) {
-							response.setUserGuid(getUserByPropertyRequest.getUserGuid());
+							response.setUserGuid(solrUser.getUserGuid());
 							response.setLocationState(solrUser.getState());
 							response.setLocationDistrict(solrUser.getDistrict());
 							response.setLocationMandal(solrUser.getMandal());
