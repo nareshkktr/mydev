@@ -3,35 +3,51 @@
 		<a class="navbar-brand"><img src="assets/app_icon.jpg" /> <span
 			class="app-name">MyIndia</span></a>
 
-		<ul class="nav pull-left">
+		<ul class="nav pull-left" id="header_logged_in_location_box">
 			<li uib-dropdown class="dropdown pull-right"><a href
 				id="user-profile-dropdown" uib-dropdown-toggle> <span
 					id="logged-in-location">Pulipadu,A.P</span> <i
 					id="header-edit-location-icon" class="material-icons">location_on</i>
 			</a></li>
 		</ul>
+		<ul class="nav pull-left" id="header_notification_icons_box">
+			<li class="pull-left header_nofitication_icon">
+				<button class="btn btn-default">
+					<span class="glyphicon glyphicon-globe"></span> <span
+						class="badge badge-notify">3</span>
+				</button>
+			</li>
+			<li class="pull-left header_nofitication_icon">
+				<button class="btn btn-default">
+					<span class="glyphicon glyphicon-flag"></span> <span
+						class="badge badge-notify">3</span>
+				</button>
+			</li>
+			<li class="pull-left header_nofitication_icon">
+				<button class="btn btn-default">
+					<span class="glyphicon glyphicon-comment"></span> <span
+						class="badge badge-notify">3</span>
+				</button>
+			</li>
+			<li class="pull-left header_nofitication_icon">
+				<button class="btn btn-default">
+					<span class="glyphicon glyphicon-user"></span> <span
+						class="badge badge-notify">3</span>
+				</button>
+			</li>
+		</ul>
 	</div>
 	<div class="navbar-header pull-right">
 		<div class="pull-left">
 			<form class="navbar-form" role="search">
-				<div class="input-group">
-					<i class="fa fa-search app_search_icon" aria-hidden="true"></i> <input
+				<div class="input-group" id="header_search_box">
+					<i class="glyphicon glyphicon-search app_search_icon" aria-hidden="true"></i> <input
 						type="text" class="form-control" placeholder="Search"
 						ng-model="header.searchTerm"
 						my-india-enter-key="header.gotoSearch()">
 				</div>
 				<div class="input-group">
 					<ul class="nav pull-left">
-						<li uib-dropdown class="dropdown pull-left"><a href
-							id="header-add-objects-icon" uib-dropdown-toggle> <i
-								class="material-icons">add</i>
-						</a>
-							<ul class="dropdown-menu" uib-dropdown-menu role="menu"
-								aria-labelledby="header-add-objects-icon">
-								<li role="menuitem"><a href="#">Problem</a></li>
-								<li role="menuitem"><a href="#">Event</a></li>
-								<li role="menuitem"><a href="#">Group</a></li>
-							</ul></li>
 						<li uib-dropdown class="dropdown pull-right"><a href
 							id="user-profile-dropdown" uib-dropdown-toggle> <img
 								id="logged-in-user-icon"
@@ -51,6 +67,5 @@
 				</div>
 			</form>
 		</div>
-
 	</div>
 </nav>

@@ -28,10 +28,10 @@ body {
 }
 
 .app_search_icon {
-	position: absolute;
+	position: absolute !important;
 	color: #c0bdbd;
 	left: 12px;
-	margin-top: 12px;
+	margin-top: 9px;
 	font-size: 12px !important;
 	z-index: 200;
 }
@@ -44,7 +44,7 @@ body {
 
 .app-name {
 	font-family: 'Niconne', cursive;
-	color: #ebebeb;
+	color: white;
 	font-size: 28px !important;
 	letter-spacing: 2px;
 	padding-left: 7px;
@@ -79,15 +79,12 @@ body {
 	color: #78787c;
 }
 
-.dropdown a:HOVER {
-	background-color: #32b38c !important;;
-}
-
 #logged-in-location {
 	font-family: cursive;
 	color: white;
 	font-size: 15px;
 	letter-spacing: 1px;
+	display: inline-table;
 }
 
 #header-edit-location-icon {
@@ -95,7 +92,7 @@ body {
 	color: white;
 	vertical-align: middle;
 	cursor: pointer;
-	font-size: 27px;
+	font-size: 22px;
 }
 
 .caret {
@@ -170,11 +167,11 @@ body {
 
 .app-body-container {
 	flex: 1;
-	margin-top: 52px;
+	margin-top: 53px;
 }
 
 .signin_app_body_container {
-	margin-bottom: 52px;
+	margin-bottom: 47px;
 	flex: 1;
 }
 
@@ -192,11 +189,6 @@ select, textarea, input[type="text"], input[type="password"], input[type="dateti
 	-webkit-box-shadow: 1px 5px 0px 1px rgba(0, 0, 0, .075) !important;
 	box-shadow: 1px 5px 0px 1px rgba(0, 0, 0, .075) !important;
 	font-size: 13px !important;
-}
-
-button, input[type="checkbox"] {
-	-webkit-box-shadow: 1px 5px 0px 1px rgba(249, 76, 89, 0.57);
-	box-shadow: 1px 5px 0px 1px rgba(249, 76, 89, 0.57);
 }
 
 button:focus {
@@ -244,14 +236,18 @@ input[type="text"], input[type="password"], select {
 	height: 100%;
 	width: auto;
 	border-radius: 50%;
-	width: 50px;
-	height: 40px;
+	width: 40px;
+	height: 38px;
 	border-radius: 50%;
 	vertical-align: middle;
 	list-height: 50px;
 }
 
 .app_header a:HOVER {
+	background-color: #f94c59 !important;
+}
+
+#user-profile-dropdown {
 	background-color: #f94c59 !important;
 }
 
@@ -269,4 +265,106 @@ input[type="text"], input[type="password"], select {
 
 .app_header .dropdown-menu .divider {
 	margin: 0px !important;
+}
+
+#header-add-objects-icon, #header_search_box,
+	#header_logged_in_location_box, #header_notification_icons_box {
+	display: none;
+}
+
+@media screen and (min-width: 850px) {
+	#header-add-objects-icon, #header_search_box,
+		#header_logged_in_location_box, #header_notification_icons_box {
+		display: inline-table;
+	}
+	#footer_nofitication_box {
+		display: none;
+	}
+}
+
+#header_search_box input[type="text"] {
+	width: 230px;
+	height: 30px !important;
+}
+
+.app_header .navbar-form {
+	padding-top: 0;
+	padding-bottom: 0;
+	padding-right: 0;
+}
+
+.header_nofitication_icon {
+	text-align: center;
+	padding-top: 8px;
+	padding-bottom: 0px;
+	padding-right: 0px !important;
+	padding-left: 0px !important;
+}
+
+.header_nofitication_icon button, .header_nofitication_icon button:HOVER
+	{
+	background-color: #f94c59;
+	color: #ebebeb;
+	border: none;
+	font-size: 19px;
+	padding-right: 0px;
+	padding: 6px 0px;
+}
+
+.header_nofitication_icon .badge-notify {
+	background-color: #e5e0e0 !important;
+	position: relative !important;
+	top: -14px !important;
+	left: -10px;
+}
+
+.header_nofitication_icon .badge {
+	padding: 2px 5px;
+	font-size: 12px;
+	color: #f94c59 !important;;
+}
+
+#header_notification_icons_box {
+	margin-left: 20px;
+	margin-top: 3px;
+}
+
+@media ( max-width : 849px ) and ( min-width: 700px ) {
+	#header-add-objects-icon, #header_search_box,
+		#header_logged_in_location_box, #header_notification_icons_box {
+		display: block;
+	}
+	#logged-in-location {
+		display: none;
+	}
+	#header_search_box {
+		float: left;
+		margin-top: 10px;
+	}
+	#header_search_box input[type="text"] {
+		width: 160px;
+	}
+	#footer_nofitication_box {
+		display: none;
+	}
+}
+
+@media ( max-width : 699px ) and ( min-width: 620px ) {
+	#header-add-objects-icon, #header_search_box,
+		#header_logged_in_location_box, #header_notification_icons_box {
+		display: block;
+	}
+	#logged-in-location {
+		display: none;
+	}
+	#header_search_box {
+		float: left;
+		margin-top: 10px;
+	}
+	#header_search_box input[type="text"] {
+		width: 100px;
+	}
+	#footer_nofitication_box {
+		display: none;
+	}
 }

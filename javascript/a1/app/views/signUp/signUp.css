@@ -105,3 +105,8 @@
 	word-wrap: break-word;
 	font-size: 22px;
 }
+
+#signup_form form button, input[type="checkbox"] {
+	-webkit-box-shadow: 1px 5px 0px 1px rgba(249, 76, 89, 0.57);
+	box-shadow: 1px 5px 0px 1px rgba(249, 76, 89, 0.57);
+}
