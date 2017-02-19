@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
+import com.kasisripriyawebapps.myindia.requestresponsemodel.GlobalSearchRequest;
+import com.kasisripriyawebapps.myindia.requestresponsemodel.GlobalSearchResponse;
 import com.kasisripriyawebapps.myindia.solr.entity.SolrGlobalSearchMaster;
 
 /**
@@ -15,5 +17,7 @@ import com.kasisripriyawebapps.myindia.solr.entity.SolrGlobalSearchMaster;
 public interface SearchService {
 
 	Map<String, List<SolrGlobalSearchMaster>> getAllGlobalSearchResults(String searchTerm) throws InternalServerException;
+
+	GlobalSearchResponse getGlobalSearchResults(GlobalSearchRequest globalSearchRequest) throws InternalServerException;
 
 }

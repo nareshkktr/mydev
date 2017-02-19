@@ -1,56 +1,60 @@
 <div class="page-container">
-	<div class="row search_results_for_text">
-		<div class="col-xs-12">
-		</div>
-	</div>
-	<div class="row search_object_count_header">
-		<div class="col-xs-3" ng-if="globalSearch.searchResults.PEOPLE.length >0">
-			<label> People&nbsp;({{globalSearch.searchResults.PEOPLE.length}}) </label>
-		</div>
-		<div class="col-xs-3" ng-if="globalSearch.searchResults.PROBLEM">
-			<label> Problem&nbsp;({{globalSearch.searchResults.PROBLEM.length}}) </label>
-		</div>
-		<div class="col-xs-3" ng-if="globalSearch.searchResults.EVENT">
-			<label> Event&nbsp;({{globalSearch.searchResults.EVENT.length}}) </label>
-		</div>
-		<div class="col-xs-3" ng-if="globalSearch.searchResults.LOCATION">
-			<label> Location&nbsp;({{globalSearch.searchResults.LOCATION.length}}) </label>
-		</div>
-	</div>
-	<div class="row search_object_content">
-		<div class="col-xs-3" ng-if="globalSearch.searchResults.PEOPLE.length >0 ">
-			<div  class="search-item row" ng-repeat="result in globalSearch.searchResults.PEOPLE">
-				<div class="col-xs-12 search-item-img">
-					<img alt=""
-						src="https://0.gravatar.com/avatar/48959f453dffdb6236f4b33eb8e9f4b7?s=50&d=identicon&r=G">
-					&nbsp; <label class="search-item-name">{{result.objectName}}</label>
-				</div>
+
+	<div class="row search_container">
+		<div class="col-lg-2 col-md-2 col-sm-4 col-xs-12 search_objects_tab">
+			<div class="search_object_tab" ng-click="globalSearch.search('ALL')">
+				<span class="search_object_tab_icon"><img
+					src="assets/objectIcons/all.png" /></span> <span
+					class="search_object_tab_name">All</span><span
+					class="search_object_tab_count">({{globalSearch.totalCount}})</span>
+			</div>
+			<div class="search_object_tab" ng-click="globalSearch.search('USER')">
+				<span class="search_object_tab_icon"><img
+					src="assets/objectIcons/user.png" /></span> <span
+					class="search_object_tab_name">Users</span><span
+					class="search_object_tab_count">({{globalSearch.objectsCount.USER?globalSearch.objectsCount.USER:0}})</span>
+			</div>
+			<div class="search_object_tab" ng-click="globalSearch.search('POLITICIAN')">
+				<span class="search_object_tab_icon"><img
+					src="assets/objectIcons/politician.png" /></span> <span
+					class="search_object_tab_name">Politicians</span><span
+					class="search_object_tab_count">({{globalSearch.objectsCount.POLITICIAN?globalSearch.objectsCount.POLITICIAN:0}})</span>
+			</div>
+			<div class="search_object_tab" ng-click="globalSearch.search('PARTY')">
+				<span class="search_object_tab_icon"><img
+					src="assets/objectIcons/party.png" /></span> <span
+					class="search_object_tab_name">Parties</span><span
+					class="search_object_tab_count">({{globalSearch.objectsCount.PARTY?globalSearch.objectsCount.PARTY:0}})</span>
+			</div>
+			<div class="search_object_tab" ng-click="globalSearch.search('PROBLEM')">
+				<span class="search_object_tab_icon"><img
+					src="assets/objectIcons/problem.png" /></span> <span
+					class="search_object_tab_name">Problems</span><span
+					class="search_object_tab_count">({{globalSearch.objectsCount.PROBLEM?globalSearch.objectsCount.PROBLEM:0}})</span>
+			</div>
+			<div class="search_object_tab" ng-click="globalSearch.search('EVENT')">
+				<span class="search_object_tab_icon"><img
+					src="assets/objectIcons/event.png" /></span> <span
+					class="search_object_tab_name">Events</span><span
+					class="search_object_tab_count">({{globalSearch.objectsCount.EVENT?globalSearch.objectsCount.EVENT:0}})</span>
+			</div>
+			<div class="search_object_tab" ng-click="globalSearch.search('LOCATION')">
+				<span class="search_object_tab_icon"><img
+					src="assets/objectIcons/location.png" /></span> <span
+					class="search_object_tab_name">Locations</span><span
+					class="search_object_tab_count">({{globalSearch.objectsCount.LOCATION?globalSearch.objectsCount.LOCATION:0}})</span>
 			</div>
 		</div>
-		<div class="col-xs-3" ng-if="globalSearch.searchResults.PROBLEM">
-			<div class="search-item row" ng-repeat="result in globalSearch.searchResults.PROBLEM">
-				<div class="col-xs-12 search-item-img">
-					<img alt=""
-						src="https://0.gravatar.com/avatar/48959f453dffdb6236f4b33eb8e9f4b7?s=50&d=identicon&r=G">
-					&nbsp; <label class="search-item-name">{{result.objectName}}</label>
-				</div>
-			</div>
-		</div>
-		<div class="col-xs-3" ng-if="globalSearch.searchResults.EVENT">
-			<div class="search-item row" ng-repeat="result in globalSearch.searchResults.EVENT">
-				<div class="col-xs-12 search-item-img">
-					<img alt=""
-						src="https://0.gravatar.com/avatar/48959f453dffdb6236f4b33eb8e9f4b7?s=50&d=identicon&r=G">
-					&nbsp; <label class="search-item-name">{{result.objectName}}</label>
-				</div>
-			</div>
-		</div>
-		<div class="col-xs-3" ng-if="globalSearch.searchResults.LOCATION">
-			<div class="search-item row" ng-repeat="result in globalSearch.searchResults.LOCATION">
-				<div class="col-xs-12 search-item-img">
-					<img alt=""
-						src="https://0.gravatar.com/avatar/48959f453dffdb6236f4b33eb8e9f4b7?s=50&d=identicon&r=G">
-					&nbsp; <label class="search-item-name">{{result.objectName}}</label>
+		<div
+			class="col-lg-10 col-md-10 col-sm-8 col-xs-12 search_objects_tab_content">
+			<div class="row search_object_content">
+				<div class="search-item col-xs-3"
+					ng-repeat="result in globalSearch.searchResults">
+					<div class="col-xs-12 search-item-img">
+						<img alt=""
+							src="https://0.gravatar.com/avatar/48959f453dffdb6236f4b33eb8e9f4b7?s=50&d=identicon&r=G">
+						&nbsp; <label class="search-item-name">{{result.objectName}}</label>
+					</div>
 				</div>
 			</div>
 		</div>

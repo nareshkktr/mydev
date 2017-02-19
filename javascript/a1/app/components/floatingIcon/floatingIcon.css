@@ -1,79 +1,26 @@
-@CHARSET "ISO-8859-1";
-
-#app_footer {
-	background-color: #f94c59;
+#add_objects_floating_content {
 	position: fixed;
-	width: 100%;
-	bottom: 0px;
-	color: #ebebeb;
-	height: 47px;
+	right: 0;
+	bottom: 47px;
 }
 
-.app_name_img {
-	text-align: center;
-}
-
-.app_name_img img {
-	width: 50px;
-	height: 40px;
-	border-radius: 50%;
-	vertical-align: middle;
-}
-
-.app_name_img label {
-	color: white;
-	letter-spacing: 1px;
-	font-size: 20px;
-	margin-left: 10px;
-	font-family: 'Niconne', cursive;
-}
-
-.copty_right_col {
-	letter-spacing: 1px;
-	padding-top: 10px;
-	text-align: center;
-}
-
-.copty_right_col label {
-	font-family: 'Niconne', cursive;
-	margin-left: 5px;
-}
-
-.social_icons_col {
-	text-align: center;
-	padding-top: 10px;
-}
-
-.social_icons_col i {
-	font-size: 17px;
-	padding-left: 10px;
-}
-
-.footer_nofitication_icon {
-	text-align: center;
-	padding-top: 8px;
-	padding-bottom: 0px;
-	padding-right: 1px !important;
-	padding-left: 5px !important;
-}
-
-.footer_nofitication_icon button, .footer_nofitication_icon button:HOVER
-	{
+#add_objects_floating_icon {
+	position: fixed;
+	right: 30px;
+	bottom: 75px;
 	background-color: #f94c59;
 	color: #ebebeb;
-	border: none;
-	font-size: 19px;
+	padding: 0px;
+	border-radius: 50%;
+	font-size: 50px;
+	width: 60px;
+	height: 60px;
+	cursor: pointer;
 }
 
-#app_footer .badge-notify {
-	background: #e5e0e0;
-    position: relative;
-    top: -14px;
-    left: -10px;
-}
-
-#app_footer .badge {
-    padding: 2px 5px;
-    font-size: 12px;
-    color: #f94c59;
+#add_objects_floating_icon span {
+	font-weight: 100;
+	font-family: inherit;
+	top: -8px;
+	left: 19px;
 }

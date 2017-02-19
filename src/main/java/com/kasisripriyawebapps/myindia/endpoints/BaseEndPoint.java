@@ -5,7 +5,9 @@ import java.io.InputStream;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.security.core.context.SecurityContextHolder;
 
+import com.kasisripriyawebapps.myindia.configs.LoggedInUserDetails;
 import com.kasisripriyawebapps.myindia.constants.ExceptionConstants;
 import com.kasisripriyawebapps.myindia.exception.PreConditionRequiredException;
 import com.kasisripriyawebapps.myindia.util.CommonUtil;
@@ -29,10 +31,16 @@ public class BaseEndPoint {
 				throw new PreConditionRequiredException(ExceptionConstants.EXCEL_FILE_TYPE_VALIDATION);
 			}
 		}
-		/*
-		 * else{ throw new PreConditionRequiredException(ExceptionConstants.
-		 * ATLEAST_ONE_FILE_REQUIRED); }
-		 */
 		return uploadedFileLocation;
+	}
+
+	protected LoggedInUserDetails getLoggedInUserDetails() {
+		LoggedInUserDetails loggedInUserDetails = null;
+		if (SecurityContextHolder.getContext() != null
+				&& SecurityContextHolder.getContext().getAuthentication() != null) {
+			loggedInUserDetails = (LoggedInUserDetails) SecurityContextHolder.getContext().getAuthentication()
+					.getPrincipal();
+		}
+		return loggedInUserDetails;
 	}
 }

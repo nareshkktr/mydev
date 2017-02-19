@@ -1,11 +1,11 @@
 (function() {
-    'use strict';
+	'use strict';
+	angular.module('myindia-app').controller("floaingIconController",
+			floaingIconController);
 
-    angular.module('myindia-app').controller("footerController", footerController);
+	floaingIconController.$inject = [];
 
-
-    function footerController() {
-
-    }
-
+	function floaingIconController() {
+		var floatingIcon = this;
+	}
 })();

@@ -34,8 +34,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	public void configure(WebSecurity web) throws Exception {
 		web.ignoring().antMatchers("/api/account/login").antMatchers("/api/account/createAccount")
 				.antMatchers("/api/swagger.json").antMatchers("/api/locationImportExport/*")
-				.antMatchers("/api/userImport/*").antMatchers("/api/importAllPoliticians/*").antMatchers("/api/user/*").
-				antMatchers("/api/search/*").antMatchers("/api/location/*");
+				.antMatchers("/api/userImport/*").antMatchers("/api/importAllPoliticians/*").antMatchers("/api/user/*")
+				.antMatchers("/api/location/*").antMatchers("/api/search/*");
 	}
 
 	@Override

@@ -9,6 +9,7 @@
 
     	var signIn = this;
  		signIn.login = login;
+ 		signIn.gotoSignUp = gotoSignUp;
 
     	function login(){
     		signInService.login(signIn.userName,signIn.password).then(loginSuccess).catch(loginFailure);
@@ -22,6 +23,11 @@
     			alert("Login Failed...");
     		}
     	}
+    	
+    	function gotoSignUp(){
+    		$state.go('signUp.validate');
+    	}
+    	
     }
 
 })();

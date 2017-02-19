@@ -10,31 +10,28 @@
 		
 		var globalSearch=this;
 		globalSearch.searchTerm=$state.params.searchTerm;
+		globalSearch.searchObjectType="";
 		globalSearch.searchResults = [];
+		globalSearch.objectsCount = {};
+		globalSearch.totalCount = 0;
+		globalSearch.search=search;
 		
-		//Call the search service
-		globalSearchService.search(globalSearch.searchTerm).then(searchSuccess).catch(searchError);
-
-		function searchSuccess(data){
-			globalSearch.searchResults = data;
-
-			globalSearch.searchResults.PEOPLE = [];
+		search('ALL');
+		
+		function search(searchObjectType){
 			
-			if(globalSearch.searchResults.USER){
-				globalSearch.searchResults.PEOPLE = globalSearch.searchResults.PEOPLE.concat(globalSearch.searchResults.USER);
+			globalSearch.searchObjectType=searchObjectType;
+			
+			globalSearchService.search(globalSearch.searchTerm,globalSearch.searchObjectType).then(searchSuccess).catch(searchError);
+			
+			function searchSuccess(data){
+				globalSearch.searchResults = data.searchResults;
+				globalSearch.totalCount = data.totalCount;
+				globalSearch.objectsCount = data.objectsCount;
 			}
-			if (globalSearch.searchResults.PARTY) {
-				globalSearch.searchResults.PEOPLE = globalSearch.searchResults.PEOPLE.concat(globalSearch.searchResults.PARTY);
+			function searchError(error){
+				alert(error);
 			}
-			if (globalSearch.searchResults.POLITICIAN) {
-				globalSearch.searchResults.PEOPLE = globalSearch.searchResults.PEOPLE.concat(globalSearch.searchResults.POLITICIAN);
-			};
-
 		}
-
-		function searchError(error){
-			alert(error);
-		}
-		
 	}
 })();

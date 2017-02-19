@@ -8,12 +8,13 @@ body {
 	background-color: #ebebeb;
 	height: 100%;
 	width: 100%;
-	padding: 10px 30px 30px 30px;
+	padding: 0px 0px 30px 0px;
 }
 
 .app_header {
 	background-color: #f94c59 !important;
 	margin-bottom: 0px !important;
+	z-index: 0 !important;
 }
 
 .app_header .navbar-form {
@@ -80,7 +81,7 @@ body {
 }
 
 #logged-in-location {
-	font-family: cursive;
+	font-family: 'Slabo 27px', serif !important;
 	color: white;
 	font-size: 15px;
 	letter-spacing: 1px;
@@ -167,7 +168,7 @@ body {
 
 .app-body-container {
 	flex: 1;
-	margin-top: 53px;
+	margin-top: 52px;
 }
 
 .signin_app_body_container {

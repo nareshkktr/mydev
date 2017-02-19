@@ -1,22 +1,21 @@
 (function() {
-    'use strict';
+	'use strict';
 
-    angular.module('myindia-app').directive("myindiaFooter", myIndiaFooter);
+	angular.module('myindia-app').directive("floatingIcon", floatingIcon);
 
+	function floatingIcon() {
 
-    function myIndiaFooter() {
+		var floatingIcon = {
+			restrict : 'E',
+			link : link,
+			templateUrl : resource + 'partials/floatingIcon.html',
+			controller : 'floaingIconController',
+			controllerAs : 'floatingIcon'
+		};
 
-        function link(scope, element, attrs) {
-        	
-        };
-        
-        return {
-            restrict:'E',
-            link:link,
-            templateUrl: resource+'partials/footer.html', 
-            controller:'footerController'
-    		
-    	}	
-    }
+		return floatingIcon;
 
+		function link(scope, element, attrs) {
+		}
+	}
 })();

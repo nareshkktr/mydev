@@ -63,6 +63,40 @@
 	}
 })();
 (function() {
+	'use strict';
+	angular.module('myindia-app').controller("floaingIconController",
+			floaingIconController);
+
+	floaingIconController.$inject = [];
+
+	function floaingIconController() {
+		var floatingIcon = this;
+	}
+})();
+
+(function() {
+	'use strict';
+
+	angular.module('myindia-app').directive("floatingIcon", floatingIcon);
+
+	function floatingIcon() {
+
+		var floatingIcon = {
+			restrict : 'E',
+			link : link,
+			templateUrl : resource + 'partials/floatingIcon.html',
+			controller : 'floaingIconController',
+			controllerAs : 'floatingIcon'
+		};
+
+		return floatingIcon;
+
+		function link(scope, element, attrs) {
+		}
+	}
+})();
+
+(function() {
     'use strict';
 
     angular.module('myindia-app').controller("footerController", footerController);
@@ -137,6 +171,40 @@
 		}
 	}
 
+})();
+
+(function() {
+	'use strict';
+	angular.module('myindia-app').controller("overlayController",
+			overlayController);
+
+	overlayController.$inject = [];
+
+	function overlayController() {
+		var overlay = this;
+	}
+})();
+
+(function() {
+	'use strict';
+
+	angular.module('myindia-app').directive("overlay", overlay);
+
+	function overlay() {
+
+		var overlay = {
+			restrict : 'E',
+			link : link,
+			templateUrl : resource + 'partials/overlay.html',
+			controller : 'overlayController',
+			controllerAs : 'overlay'
+		};
+
+		return overlay;
+
+		function link(scope, element, attrs) {
+		}
+	}
 })();
 
 (function() {
@@ -254,32 +322,29 @@
 		
 		var globalSearch=this;
 		globalSearch.searchTerm=$state.params.searchTerm;
+		globalSearch.searchObjectType="";
 		globalSearch.searchResults = [];
+		globalSearch.objectsCount = {};
+		globalSearch.totalCount = 0;
+		globalSearch.search=search;
 		
-		//Call the search service
-		globalSearchService.search(globalSearch.searchTerm).then(searchSuccess).catch(searchError);
-
-		function searchSuccess(data){
-			globalSearch.searchResults = data;
-
-			globalSearch.searchResults.PEOPLE = [];
+		search('ALL');
+		
+		function search(searchObjectType){
 			
-			if(globalSearch.searchResults.USER){
-				globalSearch.searchResults.PEOPLE = globalSearch.searchResults.PEOPLE.concat(globalSearch.searchResults.USER);
+			globalSearch.searchObjectType=searchObjectType;
+			
+			globalSearchService.search(globalSearch.searchTerm,globalSearch.searchObjectType).then(searchSuccess).catch(searchError);
+			
+			function searchSuccess(data){
+				globalSearch.searchResults = data.searchResults;
+				globalSearch.totalCount = data.totalCount;
+				globalSearch.objectsCount = data.objectsCount;
 			}
-			if (globalSearch.searchResults.PARTY) {
-				globalSearch.searchResults.PEOPLE = globalSearch.searchResults.PEOPLE.concat(globalSearch.searchResults.PARTY);
+			function searchError(error){
+				alert(error);
 			}
-			if (globalSearch.searchResults.POLITICIAN) {
-				globalSearch.searchResults.PEOPLE = globalSearch.searchResults.PEOPLE.concat(globalSearch.searchResults.POLITICIAN);
-			};
-
 		}
-
-		function searchError(error){
-			alert(error);
-		}
-		
 	}
 })();
 
@@ -298,7 +363,7 @@
     		search : search
     	};
 
-        //Call and save the data
+        // Call and save the data
         swaggerShareService.getAPIMetaData(setAPIMetaData);
 
         return globalSearchService;
@@ -307,11 +372,16 @@
             services = metaInfo;
         }
 
-    	function search(searchTerm){
+    	function search(searchTerm,searchObjectType){
+    		
+    		let requestBody = {
+    				searchText: searchTerm,
+    				searchObjectType: searchObjectType
+                }
 
             let deferred = $q.defer();
 
-            services.search.getAllGlobalSearchResults({searchTerm:searchTerm},searchSuccess,searchFailure);
+            services.search.getAllGlobalSearchResults({body:JSON.stringify(requestBody)},searchSuccess,searchFailure);
         
             return deferred.promise;
 
@@ -329,21 +399,21 @@
 
 })();
 (function() {
-    'use strict';
+	'use strict';
 
-    angular.module('myindia-app').controller("homeController", homeController);
+	angular.module('myindia-app').controller("homeController", homeController);
 
-    homeController.$inject = ['swaggerShareService'];
+	homeController.$inject = [ 'swaggerShareService' ];
 
-    function homeController(swaggerShareService) {
- 
-    	//swaggerShareService.getAPIMetaData('http://'+window.location.host+'/',setAPIMetaData);
-    	swaggerShareService.getAPIMetaData(setAPIMetaData);
+	function homeController(swaggerShareService) {
 
-    	function setAPIMetaData(metaInfo){
-    		alert(metaInfo);
-    	}
-    }
+		// swaggerShareService.getAPIMetaData('http://'+window.location.host+'/',setAPIMetaData);
+		swaggerShareService.getAPIMetaData(setAPIMetaData);
+
+		function setAPIMetaData(metaInfo) {
+
+		}
+	}
 
 })();
 
@@ -358,6 +428,7 @@
 
     	var signIn = this;
  		signIn.login = login;
+ 		signIn.gotoSignUp = gotoSignUp;
 
     	function login(){
     		signInService.login(signIn.userName,signIn.password).then(loginSuccess).catch(loginFailure);
@@ -371,6 +442,11 @@
     			alert("Login Failed...");
     		}
     	}
+    	
+    	function gotoSignUp(){
+    		$state.go('signUp.validate');
+    	}
+    	
     }
 
 })();

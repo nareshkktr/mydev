@@ -1,18 +1,18 @@
 (function() {
-    'use strict';
+	'use strict';
 
-    angular.module('myindia-app').controller("homeController", homeController);
+	angular.module('myindia-app').controller("homeController", homeController);
 
-    homeController.$inject = ['swaggerShareService'];
+	homeController.$inject = [ 'swaggerShareService' ];
 
-    function homeController(swaggerShareService) {
- 
-    	//swaggerShareService.getAPIMetaData('http://'+window.location.host+'/',setAPIMetaData);
-    	swaggerShareService.getAPIMetaData(setAPIMetaData);
+	function homeController(swaggerShareService) {
 
-    	function setAPIMetaData(metaInfo){
-    		alert(metaInfo);
-    	}
-    }
+		// swaggerShareService.getAPIMetaData('http://'+window.location.host+'/',setAPIMetaData);
+		swaggerShareService.getAPIMetaData(setAPIMetaData);
+
+		function setAPIMetaData(metaInfo) {
+
+		}
+	}
 
 })();

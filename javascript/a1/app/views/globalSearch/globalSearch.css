@@ -1,3 +1,8 @@
+.search_container {
+	margin-left: 0px !important;
+	margin-right: 0px !important;
+}
+
 .slide-animate {
 	width: 100%;
 	height: 100%;
@@ -19,7 +24,8 @@
 	cursor: pointer;
 	border-radius: 5px;
 	background: rgb(221, 220, 220);
-	margin-right: 2px !important;
+	margin-left: 20px;
+	width: auto !important;
 }
 
 .search-item img {
@@ -34,11 +40,60 @@
 	cursor: pointer;
 }
 
-.search_object_count_header div {
-	letter-spacing: 1px;
-	color: #f94c59;
-	font-size: 18px;
-}
 .search-item:HOVER {
 	background: rgb(229, 194, 194);
+}
+
+.search_object_tab:HOVER{
+	background-color: #f94c59;
+	color: #ebebeb;
+}
+
+.search_objects_tab {
+	background-color: white;
+	padding: 0px !important;
+}
+
+.search_object_tab {
+	border-bottom: 1px solid #d7c7c9;
+	padding: 15px;
+	cursor: pointer;
+}
+
+.search_object_tab_icon {
+	padding-right: 10px;
+	cursor: pointer;
+}
+
+.search_object_tab_icon img {
+	width: 40px;
+	height: 40px;
+	border: 2px solid black;
+	border-radius: 50%;
+	padding: 6px;
+	background-color: #ebebeb;
+	cursor: pointer;
+}
+
+.search_object_tab_name_count {
+	text-align: center;
+	padding-top: 9px;
+	color: #f94c59;
+	cursor: pointer;
+}
+
+.search_object_tab_name {
+	font-size: 16px;
+	font-weight: 600;
+	letter-spacing: 1px;
+	cursor: pointer;
+}
+
+.search_object_tab_count {
+	padding-left: 8px;
+	cursor: pointer;
+}
+
+.search_objects_tab_content {
+	padding: 20px;
 }

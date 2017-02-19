@@ -1,3 +1,29 @@
+#add_objects_floating_content {
+	position: fixed;
+	right: 0;
+	bottom: 47px;
+}
+
+#add_objects_floating_icon {
+	position: fixed;
+	right: 30px;
+	bottom: 75px;
+	background-color: #f94c59;
+	color: #ebebeb;
+	padding: 0px;
+	border-radius: 50%;
+	font-size: 50px;
+	width: 60px;
+	height: 60px;
+	cursor: pointer;
+}
+
+#add_objects_floating_icon span {
+	font-weight: 100;
+	font-family: inherit;
+	top: -8px;
+	left: 19px;
+}
 @CHARSET "ISO-8859-1";
 
 #app_footer {
@@ -87,12 +113,13 @@ body {
 	background-color: #ebebeb;
 	height: 100%;
 	width: 100%;
-	padding: 10px 30px 30px 30px;
+	padding: 0px 0px 30px 0px;
 }
 
 .app_header {
 	background-color: #f94c59 !important;
 	margin-bottom: 0px !important;
+	z-index: 0 !important;
 }
 
 .app_header .navbar-form {
@@ -159,7 +186,7 @@ body {
 }
 
 #logged-in-location {
-	font-family: cursive;
+	font-family: 'Slabo 27px', serif !important;
 	color: white;
 	font-size: 15px;
 	letter-spacing: 1px;
@@ -246,7 +273,7 @@ body {
 
 .app-body-container {
 	flex: 1;
-	margin-top: 53px;
+	margin-top: 52px;
 }
 
 .signin_app_body_container {
@@ -447,6 +474,20 @@ input[type="text"], input[type="password"], select {
 		display: none;
 	}
 }
+#overlay {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	background-color: #ebebeb;
+	opacity: 0.7;
+	top: 0;
+	display: none;
+}
+.search_container {
+	margin-left: 0px !important;
+	margin-right: 0px !important;
+}
+
 .slide-animate {
 	width: 100%;
 	height: 100%;
@@ -468,7 +509,8 @@ input[type="text"], input[type="password"], select {
 	cursor: pointer;
 	border-radius: 5px;
 	background: rgb(221, 220, 220);
-	margin-right: 2px !important;
+	margin-left: 20px;
+	width: auto !important;
 }
 
 .search-item img {
@@ -483,13 +525,62 @@ input[type="text"], input[type="password"], select {
 	cursor: pointer;
 }
 
-.search_object_count_header div {
-	letter-spacing: 1px;
-	color: #f94c59;
-	font-size: 18px;
-}
 .search-item:HOVER {
 	background: rgb(229, 194, 194);
+}
+
+.search_object_tab:HOVER{
+	background-color: #f94c59;
+	color: #ebebeb;
+}
+
+.search_objects_tab {
+	background-color: white;
+	padding: 0px !important;
+}
+
+.search_object_tab {
+	border-bottom: 1px solid #d7c7c9;
+	padding: 15px;
+	cursor: pointer;
+}
+
+.search_object_tab_icon {
+	padding-right: 10px;
+	cursor: pointer;
+}
+
+.search_object_tab_icon img {
+	width: 40px;
+	height: 40px;
+	border: 2px solid black;
+	border-radius: 50%;
+	padding: 6px;
+	background-color: #ebebeb;
+	cursor: pointer;
+}
+
+.search_object_tab_name_count {
+	text-align: center;
+	padding-top: 9px;
+	color: #f94c59;
+	cursor: pointer;
+}
+
+.search_object_tab_name {
+	font-size: 16px;
+	font-weight: 600;
+	letter-spacing: 1px;
+	cursor: pointer;
+}
+
+.search_object_tab_count {
+	padding-left: 8px;
+	cursor: pointer;
+}
+
+.search_objects_tab_content {
+	padding: 20px;
 }
 
 #login-container {
@@ -551,11 +642,10 @@ input[type="text"], input[type="password"], select {
 }
 
 .login_icon {
-	position: absolute;
 	color: grey;
-	left: 28px;
-	margin-top: 40px;
 	font-size: 12px !important;
+	left: -50px;
+	top: 37px !important;
 }
 
 .password_row {
@@ -650,6 +740,16 @@ input[type="text"], input[type="password"], select {
 #login_form form button, input[type="checkbox"] {
 	-webkit-box-shadow: 1px 5px 0px 1px rgba(249, 76, 89, 0.57);
 	box-shadow: 1px 5px 0px 1px rgba(249, 76, 89, 0.57);
+}
+
+.signin_user_icon {
+	left: -57px;
+}
+
+.help-block {
+	margin-top: 9px !important;
+	margin-bottom: 0px !important;
+	color: red !important;
 }
 #signup-container {
 	background-color: #ebebeb;

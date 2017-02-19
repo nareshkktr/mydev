@@ -1,7 +1,6 @@
 package com.kasisripriyawebapps.myindia.requestresponsemodel;
 
 import java.util.List;
-import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.kasisripriyawebapps.myindia.solr.entity.SolrLocationMaster;

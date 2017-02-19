@@ -13,7 +13,7 @@
     		search : search
     	};
 
-        //Call and save the data
+        // Call and save the data
         swaggerShareService.getAPIMetaData(setAPIMetaData);
 
         return globalSearchService;
@@ -22,11 +22,16 @@
             services = metaInfo;
         }
 
-    	function search(searchTerm){
+    	function search(searchTerm,searchObjectType){
+    		
+    		let requestBody = {
+    				searchText: searchTerm,
+    				searchObjectType: searchObjectType
+                }
 
             let deferred = $q.defer();
 
-            services.search.getAllGlobalSearchResults({searchTerm:searchTerm},searchSuccess,searchFailure);
+            services.search.getAllGlobalSearchResults({body:JSON.stringify(requestBody)},searchSuccess,searchFailure);
         
             return deferred.promise;
 
