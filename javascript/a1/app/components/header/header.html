@@ -4,9 +4,10 @@
 			class="app-name">MyIndia</span></a>
 
 		<ul class="nav pull-left" id="header_logged_in_location_box">
-			<li class="dropdown pull-right"><a href
-				id="user-profile-dropdown"> <span id="logged-in-location">Pulipadu,A.P</span>
-					<i id="header-edit-location-icon" class="material-icons" data-toggle="modal" data-target="#locationChangeModal">location_on</i>
+			<li uib-dropdown class="dropdown pull-right"><a href
+				id="user-profile-dropdown" uib-dropdown-toggle> <span
+					id="logged-in-location">{{header.userInfo.location}}</span> <i
+					id="header-edit-location-icon" class="material-icons" data-toggle="modal" data-target="#locationChangeModal">location_on</i>
 			</a></li>
 		</ul>
 		<ul class="nav pull-left" id="header_notification_icons_box">
@@ -50,7 +51,7 @@
 						<li uib-dropdown class="dropdown pull-right"><a href
 							id="user-profile-dropdown" uib-dropdown-toggle> <img
 								id="logged-in-user-icon"
-								src="http://2.bp.blogspot.com/-2WoowzxsUf4/VnAociz0xvI/AAAAAAAABmk/0foKF-ZDIuQ/s1600/pawan-kalyan.jpg">
+								ng-src="{{header.userInfo.userImage}}">
 								<b class="caret"></b>
 						</a>
 							<ul class="dropdown-menu" uib-dropdown-menu role="menu"
