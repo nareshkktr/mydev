@@ -27,6 +27,7 @@ import com.kasisripriyawebapps.myindia.requestresponsemodel.CreateAccountRequest
 import com.kasisripriyawebapps.myindia.requestresponsemodel.LoginRequest;
 import com.kasisripriyawebapps.myindia.service.AccountService;
 import com.kasisripriyawebapps.myindia.service.OAuthService;
+import com.kasisripriyawebapps.myindia.service.UserService;
 import com.kasisripriyawebapps.myindia.solr.entity.SolrUserMaster;
 import com.kasisripriyawebapps.myindia.solr.repository.UserMasterRepository;
 import com.kasisripriyawebapps.myindia.util.CommonUtil;
@@ -48,6 +49,9 @@ public class AccountServiceImpl implements AccountService {
 
 	@Autowired
 	LocationDao locationDao;
+	
+	@Autowired
+	UserService userService;
 
 	@Autowired
 	private UserMasterRepository userMasterRepository;
@@ -99,15 +103,17 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	@Transactional
-	public BaseUserInformation prepareBaseUserInformation(Account account) throws InternalServerException {
+	public BaseUserInformation prepareBaseUserInformation(Account account) throws InternalServerException, RecordNotFoundException {
 
 		BaseUserInformation baseUserInfo = new BaseUserInformation();
 		JSONObject authTokenInfo = null;
 		
-		baseUserInfo.setName(account.getUserInfo().getElectorName());
-		baseUserInfo.setUserGuid(account.getUserInfo().getGuid());
-		baseUserInfo.setGender(account.getUserInfo().getGender());
-		baseUserInfo.setUserImage(account.getUserInfo().getPhotoURL());
+		UserInfo userInfo = account.getUserInfo();
+		
+		baseUserInfo.setName(userInfo.getElectorName());
+		baseUserInfo.setUserGuid(userInfo.getGuid());
+		baseUserInfo.setGender(userInfo.getGender());
+		baseUserInfo.setUserImage(userInfo.getPhotoURL());
 		baseUserInfo.setUserName(account.getUserName());
 		
 		if (account != null) {
@@ -118,6 +124,8 @@ public class AccountServiceImpl implements AccountService {
 				throw new InternalServerException(e.getMessage());
 			}
 		}
+		//populateLocationInformation
+		baseUserInfo.setUserLocation(userService.getLoggedInUserLocation(account.getGuid()));
 		
 		return baseUserInfo;
 	}

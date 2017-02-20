@@ -20,6 +20,6 @@ public interface AccountService {
 
 	BaseUserInformation login(LoginRequest loginRequest) throws InternalServerException, RecordNotFoundException;
 
-	BaseUserInformation prepareBaseUserInformation(Account account) throws InternalServerException;
+	BaseUserInformation prepareBaseUserInformation(Account account) throws InternalServerException, RecordNotFoundException;
 	
 }

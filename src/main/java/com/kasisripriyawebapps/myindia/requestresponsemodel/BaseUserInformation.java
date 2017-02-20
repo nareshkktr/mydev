@@ -8,19 +8,28 @@ public class BaseUserInformation {
 	private String gender;
 	private String userName;
 	private String accessToken;
+	private UserLocationDetails userLocation;
 
 	public BaseUserInformation() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	
-	public BaseUserInformation(Long userGuid, String name, String userImage, String gender) {
+	
+
+	public BaseUserInformation(Long userGuid, String name, String userImage, String gender, String userName,
+			String accessToken, UserLocationDetails userLocation) {
 		super();
 		this.userGuid = userGuid;
 		this.name = name;
 		this.userImage = userImage;
 		this.gender = gender;
+		this.userName = userName;
+		this.accessToken = accessToken;
+		this.userLocation = userLocation;
 	}
+
+
 
 	public Long getUserGuid() {
 		return userGuid;
@@ -69,8 +78,13 @@ public class BaseUserInformation {
 	public void setAccessToken(String accessToken) {
 		this.accessToken = accessToken;
 	}
-	
-	
-	
+
+	public UserLocationDetails getUserLocation() {
+		return userLocation;
+	}
+
+	public void setUserLocation(UserLocationDetails userLocation) {
+		this.userLocation = userLocation;
+	}
 
 }
