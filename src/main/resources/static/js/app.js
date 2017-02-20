@@ -134,13 +134,31 @@
 	angular.module('myindia-app').controller("headerController",
 			headerController);
 	
-	headerController.$inject = [ '$state'];
+	headerController.$inject = [ '$state','dataShareService','$scope'];
 
-	function headerController($state) {
+	function headerController($state,dataShareService,$scope) {
 
 		var header = this;
 		header.searchTerm = '';
 		header.gotoSearch = gotoSearch;
+
+		$scope.$on('userInfo',refreshUserInfo);
+
+		function refreshUserInfo(){
+			header.userInfo = dataShareService.getUserInfo();
+
+			if(header.userInfo){
+				if(!header.userInfo.userImage){
+					if(header.userInfo.gender == 'Male'){
+						header.userInfo.userImage = resource+'/Users-User-Male-icon.png';
+					}else if(header.userInfo.gender == 'Female'){
+						header.userInfo.userImage = resource+'/Users-User-Female-icon.png';
+					}
+				}
+			}
+		}
+		
+		
 
 		function gotoSearch() {
 			$state.go('search', {
@@ -159,8 +177,7 @@
 
 		function link(scope, element, attrs) {
 
-		}
-		;
+		};
 
 		return {
 			restrict : 'E',
@@ -257,6 +274,35 @@
 	}
 })();
 
+(function() {
+    'use strict';
+
+    angular.module('myindia-app').factory("dataShareService", dataShareService);
+
+    dataShareService.$inject = ['$rootScope'];
+
+    function dataShareService($rootScope) {
+
+        var data = {};
+
+    	var dataShareService = {
+    		getUserInfo : getUserInfo,
+            setUserInfo: setUserInfo
+    	};
+
+        return dataShareService;
+
+    	function getUserInfo(){
+            return data.userInfo;
+    	}
+
+        function setUserInfo(userInfo){
+            data.userInfo = userInfo;
+            $rootScope.$broadcast('userInfo',data.userInfo);
+        }
+    }
+
+})();
 (function() {
     'use strict';
 
@@ -422,9 +468,9 @@
 
     angular.module('myindia-app').controller("signInController", signInController);
 
-    signInController.$inject = ['signInService','$state'];
+    signInController.$inject = ['signInService','$state','dataShareService'];
 
-    function signInController(signInService,$state) {
+    function signInController(signInService,$state,dataShareService) {
 
     	var signIn = this;
  		signIn.login = login;
@@ -433,13 +479,14 @@
     	function login(){
     		signInService.login(signIn.userName,signIn.password).then(loginSuccess).catch(loginFailure);
 
-    		function loginSuccess(){
+    		function loginSuccess(data){
     			alert("Login Success");
+                dataShareService.setUserInfo(data);
     			$state.go('home');
     		}
 
-    		function loginFailure(){
-    			alert("Login Failed...");
+    		function loginFailure(error){
+    			alert(error);
     		}
     	}
     	
@@ -603,9 +650,9 @@
 	angular.module('myindia-app').controller("signUpController",
 			signUpController);
 
-	signUpController.$inject = [ '$state','validateElectorService','identifyConflictParentLocationsService','createAccountService' ];
+	signUpController.$inject = [ '$state','validateElectorService','identifyConflictParentLocationsService','createAccountService','dataShareService' ];
 
-	function signUpController($state,validateElectorService,identifyConflictParentLocationsService,createAccountService) {
+	function signUpController($state,validateElectorService,identifyConflictParentLocationsService,createAccountService,dataShareService) {
 		
 		var signUp = this;
 		signUp.validateElector = validateElector;
@@ -662,11 +709,12 @@
 		}
 
 		function createAccount(){
-			
+
 			createAccountService.create(signUp.elector.location.userGuid,signUp.userName,signUp.userPassword,signUp.leafLocation,signUp.parentLocation)
 								.then(createAccountSuccess).catch(createAccountFailure);
 
 			function createAccountSuccess(data){
+				dataShareService.setUserInfo(data);
 				$state.transitionTo('home');
 			}
 

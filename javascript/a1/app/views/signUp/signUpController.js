@@ -4,9 +4,9 @@
 	angular.module('myindia-app').controller("signUpController",
 			signUpController);
 
-	signUpController.$inject = [ '$state','validateElectorService','identifyConflictParentLocationsService','createAccountService' ];
+	signUpController.$inject = [ '$state','validateElectorService','identifyConflictParentLocationsService','createAccountService','dataShareService' ];
 
-	function signUpController($state,validateElectorService,identifyConflictParentLocationsService,createAccountService) {
+	function signUpController($state,validateElectorService,identifyConflictParentLocationsService,createAccountService,dataShareService) {
 		
 		var signUp = this;
 		signUp.validateElector = validateElector;
@@ -63,11 +63,12 @@
 		}
 
 		function createAccount(){
-			
+
 			createAccountService.create(signUp.elector.location.userGuid,signUp.userName,signUp.userPassword,signUp.leafLocation,signUp.parentLocation)
 								.then(createAccountSuccess).catch(createAccountFailure);
 
 			function createAccountSuccess(data){
+				dataShareService.setUserInfo(data);
 				$state.transitionTo('home');
 			}
 

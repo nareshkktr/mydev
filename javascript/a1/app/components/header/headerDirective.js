@@ -7,8 +7,7 @@
 
 		function link(scope, element, attrs) {
 
-		}
-		;
+		};
 
 		return {
 			restrict : 'E',
