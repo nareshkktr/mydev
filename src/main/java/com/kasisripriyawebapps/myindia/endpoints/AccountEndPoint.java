@@ -11,8 +11,6 @@ import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.kasisripriyawebapps.myindia.constants.ApplicationConstants;
@@ -27,9 +25,7 @@ import com.kasisripriyawebapps.myindia.exception.RecordNotFoundException;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.BaseUserInformation;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.CreateAccountRequest;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.LoginRequest;
-import com.kasisripriyawebapps.myindia.requestresponsemodel.SaveOrUpdateDeleteObjectResponse;
 import com.kasisripriyawebapps.myindia.service.AccountService;
-import com.kasisripriyawebapps.myindia.service.OAuthService;
 import com.kasisripriyawebapps.myindia.util.CommonUtil;
 
 import io.swagger.annotations.Api;
@@ -42,7 +38,6 @@ public class AccountEndPoint {
 
 	@Autowired
 	AccountService accountService;
-	
 
 	@POST
 	@ApiOperation(value = EndPointConstants.CREATE_ACCOUNT_API_VALUE, nickname = EndPointConstants.CREATE_ACCOUNT_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.CREATE_ACCOUNT_API_DESCRIPTION)
@@ -53,11 +48,11 @@ public class AccountEndPoint {
 		BaseUserInformation baseUserInfo = null;
 		if (validateCreateAccountRequest(createAccountRequest)
 				&& !validateDuplicateAccountByUserNameRequest(createAccountRequest.getLoginUserName())) {
-			baseUserInfo = accountService.createAccount(createAccountRequest);
+			Account account = accountService.createAccount(createAccountRequest);
+			baseUserInfo = accountService.prepareBaseUserInformation(account);
 		}
-		
 		NewCookie accessTokenCookie = new NewCookie("access_token", baseUserInfo.getAccessToken());
-		
+
 		return Response.status(Status.OK).entity(baseUserInfo).cookie(accessTokenCookie).build();
 	}
 
@@ -72,9 +67,7 @@ public class AccountEndPoint {
 		if (validateLoginRequest(loginRequest)) {
 			baseUserInfo = accountService.login(loginRequest);
 		}
-		
 		NewCookie accessTokenCookie = new NewCookie("access_token", baseUserInfo.getAccessToken());
-		
 		return Response.status(Status.OK).entity(baseUserInfo).cookie(accessTokenCookie).build();
 	}
 

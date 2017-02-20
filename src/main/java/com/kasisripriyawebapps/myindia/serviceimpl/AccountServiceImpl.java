@@ -42,7 +42,7 @@ public class AccountServiceImpl implements AccountService {
 
 	@Autowired
 	LocationMasterDao locationMasterDao;
-	
+
 	@Autowired
 	OAuthService oAuthService;
 
@@ -54,12 +54,9 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	@Transactional
-	public BaseUserInformation createAccount(final CreateAccountRequest createAccountRequest)
+	public Account createAccount(final CreateAccountRequest createAccountRequest)
 			throws InternalServerException, RecordNotFoundException {
-		
-		BaseUserInformation baseUserInfo = new BaseUserInformation();
-		
-		Long accountGuid = null;
+
 		Account account = new Account();
 		account.setUserName(createAccountRequest.getLoginUserName());
 		account.setSalt(CommonUtil.generateSalt(32));
@@ -87,14 +84,14 @@ public class AccountServiceImpl implements AccountService {
 					.getLocationByGuid(createAccountRequest.getChildLocation().getLocationGuid());
 			userInfo.setMasterLocation(masterLocation);
 			account.setUserInfo(userInfo);
-			accountGuid = accountDao.createAccount(account);
-			
-			baseUserInfo = prepareBaseUserInformation(account);
-			
+			accountDao.createAccount(account);
+
 		} else {
 			throw new RecordNotFoundException(ExceptionConstants.USER_NOT_FOUND);
 		}
-		return baseUserInfo;
+
+		return account;
+
 	}
 
 	@Override
@@ -103,13 +100,13 @@ public class AccountServiceImpl implements AccountService {
 
 		BaseUserInformation baseUserInfo = new BaseUserInformation();
 		JSONObject authTokenInfo = null;
-		
+
 		baseUserInfo.setName(account.getUserInfo().getElectorName());
 		baseUserInfo.setUserGuid(account.getUserInfo().getGuid());
 		baseUserInfo.setGender(account.getUserInfo().getGender());
 		baseUserInfo.setUserImage(account.getUserInfo().getPhotoURL());
 		baseUserInfo.setUserName(account.getUserName());
-		
+
 		if (account != null) {
 			try {
 				authTokenInfo = oAuthService.getAuthTokenInfo(account.getUserName(), account.getPassword());
@@ -118,10 +115,8 @@ public class AccountServiceImpl implements AccountService {
 				throw new InternalServerException(e.getMessage());
 			}
 		}
-		
 		return baseUserInfo;
 	}
-
 
 	@Override
 	@Transactional(readOnly = true)
@@ -132,12 +127,12 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public BaseUserInformation login(LoginRequest loginRequest) throws InternalServerException, RecordNotFoundException {
-		
+	public BaseUserInformation login(LoginRequest loginRequest)
+			throws InternalServerException, RecordNotFoundException {
+
 		BaseUserInformation baseUserInfo = new BaseUserInformation();
-		
+
 		Account account = getAccountByUserName(loginRequest.getLoginUserName());
-		
 		if (account == null) {
 			throw new RecordNotFoundException(ExceptionConstants.LOGIN_ACCOUNT_NOT_FOUND_USER_NAME);
 		} else {
@@ -147,9 +142,7 @@ public class AccountServiceImpl implements AccountService {
 				throw new RecordNotFoundException(ExceptionConstants.LOGIN_ACCOUNT_NOT_FOUND_PASSWORD);
 			}
 		}
-		
 		baseUserInfo = prepareBaseUserInformation(account);
-		
 		return baseUserInfo;
 	}
 }
