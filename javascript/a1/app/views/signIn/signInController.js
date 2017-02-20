@@ -3,9 +3,9 @@
 
     angular.module('myindia-app').controller("signInController", signInController);
 
-    signInController.$inject = ['signInService','$state'];
+    signInController.$inject = ['signInService','$state','dataShareService'];
 
-    function signInController(signInService,$state) {
+    function signInController(signInService,$state,dataShareService) {
 
     	var signIn = this;
  		signIn.login = login;
@@ -14,13 +14,14 @@
     	function login(){
     		signInService.login(signIn.userName,signIn.password).then(loginSuccess).catch(loginFailure);
 
-    		function loginSuccess(){
+    		function loginSuccess(data){
     			alert("Login Success");
+                dataShareService.setUserInfo(data);
     			$state.go('home');
     		}
 
-    		function loginFailure(){
-    			alert("Login Failed...");
+    		function loginFailure(error){
+    			alert(error);
     		}
     	}
     	

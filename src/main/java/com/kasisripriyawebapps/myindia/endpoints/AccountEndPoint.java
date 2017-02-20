@@ -24,6 +24,7 @@ import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 import com.kasisripriyawebapps.myindia.exception.PreConditionFailedException;
 import com.kasisripriyawebapps.myindia.exception.PreConditionRequiredException;
 import com.kasisripriyawebapps.myindia.exception.RecordNotFoundException;
+import com.kasisripriyawebapps.myindia.requestresponsemodel.BaseUserInformation;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.CreateAccountRequest;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.LoginRequest;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.SaveOrUpdateDeleteObjectResponse;
@@ -41,8 +42,7 @@ public class AccountEndPoint {
 
 	@Autowired
 	AccountService accountService;
-	@Autowired
-	OAuthService oAuthService;
+	
 
 	@POST
 	@ApiOperation(value = EndPointConstants.CREATE_ACCOUNT_API_VALUE, nickname = EndPointConstants.CREATE_ACCOUNT_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.CREATE_ACCOUNT_API_DESCRIPTION)
@@ -50,25 +50,15 @@ public class AccountEndPoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response createAccount(CreateAccountRequest createAccountRequest) throws PreConditionFailedException,
 			PreConditionRequiredException, InternalServerException, ConflictException, RecordNotFoundException {
-		Long accountId = null;
+		BaseUserInformation baseUserInfo = null;
 		if (validateCreateAccountRequest(createAccountRequest)
 				&& !validateDuplicateAccountByUserNameRequest(createAccountRequest.getLoginUserName())) {
-			accountId = accountService.createAccount(createAccountRequest);
+			baseUserInfo = accountService.createAccount(createAccountRequest);
 		}
-		JSONObject authTokenInfo = null;
-		Account account = accountService.getAccountByUserName(createAccountRequest.getLoginUserName());
-		if (account != null) {
-			authTokenInfo = oAuthService.getAuthTokenInfo(account.getUserName(), account.getPassword());
-		}
-		String accessToken;
-		try {
-			accessToken = authTokenInfo.getString("access_token");
-		} catch (JSONException e) {
-			throw new InternalServerException(e.getMessage());
-		}
-		NewCookie accessTokenCookie = new NewCookie("access_token", accessToken);
-		SaveOrUpdateDeleteObjectResponse saveObjResponse = new SaveOrUpdateDeleteObjectResponse(accountId);
-		return Response.status(Status.OK).entity(saveObjResponse).cookie(accessTokenCookie).build();
+		
+		NewCookie accessTokenCookie = new NewCookie("access_token", baseUserInfo.getAccessToken());
+		
+		return Response.status(Status.OK).entity(baseUserInfo).cookie(accessTokenCookie).build();
 	}
 
 	@POST
@@ -77,23 +67,15 @@ public class AccountEndPoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response login(LoginRequest loginRequest) throws InternalServerException, RecordNotFoundException,
 			PreConditionFailedException, PreConditionRequiredException {
-		Account account = null;
-		JSONObject authTokenInfo = null;
+		BaseUserInformation baseUserInfo = null;
+
 		if (validateLoginRequest(loginRequest)) {
-			account = accountService.login(loginRequest);
+			baseUserInfo = accountService.login(loginRequest);
 		}
-		if (account != null) {
-			authTokenInfo = oAuthService.getAuthTokenInfo(account.getUserName(), account.getPassword());
-		}
-		String accessToken;
-		try {
-			accessToken = authTokenInfo.getString("access_token");
-		} catch (JSONException e) {
-			throw new InternalServerException(e.getMessage());
-		}
-		NewCookie accessTokenCookie = new NewCookie("access_token", accessToken);
-		SaveOrUpdateDeleteObjectResponse saveObjResponse = new SaveOrUpdateDeleteObjectResponse(account.getGuid());
-		return Response.status(Status.OK).entity(saveObjResponse).cookie(accessTokenCookie).build();
+		
+		NewCookie accessTokenCookie = new NewCookie("access_token", baseUserInfo.getAccessToken());
+		
+		return Response.status(Status.OK).entity(baseUserInfo).cookie(accessTokenCookie).build();
 	}
 
 	private Boolean validateCreateAccountRequest(CreateAccountRequest createAccountRequest)

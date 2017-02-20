@@ -24,8 +24,8 @@
 		var resource = "assets/";
 	</script>
 	<div class="app-content">
-		<myindia-header
-			ng-if="!$state.includes('signIn') && !$state.includes('signUp')"></myindia-header>
+		<myindia-header ng-if="!$state.includes('signIn') && !$state.includes('signUp')"
+			></myindia-header>
 		<div ui-view
 			ng-class="(!$state.includes('signIn') && !$state.includes('signUp') ) ? 'app-body-container': 'signin_app_body_container'"></div>
 		<myindia-footer></myindia-footer>

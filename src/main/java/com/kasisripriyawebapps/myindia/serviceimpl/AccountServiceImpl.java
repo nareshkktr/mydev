@@ -3,6 +3,8 @@
  */
 package com.kasisripriyawebapps.myindia.serviceimpl;
 
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,9 +22,11 @@ import com.kasisripriyawebapps.myindia.entity.User;
 import com.kasisripriyawebapps.myindia.entity.UserInfo;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 import com.kasisripriyawebapps.myindia.exception.RecordNotFoundException;
+import com.kasisripriyawebapps.myindia.requestresponsemodel.BaseUserInformation;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.CreateAccountRequest;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.LoginRequest;
 import com.kasisripriyawebapps.myindia.service.AccountService;
+import com.kasisripriyawebapps.myindia.service.OAuthService;
 import com.kasisripriyawebapps.myindia.solr.entity.SolrUserMaster;
 import com.kasisripriyawebapps.myindia.solr.repository.UserMasterRepository;
 import com.kasisripriyawebapps.myindia.util.CommonUtil;
@@ -38,6 +42,9 @@ public class AccountServiceImpl implements AccountService {
 
 	@Autowired
 	LocationMasterDao locationMasterDao;
+	
+	@Autowired
+	OAuthService oAuthService;
 
 	@Autowired
 	LocationDao locationDao;
@@ -47,8 +54,11 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	@Transactional
-	public Long createAccount(final CreateAccountRequest createAccountRequest)
+	public BaseUserInformation createAccount(final CreateAccountRequest createAccountRequest)
 			throws InternalServerException, RecordNotFoundException {
+		
+		BaseUserInformation baseUserInfo = new BaseUserInformation();
+		
 		Long accountGuid = null;
 		Account account = new Account();
 		account.setUserName(createAccountRequest.getLoginUserName());
@@ -78,11 +88,40 @@ public class AccountServiceImpl implements AccountService {
 			userInfo.setMasterLocation(masterLocation);
 			account.setUserInfo(userInfo);
 			accountGuid = accountDao.createAccount(account);
+			
+			baseUserInfo = prepareBaseUserInformation(account);
+			
 		} else {
 			throw new RecordNotFoundException(ExceptionConstants.USER_NOT_FOUND);
 		}
-		return accountGuid;
+		return baseUserInfo;
 	}
+
+	@Override
+	@Transactional
+	public BaseUserInformation prepareBaseUserInformation(Account account) throws InternalServerException {
+
+		BaseUserInformation baseUserInfo = new BaseUserInformation();
+		JSONObject authTokenInfo = null;
+		
+		baseUserInfo.setName(account.getUserInfo().getElectorName());
+		baseUserInfo.setUserGuid(account.getUserInfo().getGuid());
+		baseUserInfo.setGender(account.getUserInfo().getGender());
+		baseUserInfo.setUserImage(account.getUserInfo().getPhotoURL());
+		baseUserInfo.setUserName(account.getUserName());
+		
+		if (account != null) {
+			try {
+				authTokenInfo = oAuthService.getAuthTokenInfo(account.getUserName(), account.getPassword());
+				baseUserInfo.setAccessToken(authTokenInfo.getString("access_token"));
+			} catch (JSONException e) {
+				throw new InternalServerException(e.getMessage());
+			}
+		}
+		
+		return baseUserInfo;
+	}
+
 
 	@Override
 	@Transactional(readOnly = true)
@@ -93,8 +132,12 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public Account login(LoginRequest loginRequest) throws InternalServerException, RecordNotFoundException {
+	public BaseUserInformation login(LoginRequest loginRequest) throws InternalServerException, RecordNotFoundException {
+		
+		BaseUserInformation baseUserInfo = new BaseUserInformation();
+		
 		Account account = getAccountByUserName(loginRequest.getLoginUserName());
+		
 		if (account == null) {
 			throw new RecordNotFoundException(ExceptionConstants.LOGIN_ACCOUNT_NOT_FOUND_USER_NAME);
 		} else {
@@ -104,6 +147,9 @@ public class AccountServiceImpl implements AccountService {
 				throw new RecordNotFoundException(ExceptionConstants.LOGIN_ACCOUNT_NOT_FOUND_PASSWORD);
 			}
 		}
-		return account;
+		
+		baseUserInfo = prepareBaseUserInformation(account);
+		
+		return baseUserInfo;
 	}
 }
