@@ -3,10 +3,12 @@
  */
 package com.kasisripriyawebapps.myindia.service;
 
+import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 import com.kasisripriyawebapps.myindia.exception.RecordNotFoundException;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.GetUserByPropertyRequest;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.GetUserByPropertyResponse;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.LocationReferenceMasterResponse;
+import com.kasisripriyawebapps.myindia.requestresponsemodel.UserLocationDetails;
 import com.kasisripriyawebapps.myindia.solr.entity.SolrLocationMaster;
 
 public interface UserService {
@@ -22,5 +24,7 @@ public interface UserService {
 
 	GetUserByPropertyResponse getUserByVoterCardDetails(GetUserByPropertyRequest getUserByPropertyRequest)
 			throws RecordNotFoundException;
+
+	UserLocationDetails getLoggedInUserLocation(Long guid) throws RecordNotFoundException, InternalServerException;;
 
 }

@@ -14,4 +14,6 @@ public interface AccountDao {
 
 	Account getAccountByUserNameAndPassword(String userName, String salt, String password) throws InternalServerException;
 
+	Account getAccountById(Long accountGuid) throws InternalServerException;
+
 }

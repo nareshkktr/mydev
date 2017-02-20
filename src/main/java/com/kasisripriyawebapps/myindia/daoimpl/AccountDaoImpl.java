@@ -38,4 +38,9 @@ public class AccountDaoImpl extends BaseDaoImpl<Long, Account> implements Accoun
 		criterions.add(criterionObjOne);
 		return getByConditions(criterions);
 	}
+	
+	@Override
+	public Account getAccountById(Long accountGuid) throws InternalServerException {
+		return getById(accountGuid);
+	}
 }
