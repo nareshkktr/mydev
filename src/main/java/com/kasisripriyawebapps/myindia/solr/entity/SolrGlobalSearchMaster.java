@@ -20,6 +20,9 @@ public class SolrGlobalSearchMaster {
 	@Field
 	private String objectType;
 
+	@Field
+	private String objectSubType;
+
 	public Long getObjectGuid() {
 		return objectGuid;
 	}
@@ -42,6 +45,14 @@ public class SolrGlobalSearchMaster {
 
 	public void setObjectType(String objectType) {
 		this.objectType = objectType;
+	}
+
+	public String getObjectSubType() {
+		return objectSubType;
+	}
+
+	public void setObjectSubType(String objectSubType) {
+		this.objectSubType = objectSubType;
 	}
 
 }

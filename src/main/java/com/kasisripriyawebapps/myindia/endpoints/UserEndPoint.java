@@ -3,6 +3,7 @@
  */
 package com.kasisripriyawebapps.myindia.endpoints;
 
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -12,6 +13,7 @@ import javax.ws.rs.core.Response.Status;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.kasisripriyawebapps.myindia.configs.LoggedInUserDetails;
 import com.kasisripriyawebapps.myindia.constants.EndPointConstants;
 import com.kasisripriyawebapps.myindia.constants.ExceptionConstants;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
@@ -21,6 +23,7 @@ import com.kasisripriyawebapps.myindia.exception.RecordNotFoundException;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.GetUserByPropertyRequest;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.GetUserByPropertyResponse;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.LocationReferenceMasterResponse;
+import com.kasisripriyawebapps.myindia.requestresponsemodel.UserLocationDetails;
 import com.kasisripriyawebapps.myindia.service.UserService;
 import com.kasisripriyawebapps.myindia.solr.entity.SolrLocationMaster;
 import com.kasisripriyawebapps.myindia.util.CommonUtil;
@@ -31,7 +34,7 @@ import io.swagger.annotations.ApiOperation;
 @Path(value = EndPointConstants.USER_ENDPOINT_REQUEST_MAPPING)
 @Api(value = EndPointConstants.USER_ENDPOINT_API_VALUE, tags = {
 		EndPointConstants.USER_ENDPOINT_API_TAGS }, description = EndPointConstants.USER_ENDPOINT_API_DESCRIPTION)
-public class UserEndPoint {
+public class UserEndPoint extends BaseEndPoint {
 
 	@Autowired
 	UserService userService;
@@ -90,6 +93,16 @@ public class UserEndPoint {
 			saveObjResponse = userService.getReferenceLocationForMaster(solrLocationMaster);
 		}
 		return Response.status(Status.OK).entity(saveObjResponse).build();
+	}
+
+	@GET
+	@ApiOperation(value = EndPointConstants.GET_LOGGED_IN_USER_LOCATION_DETAILS_API_VALUE, nickname = EndPointConstants.GET_LOGGED_IN_USER_LOCATION_DETAILS_DETAILS_NICKNAME, httpMethod = EndPointConstants.HTTP_GET, notes = EndPointConstants.GET_LOGGED_IN_USER_LOCATION_DETAILS_DETAILS_API_DESCRIPTION)
+	@Path(EndPointConstants.GET_LOGGED_IN_USER_LOCATION_DETAILS_REQUEST_MAPPING)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getLoggedInUserLocation() throws InternalServerException, RecordNotFoundException {
+		LoggedInUserDetails loggedInUserDetails = getLoggedInUserDetails();
+		UserLocationDetails userLocationDetails=userService.getLoggedInUserLocation(loggedInUserDetails.getGuid());
+		return Response.status(Status.OK).entity(userLocationDetails).build();
 	}
 
 	private boolean validateGetUserByVoterCardDetails(GetUserByPropertyRequest getUserByPropertyRequest)

@@ -12,13 +12,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.kasisripriyawebapps.myindia.constants.ApplicationConstants;
 import com.kasisripriyawebapps.myindia.constants.ExceptionConstants;
 import com.kasisripriyawebapps.myindia.constants.ServiceConstants;
+import com.kasisripriyawebapps.myindia.dao.AccountDao;
 import com.kasisripriyawebapps.myindia.dao.UserDao;
+import com.kasisripriyawebapps.myindia.entity.Account;
+import com.kasisripriyawebapps.myindia.entity.Location;
+import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 import com.kasisripriyawebapps.myindia.exception.RecordNotFoundException;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.GetUserByPropertyRequest;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.GetUserByPropertyResponse;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.LocationReferenceMasterResponse;
+import com.kasisripriyawebapps.myindia.requestresponsemodel.UserLocationDetails;
 import com.kasisripriyawebapps.myindia.service.ExternalService;
 import com.kasisripriyawebapps.myindia.service.UserService;
 import com.kasisripriyawebapps.myindia.solr.entity.SolrLocationMaster;
@@ -34,6 +40,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	UserDao userDao;
+
+	@Autowired
+	AccountDao accountDao;
 
 	@Autowired
 	ExternalService externalService;
@@ -196,5 +205,65 @@ public class UserServiceImpl implements UserService {
 			throw new RecordNotFoundException(ExceptionConstants.INVALID_ID_CARD_NO);
 		}
 		return response;
+	}
+
+	@Override
+	@Transactional
+	public UserLocationDetails getLoggedInUserLocation(Long guid)
+			throws RecordNotFoundException, InternalServerException {
+		UserLocationDetails userLocationDetails = new UserLocationDetails();
+		Account account = accountDao.getAccountById(guid);
+		Location nativeLocation = account.getUserInfo().getNativeLocation();
+		List<Long> allLocationsGuids = new ArrayList<Long>();
+
+		allLocationsGuids.add(nativeLocation.getLocationCountry());
+		allLocationsGuids.add(nativeLocation.getLocationDistrict());
+		allLocationsGuids.add(nativeLocation.getLocationMunicipalCorporation());
+		allLocationsGuids.add(nativeLocation.getLocationMunicipality());
+		allLocationsGuids.add(nativeLocation.getLocationState());
+		allLocationsGuids.add(nativeLocation.getLocationSubDistrict());
+		allLocationsGuids.add(nativeLocation.getLocationTownPanchayat());
+		allLocationsGuids.add(nativeLocation.getLocationVillage());
+		allLocationsGuids.add(nativeLocation.getLocationVillagePanchayat());
+
+		allLocationsGuids.removeAll(Collections.singleton(null));
+		List<SolrLocationMaster> allLocations = locationMasterRepository.findByLocationGuidIn(allLocationsGuids);
+
+		if (CommonUtil.isListNotNullAndNotEmpty(allLocations)) {
+			for (SolrLocationMaster solrLocationMaster : allLocations) {
+				if (solrLocationMaster.getLocationType().equalsIgnoreCase(ServiceConstants.LOCATION_COUNTRY_TYPE)) {
+					userLocationDetails.setLocationCountry(solrLocationMaster.getLocationName());
+				} else if (solrLocationMaster.getLocationType()
+						.equalsIgnoreCase(ServiceConstants.LOCATION_COUNTRY_TYPE)) {
+					userLocationDetails.setLocationCountry(solrLocationMaster.getLocationName());
+				} else if (solrLocationMaster.getLocationType()
+						.equalsIgnoreCase(ServiceConstants.LOCATION_DISTRICT_TYPE)) {
+					userLocationDetails.setLocationDistrict(solrLocationMaster.getLocationName());
+				} else if (solrLocationMaster.getLocationType()
+						.equalsIgnoreCase(ServiceConstants.LOCATION_MUNCIPAL_CORPORATION_TYPE)) {
+					userLocationDetails.setLocationMunicipalCorporation(solrLocationMaster.getLocationName());
+				} else if (solrLocationMaster.getLocationType()
+						.equalsIgnoreCase(ServiceConstants.LOCATION_MUNCIPALITY_TYPE)) {
+					userLocationDetails.setLocationMunicipality(solrLocationMaster.getLocationName());
+				} else if (solrLocationMaster.getLocationType()
+						.equalsIgnoreCase(ServiceConstants.LOCATION_STATE_TYPE)) {
+					userLocationDetails.setLocationState(solrLocationMaster.getLocationName());
+				} else if (solrLocationMaster.getLocationType()
+						.equalsIgnoreCase(ServiceConstants.LOCATION_SUB_DISTRICT_TYPE)) {
+					userLocationDetails.setLocationSubDistrict(solrLocationMaster.getLocationName());
+				} else if (solrLocationMaster.getLocationType()
+						.equalsIgnoreCase(ServiceConstants.LOCATION_TOWN_PANCHAYATH_TYPE)) {
+					userLocationDetails.setLocationTownPanchayat(solrLocationMaster.getLocationName());
+				} else if (solrLocationMaster.getLocationType()
+						.equalsIgnoreCase(ServiceConstants.LOCATION_VILLAGE_TYPE)) {
+					userLocationDetails.setLocationVillage(solrLocationMaster.getLocationName());
+				} else if (solrLocationMaster.getLocationType()
+						.equalsIgnoreCase(ServiceConstants.LOCATION_VILLAGE_PANCHAYATH_TYPE)) {
+					userLocationDetails.setLocationVillagePanchayat(solrLocationMaster.getLocationName());
+				}
+			}
+		}
+
+		return userLocationDetails;
 	}
 }

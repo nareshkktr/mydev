@@ -867,4 +867,16 @@ public class EndPointConstants {
 	/** The Constant GET__SEARCH_RESULTS_BY_LOCATION_NAME_API_DESCRIPTION. */
 	public static final String GET_USER_BY_VOTER_CARD_DETAILS_API_DESCRIPTION = "Get User Details By Voter ID Card Details";
 
+	/** The Constant GET__SEARCH_RESULTS_BY_LOCATION_NAME_REQUEST_MAPPING. */
+	public static final String GET_LOGGED_IN_USER_LOCATION_DETAILS_REQUEST_MAPPING = "getLoggedInUserLocation";
+
+	/** The Constant GET__SEARCH_RESULTS_BY_LOCATION_NAME_API_VALUE. */
+	public static final String GET_LOGGED_IN_USER_LOCATION_DETAILS_API_VALUE = "getLoggedInUserLocation";
+
+	/** The Constant GET__SEARCH_RESULTS_BY_LOCATION_NAME_API_NICKNAME. */
+	public static final String GET_LOGGED_IN_USER_LOCATION_DETAILS_DETAILS_NICKNAME = "getLoggedInUserLocation";
+
+	/** The Constant GET__SEARCH_RESULTS_BY_LOCATION_NAME_API_DESCRIPTION. */
+	public static final String GET_LOGGED_IN_USER_LOCATION_DETAILS_DETAILS_API_DESCRIPTION = "Get User Location Details";
+
 }
