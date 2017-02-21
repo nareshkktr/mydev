@@ -1,6 +1,6 @@
 (function() {
      'use strict';
-	var myIndiaApp=angular.module('myindia-app', ['ui.router','ui.bootstrap','ngAnimate','ngMessages']);
+	var myIndiaApp=angular.module('myindia-app', ['ui.router','ui.bootstrap','ngAnimate','ngMessages','ngCookies']);
 	myIndiaApp.run(function($state, $rootScope){
 		   $rootScope.$state = $state;
 		})
@@ -146,18 +146,33 @@
 
 		header.userInfo = dataShareService.getUserInfo();
 
-		if (header.userInfo) {
-			if (!header.userInfo.userImage) {
-				if (header.userInfo.gender == 'Male') {
-					header.userInfo.userImage = resource
-							+ '/Users-User-Male-icon.png';
-				} else if (header.userInfo.gender == 'Female') {
-					header.userInfo.userImage = resource
-							+ '/Users-User-Female-icon.png';
+		if(header.userInfo){
+
+			//Preapre user profile image
+			if(!header.userInfo.userImage){
+				if(header.userInfo.gender == 'Male'){
+					header.userInfo.userImage = resource+'Users-User-Male-icon.png';
+				}else if(header.userInfo.gender == 'Female'){
+					header.userInfo.userImage = resource+'Users-User-Female-icon.png';
 				}
 			}
-		}
 
+			//Prepare location information
+			if(header.userInfo.userLocation.locationVillage){
+				header.userInfo.location = header.userInfo.userLocation.locationVillage;
+			}else if(header.userInfo.userLocation.locationMunicipality){
+				header.userInfo.location = header.userInfo.userLocation.locationMunicipality; 
+			}else if(header.userInfo.userLocation.locationMunicipalCorporation){
+				header.userInfo.location = header.userInfo.userLocation.locationMunicipalCorporation; 
+			}else if(header.userInfo.userLocation.locationTownPanchayat){
+				header.userInfo.location = header.userInfo.userLocation.locationTownPanchayat; 
+			} 
+
+			if(header.userInfo.userLocation.locationState)
+				header.userInfo.location += "," + header.userInfo.userLocation.locationDistrict;
+
+		}
+		
 		function gotoSearch() {
 			$state.go('search', {
 				searchTerm : header.searchTerm
@@ -422,16 +437,17 @@
 
     angular.module('myindia-app').factory("swaggerShareService", swaggerShareService);
 
-    swaggerShareService.$inject = ['$q'];
+    swaggerShareService.$inject = ['$q','$cookies'];
 
-    function swaggerShareService($q) {
+    function swaggerShareService($q,$cookies) {
 
         var apiMetaData = {};
 
         var hostName = 'http://localhost:8080/';
 
     	var swaggerShareService = {
-    		getAPIMetaData : getAPIMetaData
+    		getAPIMetaData : getAPIMetaData,
+            setAuthorization: setAuthorization
     	};
 
         return swaggerShareService;
@@ -456,7 +472,10 @@
     		let swagger = new SwaggerClient({
                 url: hostName+'api/swagger.json',
                 success: function() {
-                      deferred.resolve(swagger);
+
+                    setAuthorization();
+
+                    deferred.resolve(swagger);
                 },error: function(error){
                 	deferred.reject(error);
                 }
@@ -465,6 +484,22 @@
         	return deferred.promise;	
 
     	}
+
+        function setAuthorization(token){
+
+            let accessToken;
+
+            if($cookies.get("access_token")){
+                accessToken = $cookies.get("access_token");      
+            }else if(token){
+                accessToken = token;
+            }
+
+            if(accessToken){
+                var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization( "Authorization", "Bearer " + accessToken, "header" );
+                apiMetaData.metaInfo.clientAuthorizations.add("bearer",apiKeyAuth);
+            }
+        }
 
         
     }
@@ -648,6 +683,9 @@
             return deferred.promise;
 
             function loginSuccess(data){
+                //Process cookie into swagger
+                swaggerShareService.setAuthorization(data.obj.accessToken);
+
                 deferred.resolve(data.obj);
             }
 
@@ -701,6 +739,8 @@
             return deferred.promise;
 
             function createAccountSuccess(data){
+                //Process cookie into swagger
+                swaggerShareService.setAuthorization(data.obj.accessToken);
                 deferred.resolve(data.obj);
             }
 

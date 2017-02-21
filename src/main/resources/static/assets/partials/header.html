@@ -7,7 +7,7 @@
 			<li uib-dropdown class="dropdown pull-right"><a href
 				id="user-profile-dropdown" uib-dropdown-toggle> <span
 					id="logged-in-location">{{header.userInfo.location}}</span> <i
-					id="header-edit-location-icon" class="material-icons">location_on</i>
+					id="header-edit-location-icon" class="material-icons" data-toggle="modal" data-target="#locationChangeModal">location_on</i>
 			</a></li>
 		</ul>
 		<ul class="nav pull-left" id="header_notification_icons_box">
@@ -41,9 +41,9 @@
 		<div class="pull-left">
 			<form class="navbar-form" role="search">
 				<div class="input-group" id="header_search_box">
-					<i class="glyphicon glyphicon-search app_search_icon" aria-hidden="true"></i> <input
-						type="text" class="form-control" placeholder="Search"
-						ng-model="header.searchTerm"
+					<i class="glyphicon glyphicon-search app_search_icon"
+						aria-hidden="true"></i> <input type="text" class="form-control"
+						placeholder="Search" ng-model="header.searchTerm"
 						my-india-enter-key="header.gotoSearch()">
 				</div>
 				<div class="input-group">
