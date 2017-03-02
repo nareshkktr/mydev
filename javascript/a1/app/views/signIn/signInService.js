@@ -35,6 +35,9 @@
             return deferred.promise;
 
             function loginSuccess(data){
+                //Process cookie into swagger
+                swaggerShareService.setAuthorization(data.obj.accessToken);
+
                 deferred.resolve(data.obj);
             }
 
