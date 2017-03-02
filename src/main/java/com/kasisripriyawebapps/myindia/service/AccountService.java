@@ -3,6 +3,8 @@
  */
 package com.kasisripriyawebapps.myindia.service;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.kasisripriyawebapps.myindia.entity.Account;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 import com.kasisripriyawebapps.myindia.exception.RecordNotFoundException;
@@ -17,8 +19,8 @@ public interface AccountService {
 
 	Account getAccountByUserName(String userName) throws InternalServerException;
 
-	BaseUserInformation login(LoginRequest loginRequest) throws InternalServerException, RecordNotFoundException;
+	BaseUserInformation login(LoginRequest loginRequest, HttpServletRequest servletRequest) throws InternalServerException, RecordNotFoundException;
 
-	BaseUserInformation prepareBaseUserInformation(Account account) throws InternalServerException, RecordNotFoundException;
+	BaseUserInformation prepareBaseUserInformation(Account account, HttpServletRequest servletRequest) throws InternalServerException, RecordNotFoundException;
 	
 }

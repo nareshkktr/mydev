@@ -611,7 +611,7 @@ public class CommonUtil {
 		}
 		return locationName;
 	}
-	
+
 	public static boolean isListNotNullAndNotEmpty(List<?> inputList) {
 		if (inputList != null && !inputList.isEmpty()) {
 			return true;
@@ -640,4 +640,13 @@ public class CommonUtil {
 		return false;
 	}
 
+	public static void removeStringFromStringArray(String[] myStringArray, String stringToRemove) {
+
+		for (int i = 0; i < myStringArray.length; i++) {
+			if (myStringArray[i].equals(stringToRemove)) {
+				myStringArray[i] = null;
+				break;
+			}
+		}
+	}
 }

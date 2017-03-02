@@ -43,13 +43,30 @@ public class ProblemTypeDaoImpl extends BaseDaoImpl<Long, ProblemType> implement
 	@Override
 	public List<ProblemType> getAllProblemTypes(Integer offset, Integer limit) throws InternalServerException {
 		SortCriteriaData sortCriteria = new SortCriteriaData("problemTypeName", true);
-		return getAllByPage(sortCriteria,offset,limit);
+		return getAllByPage(sortCriteria, offset, limit);
 	}
 
 	@Override
 	public List<ProblemType> getAllProblemTypes() throws InternalServerException {
 		SortCriteriaData sortCriteria = new SortCriteriaData("problemTypeName", true);
 		return getAll(sortCriteria);
+	}
+
+	@Override
+	public void saveProblemTypes(List<ProblemType> newProblemTypesList) throws InternalServerException {
+		saveBatch(newProblemTypesList);
+	}
+
+	@Override
+	public void updateProblemTypes(List<ProblemType> updatedProblemTypesList) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void deleteProblemTypes(List<ProblemType> existingProblemTypesList) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

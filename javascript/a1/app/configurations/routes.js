@@ -44,6 +44,11 @@
 			templateUrl : resource + 'partials/globalSearch.html',
 			controller : 'globalSearchController',
 			controllerAs : 'globalSearch'
+		}).state('createProblem', {
+			url : '/createProblem',
+			templateUrl : resource + 'partials/createProblem.html',
+			controller : 'createProblemController',
+			controllerAs : 'createProblem'
 		});
 	}
 })();

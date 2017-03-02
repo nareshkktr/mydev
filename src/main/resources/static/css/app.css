@@ -105,6 +105,23 @@
 	font-size: 12px;
 	color: #f94c59;
 }
+
+.footer_search_bar_container {
+	position: fixed;
+	height: 47px;
+	width: 100%;
+}
+
+.footer_search_bar_container input[type="text"] {
+	height: 35px;
+	margin-top: 5px;
+	width: 90%;
+	margin-right: 3px;
+	margin-left: 17px;
+	padding-left: 10px;
+	color: black;
+	font-size: 15px !important;
+}
 @CHARSET "ISO-8859-1";
 
 body {
@@ -478,6 +495,50 @@ input[type="text"], input[type="password"], select {
 		display: none;
 	}
 }
+#location_change_search_box {
+	width: 99%;
+}
+
+#location_change_search_box .app_search_icon {
+	margin-top: 12px !important;
+}
+
+.search_locations_container {
+	width: 100%;
+}
+
+.search_location {
+	margin: 10px;
+	border-bottom: 1px solid #e1dfdf;
+	padding: 5px;
+	cursor: pointer;
+}
+
+.modal-body {
+	max-height: 400px;
+	overflow-y: auto;
+}
+
+.search_location label {
+	font-weight: 400;
+	letter-spacing: 1px;
+	cursor: pointer;
+}
+
+.search_location:HOVER {
+	background-color: #f94c59 !important;
+	color: white;
+}
+
+.search_location_result_type_lbl {
+	margin-top: 15px;
+	letter-spacing: 1px;
+}
+
+.pin_location {
+	background-color: #f94c59 !important;
+	color: white;
+}
 #overlay {
 	position: fixed;
 	width: 100%;
@@ -612,6 +673,102 @@ input[type="text"], input[type="password"], select {
 	padding: 20px;
 }
 
+.relative_problem_content {
+	margin-left: 0px !important;
+	margin-right: 0px !important;
+}
+
+.relative_problem {
+	padding: 0px !important;
+	border: 1px solid #d3cece;
+	border-left: 20px solid #528658;
+	margin-top: 15px;
+	background-color: white;
+}
+
+.relative_problem_details {
+	padding-left: 0px !important;
+	padding-right: 0px !important;
+	background-color: white;
+}
+
+.relative_problem_short_text {
+	color: #528658;
+	letter-spacing: 1px;
+	padding: 10px;
+}
+
+.relative_problem_location {
+	padding: 0px 0px 0px 10px;
+}
+
+.relative_problem_icons {
+	border-top: 1px solid lightgray;
+	margin-top: 10px;
+}
+
+.relative_problem_icon {
+	text-align: center;
+	padding-top: 4px;
+	padding-bottom: 0px;
+	padding-right: 1px !important;
+	padding-left: 5px !important;
+	border-right: 1px solid lightgray;
+	border-bottom: 1px solid lightgray;
+	background-color: white;
+}
+
+.relative_problem_icon button, .relative_problem_icon button:HOVER {
+	background-color: white;
+	color: #f94c59;
+	border: none;
+	font-size: 14px;
+}
+
+.cretae_problem_container {
+	padding: 20px;
+}
+
+.cretae_problem_container .row {
+	margin-bottom: 10px;
+}
+
+.cretae_problem_container textarea {
+	height: 160px !important;
+}
+
+.impacted_row {
+	margin-left: 60px;
+	margin-top: 14px;
+}
+
+.problem_cover_photo_content {
+	width: 100%;
+	height: 245px;
+	border: 1px dotted black;
+	background-color: white;
+}
+
+.problem_cover_photo_content .cover_photo_btn {
+	display: flex;
+	height: 34px;
+	margin: 0 auto;
+	margin-top: 100px;
+}
+
+.upload_problem_docs {
+	height: 170px;
+	border: 1px dotted black;
+	margin-left: 10px;
+	background-color: white;
+}
+
+.upload_problem_docs button {
+	display: flex;
+	margin: 0 auto;
+	margin-top: 64px;
+	padding: 10px;
+}
 #login-container {
 	background-color: #ebebeb;
 	height: 100%;

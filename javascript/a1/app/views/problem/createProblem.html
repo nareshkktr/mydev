@@ -1,0 +1,261 @@
+<div class="container-fluid wrapper page-container">
+	<div class="row">
+		<div
+			class="col-lg-9 col-md-9 col-sm-12 col-xs-12 cretae_problem_container">
+			<form role="form" method="post" name="create_problem_form" novalidate>
+				<div class="row">
+					<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 form-group">
+						<label for="search_college">Upload Cover</label>
+						<div class="problem_cover_photo_content">
+							<button type="button" class="btn app_btn cover_photo_btn">Choose
+								Cover</button>
+						</div>
+					</div>
+					<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 form-group">
+						<label for="search_college">What is your grievance?</label> <input
+							type="text" name="form_username" ng-model="signIn.userName"
+							placeholder="Username" class="form-username form-control"
+							id="form-username" ng-required="true"> <br /> <label
+							for="search_college">Could you elaborate on it?</label>
+						<textarea name="form_password" ng-model="signIn.password"
+							placeholder="Password" class="form-password form-control"
+							id="form-password" ng-required="true"></textarea>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						<label for="search_college">Upload reference
+							docs/images/videos</label>
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+						<div class="upload_problem_docs">
+							<button class="btn btn-default">
+								<span class="glyphicon glyphicon-plus"></span>
+							</button>
+						</div>
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+						<div class="upload_problem_docs">
+							<button class="btn btn-default">
+								<span class="glyphicon glyphicon-plus"></span>
+							</button>
+						</div>
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+						<div class="upload_problem_docs">
+							<button class="btn btn-default">
+								<span class="glyphicon glyphicon-plus"></span>
+							</button>
+						</div>
+					</div>
+					<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+						<div class="upload_problem_docs">
+							<button class="btn btn-default">
+								<span class="glyphicon glyphicon-plus"></span>
+							</button>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 form-group">
+						<label for="search_college">Is it related to one of these?</label>
+						<select class="form-control" name="grivience_type"
+							ng-model="signUp.grivienceType"
+							ng-options="problemType.problemTypeName for problemType in createProblem.problemTypesResults"
+							ng-required="true">
+							<option value=''>Select grievance type</option>
+						</select>
+
+
+					</div>
+					<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 form-group">
+						<label for="search_college">What are the impacts?</label>
+						<div class="row">
+							<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+								<input type="text" name="form_username"
+									ng-model="signIn.userName"
+									placeholder="No of affetced citizens?"
+									class="form-username form-control" id="form-username"
+									ng-required="true">
+							</div>
+							<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+								<input type="text" name="form_username"
+									ng-model="signIn.userName" placeholder="Money at stake?"
+									class="form-username form-control" id="form-username"
+									ng-required="true">
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div
+						class="col-lg-6 col-md-6 col-sm-12 col-xs-12 form-group col-lg-offset-6 col-md-offset-6">
+						<button type="button" class="btn app_btn" id="login-btn"
+							ng-disabled="create_problem_form.$invalid"
+							ng-click="signIn.login()">Create Problem</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div
+			class="col-lg-3 col-md-3 col-sm-12 col-xs-12 relative_problems_container">
+			<div class="row relative_problem_content">
+				<div
+					class="col-lg-12 col-md-12 col-sm-12 col-xs-12 relative_problem">
+					<div
+						class="col-lg-12 col-md-12 col-sm-12 col-xs-12 relative_problem_details">
+						<div class="relative_problem_short_text">
+							<label> Power Problem Power Problem Power Problem Power
+								Problem </label>
+						</div>
+						<div class="relative_problem_location">
+							<label> Pulipadu,Prakasam </label>
+						</div>
+						<div class="relative_problem_icons">
+							<div class="col-xs-3 relative_problem_icon">
+								<button class="btn btn-default">
+									<span class="glyphicon glyphicon-user"></span>
+								</button>
+							</div>
+							<div class="col-xs-3 relative_problem_icon">
+								<button class="btn btn-default">
+									<span class="glyphicon glyphicon-map-marker"></span>
+								</button>
+							</div>
+							<div class="col-xs-3 relative_problem_icon"
+								ng-click="showFooterSearchBox()">
+								<button class="btn btn-default">
+									<span class="glyphicon glyphicon-search"></span>
+								</button>
+							</div>
+							<div class="col-xs-3 relative_problem_icon"
+								ng-click="showFooterSearchBox()">
+								<button class="btn btn-default">
+									<span class="glyphicon glyphicon-search"></span>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row relative_problem_content">
+				<div
+					class="col-lg-12 col-md-12 col-sm-12 col-xs-12 relative_problem">
+					<div
+						class="col-lg-12 col-md-12 col-sm-12 col-xs-12 relative_problem_details">
+						<div class="relative_problem_short_text">
+							<label> Power Problem Power Problem Power Problem Power
+								Problem </label>
+						</div>
+						<div class="relative_problem_location">
+							<label> Pulipadu,Prakasam </label>
+						</div>
+						<div class="relative_problem_icons">
+							<div class="col-xs-3 relative_problem_icon">
+								<button class="btn btn-default">
+									<span class="glyphicon glyphicon-user"></span>
+								</button>
+							</div>
+							<div class="col-xs-3 relative_problem_icon">
+								<button class="btn btn-default">
+									<span class="glyphicon glyphicon-map-marker"></span>
+								</button>
+							</div>
+							<div class="col-xs-3 relative_problem_icon"
+								ng-click="showFooterSearchBox()">
+								<button class="btn btn-default">
+									<span class="glyphicon glyphicon-search"></span>
+								</button>
+							</div>
+							<div class="col-xs-3 relative_problem_icon"
+								ng-click="showFooterSearchBox()">
+								<button class="btn btn-default">
+									<span class="glyphicon glyphicon-search"></span>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row relative_problem_content">
+				<div
+					class="col-lg-12 col-md-12 col-sm-12 col-xs-12 relative_problem">
+					<div
+						class="col-lg-12 col-md-12 col-sm-12 col-xs-12 relative_problem_details">
+						<div class="relative_problem_short_text">
+							<label> Power Problem Power Problem Power Problem Power
+								Problem </label>
+						</div>
+						<div class="relative_problem_location">
+							<label> Pulipadu,Prakasam </label>
+						</div>
+						<div class="relative_problem_icons">
+							<div class="col-xs-3 relative_problem_icon">
+								<button class="btn btn-default">
+									<span class="glyphicon glyphicon-user"></span>
+								</button>
+							</div>
+							<div class="col-xs-3 relative_problem_icon">
+								<button class="btn btn-default">
+									<span class="glyphicon glyphicon-map-marker"></span>
+								</button>
+							</div>
+							<div class="col-xs-3 relative_problem_icon"
+								ng-click="showFooterSearchBox()">
+								<button class="btn btn-default">
+									<span class="glyphicon glyphicon-search"></span>
+								</button>
+							</div>
+							<div class="col-xs-3 relative_problem_icon"
+								ng-click="showFooterSearchBox()">
+								<button class="btn btn-default">
+									<span class="glyphicon glyphicon-search"></span>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row relative_problem_content">
+				<div
+					class="col-lg-12 col-md-12 col-sm-12 col-xs-12 relative_problem">
+					<div
+						class="col-lg-12 col-md-12 col-sm-12 col-xs-12 relative_problem_details">
+						<div class="relative_problem_short_text">
+							<label> Power Problem Power Problem Power Problem Power
+								Problem </label>
+						</div>
+						<div class="relative_problem_location">
+							<label> Pulipadu,Prakasam </label>
+						</div>
+						<div class="relative_problem_icons">
+							<div class="col-xs-3 relative_problem_icon">
+								<button class="btn btn-default">
+									<span class="glyphicon glyphicon-user"></span>
+								</button>
+							</div>
+							<div class="col-xs-3 relative_problem_icon">
+								<button class="btn btn-default">
+									<span class="glyphicon glyphicon-map-marker"></span>
+								</button>
+							</div>
+							<div class="col-xs-3 relative_problem_icon"
+								ng-click="showFooterSearchBox()">
+								<button class="btn btn-default">
+									<span class="glyphicon glyphicon-search"></span>
+								</button>
+							</div>
+							<div class="col-xs-3 relative_problem_icon"
+								ng-click="showFooterSearchBox()">
+								<button class="btn btn-default">
+									<span class="glyphicon glyphicon-search"></span>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

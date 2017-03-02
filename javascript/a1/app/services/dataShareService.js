@@ -1,29 +1,28 @@
 (function() {
-    'use strict';
+	'use strict';
 
-    angular.module('myindia-app').factory("dataShareService", dataShareService);
+	angular.module('myindia-app').factory("dataShareService", dataShareService);
 
-    dataShareService.$inject = ['$rootScope'];
+	dataShareService.$inject = [ '$rootScope' ];
 
-    function dataShareService($rootScope) {
+	function dataShareService($rootScope) {
 
-        var data = {};
+		var data = {};
 
-    	var dataShareService = {
-    		getUserInfo : getUserInfo,
-            setUserInfo: setUserInfo
-    	};
+		var dataShareService = {
+			getUserInfo : getUserInfo,
+			setUserInfo : setUserInfo
+		};
 
-        return dataShareService;
+		return dataShareService;
 
-    	function getUserInfo(){
-            return data.userInfo;
-    	}
+		function getUserInfo() {
+			return data.userInfo;
+		}
 
-        function setUserInfo(userInfo){
-            data.userInfo = userInfo;
-            $rootScope.$broadcast('userInfo',data.userInfo);
-        }
-    }
+		function setUserInfo(userInfo) {
+			data.userInfo = userInfo;
+		}
+	}
 
 })();

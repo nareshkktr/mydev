@@ -14,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "PROBLEM_TYPE")
 public class ProblemType implements Serializable {
@@ -31,13 +33,14 @@ public class ProblemType implements Serializable {
 	@Column(name = "PROBLEM_TYPE_NAME")
 	private String problemTypeName;
 
-	@Column(name = "PROBLEM_TYPE_DESC")
-	private String problemTypeDesc;
+	@Column(name = "MINISTRY")
+	private String problemTypeMinistry;
 
 	@Column(name = "PROBLEM_TYPE_PHOTO_URL")
 	private String problemTypePhotoURL;
 
 	@OneToMany(mappedBy = "problemType", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonIgnore
 	private List<Problem> problems = new ArrayList<Problem>(0);
 
 	public ProblemType(Long guid, String problemTypeName, String problemTypePhotoURL) {
@@ -86,12 +89,14 @@ public class ProblemType implements Serializable {
 		}
 	}
 
-	public String getProblemTypeDesc() {
-		return problemTypeDesc;
+	public String getProblemTypeMinistry() {
+		return problemTypeMinistry;
 	}
 
-	public void setProblemTypeDesc(String problemTypeDesc) {
-		this.problemTypeDesc = problemTypeDesc;
+	public void setProblemTypeMinistry(String problemTypeMinistry) {
+		this.problemTypeMinistry = problemTypeMinistry;
 	}
+
+	
 
 }

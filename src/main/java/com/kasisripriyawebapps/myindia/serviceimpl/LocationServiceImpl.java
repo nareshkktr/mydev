@@ -26,7 +26,7 @@ public class LocationServiceImpl implements LocationService {
 
 	@Override
 	public List<SolrLocationMaster> getSearchResultsByLocationName(String searchTerm) throws InternalServerException {
-		return locationMasterRepository.findByLocationNameContains(searchTerm);
+		return locationMasterRepository.findByLocationNameContainingIgnoreCaseOrderByLocationNameAsc(searchTerm);
 	}
 
 	@Override
@@ -36,7 +36,8 @@ public class LocationServiceImpl implements LocationService {
 		stateLocationTypes.add(ServiceConstants.LOCATION_STATE_TYPE);
 		stateLocationTypes.add(ServiceConstants.LOCATION_UNION_TERRITORY_TYPE);
 
-		List<SolrLocationMaster> stateLocations = locationMasterRepository.findByLocationTypeIn(stateLocationTypes);
+		List<SolrLocationMaster> stateLocations = locationMasterRepository
+				.findByLocationTypeInOrderByLocationNameAsc(stateLocationTypes);
 		return stateLocations;
 	}
 

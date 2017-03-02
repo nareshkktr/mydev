@@ -2,63 +2,38 @@
 	'use strict';
 
 	angular.module('myindia-app').directive("modal", modal);
-	
-	modal.$inject = ['ModalService'];
 
-	function modal(ModalService) {
+	modal.$inject = [ '$uibModal', '$log' ];
+
+	function modal($uibModal, $log) {
 
 		var modal = {
-			link : link
+			link : link,
+			scope : {
+				animationsEnabled : '=animationsEnabled',
+				modalTemplateUrl : '=modalTemplateUrl',
+				dismissModal : '=',
+				modalControllerName : '=modalControllerName',
+				modalControllerAlias : '=modalControllerAlias'
+			}
 		};
 
 		return modal;
 
 		function link(scope, element, attrs) {
-			// ensure id attribute exists
-			if (!attrs.id) {
-				console.error('modal must have an id');
-				return;
-			}
-
-			// move element to bottom of page (just before </body>) so it can be
-			// displayed above everything else
-			element.appendTo('body');
-
-			// close modal on background click
-			element.on('click', function(e) {
-				var target = $(e.target);
-				if (!target.closest('.modal-body').length) {
-					scope.$evalAsync(Close);
-				}
+			var modalInstance = $uibModal.open({
+				animation : scope.animationsEnabled,
+				ariaLabelledBy : 'modal-title',
+				ariaDescribedBy : 'modal-body',
+				templateUrl : scope.modalTemplateUrl,
+				controller : scope.modalControllerName,
+				controllerAs : scope.modalControllerAlias
 			});
-
-			// add self (this modal instance) to the modal service so it's
-			// accessible from controllers
-			var modal = {
-				id : attrs.id,
-				open : Open,
-				close : Close
-			};
-			ModalService.Add(modal);
-
-			// remove self from modal service when directive is destroyed
-			scope.$on('$destroy', function() {
-				ModalService.Remove(attrs.id);
-				element.remove();
+			modalInstance.result.then(function() {
+			}, function() {
+				scope.$eval(attrs.dismissModal);
+				$log.info('Modal dismissed at: ' + new Date());
 			});
-
-			// open modal
-			function Open() {
-				element.show();
-				$('body').addClass('modal-open');
-			}
-
-			// close modal
-			function Close() {
-				element.hide();
-				$('body').removeClass('modal-open');
-			}
 		}
 	}
-
 })();

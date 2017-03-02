@@ -1,8 +1,15 @@
 package com.kasisripriyawebapps.myindia.serviceimpl;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,6 +17,8 @@ import com.kasisripriyawebapps.myindia.constants.ApplicationConstants;
 import com.kasisripriyawebapps.myindia.constants.ExceptionConstants;
 import com.kasisripriyawebapps.myindia.constants.ServiceConstants;
 import com.kasisripriyawebapps.myindia.dao.ProblemTypeDao;
+import com.kasisripriyawebapps.myindia.entity.ElectroralRollesURL;
+import com.kasisripriyawebapps.myindia.entity.LocationMaster;
 import com.kasisripriyawebapps.myindia.entity.ProblemType;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 import com.kasisripriyawebapps.myindia.exception.ConflictException;
@@ -17,6 +26,7 @@ import com.kasisripriyawebapps.myindia.exception.RecordNotFoundException;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.CreateUpdateDeleteProblemTypeRequest;
 import com.kasisripriyawebapps.myindia.service.ImageService;
 import com.kasisripriyawebapps.myindia.service.ProblemTypeService;
+import com.kasisripriyawebapps.myindia.util.CommonUtil;
 
 @Service
 public class ProblemTypeServiceImpl implements ProblemTypeService {
@@ -27,6 +37,9 @@ public class ProblemTypeServiceImpl implements ProblemTypeService {
 	@Autowired
 	ImageService imageService;
 
+	@Autowired
+	private Environment env;
+
 	@Override
 	@Transactional
 	public Long createProblemType(CreateUpdateDeleteProblemTypeRequest createUpdateDeleteProblemTypeRequest)
@@ -35,7 +48,6 @@ public class ProblemTypeServiceImpl implements ProblemTypeService {
 		if (validateDuplicateProblemTypeByTypeNameRequest(createUpdateDeleteProblemTypeRequest)) {
 			ProblemType problemType = new ProblemType();
 			problemType.setProblemTypeName(createUpdateDeleteProblemTypeRequest.getProblemTypeName());
-			problemType.setProblemTypeDesc(createUpdateDeleteProblemTypeRequest.getProblemTypeDesc());
 			problemType.setProblemTypePhotoURL(
 					imageService.addImageToLocalDrive(ApplicationConstants.OBJECT_TYPE_PROBLEM_TYPE,
 							createUpdateDeleteProblemTypeRequest.getProblemTypeName(),
@@ -110,5 +122,70 @@ public class ProblemTypeServiceImpl implements ProblemTypeService {
 	public List<ProblemType> getAllProblemTypes() throws InternalServerException {
 		final List<ProblemType> problemTypes = problemTypeDao.getAllProblemTypes();
 		return problemTypes;
+	}
+
+	@Override
+	@Transactional
+	public void importAllProblemTypes() throws InternalServerException {
+
+		List<ProblemType> apiProblemTypesList = new ArrayList<ProblemType>();
+		List<ProblemType> newProblemTypesList = new ArrayList<ProblemType>();
+		List<ProblemType> existingProblemTypesList = problemTypeDao.getAllProblemTypes();
+
+		String filePath = env.getProperty("project.probem.types-file-name");
+		Workbook myWorkBook = CommonUtil.getWorkBookFromFile(filePath);
+
+		Sheet sheet = myWorkBook.getSheetAt(0);
+		int i = 0;
+		for (Row eachRow : sheet) {
+			if (i < 1) {
+				i++;
+				continue;
+			}
+			ProblemType problemType = new ProblemType();
+			String problemTypeName = eachRow.getCell(0).getStringCellValue();
+			String problemTypeMinistry = eachRow.getCell(1).getStringCellValue();
+			problemType.setProblemTypeName(problemTypeName);
+			problemType.setProblemTypeMinistry(problemTypeMinistry);
+
+			if (!newProblemTypesList.contains(problemType) && !existingProblemTypesList.contains(problemType)) {
+				newProblemTypesList.add(problemType);
+			}
+			if (!apiProblemTypesList.contains(problemType)) {
+				apiProblemTypesList.add(problemType);
+			}
+		}
+
+		problemTypeDao.saveProblemTypes(newProblemTypesList);
+		List<ProblemType> updatedProblemTypesList = findUpdatedProblemTypes(existingProblemTypesList,
+				apiProblemTypesList);
+		if (updatedProblemTypesList != null && !updatedProblemTypesList.isEmpty()) {
+			problemTypeDao.updateProblemTypes(updatedProblemTypesList);
+		}
+		if (existingProblemTypesList != null && !existingProblemTypesList.isEmpty()) {
+			existingProblemTypesList.removeAll(apiProblemTypesList);
+			problemTypeDao.deleteProblemTypes(existingProblemTypesList);
+		}
+	}
+
+	private List<ProblemType> findUpdatedProblemTypes(List<ProblemType> existingProblemTypesList,
+			List<ProblemType> apiProblemTypesList) {
+
+		List<ProblemType> updatedProblemTypesList = new ArrayList<ProblemType>();
+		Map<String, List<ProblemType>> existingProblemTypesMap = existingProblemTypesList.stream()
+				.collect(Collectors.groupingBy(problemTypeObject -> problemTypeObject.getProblemTypeName()));
+		if (apiProblemTypesList != null && !apiProblemTypesList.isEmpty() && existingProblemTypesList != null
+				&& !existingProblemTypesList.isEmpty()) {
+			for (ProblemType eachProblemType : apiProblemTypesList) {
+				if (existingProblemTypesList.contains(eachProblemType)
+						&& !updatedProblemTypesList.contains(eachProblemType)) {
+					eachProblemType.setGuid(
+							existingProblemTypesMap.get(eachProblemType.getProblemTypeName()).get(0).getGuid());
+					updatedProblemTypesList.add(eachProblemType);
+				}
+			}
+		}
+		return updatedProblemTypesList;
+
 	}
 }

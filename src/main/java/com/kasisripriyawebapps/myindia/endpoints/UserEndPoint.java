@@ -3,6 +3,8 @@
  */
 package com.kasisripriyawebapps.myindia.endpoints;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -38,6 +40,8 @@ public class UserEndPoint extends BaseEndPoint {
 
 	@Autowired
 	UserService userService;
+
+	private @Autowired HttpServletRequest servletRequest;
 
 	@POST
 	@ApiOperation(value = EndPointConstants.GET_USER_BY_VOTER_CARD_DETAILS_API_VALUE, nickname = EndPointConstants.GET_USER_BY_VOTER_CARD_DETAILS_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.GET_USER_BY_VOTER_CARD_DETAILS_API_DESCRIPTION)
@@ -101,8 +105,23 @@ public class UserEndPoint extends BaseEndPoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getLoggedInUserLocation() throws InternalServerException, RecordNotFoundException {
 		LoggedInUserDetails loggedInUserDetails = getLoggedInUserDetails();
-		UserLocationDetails userLocationDetails=userService.getLoggedInUserLocation(loggedInUserDetails.getGuid());
+		UserLocationDetails userLocationDetails = userService.getLoggedInUserLocation(loggedInUserDetails.getGuid());
+		HttpSession session = servletRequest.getSession(true);
+		session.setAttribute("userLocationDetails", userLocationDetails);
 		return Response.status(Status.OK).entity(userLocationDetails).build();
+	}
+
+	@POST
+	@ApiOperation(value = EndPointConstants.PIN_LOCATION_API_VALUE, nickname = EndPointConstants.PIN_LOCATION_DETAILS_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.PIN_LOCATION_DETAILS_API_DESCRIPTION)
+	@Path(EndPointConstants.PIN_LOCATION_REQUEST_MAPPING)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response pinLocation(final SolrLocationMaster solrLocationMaster) {
+		UserLocationDetails userLocationDetails = new UserLocationDetails();
+		userLocationDetails.setLocationGuid(solrLocationMaster.getLocationGuid());
+		userLocationDetails.setLocationName(solrLocationMaster.getLocationName());
+		HttpSession session = servletRequest.getSession(true);
+		session.setAttribute("userLocationDetails", userLocationDetails);
+		return Response.status(Status.OK).entity(solrLocationMaster).build();
 	}
 
 	private boolean validateGetUserByVoterCardDetails(GetUserByPropertyRequest getUserByPropertyRequest)

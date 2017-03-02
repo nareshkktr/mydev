@@ -85,13 +85,32 @@ public class ProblemTypeEndPoint {
 	}
 
 	@GET
+	@ApiOperation(value = EndPointConstants.GET_PROBLEM_TYPES_API_VALUE, nickname = EndPointConstants.GET_PROBLEM_TYPES_API_NICKNAME, httpMethod = EndPointConstants.HTTP_GET, notes = EndPointConstants.GET_PROBLEM_TYPES_API_DESCRIPTION)
+	@Path(EndPointConstants.GET_PROBLEM_TYPES_REQUEST_MAPPING)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getProblemTypes(@PathParam("offset") final Integer offset, @PathParam("limit") final Integer limit)
+			throws InternalServerException {
+		List<ProblemType> problemTypes = null;
+		problemTypes = problemTypeService.getAllProblemTypes(offset, limit);
+		return Response.status(Status.OK).entity(problemTypes).build();
+	}
+
+	@POST
+	@ApiOperation(value = EndPointConstants.IMPORT_ALL_PROBLEM_TYPE_API_VALUE, nickname = EndPointConstants.IMPORT_ALL_PROBLEM_TYPE_API_NICKNAME, httpMethod = EndPointConstants.HTTP_GET, notes = EndPointConstants.IMPORT_ALL_PROBLEM_TYPE_API_DESCRIPTION)
+	@Path(EndPointConstants.IMPORT_ALL_PROBLEM_TYPE_REQUEST_MAPPING)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response importAllProblemTypes() throws InternalServerException {
+		problemTypeService.importAllProblemTypes();
+		return Response.status(Status.OK).entity(null).build();
+	}
+
+	@GET
 	@ApiOperation(value = EndPointConstants.GET_ALL_PROBLEM_TYPES_API_VALUE, nickname = EndPointConstants.GET_ALL_PROBLEM_TYPES_API_NICKNAME, httpMethod = EndPointConstants.HTTP_GET, notes = EndPointConstants.GET_ALL_PROBLEM_TYPES_API_DESCRIPTION)
 	@Path(EndPointConstants.GET_ALL_PROBLEM_TYPES_REQUEST_MAPPING)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getAllProblemTypes(@PathParam("offset") final Integer offset,
-			@PathParam("limit") final Integer limit) throws InternalServerException {
+	public Response getAllProblemTypes() throws InternalServerException {
 		List<ProblemType> problemTypes = null;
-		problemTypes = problemTypeService.getAllProblemTypes(offset, limit);
+		problemTypes = problemTypeService.getAllProblemTypes();
 		return Response.status(Status.OK).entity(problemTypes).build();
 	}
 

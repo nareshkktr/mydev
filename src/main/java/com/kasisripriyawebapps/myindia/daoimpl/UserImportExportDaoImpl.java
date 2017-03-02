@@ -7,13 +7,13 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
-import com.kasisripriyawebapps.myindia.dao.UserImportDao;
+import com.kasisripriyawebapps.myindia.dao.UserImportExportDao;
 import com.kasisripriyawebapps.myindia.dto.SortCriteriaData;
 import com.kasisripriyawebapps.myindia.entity.ElectroralRollesURL;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 
 @Repository
-public class UserImportDaoImpl extends BaseDaoImpl<Long, ElectroralRollesURL> implements UserImportDao {
+public class UserImportExportDaoImpl extends BaseDaoImpl<Long, ElectroralRollesURL> implements UserImportExportDao {
 
 	@Override
 	public void saveElectroralRollesURLData(List<ElectroralRollesURL> electroralRollesUrlList)

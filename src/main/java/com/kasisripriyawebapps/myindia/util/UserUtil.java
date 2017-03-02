@@ -2,7 +2,9 @@ package com.kasisripriyawebapps.myindia.util;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfReader;
@@ -13,6 +15,7 @@ import com.itextpdf.text.pdf.parser.RegionTextRenderFilter;
 import com.itextpdf.text.pdf.parser.RenderFilter;
 import com.itextpdf.text.pdf.parser.TextExtractionStrategy;
 import com.kasisripriyawebapps.myindia.constants.ApplicationConstants;
+import com.kasisripriyawebapps.myindia.constants.ServiceConstants;
 import com.kasisripriyawebapps.myindia.dto.ElectroralRollPDFHeaderData;
 import com.kasisripriyawebapps.myindia.entity.ElectroralRollesURL;
 import com.kasisripriyawebapps.myindia.entity.User;
@@ -21,6 +24,13 @@ import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 public class UserUtil {
 
 	private static List<User> parseElectroralData(ElectroralRollesURL eachURLData) {
+
+		System.setProperty("http.proxyHost", "proxy.cat.com");
+		System.setProperty("http.proxyPort", "80");
+
+		System.setProperty("https.proxyHost", "proxy.cat.com");
+		System.setProperty("https.proxyPort", "80");
+
 		List<User> eachPageUsers = new ArrayList<User>();
 		String pdfURL = eachURLData.getPdfUrl();
 		if (pdfURL != null && !pdfURL.isEmpty()) {
@@ -40,8 +50,8 @@ public class UserUtil {
 					if (i < 3) {
 						continue;
 					}
-					int ly = 34;
-					int uy = 128;
+					int ly = 30;
+					int uy = 125;
 					for (int j = 0; j < 10; j++) {
 						int lx = 0;
 						int ux = 175;
@@ -103,6 +113,7 @@ public class UserUtil {
 		try {
 			tableContent = PdfTextExtractor.getTextFromPage(reader, 1, strategy);
 		} catch (IOException e) {
+			e.printStackTrace();
 			new InternalServerException(e.getMessage());
 		}
 
@@ -115,7 +126,7 @@ public class UserUtil {
 				String policeStation = lines[2].trim();
 				String mandal = lines[4].trim();
 				String revenueDivision = lines[6];
-				String pinCode = lines[10];
+				String pinCode = "";// lines[10];
 
 				pdfHeaderData.setMainTown(mainTown);
 				pdfHeaderData.setPoliceStation(policeStation);
@@ -165,107 +176,100 @@ public class UserUtil {
 
 		try {
 			if (tableContent != null && !tableContent.trim().isEmpty()) {
+
 				String[] lines = tableContent.split("\n");
 				int noOfLines = lines.length;
 				if (lines != null && noOfLines != 0) {
 
+					System.out.println(tableContent);
+
 					int processingLineNo = noOfLines - 1;
-					String sexAgeLine = lines[processingLineNo].trim();
-					String[] sexAgeLineSpaces = sexAgeLine.split(" ");
-					if (sexAgeLineSpaces.length > 3) {
-						age = sexAgeLineSpaces[1];
-						sex = sexAgeLineSpaces[3];
-					} else if (sexAgeLineSpaces.length == 3) {
-						age = sexAgeLineSpaces[1];
-						processingLineNo--;
-						sex = lines[processingLineNo].trim();
-					} else {
-						processingLineNo--;
-						sexAgeLine = lines[processingLineNo].trim();
-						sexAgeLineSpaces = sexAgeLine.split(" ");
-						if (sexAgeLineSpaces.length > 1) {
-							age = sexAgeLineSpaces[0].trim();
-							sex = sexAgeLineSpaces[1].trim();
-						}
-					}
+					Map<String, String> sexMap = getSex(lines, processingLineNo);
+					sex = sexMap.get("sexValue");
+					processingLineNo = Integer.parseInt(sexMap.get("currentLineNo"));
+					Map<String, String> ageMap = getAge(lines, processingLineNo);
+					age = ageMap.get("ageValue");
+					processingLineNo = Integer.parseInt(ageMap.get("currentLineNo"));
 
-					processingLineNo--;
-					processingLineNo--;
-					houseNo = lines[processingLineNo].trim();
-					processingLineNo--;
+					System.out.println(">>>>>>>>>>>>>" + sex + ">>" + age);
 
-					if (lines[processingLineNo].trim().contains(":")) {
-						String referenceTypeWithS = lines[processingLineNo].trim();
-						referenceType = referenceTypeWithS.split(" ")[0].split("'s")[0];
-						processingLineNo--;
-						referenceName = lines[processingLineNo].trim();
-						processingLineNo--;
-						if (lines[processingLineNo].trim().contains(":")) {
-							processingLineNo--;
-							electorName = lines[processingLineNo].trim();
-
-						} else {
-							processingLineNo--;
-							processingLineNo--;
-							electorName = lines[processingLineNo].trim() + " " + lines[processingLineNo + 2].trim();
-
-						}
-
-					} else {
-						processingLineNo--;
-						String referenceTypeWithS = lines[processingLineNo].trim();
-						referenceType = referenceTypeWithS.split(" ")[0].split("'s")[0];
-						processingLineNo--;
-						referenceName = lines[processingLineNo].trim() + " " + lines[processingLineNo + 2].trim();
-						processingLineNo--;
-						if (lines[processingLineNo].trim().contains(":")) {
-							processingLineNo--;
-							electorName = lines[processingLineNo].trim();
-
-						} else {
-							processingLineNo--;
-							processingLineNo--;
-							electorName = lines[processingLineNo].trim() + " " + lines[processingLineNo + 2].trim();
-
-						}
-					}
-					processingLineNo--;
-
-					String voterIdLine = lines[processingLineNo].trim();
-					String[] voterIdLineSpaces = voterIdLine.split(" ");
-					if (voterIdLineSpaces.length > 1) {
-						voterId = voterIdLineSpaces[1].trim();
-					} else {
-						voterId = voterIdLine;
-					}
-
-					if (electorName != null && !electorName.isEmpty()) {
-						String[] electorNamesArray = electorName.split(" ");
-						if (electorNamesArray != null) {
-							electorName = "";
-							for (int m = 0; m < electorNamesArray.length; m++) {
-								String eachSpaceElectorName = electorNamesArray[m];
-								if (!eachSpaceElectorName.isEmpty()) {
-									electorName += eachSpaceElectorName.trim() + " ";
-								}
-							}
-						}
-						electorName = electorName.toUpperCase().trim();
-					}
-
-					if (referenceName != null && !referenceName.isEmpty()) {
-						String[] referenceNamesArray = referenceName.split(" ");
-						if (referenceNamesArray != null) {
-							referenceName = "";
-							for (int m = 0; m < referenceNamesArray.length; m++) {
-								String eachSpaceReferenceName = referenceNamesArray[m];
-								if (!eachSpaceReferenceName.isEmpty()) {
-									referenceName += eachSpaceReferenceName.trim() + " ";
-								}
-							}
-						}
-						referenceName = referenceName.toUpperCase().trim();
-					}
+					/*
+					 * String sexAgeLine = lines[processingLineNo].trim();
+					 * String[] sexAgeLineSpaces = sexAgeLine.split(" "); if
+					 * (sexAgeLineSpaces.length > 3) { age =
+					 * sexAgeLineSpaces[1]; sex = sexAgeLineSpaces[3]; } else if
+					 * (sexAgeLineSpaces.length == 3) { age =
+					 * sexAgeLineSpaces[1]; processingLineNo--; sex =
+					 * lines[processingLineNo].trim(); } else if
+					 * (sexAgeLineSpaces.length == 2) { sex =
+					 * lines[processingLineNo].trim(); } else {
+					 * processingLineNo--; sexAgeLine =
+					 * lines[processingLineNo].trim(); sexAgeLineSpaces =
+					 * sexAgeLine.split(" "); if (sexAgeLineSpaces.length > 1) {
+					 * age = sexAgeLineSpaces[0].trim(); sex =
+					 * sexAgeLineSpaces[1].trim(); } }
+					 * 
+					 * System.out.println(">>>>>>>>>>>" + sex);
+					 * 
+					 * processingLineNo--; processingLineNo--; houseNo =
+					 * lines[processingLineNo].trim(); processingLineNo--;
+					 * 
+					 * if (lines[processingLineNo].trim().contains(":")) {
+					 * String referenceTypeWithS =
+					 * lines[processingLineNo].trim(); referenceType =
+					 * referenceTypeWithS.split(" ")[0].split("'s")[0];
+					 * processingLineNo--; referenceName =
+					 * lines[processingLineNo].trim(); processingLineNo--; if
+					 * (lines[processingLineNo].trim().contains(":")) {
+					 * processingLineNo--; electorName =
+					 * lines[processingLineNo].trim();
+					 * 
+					 * } else { processingLineNo--; processingLineNo--;
+					 * electorName = lines[processingLineNo].trim() + " " +
+					 * lines[processingLineNo + 2].trim();
+					 * 
+					 * }
+					 * 
+					 * } else { processingLineNo--; String referenceTypeWithS =
+					 * lines[processingLineNo].trim(); referenceType =
+					 * referenceTypeWithS.split(" ")[0].split("'s")[0];
+					 * processingLineNo--; referenceName =
+					 * lines[processingLineNo].trim() + " " +
+					 * lines[processingLineNo + 2].trim(); processingLineNo--;
+					 * if (lines[processingLineNo].trim().contains(":")) {
+					 * processingLineNo--; electorName =
+					 * lines[processingLineNo].trim();
+					 * 
+					 * } else { processingLineNo--; processingLineNo--;
+					 * electorName = lines[processingLineNo].trim() + " " +
+					 * lines[processingLineNo + 2].trim();
+					 * 
+					 * } } processingLineNo--;
+					 * 
+					 * String voterIdLine = lines[processingLineNo].trim();
+					 * String[] voterIdLineSpaces = voterIdLine.split(" "); if
+					 * (voterIdLineSpaces.length > 1) { voterId =
+					 * voterIdLineSpaces[1].trim(); } else { voterId =
+					 * voterIdLine; }
+					 * 
+					 * if (electorName != null && !electorName.isEmpty()) {
+					 * String[] electorNamesArray = electorName.split(" "); if
+					 * (electorNamesArray != null) { electorName = ""; for (int
+					 * m = 0; m < electorNamesArray.length; m++) { String
+					 * eachSpaceElectorName = electorNamesArray[m]; if
+					 * (!eachSpaceElectorName.isEmpty()) { electorName +=
+					 * eachSpaceElectorName.trim() + " "; } } } electorName =
+					 * electorName.toUpperCase().trim(); }
+					 * 
+					 * if (referenceName != null && !referenceName.isEmpty()) {
+					 * String[] referenceNamesArray = referenceName.split(" ");
+					 * if (referenceNamesArray != null) { referenceName = "";
+					 * for (int m = 0; m < referenceNamesArray.length; m++) {
+					 * String eachSpaceReferenceName = referenceNamesArray[m];
+					 * if (!eachSpaceReferenceName.isEmpty()) { referenceName +=
+					 * eachSpaceReferenceName.trim() + " "; } } } referenceName
+					 * = referenceName.toUpperCase().trim(); }
+					 */
 
 					User user = new User();
 					user.setAge(Integer.parseInt(age.trim()));
@@ -296,15 +300,71 @@ public class UserUtil {
 			}
 
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			isProcessed = false;
 		}
 		return isProcessed;
 	}
 
+	private static Map<String, String> getSex(String[] boxContent, int currentLineNo) {
+		Map<String, String> sexMap = new HashMap<String, String>();
+		String sexAgeLine = boxContent[currentLineNo];
+
+		String sexValue = "";
+		if (sexAgeLine.equalsIgnoreCase(ServiceConstants.DELETE_USER)) {
+			System.out.println("In Deleted");
+			currentLineNo--;
+			sexAgeLine = boxContent[currentLineNo];
+		}
+
+		String[] sexAgeLineSpaces = sexAgeLine.split(" ");
+		if (sexAgeLineSpaces.length == 2) {
+			sexValue = sexAgeLineSpaces[1];
+			currentLineNo--;
+		} else if (sexAgeLineSpaces.length == 1) {
+			currentLineNo--;
+			sexValue = boxContent[currentLineNo];
+			currentLineNo--;
+		} else if (sexAgeLineSpaces.length == 3) {
+			System.out.println("In 3");
+		} else if (sexAgeLineSpaces.length == 4) {
+			System.out.println("In 4");
+			sexValue = sexAgeLineSpaces[3];
+		}
+		sexMap.put("sexValue", sexValue);
+		sexMap.put("currentLineNo", "" + currentLineNo);
+		return sexMap;
+	}
+
+	private static Map<String, String> getAge(String[] boxContent, int currentLineNo) {
+		Map<String, String> ageMap = new HashMap<String, String>();
+		String sexAgeLine = boxContent[currentLineNo];
+		String[] sexAgeLineSpaces = sexAgeLine.split(" ");
+		String ageValue = "";
+
+		if (sexAgeLineSpaces.length == 2) {
+			ageValue = sexAgeLineSpaces[1];
+			currentLineNo--;
+
+		} else if (sexAgeLineSpaces.length == 1) {
+			currentLineNo--;
+			ageValue = boxContent[currentLineNo];
+			currentLineNo--;
+		} else if (sexAgeLineSpaces.length == 4) {
+			System.out.println("In 4 Age");
+			ageValue = sexAgeLineSpaces[1];
+			currentLineNo--;
+		}
+		ageMap.put("ageValue", ageValue);
+		ageMap.put("currentLineNo", "" + currentLineNo);
+
+		return ageMap;
+	}
+
 	public static void main(String args[]) {
 		ElectroralRollesURL eachURLData = new ElectroralRollesURL();
 		eachURLData.setPdfUrl(
-				"http://ceoaperms.ap.gov.in/Electoral_Rolls/PDFGeneration.aspx?urlPath=D:\\SSR_2017_Draft_Roles\\ANDHRA\\AC_109\\English\\S01A109P065.PDF");
+				"http://ceoaperms.ap.gov.in/Electoral_Rolls/PDFGeneration.aspx?urlPath=D:\\SSR_2017_Final_Roles\\ANDHRA\\AC_154\\English\\S01A154P080.PDF");
 		List<User> eachPageUsers = new ArrayList<User>();
 		eachPageUsers = parseElectroralData(eachURLData);
 
