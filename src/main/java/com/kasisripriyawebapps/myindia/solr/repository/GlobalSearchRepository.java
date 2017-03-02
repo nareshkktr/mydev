@@ -8,8 +8,8 @@ import com.kasisripriyawebapps.myindia.solr.entity.SolrGlobalSearchMaster;
 
 public interface GlobalSearchRepository extends SolrCrudRepository<SolrGlobalSearchMaster, Long> {
 
-	List<SolrGlobalSearchMaster> findByObjectNameContainingIgnoreCase(String searchTerm);
+	List<SolrGlobalSearchMaster> findByObjectNameContainingIgnoreCaseOrderByObjectNameAsc(String searchTerm);
 
-	List<SolrGlobalSearchMaster> findByObjectNameContainingIgnoreCaseAndObjectType(String searchText,
-			String searchObjectType);
+	List<SolrGlobalSearchMaster> findByObjectNameContainingIgnoreCaseAndObjectTypeOrderByObjectNameAsc(
+			String searchText, String searchObjectType);
 }

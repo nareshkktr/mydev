@@ -1,0 +1,44 @@
+#location_change_search_box {
+	width: 99%;
+}
+
+#location_change_search_box .app_search_icon {
+	margin-top: 12px !important;
+}
+
+.search_locations_container {
+	width: 100%;
+}
+
+.search_location {
+	margin: 10px;
+	border-bottom: 1px solid #e1dfdf;
+	padding: 5px;
+	cursor: pointer;
+}
+
+.modal-body {
+	max-height: 400px;
+	overflow-y: auto;
+}
+
+.search_location label {
+	font-weight: 400;
+	letter-spacing: 1px;
+	cursor: pointer;
+}
+
+.search_location:HOVER {
+	background-color: #f94c59 !important;
+	color: white;
+}
+
+.search_location_result_type_lbl {
+	margin-top: 15px;
+	letter-spacing: 1px;
+}
+
+.pin_location {
+	background-color: #f94c59 !important;
+	color: white;
+}

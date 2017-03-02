@@ -1,0 +1,32 @@
+<div class="modal-header">
+	<h3 class="modal-title" id="modal-title">Pin Location</h3>
+</div>
+<div class="modal-body" id="modal-body">
+	<form class="navbar-form" role="search">
+		<div class="input-group" id="location_change_search_box">
+			<i class="glyphicon glyphicon-search app_search_icon"
+				aria-hidden="true"></i> <input type="text" class="form-control"
+				placeholder="Search Location"
+				ng-model="locationChangePopUp.searchTerm"
+				my-india-enter-key="locationChangePopUp.getSearchResults()">
+		</div>
+		<div class="input-group">
+			<label class="search_location_result_type_lbl">
+				{{locationChangePopUp.resultsType}} </label>
+		</div>
+		<div class="input-group search_locations_container">
+			<div class="search_location" 
+				ng-repeat="searchLocation in locationChangePopUp.popularLocations"
+				ng-class="{'pin_location': locationChangePopUp.selectedLocation==searchLocation}"
+				ng-click="locationChangePopUp.selectLocation(searchLocation)">
+				<label> {{searchLocation.locationName}}
+					&nbsp;({{searchLocation.locationType}}) </label>
+			</div>
+		</div>
+	</form>
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn app_btn" ng-click="locationChangePopUp.closePopUp()">Cancel</button>
+	<button type="button" class="btn app_btn"
+		ng-disabled="!locationChangePopUp.locationSelected" ng-click="locationChangePopUp.pinLocation()">Pin It!</button>
+</div>

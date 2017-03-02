@@ -2,6 +2,7 @@ package com.kasisripriyawebapps.myindia.solr.repository;
 
 import java.util.List;
 
+import org.springframework.data.solr.repository.Boost;
 import org.springframework.data.solr.repository.SolrCrudRepository;
 
 import com.kasisripriyawebapps.myindia.solr.entity.SolrLocationMaster;
@@ -19,8 +20,8 @@ public interface LocationMasterRepository extends SolrCrudRepository<SolrLocatio
 
 	List<SolrLocationMaster> findByLocationGuidIn(List<Long> villageGuids);
 
-	List<SolrLocationMaster> findByLocationNameContains(String searchTerm);
+	List<SolrLocationMaster> findByLocationNameContainingIgnoreCaseOrderByLocationNameAsc(@Boost(2) String searchTerm);
 
-	List<SolrLocationMaster> findByLocationTypeIn(List<String> stateLocationTypes);
+	List<SolrLocationMaster> findByLocationTypeInOrderByLocationNameAsc(List<String> stateLocationTypes);
 
 }

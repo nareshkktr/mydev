@@ -14,7 +14,8 @@
             restrict:'E',
             link:link,
             templateUrl: resource+'partials/footer.html', 
-            controller:'footerController'
+            controller:'footerController',
+            controllerAs : 'footer'
     		
     	}	
     }

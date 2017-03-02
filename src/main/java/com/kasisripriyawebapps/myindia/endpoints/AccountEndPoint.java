@@ -3,6 +3,7 @@
  */
 package com.kasisripriyawebapps.myindia.endpoints;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -39,6 +40,8 @@ public class AccountEndPoint {
 	@Autowired
 	AccountService accountService;
 
+	private @Autowired HttpServletRequest servletRequest;
+
 	@POST
 	@ApiOperation(value = EndPointConstants.CREATE_ACCOUNT_API_VALUE, nickname = EndPointConstants.CREATE_ACCOUNT_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.CREATE_ACCOUNT_API_DESCRIPTION)
 	@Path(EndPointConstants.CREATE_ACCOUNT_REQUEST_MAPPING)
@@ -49,7 +52,7 @@ public class AccountEndPoint {
 		if (validateCreateAccountRequest(createAccountRequest)
 				&& !validateDuplicateAccountByUserNameRequest(createAccountRequest.getLoginUserName())) {
 			Account account = accountService.createAccount(createAccountRequest);
-			baseUserInfo = accountService.prepareBaseUserInformation(account);
+			baseUserInfo = accountService.prepareBaseUserInformation(account, servletRequest);
 		}
 		NewCookie accessTokenCookie = new NewCookie("access_token", baseUserInfo.getAccessToken());
 
@@ -65,7 +68,7 @@ public class AccountEndPoint {
 		BaseUserInformation baseUserInfo = null;
 
 		if (validateLoginRequest(loginRequest)) {
-			baseUserInfo = accountService.login(loginRequest);
+			baseUserInfo = accountService.login(loginRequest, servletRequest);
 		}
 		NewCookie accessTokenCookie = new NewCookie("access_token", baseUserInfo.getAccessToken());
 		return Response.status(Status.OK).entity(baseUserInfo).cookie(accessTokenCookie).build();

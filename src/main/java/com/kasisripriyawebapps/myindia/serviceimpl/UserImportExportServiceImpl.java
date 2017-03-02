@@ -1,11 +1,22 @@
 package com.kasisripriyawebapps.myindia.serviceimpl;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -29,24 +40,25 @@ import com.kasisripriyawebapps.myindia.constants.ExceptionConstants;
 import com.kasisripriyawebapps.myindia.constants.LocationConstants;
 import com.kasisripriyawebapps.myindia.constants.ServiceConstants;
 import com.kasisripriyawebapps.myindia.dao.UserDao;
-import com.kasisripriyawebapps.myindia.dao.UserImportDao;
+import com.kasisripriyawebapps.myindia.dao.UserImportExportDao;
 import com.kasisripriyawebapps.myindia.dto.ElectroralRollPDFHeaderData;
 import com.kasisripriyawebapps.myindia.entity.ElectroralRollesURL;
+import com.kasisripriyawebapps.myindia.entity.ProblemType;
 import com.kasisripriyawebapps.myindia.entity.User;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 import com.kasisripriyawebapps.myindia.exception.RecordNotFoundException;
-import com.kasisripriyawebapps.myindia.service.UserImportService;
+import com.kasisripriyawebapps.myindia.service.UserImportExportService;
 import com.kasisripriyawebapps.myindia.util.CommonUtil;
 
 @Service
-public class UserImportServiceImpl implements UserImportService {
+public class UserImportExportServiceImpl implements UserImportExportService {
 
 	static WebDriver driver;
 	@Autowired
 	private Environment env;
 
 	@Autowired
-	UserImportDao userImportDao;
+	UserImportExportDao userImportExportDao;
 
 	@Autowired
 	UserDao userDao;
@@ -63,7 +75,7 @@ public class UserImportServiceImpl implements UserImportService {
 
 	@Override
 	@Transactional
-	public void saveStateElectroralRolleUrls(ElectroralRollesURL electroralRollesURL)
+	public void exportStateElectroralRolleUrls(ElectroralRollesURL electroralRollesURL)
 			throws InternalServerException, RecordNotFoundException {
 		driver = new ChromeDriver();
 		driver.get(env.getProperty("india-electroral-rolles.url"));
@@ -154,14 +166,68 @@ public class UserImportServiceImpl implements UserImportService {
 		}
 	}
 
+	private void writeDataIntoSheet(Map<Integer, Object[]> sheetData, Sheet exportWorkBookSheet) {
+
+		Set<Integer> newRows = sheetData.keySet();
+		int rownum = exportWorkBookSheet.getLastRowNum() + 1;
+		for (Integer key : newRows) {
+			Row row = exportWorkBookSheet.createRow(rownum++);
+			Object[] objArr = sheetData.get(key);
+			int cellnum = 0;
+			for (Object obj : objArr) {
+				Cell cell = row.createCell(cellnum++);
+				if (obj instanceof String) {
+					cell.setCellValue((String) obj);
+				} else if (obj instanceof Long) {
+					cell.setCellValue((Long) obj);
+				} else if (obj instanceof Integer) {
+					cell.setCellValue((Integer) obj);
+				} else if (obj == null) {
+					cell.setCellType(Cell.CELL_TYPE_BLANK);
+				}
+			}
+		}
+	}
+
+	private void writeExcelDataIntoFile(String outPutFilePath, Workbook exportWorkBook) throws InternalServerException {
+		FileOutputStream os = null;
+		try {
+			os = new FileOutputStream(outPutFilePath);
+			try {
+				exportWorkBook.write(os);
+				os.close();
+				exportWorkBook.close();
+			} catch (IOException e) {
+				throw new InternalServerException(e.getMessage());
+			}
+		} catch (FileNotFoundException e) {
+			throw new InternalServerException(e.getMessage());
+		}
+	}
+
 	private void handleAndhraPradeshTeleganaElectroralRollesURL(ElectroralRollesURL electroralRollesURL,
 			String stateUrl) throws InternalServerException {
-		List<ElectroralRollesURL> pdfElectroralRollesUrlList = new ArrayList<ElectroralRollesURL>();
-		List<ElectroralRollesURL> newElectroralRollesUrlList = new ArrayList<ElectroralRollesURL>();
-		List<ElectroralRollesURL> existingElectroralRollesUrlList = userImportDao
-				.getElectroralRollesURLData(electroralRollesURL);
+
 		driver = new ChromeDriver();
 		driver.get(stateUrl);
+
+		String outPutFilePath = "";
+		String directoryPath = env.getProperty("project.electroral.url.data-files.upload-path") + "/"
+				+ electroralRollesURL.getStateName() + "/" + electroralRollesURL.getDistrictName() + "/";
+		String fileName = env.getProperty("project.electroral.url.data-file-name");
+
+		outPutFilePath = directoryPath + fileName;
+		CommonUtil.createExcelFile(directoryPath, fileName);
+
+		Workbook exportWorkBook = CommonUtil.getWorkBookFromFile(outPutFilePath);
+		if (exportWorkBook.getNumberOfSheets() == 1 && exportWorkBook.getSheetAt(0) != null) {
+			exportWorkBook.removeSheetAt(0);
+		}
+		Sheet exportWorkBookSheet = exportWorkBook
+				.createSheet(env.getProperty("project.electroral.url.data-file-name"));
+
+		addHeaderRow(exportWorkBookSheet);
+		TreeMap<Integer, Object[]> electroralURLDaraMp = new TreeMap<Integer, Object[]>();
 
 		Select districtDropDown = new Select(driver.findElement(By.id("ddlDist")));
 		List<WebElement> districtOptions = districtDropDown.getOptions();
@@ -211,11 +277,13 @@ public class UserImportServiceImpl implements UserImportService {
 					}
 				}
 				getPollingStationElectorsUrls(electroralRollesURL, districtName, mlaConstituencyName, mlaConstituencyNo,
-						pdfElectroralRollesUrlList, existingElectroralRollesUrlList, newElectroralRollesUrlList);
+						electroralURLDaraMp);
 			}
 		}
-		saveStateElectroralRollesURLData(electroralRollesURL, pdfElectroralRollesUrlList,
-				existingElectroralRollesUrlList, newElectroralRollesUrlList);
+
+		writeDataIntoSheet(electroralURLDaraMp, exportWorkBookSheet);
+		writeExcelDataIntoFile(outPutFilePath, exportWorkBook);
+
 		driver.close();
 		driver.quit();
 	}
@@ -224,13 +292,14 @@ public class UserImportServiceImpl implements UserImportService {
 			List<ElectroralRollesURL> pdfElectroralRollesUrlList,
 			List<ElectroralRollesURL> existingElectroralRollesUrlList,
 			List<ElectroralRollesURL> newElectroralRollesUrlList) throws InternalServerException {
-		userImportDao.saveElectroralRollesURLData(newElectroralRollesUrlList);
+		System.out.println(newElectroralRollesUrlList.size());
+		userImportExportDao.saveElectroralRollesURLData(newElectroralRollesUrlList);
 		newElectroralRollesUrlList.clear();
 		List<ElectroralRollesURL> updatedElectroralRollesUrlList = findUpdatedElectroralRollesURLData(
 				existingElectroralRollesUrlList, pdfElectroralRollesUrlList);
-		userImportDao.updateElectroralRollesURLData(updatedElectroralRollesUrlList);
+		userImportExportDao.updateElectroralRollesURLData(updatedElectroralRollesUrlList);
 		existingElectroralRollesUrlList.removeAll(pdfElectroralRollesUrlList);
-		userImportDao.deleteeElectroralRollesURLData(existingElectroralRollesUrlList);
+		userImportExportDao.deleteeElectroralRollesURLData(existingElectroralRollesUrlList);
 	}
 
 	private List<ElectroralRollesURL> findUpdatedElectroralRollesURLData(
@@ -264,10 +333,8 @@ public class UserImportServiceImpl implements UserImportService {
 	}
 
 	private static void processAPTNPollingStationURLs(ElectroralRollesURL electroralRollesURL, String districtName,
-			String mlaConstituencyName, int mlaConstituencyNo, List<ElectroralRollesURL> pdfElectroralRollesUrlList,
-			List<ElectroralRollesURL> existingElectroralRollesUrlList,
-			List<ElectroralRollesURL> newElectroralRollesUrlList, int pollingStationIndex, int pollingStationSize,
-			String existingPDFUrl) {
+			String mlaConstituencyName, int mlaConstituencyNo, int pollingStationIndex, int pollingStationSize,
+			String existingPDFUrl, TreeMap<Integer, Object[]> electroralURLDaraMp) {
 		if (pollingStationIndex < pollingStationSize) {
 			WebElement pageMainTable = driver.findElement(By.id("GridView1"));
 			WebElement pageMainTableBody = pageMainTable.findElements(By.xpath("tbody")).get(0);
@@ -295,27 +362,45 @@ public class UserImportServiceImpl implements UserImportService {
 			}
 
 			System.out.println("pdfUrl>>" + pollingStationIndex + ">>" + pdfUrl);
-			ElectroralRollesURL electroralRolleURL = new ElectroralRollesURL();
-			electroralRolleURL.setDistrictName(districtName);
-			electroralRolleURL.setMlaConstituencyName(mlaConstituencyName);
-			electroralRolleURL.setMlaConstituencyNo(mlaConstituencyNo);
-			electroralRolleURL.setStateName(electroralRollesURL.getStateName());
-			electroralRolleURL.setPollingStationName(polingStationName);
-			electroralRolleURL.setPollingStationAddress(polingStationAddress);
-			electroralRolleURL.setPdfUrl(pdfUrl);
-			electroralRolleURL.setPartNo(partNo);
-			if (!existingElectroralRollesUrlList.contains(electroralRolleURL)) {
-				newElectroralRollesUrlList.add(electroralRolleURL);
-			}
-			if (!pdfElectroralRollesUrlList.contains(electroralRolleURL)) {
-				pdfElectroralRollesUrlList.add(electroralRolleURL);
+
+			Integer rowNo = 0;
+			if (electroralURLDaraMp != null) {
+				if (!electroralURLDaraMp.keySet().isEmpty()) {
+					rowNo = electroralURLDaraMp.lastKey();
+				}
+				electroralURLDaraMp.put(rowNo + 1,
+						new Object[] { electroralRollesURL.getStateName(), districtName, mlaConstituencyName,
+								mlaConstituencyNo, partNo, polingStationName, polingStationAddress, pdfUrl });
 			}
 
 			processAPTNPollingStationURLs(electroralRollesURL, districtName, mlaConstituencyName, mlaConstituencyNo,
-					pdfElectroralRollesUrlList, existingElectroralRollesUrlList, newElectroralRollesUrlList,
-					pollingStationIndex + 1, statesTableRowsWithHeader.size(), existingPDFUrl);
+					pollingStationIndex + 1, statesTableRowsWithHeader.size(), existingPDFUrl, electroralURLDaraMp);
 
 		}
+
+	}
+
+	private void addHeaderRow(Sheet exportWorkBookSheet) {
+
+		Row headerRow = exportWorkBookSheet.createRow(0);
+
+		Cell stateNameHeaderCell = headerRow.createCell(0);
+		Cell districtNameHeaderCell = headerRow.createCell(1);
+		Cell mlaConstituencyNameHeaderCell = headerRow.createCell(2);
+		Cell mlaConstituencyNoHeaderCell = headerRow.createCell(3);
+		Cell polingStationNoHeaderCell = headerRow.createCell(4);
+		Cell polingStationNameHeaderCell = headerRow.createCell(5);
+		Cell polingStationLocationHeaderCell = headerRow.createCell(6);
+		Cell pdfUrlHeaderCell = headerRow.createCell(7);
+
+		stateNameHeaderCell.setCellValue(ServiceConstants.LOCATION_STATE_TYPE);
+		districtNameHeaderCell.setCellValue(ServiceConstants.LOCATION_DISTRICT_TYPE);
+		mlaConstituencyNameHeaderCell.setCellValue(ServiceConstants.LOCATION_MLA_CONSTITUENCT_TYPE);
+		mlaConstituencyNoHeaderCell.setCellValue(ServiceConstants.LOCATION_MLA_CONSTITUENCY_NO);
+		polingStationNoHeaderCell.setCellValue(ServiceConstants.POLING_STATION_NO);
+		polingStationNameHeaderCell.setCellValue(ServiceConstants.POLING_STATION_NAME);
+		polingStationLocationHeaderCell.setCellValue(ServiceConstants.POLING_STATION_ADDRESS);
+		pdfUrlHeaderCell.setCellValue(ServiceConstants.LOCATION_STATE_TYPE);
 
 	}
 
@@ -354,9 +439,7 @@ public class UserImportServiceImpl implements UserImportService {
 	}
 
 	private static void getPollingStationElectorsUrls(ElectroralRollesURL electroralRollesURL, String districtName,
-			String mlaConstituencyName, int mlaConstituencyNo, List<ElectroralRollesURL> pdfElectroralRollesUrlList,
-			List<ElectroralRollesURL> existingElectroralRollesUrlList,
-			List<ElectroralRollesURL> newElectroralRollesUrlList) {
+			String mlaConstituencyName, int mlaConstituencyNo, TreeMap<Integer, Object[]> sheetData) {
 
 		WebElement pageMainTable = driver.findElement(By.id("GridView1"));
 		WebElement pageMainTableBody = pageMainTable.findElements(By.xpath("tbody")).get(0);
@@ -364,9 +447,8 @@ public class UserImportServiceImpl implements UserImportService {
 
 		if (statesTableRowsWithHeader != null && !statesTableRowsWithHeader.isEmpty()) {
 
-			processAPTNPollingStationURLs(electroralRollesURL, districtName, mlaConstituencyName, mlaConstituencyNo,
-					pdfElectroralRollesUrlList, existingElectroralRollesUrlList, newElectroralRollesUrlList, 1,
-					statesTableRowsWithHeader.size(), "");
+			processAPTNPollingStationURLs(electroralRollesURL, districtName, mlaConstituencyName, mlaConstituencyNo, 1,
+					statesTableRowsWithHeader.size(), "", sheetData);
 		}
 
 	}
@@ -390,10 +472,6 @@ public class UserImportServiceImpl implements UserImportService {
 
 	private void handleKarnatakaElectroralRollesURL(ElectroralRollesURL electroralRollesURL, String stateUrl)
 			throws InternalServerException {
-		List<ElectroralRollesURL> pdfElectroralRollesUrlList = new ArrayList<ElectroralRollesURL>();
-		List<ElectroralRollesURL> newElectroralRollesUrlList = new ArrayList<ElectroralRollesURL>();
-		List<ElectroralRollesURL> existingElectroralRollesUrlList = userImportDao
-				.getElectroralRollesURLData(electroralRollesURL);
 		driver = new ChromeDriver();
 		driver.get(stateUrl);
 
@@ -401,20 +479,15 @@ public class UserImportServiceImpl implements UserImportService {
 		WebElement districtMainTableTbody = districtMainTable.findElements(By.xpath("tbody")).get(0);
 		List<WebElement> districtTableRowsWithHeader = districtMainTableTbody.findElements(By.xpath("tr"));
 
-		processKarnatakaDistrict(electroralRollesURL, 1, districtTableRowsWithHeader.size(), pdfElectroralRollesUrlList,
-				newElectroralRollesUrlList, existingElectroralRollesUrlList);
+		processKarnatakaDistrict(electroralRollesURL, 1, districtTableRowsWithHeader.size());
 
 		driver.close();
 		driver.quit();
 
-		saveStateElectroralRollesURLData(electroralRollesURL, pdfElectroralRollesUrlList, newElectroralRollesUrlList,
-				existingElectroralRollesUrlList);
 	}
 
 	private static void processKarnatakaDistrict(ElectroralRollesURL electroralRollesURL, int districtNo,
-			int districtSize, List<ElectroralRollesURL> pdfElectroralRollesUrlList,
-			List<ElectroralRollesURL> newElectroralRollesUrlList,
-			List<ElectroralRollesURL> existingElectroralRollesUrlList) throws InternalServerException {
+			int districtSize) throws InternalServerException {
 
 		if (districtNo < districtSize) {
 
@@ -450,21 +523,18 @@ public class UserImportServiceImpl implements UserImportService {
 				List<WebElement> mandalTableRowsWithHeader = mlaCostituencyMainTableTbody.findElements(By.xpath("tr"));
 
 				processKarnatakaDistrictMLAConstituency(electroralRollesURL, 1, mandalTableRowsWithHeader.size(),
-						districtNo, districtSize, districtName, pdfElectroralRollesUrlList, newElectroralRollesUrlList,
-						existingElectroralRollesUrlList);
+						districtNo, districtSize, districtName);
 
 			} else {
-				processKarnatakaDistrict(electroralRollesURL, districtNo + 1, districtSize, pdfElectroralRollesUrlList,
-						newElectroralRollesUrlList, existingElectroralRollesUrlList);
+				processKarnatakaDistrict(electroralRollesURL, districtNo + 1, districtSize);
 			}
 		}
 
 	}
 
 	private static void processKarnatakaDistrictMLAConstituency(ElectroralRollesURL electroralRollesURL,
-			int mlaConstituencyNo, int mlaConstituencySize, int districtNo, int districtSize, String districtName,
-			List<ElectroralRollesURL> pdfElectroralRollesUrlList, List<ElectroralRollesURL> newElectroralRollesUrlList,
-			List<ElectroralRollesURL> existingElectroralRollesUrlList) throws InternalServerException {
+			int mlaConstituencyNo, int mlaConstituencySize, int districtNo, int districtSize, String districtName)
+			throws InternalServerException {
 
 		if (mlaConstituencyNo < mlaConstituencySize) {
 
@@ -498,12 +568,10 @@ public class UserImportServiceImpl implements UserImportService {
 				}
 
 				processKarnatakaDistrictMLAPollingStation(electroralRollesURL, mlaConstituencyNo, mlaConstituencySize,
-						districtNo, districtSize, districtName, mlaConstituencyName, pdfElectroralRollesUrlList,
-						newElectroralRollesUrlList, existingElectroralRollesUrlList);
+						districtNo, districtSize, districtName, mlaConstituencyName);
 			} else {
 				processKarnatakaDistrictMLAConstituency(electroralRollesURL, mlaConstituencyNo + 1, mlaConstituencySize,
-						districtNo, districtSize, districtName, pdfElectroralRollesUrlList, newElectroralRollesUrlList,
-						existingElectroralRollesUrlList);
+						districtNo, districtSize, districtName);
 			}
 		} else {
 			driver.navigate().back();
@@ -513,16 +581,13 @@ public class UserImportServiceImpl implements UserImportService {
 				throw new InternalServerException(e.getMessage());
 			}
 
-			processKarnatakaDistrict(electroralRollesURL, districtNo + 1, districtSize, pdfElectroralRollesUrlList,
-					newElectroralRollesUrlList, existingElectroralRollesUrlList);
+			processKarnatakaDistrict(electroralRollesURL, districtNo + 1, districtSize);
 		}
 	}
 
 	private static void processKarnatakaDistrictMLAPollingStation(ElectroralRollesURL electroralRollesURL,
 			int mlaConstituencyNo, int mlaConstituencySize, int districtNo, int districtSize, String districtName,
-			String mlaConstituencyName, List<ElectroralRollesURL> pdfElectroralRollesUrlList,
-			List<ElectroralRollesURL> newElectroralRollesUrlList,
-			List<ElectroralRollesURL> existingElectroralRollesUrlList) throws InternalServerException {
+			String mlaConstituencyName) throws InternalServerException {
 
 		WebElement pollingStationMainTable = driver.findElement(By.id("ctl00_ContentPlaceHolder1_GridView1"));
 		WebElement pollingStationMainTableTbody = pollingStationMainTable.findElements(By.xpath("tbody")).get(0);
@@ -562,12 +627,7 @@ public class UserImportServiceImpl implements UserImportService {
 				electroralRolleURL.setPollingStationName(null);
 				electroralRolleURL.setPollingStationAddress(polingStationAddress);
 				electroralRolleURL.setPdfUrl(pdfUrl);
-				if (!existingElectroralRollesUrlList.contains(electroralRolleURL)) {
-					newElectroralRollesUrlList.add(electroralRolleURL);
-				}
-				if (!pdfElectroralRollesUrlList.contains(electroralRolleURL)) {
-					pdfElectroralRollesUrlList.add(electroralRolleURL);
-				}
+
 			}
 
 			k++;
@@ -582,15 +642,14 @@ public class UserImportServiceImpl implements UserImportService {
 		}
 
 		processKarnatakaDistrictMLAConstituency(electroralRollesURL, mlaConstituencyNo + 1, mlaConstituencySize,
-				districtNo, districtSize, districtName, pdfElectroralRollesUrlList, newElectroralRollesUrlList,
-				existingElectroralRollesUrlList);
+				districtNo, districtSize, districtName);
 	}
 
 	@Override
 	@Transactional
 	public void saveStateElectroralRolleData(ElectroralRollesURL electroralRollesURL) throws InternalServerException {
 		// TODO Auto-generated method stub
-		List<ElectroralRollesURL> electroralRollesUrlList = userImportDao
+		List<ElectroralRollesURL> electroralRollesUrlList = userImportExportDao
 				.getElectroralRollesURLData(electroralRollesURL);
 
 		List<User> users = new ArrayList<User>();
@@ -886,5 +945,91 @@ public class UserImportServiceImpl implements UserImportService {
 			isProcessed = false;
 		}
 		return isProcessed;
+	}
+
+	@Override
+	@Transactional
+	public void importStateElectroralRolleUrls(ElectroralRollesURL electroralRollesURL) throws InternalServerException {
+		List<ElectroralRollesURL> pdfElectroralRollesUrlList = new ArrayList<ElectroralRollesURL>();
+		List<ElectroralRollesURL> newElectroralRollesUrlList = new ArrayList<ElectroralRollesURL>();
+		List<ElectroralRollesURL> existingElectroralRollesUrlList = userImportExportDao
+				.getElectroralRollesURLData(electroralRollesURL);
+
+		String directoryPath = env.getProperty("project.electroral.url.data-files.upload-path");
+
+		File file = new File(directoryPath);
+		String[] directories = file.list(new FilenameFilter() {
+			@Override
+			public boolean accept(File current, String name) {
+				return new File(current, name).isDirectory();
+			}
+		});
+
+		if (directories != null && directories.length > 0) {
+			for (String eachDirectoryName : directories) {
+
+				String eachStateDirectoryName = directoryPath + "/" + eachDirectoryName;
+				File eachStateDirectoryFile = new File(eachStateDirectoryName);
+				String[] eachStateDirectories = eachStateDirectoryFile.list(new FilenameFilter() {
+					@Override
+					public boolean accept(File current, String name) {
+						return new File(current, name).isDirectory();
+					}
+				});
+				if (eachStateDirectories != null && eachStateDirectories.length > 0) {
+					for (String eachStateDistrictDirectory : eachStateDirectories) {
+						String filePath = eachStateDirectoryName + "/" + eachStateDistrictDirectory + "/"
+								+ env.getProperty("project.electroral.url.data-file-name");
+
+						System.out.println(filePath);
+						File f = new File(filePath);
+						if (f.exists()) {
+							Workbook myWorkBook = CommonUtil.getWorkBookFromFile(filePath);
+
+							Sheet sheet = myWorkBook.getSheetAt(0);
+							int i = 0;
+							for (Row eachRow : sheet) {
+								if (i < 1) {
+									i++;
+									continue;
+								}
+
+								String stateName = eachRow.getCell(0).getStringCellValue();
+								String districtName = eachRow.getCell(1).getStringCellValue();
+								String mlaConstituencyName = eachRow.getCell(2).getStringCellValue();
+								Integer mlaConstituencyNo = (int) eachRow.getCell(3).getNumericCellValue();
+								Integer partNo = (int) eachRow.getCell(4).getNumericCellValue();
+								String polingStationName = eachRow.getCell(5).getStringCellValue();
+								String polingStationAddress = eachRow.getCell(6).getStringCellValue();
+								String pdfUrl = eachRow.getCell(7).getStringCellValue();
+
+								ElectroralRollesURL electroralRolleURL = new ElectroralRollesURL();
+								electroralRolleURL.setDistrictName(districtName);
+								electroralRolleURL.setMlaConstituencyName(mlaConstituencyName);
+								electroralRolleURL.setMlaConstituencyNo(mlaConstituencyNo);
+								electroralRolleURL.setStateName(stateName);
+								electroralRolleURL.setPollingStationName(polingStationName);
+								electroralRolleURL.setPollingStationAddress(polingStationAddress);
+								electroralRolleURL.setPdfUrl(pdfUrl);
+								electroralRolleURL.setPartNo(partNo);
+
+								if (!newElectroralRollesUrlList.contains(electroralRolleURL)
+										&& !existingElectroralRollesUrlList.contains(electroralRolleURL)) {
+									newElectroralRollesUrlList.add(electroralRolleURL);
+								}
+								if (!pdfElectroralRollesUrlList.contains(electroralRolleURL)) {
+									pdfElectroralRollesUrlList.add(electroralRolleURL);
+								}
+							}
+						}
+
+					}
+				}
+			}
+		}
+
+		saveStateElectroralRollesURLData(electroralRollesURL, pdfElectroralRollesUrlList,
+				existingElectroralRollesUrlList, newElectroralRollesUrlList);
+
 	}
 }

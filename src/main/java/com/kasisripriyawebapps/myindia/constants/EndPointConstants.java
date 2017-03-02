@@ -318,16 +318,16 @@ public class EndPointConstants {
 	public static final String DELETE_PROBLEM_TYPE_API_DESCRIPTION = "Delete Problem Type";
 
 	/** The Constant CREATE_ACCOUNT_REQUEST_MAPPING. */
-	public static final String GET_ALL_PROBLEM_TYPES_REQUEST_MAPPING = "getAllProblemTypes/{offset}/{limit}";
+	public static final String GET_PROBLEM_TYPES_REQUEST_MAPPING = "getProblemTypes/{offset}/{limit}";
 
 	/** The Constant CREATE_ACCOUNT_API_VALUE. */
-	public static final String GET_ALL_PROBLEM_TYPES_API_VALUE = "getAllProblemTypes";
+	public static final String GET_PROBLEM_TYPES_API_VALUE = "getProblemTypes";
 
 	/** The Constant CREATE_ACCOUNT_API_NICKNAME. */
-	public static final String GET_ALL_PROBLEM_TYPES_API_NICKNAME = "getAllProblemTypes";
+	public static final String GET_PROBLEM_TYPES_API_NICKNAME = "getProblemTypes";
 
 	/** The Constant CREATE_ACCOUNT_API_DESCRIPTION. */
-	public static final String GET_ALL_PROBLEM_TYPES_API_DESCRIPTION = "Get All Problem Types";
+	public static final String GET_PROBLEM_TYPES_API_DESCRIPTION = "Get Problem Types";
 
 	/** The Constant ACCOUNT_ENDPOINT_REQUEST_MAPPING. */
 	public static final String ACTIVITY_ENDPOINT_REQUEST_MAPPING = "/activity";
@@ -656,28 +656,40 @@ public class EndPointConstants {
 	public static final String IMPORT_VILLAGE_REFERENCE_LOCATIONS_API_DESCRIPTION = "Import Village Parent Locations";
 
 	/** The Constant USER_ENDPOINT_REQUEST_MAPPING. */
-	public static final String USER_IMPORT_ENDPOINT_REQUEST_MAPPING = "/userImport";
+	public static final String USER_IMPORT_EXPORT_ENDPOINT_REQUEST_MAPPING = "/userImportExport";
 
 	/** The Constant USER_ENDPOINT_API_VALUE. */
-	public static final String USER_IMPORT_ENDPOINT_API_VALUE = "userImport";
+	public static final String USER_IMPORT_EXPORT_ENDPOINT_API_VALUE = "userImportExport";
 
 	/** The Constant USER_ENDPOINT_API_TAGS. */
-	public static final String USER_IMPORT_ENDPOINT_API_TAGS = "userImport";
+	public static final String USER_IMPORT_EXPORT_ENDPOINT_API_TAGS = "userImportExport";
 
 	/** The Constant USER_ENDPOINT_API_DESCRIPTION. */
-	public static final String USER_IMPORT_ENDPOINT_API_DESCRIPTION = "User Import Management API";
+	public static final String USER_IMPORT_EXPORT_ENDPOINT_API_DESCRIPTION = "User Import And Export Management API";
 
 	/** The Constant UPLOAD_ALL_USERS_REQUEST_MAPPING. */
-	public static final String SAVE_ELECTRORAL_ROLLES_URLS_REQUEST_MAPPING = "saveStateElectroralRolleUrls";
+	public static final String EXPORT_ELECTRORAL_ROLLES_URLS_REQUEST_MAPPING = "exportStateElectroralRolleUrls";
 
 	/** The Constant UPLOAD_ALL_USERS_API_VALUE. */
-	public static final String SAVE_ELECTRORAL_ROLLES_URLS_API_VALUE = "saveStateElectroralRolleUrls";
+	public static final String EXPORT_ELECTRORAL_ROLLES_URLS_API_VALUE = "exportStateElectroralRolleUrls";
 
 	/** The Constant UPLOAD_ALL_USERS_API_NICKNAME. */
-	public static final String SAVE_ELECTRORAL_ROLLES_URLS_API_NICKNAME = "saveStateElectroralRolleUrls";
+	public static final String EXPORT_ELECTRORAL_ROLLES_URLS_API_NICKNAME = "exportStateElectroralRolleUrls";
 
 	/** The Constant UPLOAD_ALL_USERS_API_DESCRIPTION. */
-	public static final String SAVE_ELECTRORAL_ROLLES_URLS_API_DESCRIPTION = "Save States Electroral Rolles URLs";
+	public static final String EXPORT_ELECTRORAL_ROLLES_URLS_API_DESCRIPTION = "Export States Electroral Rolles URLs";
+
+	/** The Constant UPLOAD_ALL_USERS_REQUEST_MAPPING. */
+	public static final String IMPORT_ELECTRORAL_ROLLES_URLS_REQUEST_MAPPING = "importStateElectroralRolleUrls";
+
+	/** The Constant UPLOAD_ALL_USERS_API_VALUE. */
+	public static final String IMPORT_ELECTRORAL_ROLLES_URLS_API_VALUE = "importStateElectroralRolleUrls";
+
+	/** The Constant UPLOAD_ALL_USERS_API_NICKNAME. */
+	public static final String IMPORT_ELECTRORAL_ROLLES_URLS_API_NICKNAME = "importStateElectroralRolleUrls";
+
+	/** The Constant UPLOAD_ALL_USERS_API_DESCRIPTION. */
+	public static final String IMPORT_ELECTRORAL_ROLLES_URLS_API_DESCRIPTION = "Import States Electroral Rolles URLs";
 
 	/** The Constant UPLOAD_ALL_USERS_REQUEST_MAPPING. */
 	public static final String SAVE_ELECTRORAL_ROLLES_DATA_REQUEST_MAPPING = "saveStateElectroralRolleData";
@@ -878,5 +890,41 @@ public class EndPointConstants {
 
 	/** The Constant GET__SEARCH_RESULTS_BY_LOCATION_NAME_API_DESCRIPTION. */
 	public static final String GET_LOGGED_IN_USER_LOCATION_DETAILS_DETAILS_API_DESCRIPTION = "Get User Location Details";
+
+	/** The Constant GET__SEARCH_RESULTS_BY_LOCATION_NAME_REQUEST_MAPPING. */
+	public static final String PIN_LOCATION_REQUEST_MAPPING = "pinLocation";
+
+	/** The Constant GET__SEARCH_RESULTS_BY_LOCATION_NAME_API_VALUE. */
+	public static final String PIN_LOCATION_API_VALUE = "pinLocation";
+
+	/** The Constant GET__SEARCH_RESULTS_BY_LOCATION_NAME_API_NICKNAME. */
+	public static final String PIN_LOCATION_DETAILS_NICKNAME = "pinLocation";
+
+	/** The Constant GET__SEARCH_RESULTS_BY_LOCATION_NAME_API_DESCRIPTION. */
+	public static final String PIN_LOCATION_DETAILS_API_DESCRIPTION = "Pin User Location Details";
+
+	/** The Constant CREATE_ACCOUNT_REQUEST_MAPPING. */
+	public static final String IMPORT_ALL_PROBLEM_TYPE_REQUEST_MAPPING = "importAllProblemTypes";
+
+	/** The Constant CREATE_ACCOUNT_API_VALUE. */
+	public static final String IMPORT_ALL_PROBLEM_TYPE_API_VALUE = "importAllProblemTypes";
+
+	/** The Constant CREATE_ACCOUNT_API_NICKNAME. */
+	public static final String IMPORT_ALL_PROBLEM_TYPE_API_NICKNAME = "importAllProblemTypes";
+
+	/** The Constant CREATE_ACCOUNT_API_DESCRIPTION. */
+	public static final String IMPORT_ALL_PROBLEM_TYPE_API_DESCRIPTION = "Import All Problem Types";
+
+	/** The Constant CREATE_ACCOUNT_REQUEST_MAPPING. */
+	public static final String GET_ALL_PROBLEM_TYPES_REQUEST_MAPPING = "getAllProblemTypes";
+
+	/** The Constant CREATE_ACCOUNT_API_VALUE. */
+	public static final String GET_ALL_PROBLEM_TYPES_API_VALUE = "getAllProblemTypes";
+
+	/** The Constant CREATE_ACCOUNT_API_NICKNAME. */
+	public static final String GET_ALL_PROBLEM_TYPES_API_NICKNAME = "getAllProblemTypes";
+
+	/** The Constant CREATE_ACCOUNT_API_DESCRIPTION. */
+	public static final String GET_ALL_PROBLEM_TYPES_API_DESCRIPTION = "Get All Problem Types";
 
 }

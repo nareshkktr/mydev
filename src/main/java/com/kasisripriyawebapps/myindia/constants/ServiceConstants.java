@@ -3,6 +3,8 @@
  */
 package com.kasisripriyawebapps.myindia.constants;
 
+import java.util.Date;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class ServiceConstants.
@@ -138,17 +140,25 @@ public class ServiceConstants {
 	public static final String PIPE = "|";
 
 	public static final String DELETE_USER = "D E L E T E D";
-	public static final Long DEFAULT_COUNTRY_CODE=(long)-1;
-	
+	public static final Long DEFAULT_COUNTRY_CODE = (long) -1;
+
 	public static final String SITTING_LOKSABHA_MP_DESIGNATION = "Sitting Lok Sabha Member Of Parliment";
-    public static final String MP = "Member Of Parliment";
+	public static final String MP = "Member Of Parliment";
 
 	public static final String SITTING_RAJYASABHA_MP_DESIGNATION = "Sitting Rajya Sabha Member Of Parliment";
 
 	public static final String SITTING_MLA_DESIGNATION = "Sitting Member Of Legislative Assembly";
 
 	public static final String MLA = "Member of Legislative Assembly";
-	
+
 	public static final String CHIEF_MINISTER = "Chief Minister";
 	public static final String GOVERNORS = "Governor";
+
+	public static final String LOCATION_MLA_CONSTITUENCY_NO= "MLA Constituency No";
+
+	public static final String POLING_STATION_NO = "Poling Station No";
+
+	public static final String POLING_STATION_NAME = "Poling Station Name";
+
+	public static final String POLING_STATION_ADDRESS = "Poling Station Address";
 }

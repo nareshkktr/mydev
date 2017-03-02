@@ -39,7 +39,7 @@ public class SearchServiceImpl implements SearchService {
 			throws InternalServerException {
 		Map<String, List<SolrGlobalSearchMaster>> searchResultsMap = new HashMap<String, List<SolrGlobalSearchMaster>>();
 		List<SolrGlobalSearchMaster> searchResults = globalSearchRepository
-				.findByObjectNameContainingIgnoreCase(searchTerm);
+				.findByObjectNameContainingIgnoreCaseOrderByObjectNameAsc(searchTerm);
 		if (CommonUtil.isListNotNullAndNotEmpty(searchResults)) {
 			searchResultsMap = searchResults.stream()
 					.collect(Collectors.groupingBy(searchResult -> searchResult.getObjectType()));
@@ -56,10 +56,11 @@ public class SearchServiceImpl implements SearchService {
 		List<SolrGlobalSearchMaster> searchResults = new ArrayList<SolrGlobalSearchMaster>();
 		if (globalSearchRequest.getSearchObjectType().equalsIgnoreCase("ALL")) {
 			searchResults = globalSearchRepository
-					.findByObjectNameContainingIgnoreCase(globalSearchRequest.getSearchText());
+					.findByObjectNameContainingIgnoreCaseOrderByObjectNameAsc(globalSearchRequest.getSearchText());
 		} else {
-			searchResults = globalSearchRepository.findByObjectNameContainingIgnoreCaseAndObjectType(
-					globalSearchRequest.getSearchText(), globalSearchRequest.getSearchObjectType());
+			searchResults = globalSearchRepository
+					.findByObjectNameContainingIgnoreCaseAndObjectTypeOrderByObjectNameAsc(
+							globalSearchRequest.getSearchText(), globalSearchRequest.getSearchObjectType());
 		}
 		if (CommonUtil.isListNotNullAndNotEmpty(searchResults)) {
 			globalSearchResponse.setTotalCount(searchResults.size());

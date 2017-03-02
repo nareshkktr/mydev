@@ -5,7 +5,7 @@ import java.util.List;
 import com.kasisripriyawebapps.myindia.entity.ElectroralRollesURL;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 
-public interface UserImportDao {
+public interface UserImportExportDao {
 
 	void saveElectroralRollesURLData(List<ElectroralRollesURL> electroralRollesUrlList) throws InternalServerException;
 

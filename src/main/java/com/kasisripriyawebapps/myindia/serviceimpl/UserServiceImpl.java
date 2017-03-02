@@ -6,13 +6,13 @@ package com.kasisripriyawebapps.myindia.serviceimpl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.kasisripriyawebapps.myindia.constants.ApplicationConstants;
 import com.kasisripriyawebapps.myindia.constants.ExceptionConstants;
 import com.kasisripriyawebapps.myindia.constants.ServiceConstants;
 import com.kasisripriyawebapps.myindia.dao.AccountDao;
@@ -230,40 +230,60 @@ public class UserServiceImpl implements UserService {
 		List<SolrLocationMaster> allLocations = locationMasterRepository.findByLocationGuidIn(allLocationsGuids);
 
 		if (CommonUtil.isListNotNullAndNotEmpty(allLocations)) {
-			for (SolrLocationMaster solrLocationMaster : allLocations) {
-				if (solrLocationMaster.getLocationType().equalsIgnoreCase(ServiceConstants.LOCATION_COUNTRY_TYPE)) {
-					userLocationDetails.setLocationCountry(solrLocationMaster.getLocationName());
-				} else if (solrLocationMaster.getLocationType()
-						.equalsIgnoreCase(ServiceConstants.LOCATION_COUNTRY_TYPE)) {
-					userLocationDetails.setLocationCountry(solrLocationMaster.getLocationName());
-				} else if (solrLocationMaster.getLocationType()
-						.equalsIgnoreCase(ServiceConstants.LOCATION_DISTRICT_TYPE)) {
-					userLocationDetails.setLocationDistrict(solrLocationMaster.getLocationName());
-				} else if (solrLocationMaster.getLocationType()
-						.equalsIgnoreCase(ServiceConstants.LOCATION_MUNCIPAL_CORPORATION_TYPE)) {
-					userLocationDetails.setLocationMunicipalCorporation(solrLocationMaster.getLocationName());
-				} else if (solrLocationMaster.getLocationType()
-						.equalsIgnoreCase(ServiceConstants.LOCATION_MUNCIPALITY_TYPE)) {
-					userLocationDetails.setLocationMunicipality(solrLocationMaster.getLocationName());
-				} else if (solrLocationMaster.getLocationType()
-						.equalsIgnoreCase(ServiceConstants.LOCATION_STATE_TYPE)) {
-					userLocationDetails.setLocationState(solrLocationMaster.getLocationName());
-				} else if (solrLocationMaster.getLocationType()
-						.equalsIgnoreCase(ServiceConstants.LOCATION_SUB_DISTRICT_TYPE)) {
-					userLocationDetails.setLocationSubDistrict(solrLocationMaster.getLocationName());
-				} else if (solrLocationMaster.getLocationType()
-						.equalsIgnoreCase(ServiceConstants.LOCATION_TOWN_PANCHAYATH_TYPE)) {
-					userLocationDetails.setLocationTownPanchayat(solrLocationMaster.getLocationName());
-				} else if (solrLocationMaster.getLocationType()
-						.equalsIgnoreCase(ServiceConstants.LOCATION_VILLAGE_TYPE)) {
-					userLocationDetails.setLocationVillage(solrLocationMaster.getLocationName());
-				} else if (solrLocationMaster.getLocationType()
-						.equalsIgnoreCase(ServiceConstants.LOCATION_VILLAGE_PANCHAYATH_TYPE)) {
-					userLocationDetails.setLocationVillagePanchayat(solrLocationMaster.getLocationName());
+
+			Map<String, List<SolrLocationMaster>> allLocationsMap = allLocations.stream()
+					.collect(Collectors.groupingBy(locationObject -> locationObject.getLocationType()));
+
+			String locationName = "";
+			Long locationGuid = null;
+			if (allLocationsMap != null) {
+				if (allLocationsMap.containsKey(ServiceConstants.LOCATION_VILLAGE_TYPE)) {
+					List<SolrLocationMaster> villageLocations = allLocationsMap
+							.get(ServiceConstants.LOCATION_VILLAGE_TYPE);
+					if (CommonUtil.isListNotNullAndNotEmpty(villageLocations)) {
+						locationName = villageLocations.get(0).getLocationName();
+						locationGuid = villageLocations.get(0).getLocationGuid();
+					}
 				}
+
+				if (allLocationsMap.containsKey(ServiceConstants.LOCATION_MUNCIPAL_CORPORATION_TYPE)) {
+					List<SolrLocationMaster> municipalCorporationLocations = allLocationsMap
+							.get(ServiceConstants.LOCATION_MUNCIPAL_CORPORATION_TYPE);
+					if (CommonUtil.isListNotNullAndNotEmpty(municipalCorporationLocations)) {
+						locationName = municipalCorporationLocations.get(0).getLocationName();
+						locationGuid = municipalCorporationLocations.get(0).getLocationGuid();
+					}
+				}
+
+				if (allLocationsMap.containsKey(ServiceConstants.LOCATION_MUNCIPALITY_TYPE)) {
+					List<SolrLocationMaster> muncipalityLocations = allLocationsMap
+							.get(ServiceConstants.LOCATION_MUNCIPALITY_TYPE);
+					if (CommonUtil.isListNotNullAndNotEmpty(muncipalityLocations)) {
+						locationName = muncipalityLocations.get(0).getLocationName();
+						locationGuid = muncipalityLocations.get(0).getLocationGuid();
+					}
+				}
+
+				if (allLocationsMap.containsKey(ServiceConstants.LOCATION_NAGAR_PANCHAYAT_TYPE)) {
+					List<SolrLocationMaster> nagarPanchatathLocations = allLocationsMap
+							.get(ServiceConstants.LOCATION_NAGAR_PANCHAYAT_TYPE);
+					if (CommonUtil.isListNotNullAndNotEmpty(nagarPanchatathLocations)) {
+						locationName = nagarPanchatathLocations.get(0).getLocationName();
+						locationGuid = nagarPanchatathLocations.get(0).getLocationGuid();
+					}
+				}
+
+				if (allLocationsMap.containsKey(ServiceConstants.LOCATION_DISTRICT_TYPE)) {
+					List<SolrLocationMaster> districtLocations = allLocationsMap
+							.get(ServiceConstants.LOCATION_DISTRICT_TYPE);
+					if (CommonUtil.isListNotNullAndNotEmpty(districtLocations)) {
+						locationName += ", " + districtLocations.get(0).getLocationName();
+					}
+				}
+				userLocationDetails.setLocationGuid(locationGuid);
+				userLocationDetails.setLocationName(locationName);
 			}
 		}
-
 		return userLocationDetails;
 	}
 }

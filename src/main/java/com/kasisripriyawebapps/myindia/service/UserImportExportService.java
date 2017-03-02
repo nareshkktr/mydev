@@ -4,11 +4,13 @@ import com.kasisripriyawebapps.myindia.entity.ElectroralRollesURL;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 import com.kasisripriyawebapps.myindia.exception.RecordNotFoundException;
 
-public interface UserImportService {
+public interface UserImportExportService {
 
-	void saveStateElectroralRolleUrls(ElectroralRollesURL electroralRollesURL)
+	void exportStateElectroralRolleUrls(ElectroralRollesURL electroralRollesURL)
 			throws InternalServerException, RecordNotFoundException;
 
 	void saveStateElectroralRolleData(ElectroralRollesURL electroralRollesURL) throws InternalServerException;
+
+	void importStateElectroralRolleUrls(ElectroralRollesURL electroralRollesURL)  throws InternalServerException;
 
 }

@@ -14,7 +14,8 @@
 		</div>
 	</div>
 	<div class="row"
-		ng-if="!$state.includes('signIn') && !$state.includes('signUp') " id="footer_nofitication_box">
+		ng-if="!$state.includes('signIn') && !$state.includes('signUp') "
+		id="footer_nofitication_box">
 		<div class="col-xs-2 footer_nofitication_icon">
 			<button class="btn btn-default">
 				<span class="glyphicon glyphicon-globe"></span> <span
@@ -44,10 +45,17 @@
 				<span class="glyphicon glyphicon-map-marker"></span>
 			</button>
 		</div>
-		<div class="col-xs-2 footer_nofitication_icon">
+		<div class="col-xs-2 footer_nofitication_icon"
+			ng-click="showFooterSearchBox()">
 			<button class="btn btn-default">
 				<span class="glyphicon glyphicon-search"></span>
 			</button>
+		</div>
+		<div class="footer_search_bar_container"
+			ng-show="footer.showSearchBox">
+			<input type="text" class="form-control" placeholder="Search"
+				ng-model="footer.searchTerm"
+				my-india-enter-key="footer.gotoSearch()"
 		</div>
 	</div>
 </div>

@@ -27,7 +27,7 @@ import io.swagger.annotations.ApiOperation;
 		EndPointConstants.POLITICIAN_ENDPOINT_API_TAGS }, description = EndPointConstants.PARTY_ENDPOINT_API_DESCRIPTION)
 public class ProblemEndPoint {
 
-	/** The problem service. */
+
 	@Autowired
 	ProblemService problemService;
 

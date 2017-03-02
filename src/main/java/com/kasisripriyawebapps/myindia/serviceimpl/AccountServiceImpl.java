@@ -3,6 +3,9 @@
  */
 package com.kasisripriyawebapps.myindia.serviceimpl;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +28,7 @@ import com.kasisripriyawebapps.myindia.exception.RecordNotFoundException;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.BaseUserInformation;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.CreateAccountRequest;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.LoginRequest;
+import com.kasisripriyawebapps.myindia.requestresponsemodel.UserLocationDetails;
 import com.kasisripriyawebapps.myindia.service.AccountService;
 import com.kasisripriyawebapps.myindia.service.OAuthService;
 import com.kasisripriyawebapps.myindia.service.UserService;
@@ -49,7 +53,7 @@ public class AccountServiceImpl implements AccountService {
 
 	@Autowired
 	LocationDao locationDao;
-	
+
 	@Autowired
 	UserService userService;
 
@@ -100,7 +104,7 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	@Transactional
-	public BaseUserInformation prepareBaseUserInformation(Account account) throws InternalServerException, RecordNotFoundException {
+	public BaseUserInformation prepareBaseUserInformation(Account account,HttpServletRequest servletRequest) throws InternalServerException, RecordNotFoundException {
 
 		BaseUserInformation baseUserInfo = new BaseUserInformation();
 		JSONObject authTokenInfo = null;
@@ -122,7 +126,10 @@ public class AccountServiceImpl implements AccountService {
 			}
 		}
 		//populateLocationInformation
-		baseUserInfo.setUserLocation(userService.getLoggedInUserLocation(account.getGuid()));
+		UserLocationDetails userLocationDetails=userService.getLoggedInUserLocation(account.getGuid());
+		HttpSession session = servletRequest.getSession(true);
+		session.setAttribute("userLocationDetails", userLocationDetails);
+		baseUserInfo.setUserLocation(userLocationDetails);
 		
 		return baseUserInfo;
 	}
@@ -136,7 +143,7 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public BaseUserInformation login(LoginRequest loginRequest)
+	public BaseUserInformation login(LoginRequest loginRequest,HttpServletRequest servletRequest)
 			throws InternalServerException, RecordNotFoundException {
 
 		BaseUserInformation baseUserInfo = new BaseUserInformation();
@@ -151,7 +158,7 @@ public class AccountServiceImpl implements AccountService {
 				throw new RecordNotFoundException(ExceptionConstants.LOGIN_ACCOUNT_NOT_FOUND_PASSWORD);
 			}
 		}
-		baseUserInfo = prepareBaseUserInformation(account);
+		baseUserInfo = prepareBaseUserInformation(account,servletRequest);
 		return baseUserInfo;
 	}
 }
