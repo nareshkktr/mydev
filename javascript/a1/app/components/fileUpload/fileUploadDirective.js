@@ -8,7 +8,8 @@
 		var fileUpload = {
 			restrict : 'E',
 			scope: {
-				isMultiple: '@',
+				type: '@',
+				acceptType: '@',
 				callback: '&'
 			},
 			templateUrl : resource + 'partials/fileUpload.html',
