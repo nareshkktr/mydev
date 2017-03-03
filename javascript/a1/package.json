@@ -9,11 +9,13 @@
   },
   "scripts": {
     "start": "brunch watch --server",
-    "build":"brunch build&&xcopy public ..\\src\\main\\resources\\static /s /e /h /y",
+    "build": "brunch build&&xcopy public ..\\src\\main\\resources\\static /s /e /h /y",
     "startLocal": "startLocalScript.bat",
     "copyHtmlFiles": "copyHtmlFiles.bat"
   },
-  "dependencies": {},
+  "dependencies": {
+    "angular-trix": "^1.0.2"
+  },
   "devDependencies": {
     "brunch": "^2.0.0",
     "javascript-brunch": "^2.0.0",

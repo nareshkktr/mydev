@@ -6,8 +6,9 @@
 		<ul class="nav pull-left" id="header_logged_in_location_box">
 			<li uib-dropdown class="dropdown pull-right"><a href
 				id="user-profile-dropdown" uib-dropdown-toggle> <span
-					id="logged-in-location">{{header.userInfo.location}}</span> <i
-					id="header-edit-location-icon" class="material-icons" data-toggle="modal" data-target="#locationChangeModal">location_on</i>
+					id="logged-in-location">{{header.userInfo.userLocation.locationName}}</span>
+					<i id="header-edit-location-icon" class="material-icons"
+					ng-click="header.openLocationChangeModal()">location_on</i>
 			</a></li>
 		</ul>
 		<ul class="nav pull-left" id="header_notification_icons_box">
@@ -50,8 +51,7 @@
 					<ul class="nav pull-left">
 						<li uib-dropdown class="dropdown pull-right"><a href
 							id="user-profile-dropdown" uib-dropdown-toggle> <img
-								id="logged-in-user-icon"
-								ng-src="{{header.userInfo.userImage}}">
+								id="logged-in-user-icon" ng-src="{{header.userInfo.userImage}}">
 								<b class="caret"></b>
 						</a>
 							<ul class="dropdown-menu" uib-dropdown-menu role="menu"
@@ -69,3 +69,11 @@
 		</div>
 	</div>
 </nav>
+
+<modal ng-if="header.showLocationChangeModal"
+	animations-enabled="header.animationsEnabled"
+	modal-template-url="header.locationChangePopUpUrl"
+	dismiss-modal="header.closeLocationChangeModal()"
+	modal-controller-name="header.modalControllerName"
+	modal-controller-alias="header.modalControllerAlias"> </modal>
+

@@ -1,6 +1,6 @@
 (function() {
      'use strict';
-	var myIndiaApp=angular.module('myindia-app', ['ui.router','ui.bootstrap','ngAnimate','ngMessages','ngCookies']);
+	var myIndiaApp=angular.module('myindia-app', ['ui.router','ui.bootstrap','ngAnimate','ngMessages','ngCookies','angularTrix']);
 	myIndiaApp.run(function($state, $rootScope){
 		   $rootScope.$state = $state;
 		})
@@ -63,6 +63,91 @@
 	}
 })();
 (function() {
+	
+	'use strict';
+
+	angular.module('myindia-app').controller("fileUploadController",
+			fileUploadController);
+
+	fileUploadController.$inject = ['$scope'];
+
+	function fileUploadController($scope) {
+		var fileUpload = this;
+		
+		fileUpload.uploadFile = uploadFile;
+
+		function uploadFile(){
+			//return the selected files to parent.
+			$scope.callback()($scope.files);
+		}
+
+	}
+
+
+})();
+
+(function() {
+	'use strict';
+
+	angular.module('myindia-app').directive("fileUpload", fileUpload);
+
+	function fileUpload() {
+
+		var fileUpload = {
+			restrict : 'E',
+			scope: {
+				type: '@',
+				acceptType: '@',
+				callback: '&'
+			},
+			templateUrl : resource + 'partials/fileUpload.html',
+			controller : 'fileUploadController',
+			controllerAs : 'fileUpload'
+		};
+
+		return fileUpload;
+
+	}
+})();
+
+(function() {
+	'use strict';
+
+	angular.module('myindia-app').directive("setFileAttributes", setFileAttributes);
+
+	function setFileAttributes() {
+
+		var setFileAttributes = {
+			restrict : 'A',
+			link : link
+		};
+
+		return setFileAttributes;
+
+		function link(scope, element, attrs) {
+
+			//Set selection Type.
+			if(scope.type == 'Multiple')
+				element[0].multiple  = true;
+
+			//Select accepts
+			if(scope.acceptType == 'Image'){
+				element[0].accept = 'image/*';
+			}
+
+			element.bind("change", function (changeEvent) {
+                scope.$apply(function () {
+                    scope.files = changeEvent.target.files;
+                    //call the function that uploads the files..
+                    scope.fileUpload.uploadFile();
+                });
+            });
+
+		}
+	}
+})();
+
+(function() {
 	'use strict';
 	angular.module('myindia-app').controller("floaingIconController",
 			floaingIconController);
@@ -97,14 +182,31 @@
 })();
 
 (function() {
-    'use strict';
+	'use strict';
 
-    angular.module('myindia-app').controller("footerController", footerController);
+	angular.module('myindia-app').controller("footerController",
+			footerController);
 
+	footerController.$inject = [ '$state' ];
 
-    function footerController() {
+	function footerController($state) {
 
-    }
+		var footer = this;
+		footer.searchTerm = '';
+		footer.gotoSearch = gotoSearch;
+		footer.showSearchBox = true;
+		footer.showFooterSearchBox = showFooterSearchBox;
+
+		function gotoSearch() {
+			$state.go('search', {
+				searchTerm : footer.searchTerm
+			});
+		}
+
+		function showFooterSearchBox() {
+			footer.showSearchBox = !footer.showSearchBox;
+		}
+	}
 
 })();
 (function() {
@@ -123,7 +225,8 @@
             restrict:'E',
             link:link,
             templateUrl: resource+'partials/footer.html', 
-            controller:'footerController'
+            controller:'footerController',
+            controllerAs : 'footer'
     		
     	}	
     }
@@ -134,58 +237,52 @@
 	angular.module('myindia-app').controller("headerController",
 			headerController);
 
-	headerController.$inject = [ '$state', 'dataShareService', 'ModalService' ];
+	headerController.$inject = [ '$state', 'dataShareService' ];
 
-	function headerController($state, dataShareService, ModalService) {
+	function headerController($state, dataShareService) {
 
 		var header = this;
 		header.searchTerm = '';
 		header.gotoSearch = gotoSearch;
 		header.openLocationChangeModal = openLocationChangeModal;
+		header.animationsEnabled = true;
+		header.locationChangePopUpUrl = resource
+				+ "partials/locationChangePopUp.html";
+		header.showLocationChangeModal = false;
 		header.closeLocationChangeModal = closeLocationChangeModal;
-
 		header.userInfo = dataShareService.getUserInfo();
 
-		if(header.userInfo){
+		header.modalControllerName = "locationChangePopUpController";
+		header.modalControllerAlias = "locationChangePopUp";
 
-			//Preapre user profile image
-			if(!header.userInfo.userImage){
-				if(header.userInfo.gender == 'Male'){
-					header.userInfo.userImage = resource+'Users-User-Male-icon.png';
-				}else if(header.userInfo.gender == 'Female'){
-					header.userInfo.userImage = resource+'Users-User-Female-icon.png';
+		if (header.userInfo) {
+
+			// Preapre user profile image
+			if (!header.userInfo.userImage) {
+				if (header.userInfo.gender == 'Male') {
+					header.userInfo.userImage = resource
+							+ 'Users-User-Male-icon.png';
+				} else if (header.userInfo.gender == 'Female') {
+					header.userInfo.userImage = resource
+							+ 'Users-User-Female-icon.png';
 				}
 			}
 
-			//Prepare location information
-			if(header.userInfo.userLocation.locationVillage){
-				header.userInfo.location = header.userInfo.userLocation.locationVillage;
-			}else if(header.userInfo.userLocation.locationMunicipality){
-				header.userInfo.location = header.userInfo.userLocation.locationMunicipality; 
-			}else if(header.userInfo.userLocation.locationMunicipalCorporation){
-				header.userInfo.location = header.userInfo.userLocation.locationMunicipalCorporation; 
-			}else if(header.userInfo.userLocation.locationTownPanchayat){
-				header.userInfo.location = header.userInfo.userLocation.locationTownPanchayat; 
-			} 
-
-			if(header.userInfo.userLocation.locationState)
-				header.userInfo.location += "," + header.userInfo.userLocation.locationDistrict;
-
 		}
-		
+
 		function gotoSearch() {
 			$state.go('search', {
 				searchTerm : header.searchTerm
 			});
 		}
 
-		function openLocationChangeModal(id) {
-			ModalService.Open(id);
+		function openLocationChangeModal() {
+			header.showLocationChangeModal = true;
+		}
+		function closeLocationChangeModal() {
+			header.showLocationChangeModal = false;
 		}
 
-		function closeLocationChangeModal(id) {
-			ModalService.Close(id);
-		}
 	}
 })();
 
@@ -213,112 +310,209 @@
 
 (function() {
 	'use strict';
+	angular.module('myindia-app').controller("locationChangePopUpController",
+			locationChangePopUpController);
+
+	locationChangePopUpController.$inject = [ '$state',
+			'locationChangePopUpService','dataShareService','$uibModalInstance' ];
+
+	function locationChangePopUpController($state, locationChangePopUpService,dataShareService,$uibModalInstance) {
+		
+		var locationChangePopUp = this;
+		locationChangePopUp.popularLocations =[];
+		locationChangePopUp.locationSelected=false;
+		locationChangePopUp.resultsType="Popular Locations";
+		locationChangePopUp.searchTerm="";
+		locationChangePopUp.getSearchResults=getSearchResults;
+		locationChangePopUp.selectedLocation=null;
+		locationChangePopUp.selectLocation = selectLocation;
+		locationChangePopUp.pinLocation = pinLocation;
+		locationChangePopUp.closePopUp = closePopUp;
+		
+		getPopularLocations();
+		
+		function getPopularLocations(){
+			locationChangePopUpService.getPopularLocations().then(popularLocationsSuccess).catch(popularLocationsFailure);
+
+    		function popularLocationsSuccess(data){
+    			locationChangePopUp.popularLocations=data;
+    		}
+    		function popularLocationsFailure(error){
+    			alert(error);
+    		}
+    	}
+		
+		function getSearchResults(){
+			if(locationChangePopUp.searchTerm.length>=3){
+				locationChangePopUp.resultsType="Search Results For :"+locationChangePopUp.searchTerm;
+				locationChangePopUpService.getSearchResults(locationChangePopUp.searchTerm).then(searchLocationsSuccess).catch(searchLocationsFailure);
+	
+	    		function searchLocationsSuccess(data){
+	    			locationChangePopUp.popularLocations=data;
+	    		}
+	    		function searchLocationsFailure(error){
+	    			alert(error);
+	    		}
+			}
+    	}
+		
+		function selectLocation(searchLocation){
+			locationChangePopUp.selectedLocation=searchLocation;
+			locationChangePopUp.locationSelected=true;
+		}
+		
+		function closePopUp(){
+			 $uibModalInstance.dismiss('cancel');
+		}
+		
+		function pinLocation(){
+			locationChangePopUpService.pinLocation(locationChangePopUp.selectedLocation).then(pinLocationSuccess).catch(pinLocationFailure);
+
+    		function pinLocationSuccess(data){
+    			var userInfo=dataShareService.getUserInfo();
+    			userInfo.userLocation.locationName=locationChangePopUp.selectedLocation.locationName;
+    			userInfo.userLocation.locationGuid=locationChangePopUp.selectedLocation.locationGuid;
+    			dataShareService.setUserInfo(userInfo);
+    			locationChangePopUp.closePopUp();
+    		}
+    		function pinLocationFailure(error){
+    			alert(error);
+    		}
+    	}
+	}
+	
+})();
+(function() {
+	'use strict';
+
+	angular.module('myindia-app').factory("locationChangePopUpService",
+			locationChangePopUpService);
+
+	locationChangePopUpService.$inject = [ '$q', 'swaggerShareService' ];
+
+	function locationChangePopUpService($q, swaggerShareService) {
+
+		var services = {};
+
+		var locationChangePopUpService = {
+			getPopularLocations : getPopularLocations,
+			getSearchResults : getSearchResults,
+			pinLocation : pinLocation
+		};
+
+		// Call and save the data
+		swaggerShareService.getAPIMetaData(setAPIMetaData);
+
+		return locationChangePopUpService;
+
+		function setAPIMetaData(metaInfo) {
+			services = metaInfo;
+		}
+
+		function getPopularLocations() {
+
+			let
+			deferred = $q.defer();
+
+			services.location.getPopularLocations({}, popularLocationsSuccess,
+					popularLocationsFailure);
+
+			return deferred.promise;
+
+			function popularLocationsSuccess(data) {
+				deferred.resolve(data.obj);
+			}
+
+			function popularLocationsFailure(error) {
+				deferred.reject(error);
+			}
+
+		}
+
+		function getSearchResults(searchTerm) {
+
+			let
+			deferred = $q.defer();
+
+			services.location.getSearchResultsByLocationName({
+				"searchTerm" : searchTerm
+			}, searchLocationsSuccess, searchLocationsFailure);
+
+			return deferred.promise;
+
+			function searchLocationsSuccess(data) {
+				deferred.resolve(data.obj);
+			}
+
+			function searchLocationsFailure(error) {
+				deferred.reject(error);
+			}
+
+		}
+
+		function pinLocation(selectedLocation) {
+
+			let
+			deferred = $q.defer();
+
+			services.user.pinLocation({
+				body : JSON.stringify(selectedLocation)
+			}, pinLocationSuccess, pinLocationFailure);
+
+			return deferred.promise;
+
+			function pinLocationSuccess(data) {
+				deferred.resolve(data.obj);
+			}
+
+			function pinLocationFailure(error) {
+				deferred.reject(error);
+			}
+
+		}
+
+	}
+
+})();
+(function() {
+	'use strict';
 
 	angular.module('myindia-app').directive("modal", modal);
-	
-	modal.$inject = ['ModalService'];
 
-	function modal(ModalService) {
+	modal.$inject = [ '$uibModal', '$log' ];
+
+	function modal($uibModal, $log) {
 
 		var modal = {
-			link : link
+			link : link,
+			scope : {
+				animationsEnabled : '=animationsEnabled',
+				modalTemplateUrl : '=modalTemplateUrl',
+				dismissModal : '=',
+				modalControllerName : '=modalControllerName',
+				modalControllerAlias : '=modalControllerAlias'
+			}
 		};
 
 		return modal;
 
 		function link(scope, element, attrs) {
-			// ensure id attribute exists
-			if (!attrs.id) {
-				console.error('modal must have an id');
-				return;
-			}
-
-			// move element to bottom of page (just before </body>) so it can be
-			// displayed above everything else
-			element.appendTo('body');
-
-			// close modal on background click
-			element.on('click', function(e) {
-				var target = $(e.target);
-				if (!target.closest('.modal-body').length) {
-					scope.$evalAsync(Close);
-				}
+			var modalInstance = $uibModal.open({
+				animation : scope.animationsEnabled,
+				ariaLabelledBy : 'modal-title',
+				ariaDescribedBy : 'modal-body',
+				templateUrl : scope.modalTemplateUrl,
+				controller : scope.modalControllerName,
+				controllerAs : scope.modalControllerAlias
 			});
-
-			// add self (this modal instance) to the modal service so it's
-			// accessible from controllers
-			var modal = {
-				id : attrs.id,
-				open : Open,
-				close : Close
-			};
-			ModalService.Add(modal);
-
-			// remove self from modal service when directive is destroyed
-			scope.$on('$destroy', function() {
-				ModalService.Remove(attrs.id);
-				element.remove();
+			modalInstance.result.then(function() {
+			}, function() {
+				scope.$eval(attrs.dismissModal);
+				$log.info('Modal dismissed at: ' + new Date());
 			});
-
-			// open modal
-			function Open() {
-				element.show();
-				$('body').addClass('modal-open');
-			}
-
-			// close modal
-			function Close() {
-				element.hide();
-				$('body').removeClass('modal-open');
-			}
 		}
 	}
-
 })();
-(function () {
-    'use strict';
-
-    angular
-        .module('myindia-app')
-        .factory('ModalService', ModalService);
-
-    function ModalService() {
-        var modals = []; // array of modals on the page
-        var service = {};
-
-        service.Add = Add;
-        service.Remove = Remove;
-        service.Open = Open;
-        service.Close = Close;
-
-        return service;
-
-        function Add(modal) {
-            // add modal to array of active modals
-            modals.push(modal);
-        }
-        
-        function Remove(id) {
-            // remove modal from array of active modals
-            var modalToRemove = _.findWhere(modals, { id: id });
-            modals = _.without(modals, modalToRemove);
-        }
-
-        function Open(id) {
-            // open modal specified by id
-            var modal = _.findWhere(modals, { id: id });
-            modal.open();
-        }
-
-        function Close(id) {
-            // close modal specified by id
-            var modal = _.findWhere(modals, { id: id });
-            modal.close();
-        }
-    }
-
-})();
-
 (function() {
 	'use strict';
 	angular.module('myindia-app').controller("overlayController",
@@ -399,37 +593,41 @@
 			templateUrl : resource + 'partials/globalSearch.html',
 			controller : 'globalSearchController',
 			controllerAs : 'globalSearch'
+		}).state('createProblem', {
+			url : '/createProblem',
+			templateUrl : resource + 'partials/createProblem.html',
+			controller : 'createProblemController',
+			controllerAs : 'createProblem'
 		});
 	}
 })();
 
 (function() {
-    'use strict';
+	'use strict';
 
-    angular.module('myindia-app').factory("dataShareService", dataShareService);
+	angular.module('myindia-app').factory("dataShareService", dataShareService);
 
-    dataShareService.$inject = ['$rootScope'];
+	dataShareService.$inject = [ '$rootScope' ];
 
-    function dataShareService($rootScope) {
+	function dataShareService($rootScope) {
 
-        var data = {};
+		var data = {};
 
-    	var dataShareService = {
-    		getUserInfo : getUserInfo,
-            setUserInfo: setUserInfo
-    	};
+		var dataShareService = {
+			getUserInfo : getUserInfo,
+			setUserInfo : setUserInfo
+		};
 
-        return dataShareService;
+		return dataShareService;
 
-    	function getUserInfo(){
-            return data.userInfo;
-    	}
+		function getUserInfo() {
+			return data.userInfo;
+		}
 
-        function setUserInfo(userInfo){
-            data.userInfo = userInfo;
-            $rootScope.$broadcast('userInfo',data.userInfo);
-        }
-    }
+		function setUserInfo(userInfo) {
+			data.userInfo = userInfo;
+		}
+	}
 
 })();
 (function() {
@@ -598,20 +796,91 @@
 
 	angular.module('myindia-app').controller("homeController", homeController);
 
-	homeController.$inject = [ 'swaggerShareService' ];
+	function homeController() {
+	}
 
-	function homeController(swaggerShareService) {
+})();
 
-		// swaggerShareService.getAPIMetaData('http://'+window.location.host+'/',setAPIMetaData);
-		swaggerShareService.getAPIMetaData(setAPIMetaData);
+(function() {
+	'use strict';
 
-		function setAPIMetaData(metaInfo) {
-
+	angular.module('myindia-app').controller("createProblemController",
+			createProblemController);
+	createProblemController.$inject = [ 'createProblemService' ];
+	
+	function createProblemController(createProblemService) {
+		
+		var createProblem=this;
+		createProblem.problemTypesResults = [];
+		createProblem.grivienceTyp="";
+		createProblem.grivienceDescription="";
+		
+		getAllProblemTypes();
+		
+		function getAllProblemTypes(){
+			
+			createProblemService.getAllProblemTypes().then(getAllProblemTypesSuccess).catch(getAllProblemTypesFailure);
+			
+			function getAllProblemTypesSuccess(data){
+				createProblem.problemTypesResults = data;
+				console.log(createProblem.problemTypesResults);
+			}
+			function getAllProblemTypesFailure(error){
+				alert(error);
+			}
 		}
 	}
 
 })();
 
+(function() {
+	'use strict';
+
+	angular.module('myindia-app').factory("createProblemService",
+			createProblemService);
+
+	createProblemService.$inject = [ '$q', 'swaggerShareService', '$timeout' ];
+
+	function createProblemService($q, swaggerShareService, $timeout) {
+
+		var services = {};
+
+		var createProblemService = {
+			getAllProblemTypes : getAllProblemTypes
+		};
+
+		// Call and save the data
+		swaggerShareService.getAPIMetaData(setAPIMetaData);
+
+		return createProblemService;
+
+		function setAPIMetaData(metaInfo) {
+			services = metaInfo;
+		}
+
+		function getAllProblemTypes() {
+
+			let
+			deferred = $q.defer();
+			$timeout(function() {
+				services.problemType.getAllProblemTypes({},
+						getAllProblemTypesSuccess, getAllProblemTypesFailure);
+			}, 2000);
+			return deferred.promise;
+
+			function getAllProblemTypesSuccess(data) {
+				deferred.resolve(data.obj);
+			}
+
+			function getAllProblemTypesFailure(error) {
+				deferred.reject(error);
+			}
+
+		}
+
+	}
+
+})();
 (function() {
     'use strict';
 

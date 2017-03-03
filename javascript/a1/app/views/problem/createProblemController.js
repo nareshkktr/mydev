@@ -9,7 +9,8 @@
 		
 		var createProblem=this;
 		createProblem.problemTypesResults = [];
-		createProblem.grivienceType;
+		createProblem.grivienceTyp="";
+		createProblem.grivienceDescription="";
 		
 		getAllProblemTypes();
 		
