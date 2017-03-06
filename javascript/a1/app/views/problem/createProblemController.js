@@ -17,7 +17,8 @@
 		createProblem.locatedIn=dataShareService.getUserInfo().userLocation;
 		createProblem.saveProblem=saveProblem;
 		createProblem.locatedInName=dataShareService.getUserInfo().userLocation.locationName;
-		
+		createProblem.uploadCover = uploadCover;
+
 		getAllProblemTypes();
 		
 		function saveProblem(){
@@ -42,6 +43,10 @@
 			function getAllProblemTypesFailure(error){
 				alert(error);
 			}
+		}
+
+		function uploadCover(file){
+			createProblem.coverPhotoFile = file[0];
 		}
 	}
 

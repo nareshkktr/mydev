@@ -116,4 +116,10 @@ public class ExceptionConstants {
 	public static final String GENDER_REQUIRED = "Gender Required";
 	public static final String GENDER_SHOULD_NOT_BE_EMPTY = "Gender Should Not Be Empty";
 	public static final String INVALID_GENDER = "Invalid Gender";
+
+	public static final String PROBLEM_DESCRIPTION_REQUIRED = "Problem Description is a Required field";
+	public static final String PROBLEM_LOCATION_REQUIRED = "Location of occurrence of problem is a Required field";
+	public static final String PROBLEM_IMPACT_REQUIRED = "One of problem impact field is a required field";
+	public static final String PROBLEM_DESCRIPTION_NOT_EMPTY = "Problem Description cannot be empty";
+	
 }
