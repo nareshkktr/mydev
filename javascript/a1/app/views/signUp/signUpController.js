@@ -17,8 +17,13 @@
 		signUp.numberOfYears = 100;
 		signUp.gender = 'Male';
 		signUp.passwordRegex = "^.*(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[~!@#$%^&*(),./?]).*$";
-
+		signUp.gotoSignIn = gotoSignIn;
+		
 		populateYears();
+		
+		function gotoSignIn(){
+    		$state.go('signIn');
+    	}
 
 		function validateElector(){
 
@@ -43,7 +48,7 @@
 				$state.transitionTo('signUp.accountSetup');
 			}
 
-			// Indetify if there are conflicting parents 
+			// Indetify if there are conflicting parents
 			identifyConflictParentLocationsService.setup(signUp.leafLocation).then(identifyConflictParentLocationsSuccess)
 												.catch(identifyConflictParentLocationsFailure);
 
@@ -53,7 +58,7 @@
 					signUp.parentLocation = data.parentLocations[0];
 					$state.transitionTo('signUp.accountSetup');
 				}  
-				//If not there are multiple location populate them.
+				// If not there are multiple location populate them.
 				signUp.elector.conflictParentLocations = data.parentLocations;
 			}
 
@@ -79,7 +84,7 @@
 
 		function populateYears(){
 	    	let currentYear = new Date().getFullYear();
-		    //populate default ste of years.
+		    // populate default ste of years.
 		    for(let start=0;start<signUp.numberOfYears;start++){
 		       signUp.years.push(currentYear--);
 		    }

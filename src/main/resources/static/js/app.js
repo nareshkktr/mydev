@@ -1,6 +1,6 @@
 (function() {
      'use strict';
-	var myIndiaApp=angular.module('myindia-app', ['ui.router','ui.bootstrap','ngAnimate','ngMessages','ngCookies','angularTrix']);
+	var myIndiaApp=angular.module('myindia-app', ['ui.router','ui.bootstrap','ngAnimate','ngMessages','ngCookies']);
 	myIndiaApp.run(function($state, $rootScope){
 		   $rootScope.$state = $state;
 		})
@@ -143,6 +143,38 @@
                 });
             });
 
+		}
+	}
+})();
+
+(function() {
+	'use strict';
+
+	angular.module('myindia-app').directive("showPreview", showPreview);
+
+	function showPreview() {
+
+		var showPreview = {
+			restrict : 'A',
+			scope:{
+				file:'='
+			},
+			link : link
+		};
+
+		return showPreview;
+
+		function link(scope, element, attrs) {
+
+			scope.$watch('file',function(){
+				if(scope.file){
+					var reader = new FileReader();
+				    reader.onload = function(){
+				      element[0].src = reader.result;
+				    };
+	    			reader.readAsDataURL(scope.file);
+				}
+			});
 		}
 	}
 })();
@@ -806,16 +838,26 @@
 
 	angular.module('myindia-app').controller("createProblemController",
 			createProblemController);
-	createProblemController.$inject = [ 'createProblemService' ];
+	createProblemController.$inject = [ 'createProblemService','dataShareService' ];
 	
-	function createProblemController(createProblemService) {
+	function createProblemController(createProblemService,dataShareService) {
 		
 		var createProblem=this;
 		createProblem.problemTypesResults = [];
-		createProblem.grivienceTyp="";
+		createProblem.grivienceName="";
+		createProblem.grivienceType="";
 		createProblem.grivienceDescription="";
+		createProblem.noOfAffectedCitizens=0;
+		createProblem.moneyAtStake=0;
+		createProblem.locatedIn=dataShareService.getUserInfo().userLocation;
+		createProblem.saveProblem=saveProblem;
+		createProblem.locatedInName=dataShareService.getUserInfo().userLocation.locationName;
 		
 		getAllProblemTypes();
+		
+		function saveProblem(){
+			
+		}
 		
 		function getAllProblemTypes(){
 			
@@ -900,7 +942,7 @@
     		function loginSuccess(data){
     			alert("Login Success");
                 dataShareService.setUserInfo(data);
-    			$state.go('home');
+    			$state.go('createProblem');
     		}
 
     		function loginFailure(error){
@@ -911,6 +953,7 @@
     	function gotoSignUp(){
     		$state.go('signUp.validate');
     	}
+    	
     	
     }
 
@@ -1086,8 +1129,13 @@
 		signUp.numberOfYears = 100;
 		signUp.gender = 'Male';
 		signUp.passwordRegex = "^.*(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[~!@#$%^&*(),./?]).*$";
-
+		signUp.gotoSignIn = gotoSignIn;
+		
 		populateYears();
+		
+		function gotoSignIn(){
+    		$state.go('signIn');
+    	}
 
 		function validateElector(){
 
@@ -1112,7 +1160,7 @@
 				$state.transitionTo('signUp.accountSetup');
 			}
 
-			// Indetify if there are conflicting parents 
+			// Indetify if there are conflicting parents
 			identifyConflictParentLocationsService.setup(signUp.leafLocation).then(identifyConflictParentLocationsSuccess)
 												.catch(identifyConflictParentLocationsFailure);
 
@@ -1122,7 +1170,7 @@
 					signUp.parentLocation = data.parentLocations[0];
 					$state.transitionTo('signUp.accountSetup');
 				}  
-				//If not there are multiple location populate them.
+				// If not there are multiple location populate them.
 				signUp.elector.conflictParentLocations = data.parentLocations;
 			}
 
@@ -1148,7 +1196,7 @@
 
 		function populateYears(){
 	    	let currentYear = new Date().getFullYear();
-		    //populate default ste of years.
+		    // populate default ste of years.
 		    for(let start=0;start<signUp.numberOfYears;start++){
 		       signUp.years.push(currentYear--);
 		    }

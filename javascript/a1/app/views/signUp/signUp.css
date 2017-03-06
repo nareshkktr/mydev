@@ -27,6 +27,7 @@
 
 #signup_form form {
 	width: 75%;
+	margin: 0 auto;
 }
 
 #signup_form form .form-group {
@@ -109,4 +110,18 @@
 #signup_form form button, input[type="checkbox"] {
 	-webkit-box-shadow: 1px 5px 0px 1px rgba(249, 76, 89, 0.57);
 	box-shadow: 1px 5px 0px 1px rgba(249, 76, 89, 0.57);
+}
+
+.signup_user_icon {
+	left: -66px !important;
+}
+
+@media ( max-width : 750px ) and ( min-width: 0px ) {
+	#signup_bg_cell {
+		display: none;
+	}
+	#signup_form form {
+		width: 96%;
+		margin: 0 auto;
+	}
 }

@@ -3,16 +3,33 @@
 
 	angular.module('myindia-app').controller("createProblemController",
 			createProblemController);
-	createProblemController.$inject = [ 'createProblemService' ];
+	createProblemController.$inject = [ 'createProblemService','dataShareService' ];
 	
-	function createProblemController(createProblemService) {
+	function createProblemController(createProblemService,dataShareService) {
 		
 		var createProblem=this;
 		createProblem.problemTypesResults = [];
-		createProblem.grivienceTyp="";
+		createProblem.grivienceName="";
+		createProblem.grivienceType="";
 		createProblem.grivienceDescription="";
+		createProblem.noOfAffectedCitizens="";
+		createProblem.moneyAtStake="";
+		createProblem.locatedIn=dataShareService.getUserInfo().userLocation;
+		createProblem.saveProblem=saveProblem;
+		createProblem.locatedInName=dataShareService.getUserInfo().userLocation.locationName;
 		
 		getAllProblemTypes();
+		
+		function saveProblem(){
+			
+			createProblemService.saveProblem(createProblem).then(saveProblemSuccess).catch(saveProblemFailure);
+
+    		function saveProblemSuccess(data){
+            }
+    		function saveProblemFailure(error){
+    			alert(error);
+    		}
+		}
 		
 		function getAllProblemTypes(){
 			
