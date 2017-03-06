@@ -69,6 +69,18 @@ public class Problem implements Serializable {
 
 
 
+	public Boolean getEscalationEnabled() {
+		return escalationEnabled;
+	}
+
+
+
+	public void setEscalationEnabled(Boolean escalationEnabled) {
+		this.escalationEnabled = escalationEnabled;
+	}
+
+
+
 	public String getRootCause() {
 		return rootCause;
 	}

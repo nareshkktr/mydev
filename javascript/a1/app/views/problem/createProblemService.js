@@ -15,7 +15,7 @@
 		};
 
 		// Call and save the data
-		swaggerShareService.getAPIMetaData(setAPIMetaData);
+		let swaggerPromise = swaggerShareService.getAPIMetaData(setAPIMetaData);
 
 		return createProblemService;
 
@@ -25,12 +25,20 @@
 
 		function getAllProblemTypes() {
 
-			let
-			deferred = $q.defer();
-			$timeout(function() {
+			let deferred = $q.defer();
+			
+			if(swaggerPromise){
+				swaggerPromise.then(function(){
+					services.problemType.getAllProblemTypes({},
+						getAllProblemTypesSuccess, getAllProblemTypesFailure);
+					swaggerPromise = undefined;
+				})
+			}else{
 				services.problemType.getAllProblemTypes({},
 						getAllProblemTypesSuccess, getAllProblemTypesFailure);
-			}, 2000);
+			}
+			
+
 			return deferred.promise;
 
 			function getAllProblemTypesSuccess(data) {

@@ -7,8 +7,12 @@
 					<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 form-group">
 						<label for="search_college">Upload Cover</label>
 						<div class="problem_cover_photo_content">
-							<button type="button" class="btn app_btn cover_photo_btn">Choose
-								Cover</button>
+							<label class="problem_cover_file_upload" for="file-upload" ng-if="!createProblem.coverPhotoFile">
+								<div  class="btn app_btn cover_photo_btn">Choose
+								Cover</div>
+							</label>
+							<file-upload callback="createProblem.uploadCover" type="Single" accept-type="Image"></file-upload>
+							<img class="problem_cover_photo" show-preview file="createProblem.coverPhotoFile" ng-if="createProblem.coverPhotoFile" />
 						</div>
 					</div>
 					<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 form-group">

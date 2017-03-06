@@ -927,4 +927,18 @@ public class EndPointConstants {
 	/** The Constant CREATE_ACCOUNT_API_DESCRIPTION. */
 	public static final String GET_ALL_PROBLEM_TYPES_API_DESCRIPTION = "Get All Problem Types";
 
+	/** The Constant CREATE_PROBLEM_API_NICKNAME. */
+	public static final String CREATE_PROBLEM_API_NICKNAME = "createProblem";
+
+	/** The Constant CREATE_PROBLEM_API_DESCRIPTION. */
+	public static final String CREATE_PROBLEM_API_DESCRIPTION = "Create Problem";
+
+	/** The Constant CREATE_PROBLEM_API_VALUE. */
+	public static final String CREATE_PROBLEM_API_VALUE = "createProblem";
+
+	/** The Constant CREATE_PROBLEM_REQUEST_MAPPING. */
+	public static final String CREATE_PROBLEM_REQUEST_MAPPING = "createProblem";
+	
+	
+
 }

@@ -11,6 +11,7 @@
 		createProblem.problemTypesResults = [];
 		createProblem.grivienceTyp="";
 		createProblem.grivienceDescription="";
+		createProblem.uploadCover = uploadCover;
 		
 		getAllProblemTypes();
 		
@@ -25,6 +26,10 @@
 			function getAllProblemTypesFailure(error){
 				alert(error);
 			}
+		}
+
+		function uploadCover(file){
+			createProblem.coverPhotoFile = file[0];
 		}
 	}
 

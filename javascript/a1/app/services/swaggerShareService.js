@@ -23,10 +23,12 @@
     		if(apiMetaData.metaInfo){
     			setMetaData(apiMetaData.metaInfo);
     		}else{
-    			fetchAPIMetaData(hostName).then(function(data){
+                let swaggerPromise = fetchAPIMetaData(hostName);
+    			swaggerPromise.then(function(data){
     				apiMetaData.metaInfo = data;
     				setMetaData(apiMetaData.metaInfo);
     			});
+                return swaggerPromise;
     		}
 
     	}
