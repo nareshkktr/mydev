@@ -63,7 +63,7 @@
                 accessToken = token;
             }
 
-            if(accessToken){
+            if(accessToken && apiMetaData.metaInfo){
                 var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization( "Authorization", "Bearer " + accessToken, "header" );
                 apiMetaData.metaInfo.clientAuthorizations.add("bearer",apiKeyAuth);
             }
