@@ -35,7 +35,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 		web.ignoring().antMatchers("/api/account/login").antMatchers("/api/account/createAccount")
 				.antMatchers("/api/swagger.json").antMatchers("/api/locationImportExport/*")
 				.antMatchers("/api/userImport/*").antMatchers("/api/importAllPoliticians/*")
-				.antMatchers("/api/location/*").antMatchers("/api/user/*");
+				.antMatchers("/api/location/*").antMatchers("/api/user/*").antMatchers("/api/problemType/*")
+				.antMatchers("/api/search/*");
 	}
 
 	@Override

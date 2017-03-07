@@ -11,6 +11,6 @@ import com.kasisripriyawebapps.myindia.exception.InternalServerException;
  */
 public interface ProblemDao {
 
-	Long createProblem(Problem problem) throws InternalServerException;
+	Long saveProblem(Problem problem) throws InternalServerException;
 
 }

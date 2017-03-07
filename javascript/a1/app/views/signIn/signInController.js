@@ -17,7 +17,7 @@
     		function loginSuccess(data){
     			alert("Login Success");
                 dataShareService.setUserInfo(data);
-    			$state.go('home');
+    			$state.go('createProblem');
     		}
 
     		function loginFailure(error){
@@ -28,6 +28,7 @@
     	function gotoSignUp(){
     		$state.go('signUp.validate');
     	}
+    	
     	
     }
 

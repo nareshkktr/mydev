@@ -17,12 +17,17 @@
 					</div>
 					<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 form-group">
 						<label for="search_college">What is your grievance?</label> <input
-							type="text" name="form_username" ng-model="signIn.userName"
-							placeholder="Username" class="form-username form-control"
-							id="form-username" ng-required="true"> <br /> <label
-							for="search_college">Could you elaborate on it?</label>
-						<trix-editor class="trix-content" angular-trix
-							ng-model="createProblem.grivienceDescription"></trix-editor>
+							type="text" name="grivience_name"
+							ng-model="createProblem.grivienceName"
+							placeholder="Type your grievance" class="form-control"
+							ng-required="true">
+						<div class="problem_desc_editor_content">
+							<label for="search_college">Could you elaborate on it?</label>
+							<div class="problem_desc_editor_container">
+								<trix-editor class="trix-content" angular-trix
+									ng-model="createProblem.grivienceDescription"></trix-editor>
+							</div>
+						</div>
 					</div>
 				</div>
 				<div class="row">
@@ -34,23 +39,20 @@
 							ng-required="true">
 							<option value=''>Select grievance type</option>
 						</select>
-
-
 					</div>
 					<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 form-group">
 						<label for="search_college">What are the impacts?</label>
 						<div class="row">
 							<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-								<input type="text" name="form_username"
-									ng-model="signIn.userName"
-									placeholder="No of affetced citizens?"
-									class="form-username form-control" id="form-username"
+								<input type="text" name="no_of_affected_citizens"
+									ng-model="createProblem.noOfAffectedCitizens"
+									placeholder="No of affetced citizens?" class="form-control"
 									ng-required="true">
 							</div>
 							<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-								<input type="text" name="form_username"
-									ng-model="signIn.userName" placeholder="Money at stake?"
-									class="form-username form-control" id="form-username"
+								<input type="text" name="money_at_stake"
+									ng-model="createProblem.moneyAtStake"
+									placeholder="Money at stake?" class="form-control"
 									ng-required="true">
 							</div>
 						</div>
@@ -58,11 +60,16 @@
 				</div>
 
 				<div class="row">
-					<div
-						class="col-lg-6 col-md-6 col-sm-12 col-xs-12 form-group col-lg-offset-6 col-md-offset-6">
+					<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 form-group">
+						<label for="search_college">Where it located?</label> <input
+							type="text" name="located_in" ng-model="createProblem.locatedInName"
+							placeholder="Where it located" class="form-control"
+							ng-required="true" value="">
+					</div>
+					<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 form-group">
 						<button type="button" class="btn app_btn" id="login-btn"
 							ng-disabled="create_problem_form.$invalid"
-							ng-click="signIn.login()">Create Problem</button>
+							ng-click="createProblem.saveProblem()">Create Problem</button>
 					</div>
 				</div>
 			</form>

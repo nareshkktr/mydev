@@ -21,4 +21,9 @@ public class ProblemDaoImpl extends BaseDaoImpl<Long, Problem> implements Proble
 		return save(problem);
 	}
 
+	@Override
+	public Long saveProblem(Problem problem) throws InternalServerException {
+		return save(problem);
+	}
+
 }

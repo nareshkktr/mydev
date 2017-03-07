@@ -14,7 +14,6 @@ body {
 .app_header {
 	background-color: #f94c59 !important;
 	margin-bottom: 0px !important;
-	z-index: 0 !important;
 }
 
 .app_header .navbar-form {
@@ -214,7 +213,6 @@ textarea:focus, input[type="text"]:focus, input[type="password"]:focus,
 }
 
 input[type="text"], input[type="password"], select {
-	padding-left: 35px;
 	background-color: white;
 }
 

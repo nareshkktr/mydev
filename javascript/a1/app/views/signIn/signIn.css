@@ -166,3 +166,13 @@
 	margin-bottom: 0px !important;
 	color: red !important;
 }
+
+@media ( max-width : 670px ) and ( min-width: 0px ) {
+	#login_bg_cell {
+		display: none;
+	}
+	#login_form form {
+		width: 90%;
+		margin: 0 auto;
+	}
+}

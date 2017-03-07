@@ -11,7 +11,8 @@
 		var services = {};
 
 		var createProblemService = {
-			getAllProblemTypes : getAllProblemTypes
+			getAllProblemTypes : getAllProblemTypes,
+			saveProblem:saveProblem
 		};
 
 		// Call and save the data
@@ -50,6 +51,28 @@
 			}
 
 		}
+		
+		function saveProblem(problemData){
+
+            let requestBody = {
+                loginUserName: problemData,
+                password: problemData
+            }
+            let deferred = $q.defer();
+
+            services.account.login({body:JSON.stringify(requestBody)},saveProblemSuccess,saveProblemFailure);
+        
+            return deferred.promise;
+
+            function saveProblemSuccess(data){
+                deferred.resolve(data.obj);
+            }
+
+            function saveProblemFailure(error){
+                deferred.reject(error);
+            }
+
+    	}
 
 	}
 
