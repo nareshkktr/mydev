@@ -2,6 +2,7 @@ package com.kasisripriyawebapps.myindia.requestresponsemodel;
 
 import java.io.Serializable;
 
+import com.kasisripriyawebapps.myindia.entity.ProblemType;
 import com.kasisripriyawebapps.myindia.solr.entity.SolrLocationMaster;
 
 public class CreateUpdateProblemRequestData implements Serializable {
@@ -16,8 +17,7 @@ public class CreateUpdateProblemRequestData implements Serializable {
 	private String problemDesc;
 	private String problemMainPhoto;
 	private SolrLocationMaster problemLocation;
-	private String problemPhoto;
-	private Long problemTypeGuId;
+	private ProblemType problemType;
 	private Long noOfAffectdCitizens;
 	private Long moneyAtStake;
 
@@ -61,20 +61,12 @@ public class CreateUpdateProblemRequestData implements Serializable {
 		this.problemLocation = problemLocation;
 	}
 
-	public String getProblemPhoto() {
-		return problemPhoto;
+	public ProblemType getProblemType() {
+		return problemType;
 	}
 
-	public void setProblemPhoto(String problemPhoto) {
-		this.problemPhoto = problemPhoto;
-	}
-
-	public Long getProblemTypeGuId() {
-		return problemTypeGuId;
-	}
-
-	public void setProblemTypeGuId(Long problemTypeGuId) {
-		this.problemTypeGuId = problemTypeGuId;
+	public void setProblemType(ProblemType problemType) {
+		this.problemType = problemType;
 	}
 
 	public Long getNoOfAffectdCitizens() {

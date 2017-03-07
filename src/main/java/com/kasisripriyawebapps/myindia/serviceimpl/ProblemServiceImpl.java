@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kasisripriyawebapps.myindia.configs.LoggedInUserDetails;
+import com.kasisripriyawebapps.myindia.constants.ApplicationConstants;
 import com.kasisripriyawebapps.myindia.dao.LocationMasterDao;
 import com.kasisripriyawebapps.myindia.dao.ProblemDao;
 import com.kasisripriyawebapps.myindia.dao.ProblemTypeDao;
@@ -16,6 +17,7 @@ import com.kasisripriyawebapps.myindia.entity.Problem;
 import com.kasisripriyawebapps.myindia.entity.ProblemType;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.CreateUpdateProblemRequestData;
+import com.kasisripriyawebapps.myindia.service.ImageService;
 import com.kasisripriyawebapps.myindia.service.ProblemService;
 import com.kasisripriyawebapps.myindia.util.CommonUtil;
 
@@ -35,6 +37,9 @@ public class ProblemServiceImpl implements ProblemService {
 	@Autowired
 	private LocationMasterDao locationMasterDao;
 
+	@Autowired
+	ImageService imageService;
+
 	@Override
 	@Transactional
 	public Long createProblem(CreateUpdateProblemRequestData createUpdateProblemRequestData,
@@ -51,7 +56,7 @@ public class ProblemServiceImpl implements ProblemService {
 		problem.setProblemLongDescription(createUpdateProblemRequestData.getProblemDesc());
 		problem.setProblemShortDescription(createUpdateProblemRequestData.getProblemName());
 		ProblemType problemType = problemTypeDao
-				.getProblemTypeById(createUpdateProblemRequestData.getProblemTypeGuId());
+				.getProblemTypeById(createUpdateProblemRequestData.getProblemType().getGuid());
 		problem.setProblemType(problemType);
 		problemGuid = problemDao.saveProblem(problem);
 		return problemGuid;

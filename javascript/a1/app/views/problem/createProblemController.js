@@ -10,15 +10,17 @@
 		var createProblem=this;
 		createProblem.problemTypesResults = [];
 		createProblem.grivienceName="";
-		createProblem.grivienceType="";
-		createProblem.grivienceDescription="";
-		createProblem.noOfAffectedCitizens="";
-		createProblem.moneyAtStake="";
+		createProblem.grivienceType;
+		createProblem.grivienceDescription;
+		createProblem.noOfAffectedCitizens;
+		createProblem.moneyAtStake;
 		createProblem.locatedIn=dataShareService.getUserInfo().userLocation;
 		createProblem.saveProblem=saveProblem;
 		createProblem.locatedInName=dataShareService.getUserInfo().userLocation.locationName;
 		createProblem.uploadCover = uploadCover;
 
+		
+		    
 		getAllProblemTypes();
 		
 		function saveProblem(){

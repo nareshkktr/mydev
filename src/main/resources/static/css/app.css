@@ -2,6 +2,7 @@
 	position: fixed;
 	right: 0;
 	bottom: 47px;
+	z-index:1200;
 }
 
 #add_objects_floating_icon {
@@ -22,7 +23,16 @@
 	font-weight: 100;
 	font-family: inherit;
 	top: -8px;
-	left: 19px;
+	left: 19px;	
+}
+.top_overlay_content{
+	position: fixed;
+    right: 37px;
+    bottom: 150px;
+    z-index: 1200;
+    background-color: black;
+    color: white;
+    padding: 10px;
 }
 @CHARSET "ISO-8859-1";
 
@@ -337,7 +347,6 @@ textarea:focus, input[type="text"]:focus, input[type="password"]:focus,
 }
 
 input[type="text"], input[type="password"], select {
-	padding-left: 35px;
 	background-color: white;
 }
 
@@ -546,8 +555,9 @@ input[type="text"], input[type="password"], select {
 	background-color: #ebebeb;
 	opacity: 0.7;
 	top: 0;
-	display: none;
+	z-index:1100;
 }
+
 .search_container {
 	margin-left: 0px !important;
 	margin-right: 0px !important;
@@ -754,6 +764,7 @@ input[type="text"], input[type="password"], select {
 	height: 34px;
 	margin: 0 auto;
 	margin-top: 100px;
+	width: 22%;
 }
 
 .upload_problem_docs {
@@ -761,6 +772,10 @@ input[type="text"], input[type="password"], select {
 	border: 1px dotted black;
 	margin-left: 10px;
 	background-color: white;
+}
+
+.problem_cover_file_upload{
+	display: block !important;
 }
 
 .upload_problem_docs button {
@@ -802,6 +817,11 @@ input[type="text"], input[type="password"], select {
 .problem_desc_editor_content{
 	margin-top: 20px;
 }
+.problem_cover_photo{
+	width: 100%;
+	height: 100%;
+}
+
 #login-container {
 	background-color: #ebebeb;
 	height: 100%;
@@ -979,6 +999,9 @@ input[type="text"], input[type="password"], select {
 		width: 90%;
 		margin: 0 auto;
 	}
+}
+#login_form input[type="text"],input[type="password"] {
+	padding-left: 35px;
 }
 #signup-container {
 	background-color: #ebebeb;

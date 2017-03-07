@@ -2,6 +2,7 @@
 	position: fixed;
 	right: 0;
 	bottom: 47px;
+	z-index:1200;
 }
 
 #add_objects_floating_icon {
@@ -22,5 +23,14 @@
 	font-weight: 100;
 	font-family: inherit;
 	top: -8px;
-	left: 19px;
+	left: 19px;	
+}
+.top_overlay_content{
+	position: fixed;
+    right: 37px;
+    bottom: 150px;
+    z-index: 1200;
+    background-color: black;
+    color: white;
+    padding: 10px;
 }

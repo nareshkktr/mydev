@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.kasisripriyawebapps.myindia.configs.LoggedInUserDetails;
 import com.kasisripriyawebapps.myindia.constants.EndPointConstants;
+import com.kasisripriyawebapps.myindia.constants.ExceptionConstants;
 import com.kasisripriyawebapps.myindia.exception.ConflictException;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 import com.kasisripriyawebapps.myindia.exception.PreConditionFailedException;
@@ -29,10 +30,10 @@ import io.swagger.annotations.ApiOperation;
 /**
  * The Class ProblemEndPoint.
  */
-@Path(value = EndPointConstants.POLITICIAN_ENDPOINT_REQUEST_MAPPING)
-@Api(value = EndPointConstants.POLITICIAN_ENDPOINT_API_VALUE, tags = {
-		EndPointConstants.POLITICIAN_ENDPOINT_API_TAGS }, description = EndPointConstants.PARTY_ENDPOINT_API_DESCRIPTION)
-public class ProblemEndPoint extends BaseEndPoint{
+@Path(value = EndPointConstants.PROBLEM_ENDPOINT_REQUEST_MAPPING)
+@Api(value = EndPointConstants.PROBLEM_ENDPOINT_API_VALUE, tags = {
+		EndPointConstants.PROBLEM_ENDPOINT_API_TAGS }, description = EndPointConstants.PROBLEM_ENDPOINT_API_DESCRIPTION)
+public class ProblemEndPoint extends BaseEndPoint {
 
 	@Autowired
 	ProblemService problemService;
@@ -54,16 +55,33 @@ public class ProblemEndPoint extends BaseEndPoint{
 			ConflictException {
 		Long problemGuid = null;
 		LoggedInUserDetails loggedInUserDetails = getLoggedInUserDetails();
-		
+
 		if (validateCreateUpdateProblemRequest(createUpdateProblemRequestData)) {
-			problemGuid = problemService.createProblem(createUpdateProblemRequestData,loggedInUserDetails);
+			problemGuid = problemService.createProblem(createUpdateProblemRequestData, loggedInUserDetails);
 		}
 		SaveOrUpdateDeleteObjectResponse saveObjResponse = new SaveOrUpdateDeleteObjectResponse(problemGuid);
 		return Response.status(Status.OK).entity(saveObjResponse).build();
 	}
 
-	private boolean validateCreateUpdateProblemRequest(CreateUpdateProblemRequestData createUpdateProblemRequestData) {
-		// TODO Auto-generated method stub
-		return false;
+	private boolean validateCreateUpdateProblemRequest(CreateUpdateProblemRequestData createUpdateProblemRequestData)
+			throws PreConditionFailedException, PreConditionRequiredException {
+		if (createUpdateProblemRequestData == null) {
+			throw new PreConditionFailedException(ExceptionConstants.REQUEST_NOT_NULL);
+		} else if (createUpdateProblemRequestData.getProblemName() == null) {
+			throw new PreConditionRequiredException(ExceptionConstants.PROBLEM_NAME_REQUIRED);
+		} else if (createUpdateProblemRequestData.getProblemDesc() == null) {
+			throw new PreConditionRequiredException(ExceptionConstants.PROBLEM_DESCRIPTION_REQUIRED);
+		} else if (createUpdateProblemRequestData.getProblemName().isEmpty()) {
+			throw new PreConditionFailedException(ExceptionConstants.PROBLEM_NAME_SHOULD_NOT_BE_EMPTY);
+		} else if (createUpdateProblemRequestData.getProblemDesc().isEmpty()) {
+			throw new PreConditionFailedException(ExceptionConstants.PROBLEM_DESCRIPTION_SHOULD_NOT_BE_EMPTY);
+		} else if (createUpdateProblemRequestData.getProblemType() == null
+				|| createUpdateProblemRequestData.getProblemType().getGuid() == null) {
+			throw new PreConditionRequiredException(ExceptionConstants.PROBLEM_TYPE_REQUIRED);
+		} else if (createUpdateProblemRequestData.getProblemLocation() == null
+				|| createUpdateProblemRequestData.getProblemLocation().getLocationGuid() == null) {
+			throw new PreConditionRequiredException(ExceptionConstants.PROBLEM_LOCATION_REQUIRED);
+		}
+		return true;
 	}
 }

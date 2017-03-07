@@ -1,6 +1,6 @@
 (function() {
      'use strict';
-	var myIndiaApp=angular.module('myindia-app', ['ui.router','ui.bootstrap','ngAnimate','ngMessages','ngCookies']);
+	var myIndiaApp=angular.module('myindia-app', ['ui.router','ui.bootstrap','ngAnimate','ngMessages','ngCookies','angularTrix']);
 	myIndiaApp.run(function($state, $rootScope){
 		   $rootScope.$state = $state;
 		})
@@ -185,9 +185,15 @@
 			floaingIconController);
 
 	floaingIconController.$inject = [];
-
+	
 	function floaingIconController() {
 		var floatingIcon = this;
+		floatingIcon.showOverlay = false;
+		floatingIcon.toggleOverlay = toggleOverlay;
+
+		function toggleOverlay() {
+			floatingIcon.showOverlay = !floatingIcon.showOverlay;
+		}
 	}
 })();
 
@@ -580,6 +586,68 @@
 })();
 
 (function() {
+    'use strict';
+    angular.module('angularTrix', []).directive('angularTrix', function() {
+        return {
+            restrict: 'A',
+            require: 'ngModel',
+            scope: {
+                trixInitialize: '&',
+                trixChange: '&',
+                trixSelectionChange: '&',
+                trixFocus: '&',
+                trixBlur: '&',
+                trixFileAccept: '&',
+                trixAttachmentAdd: '&',
+                trixAttachmentRemove: '&'
+            },
+            link: function(scope, element, attrs, ngModel) {
+
+                element.on('trix-initialize', function() {
+                    if (ngModel.$modelValue) {
+                        element[0].editor.loadHTML(ngModel.$modelValue);
+                    }
+                });
+
+                ngModel.$render = function() {
+                    if (element[0].editor) {
+                        element[0].editor.loadHTML(ngModel.$modelValue);
+                    }
+
+                    element.on('trix-change', function() {
+                        ngModel.$setViewValue(element.html());
+                    });
+                };
+
+                var registerEvents = function(type, method) {
+                    element[0].addEventListener(type, function(e) {
+                        if (type === 'trix-file-accept' && attrs.preventTrixFileAccept === 'true') {
+                            e.preventDefault();
+                        }
+
+                        scope[method]({
+                            e: e,
+                            editor: element[0].editor
+                        });
+                    });
+                };
+
+                registerEvents('trix-initialize', 'trixInitialize');
+                registerEvents('trix-change', 'trixChange');
+                registerEvents('trix-selection-change', 'trixSelectionChange');
+                registerEvents('trix-focus', 'trixFocus');
+                registerEvents('trix-blur', 'trixBlur');
+                registerEvents('trix-file-accept', 'trixFileAccept');
+                registerEvents('trix-attachment-add', 'trixAttachmentAdd');
+                registerEvents('trix-attachment-remove', 'trixAttachmentRemove');
+
+            }
+        };
+    });
+
+}());
+
+(function() {
 	'use strict';
 
 	angular.module('myindia-app').config(routeConfig);
@@ -687,10 +755,12 @@
     		if(apiMetaData.metaInfo){
     			setMetaData(apiMetaData.metaInfo);
     		}else{
-    			fetchAPIMetaData(hostName).then(function(data){
+                let swaggerPromise = fetchAPIMetaData(hostName);
+    			swaggerPromise.then(function(data){
     				apiMetaData.metaInfo = data;
     				setMetaData(apiMetaData.metaInfo);
     			});
+                return swaggerPromise;
     		}
 
     	}
@@ -845,18 +915,28 @@
 		var createProblem=this;
 		createProblem.problemTypesResults = [];
 		createProblem.grivienceName="";
-		createProblem.grivienceType="";
-		createProblem.grivienceDescription="";
-		createProblem.noOfAffectedCitizens=0;
-		createProblem.moneyAtStake=0;
+		createProblem.grivienceType;
+		createProblem.grivienceDescription;
+		createProblem.noOfAffectedCitizens;
+		createProblem.moneyAtStake;
 		createProblem.locatedIn=dataShareService.getUserInfo().userLocation;
 		createProblem.saveProblem=saveProblem;
 		createProblem.locatedInName=dataShareService.getUserInfo().userLocation.locationName;
+		createProblem.uploadCover = uploadCover;
+
 		
+		    
 		getAllProblemTypes();
 		
 		function saveProblem(){
 			
+			createProblemService.saveProblem(createProblem).then(saveProblemSuccess).catch(saveProblemFailure);
+
+    		function saveProblemSuccess(data){
+            }
+    		function saveProblemFailure(error){
+    			alert(error);
+    		}
 		}
 		
 		function getAllProblemTypes(){
@@ -871,6 +951,10 @@
 				alert(error);
 			}
 		}
+
+		function uploadCover(file){
+			createProblem.coverPhotoFile = file[0];
+		}
 	}
 
 })();
@@ -881,18 +965,19 @@
 	angular.module('myindia-app').factory("createProblemService",
 			createProblemService);
 
-	createProblemService.$inject = [ '$q', 'swaggerShareService', '$timeout' ];
+	createProblemService.$inject = [ '$q', 'swaggerShareService', '$timeout'];
 
 	function createProblemService($q, swaggerShareService, $timeout) {
 
 		var services = {};
 
 		var createProblemService = {
-			getAllProblemTypes : getAllProblemTypes
+			getAllProblemTypes : getAllProblemTypes,
+			saveProblem:saveProblem
 		};
 
 		// Call and save the data
-		swaggerShareService.getAPIMetaData(setAPIMetaData);
+		let swaggerPromise = swaggerShareService.getAPIMetaData(setAPIMetaData);
 
 		return createProblemService;
 
@@ -902,12 +987,20 @@
 
 		function getAllProblemTypes() {
 
-			let
-			deferred = $q.defer();
-			$timeout(function() {
+			let deferred = $q.defer();
+			
+			if(swaggerPromise){
+				swaggerPromise.then(function(){
+					services.problemType.getAllProblemTypes({},
+						getAllProblemTypesSuccess, getAllProblemTypesFailure);
+					swaggerPromise = undefined;
+				})
+			}else{
 				services.problemType.getAllProblemTypes({},
 						getAllProblemTypesSuccess, getAllProblemTypesFailure);
-			}, 2000);
+			}
+			
+
 			return deferred.promise;
 
 			function getAllProblemTypesSuccess(data) {
@@ -919,6 +1012,43 @@
 			}
 
 		}
+		
+		function saveProblem(problemData){
+
+			
+            let requestBody = {
+            		problemName: problemData.grivienceName,
+            		problemDesc: problemData.grivienceDescription,
+            		problemMainPhoto: problemData.problemMainPhoto,
+            		problemLocation:problemData.locatedIn,
+            		problemType:problemData.grivienceType,
+            		noOfAffectdCitizens:problemData.noOfAffectedCitizens,
+            		moneyAtStake:problemData.moneyAtStake
+            }
+            let deferred = $q.defer();
+            
+            if(swaggerPromise){
+				swaggerPromise.then(function(){
+					services.problem.createProblem({body:JSON.stringify(requestBody)},
+							saveProblemSuccess, saveProblemFailure);
+					swaggerPromise = undefined;
+				})
+			}else{
+				services.problem.createProblem({body:JSON.stringify(requestBody)},
+						saveProblemSuccess, saveProblemFailure);
+			}
+            
+            return deferred.promise;
+
+            function saveProblemSuccess(data){
+                deferred.resolve(data.obj);
+            }
+
+            function saveProblemFailure(error){
+                deferred.reject(error);
+            }
+
+    	}
 
 	}
 

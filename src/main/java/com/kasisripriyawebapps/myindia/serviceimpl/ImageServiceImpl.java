@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +32,9 @@ public class ImageServiceImpl implements ImageService {
 	@Autowired
 	ImageDao imageDao;
 
+	@Autowired
+	private Environment env;
+
 	@Override
 	@Transactional
 	public void addImages(List<CreateUpdateImageRequest> createUpdateImageRequest)
@@ -43,7 +47,7 @@ public class ImageServiceImpl implements ImageService {
 	@Override
 	public String addImageToLocalDrive(String objectType, String objectId, String imageData, String imageName)
 			throws InternalServerException {
-		String imageSavedLocationRootPath = ApplicationConstants.IMAGE_ROOT_PATH;
+		String imageSavedLocationRootPath = env.getProperty("project.apache.htdocs_path");
 		File objectTypeGuidDirectory = new File(
 				imageSavedLocationRootPath + File.separator + objectType + File.separator + objectId);
 		if (!objectTypeGuidDirectory.exists())
@@ -113,7 +117,7 @@ public class ImageServiceImpl implements ImageService {
 		} else if (createUpdateImageRequest.getObjectType()
 				.equalsIgnoreCase(ApplicationConstants.OBJECT_TYPE_PROBLEM)) {
 			ProblemImage imageEntity = new ProblemImage();
-			//imageEntity.setImageName(createUpdateImageRequest.getImageName());
+			// imageEntity.setImageName(createUpdateImageRequest.getImageName());
 			imageEntity.setImageURL(fileUrl);
 			imageEntity.setCreatedTimeStamp(CommonUtil.getCurrentGMTTimestamp());
 			imageObj = imageEntity;

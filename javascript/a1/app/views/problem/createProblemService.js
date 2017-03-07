@@ -4,7 +4,7 @@
 	angular.module('myindia-app').factory("createProblemService",
 			createProblemService);
 
-	createProblemService.$inject = [ '$q', 'swaggerShareService', '$timeout' ];
+	createProblemService.$inject = [ '$q', 'swaggerShareService', '$timeout'];
 
 	function createProblemService($q, swaggerShareService, $timeout) {
 
@@ -54,14 +54,23 @@
 		
 		function saveProblem(problemData){
 
+			
             let requestBody = {
-                loginUserName: problemData,
-                password: problemData
+            		problemName: problemData.grivienceName,
+            		problemDesc: problemData.grivienceDescription,
+            		problemMainPhoto: problemData.problemMainPhoto,
+            		problemLocation:problemData.locatedIn,
+            		problemType:problemData.grivienceType,
+            		noOfAffectdCitizens:problemData.noOfAffectedCitizens,
+            		moneyAtStake:problemData.moneyAtStake
             }
             let deferred = $q.defer();
-
-            services.account.login({body:JSON.stringify(requestBody)},saveProblemSuccess,saveProblemFailure);
-        
+            
+           
+				services.problem.createProblem({body:JSON.stringify(requestBody)},
+						saveProblemSuccess, saveProblemFailure);
+			
+            
             return deferred.promise;
 
             function saveProblemSuccess(data){
