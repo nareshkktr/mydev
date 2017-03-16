@@ -3,9 +3,7 @@
 
 	angular.module('myindia-app').factory("dataShareService", dataShareService);
 
-	dataShareService.$inject = [ '$rootScope', 'userInfoService' ];
-
-	function dataShareService($rootScope, userInfoService) {
+	function dataShareService() {
 
 		var data = {};
 
@@ -17,12 +15,6 @@
 		return dataShareService;
 
 		function getUserInfo() {
-			if (data.userInfo == undefined) {
-				userInfoService.getUserInfo().then(function(data){
-					setUserInfo(data);
-				});
-				
-			}
 			return data.userInfo;
 		}
 

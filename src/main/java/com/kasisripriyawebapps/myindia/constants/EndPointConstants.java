@@ -951,16 +951,4 @@ public class EndPointConstants {
 	/** The Constant CREATE_ACCOUNT_API_DESCRIPTION. */
 	public static final String GET_LOGGED_IN_API_DESCRIPTION = "Get Logged In User Details";
 
-	/** The Constant CREATE_ACCOUNT_REQUEST_MAPPING. */
-	public static final String GET_LOGGED_IN_REQUEST_MAPPING = "getLoggedInUserInfo";
-
-	/** The Constant CREATE_ACCOUNT_API_VALUE. */
-	public static final String GET_LOGGED_IN_API_VALUE = "getLoggedInUserInfo";
-
-	/** The Constant CREATE_ACCOUNT_API_NICKNAME. */
-	public static final String GET_LOGGED_IN_API_NICKNAME = "getLoggedInUserInfo";
-
-	/** The Constant CREATE_ACCOUNT_API_DESCRIPTION. */
-	public static final String GET_LOGGED_IN_API_DESCRIPTION = "Get Logged In User Details";
-
 }
