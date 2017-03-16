@@ -119,8 +119,6 @@ public class UserEndPoint extends BaseEndPoint {
 		UserLocationDetails userLocationDetails = new UserLocationDetails();
 		userLocationDetails.setLocationGuid(solrLocationMaster.getLocationGuid());
 		userLocationDetails.setLocationName(solrLocationMaster.getLocationName());
-		HttpSession session = servletRequest.getSession(true);
-		session.setAttribute("userLocationDetails", userLocationDetails);
 		return Response.status(Status.OK).entity(solrLocationMaster).build();
 	}
 

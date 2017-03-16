@@ -104,8 +104,12 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	@Transactional
+<<<<<<< HEAD
 	public BaseUserInformation prepareBaseUserInformation(Account account)
 			throws InternalServerException, RecordNotFoundException {
+=======
+	public BaseUserInformation prepareBaseUserInformation(Account account) throws InternalServerException, RecordNotFoundException {
+>>>>>>> 9251312013bb811e4403d57cfce578bc837a5b18
 
 		BaseUserInformation baseUserInfo = new BaseUserInformation();
 		JSONObject authTokenInfo = null;
@@ -126,8 +130,13 @@ public class AccountServiceImpl implements AccountService {
 				throw new InternalServerException(e.getMessage());
 			}
 		}
+<<<<<<< HEAD
 		// populateLocationInformation
 		UserLocationDetails userLocationDetails = userService.getLoggedInUserLocation(account.getGuid());
+=======
+		//populateLocationInformation
+		UserLocationDetails userLocationDetails=userService.getLoggedInUserLocation(account.getGuid());
+>>>>>>> 9251312013bb811e4403d57cfce578bc837a5b18
 		baseUserInfo.setUserLocation(userLocationDetails);
 
 		return baseUserInfo;
@@ -158,6 +167,24 @@ public class AccountServiceImpl implements AccountService {
 			}
 		}
 		baseUserInfo = prepareBaseUserInformation(account);
+<<<<<<< HEAD
+=======
+		return baseUserInfo;
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public BaseUserInformation prepareLoggedInUserInfo(String userName)
+			throws InternalServerException, RecordNotFoundException {
+		
+		BaseUserInformation baseUserInfo = new BaseUserInformation();
+
+		Account account = getAccountByUserName(userName);
+		if (account == null) {
+			throw new RecordNotFoundException(ExceptionConstants.LOGIN_ACCOUNT_NOT_FOUND_USER_NAME);
+		}
+		baseUserInfo = prepareBaseUserInformation(account);
+>>>>>>> 9251312013bb811e4403d57cfce578bc837a5b18
 		return baseUserInfo;
 	}
 }

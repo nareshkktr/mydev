@@ -4,11 +4,15 @@
 package com.kasisripriyawebapps.myindia.endpoints;
 
 import javax.servlet.http.HttpServletRequest;
+<<<<<<< HEAD
 import javax.servlet.http.HttpSession;
+=======
+>>>>>>> 9251312013bb811e4403d57cfce578bc837a5b18
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
@@ -38,7 +42,11 @@ import io.swagger.annotations.ApiOperation;
 @Path(EndPointConstants.ACCOUNT_ENDPOINT_REQUEST_MAPPING)
 @Api(value = EndPointConstants.ACCOUNT_ENDPOINT_API_VALUE, tags = {
 		EndPointConstants.ACCOUNT_ENDPOINT_API_TAGS }, description = EndPointConstants.ACCOUNT_ENDPOINT_API_DESCRIPTION)
+<<<<<<< HEAD
 public class AccountEndPoint extends BaseEndPoint {
+=======
+public class AccountEndPoint extends BaseEndPoint{
+>>>>>>> 9251312013bb811e4403d57cfce578bc837a5b18
 
 	@Autowired
 	AccountService accountService;
@@ -83,8 +91,13 @@ public class AccountEndPoint extends BaseEndPoint {
 			RecordNotFoundException, PreConditionFailedException, PreConditionRequiredException {
 		BaseUserInformation baseUserInfo = null;
 		LoggedInUserDetails loggedInUserDetails = getLoggedInUserDetails();
+<<<<<<< HEAD
 		Account account = accountService.getAccountByUserName(loggedInUserDetails.getUserName());
 		baseUserInfo = accountService.prepareBaseUserInformation(account);
+=======
+		//Account account = accountService.getAccountByUserName(loggedInUserDetails.getUserName());
+		baseUserInfo = accountService.prepareLoggedInUserInfo(loggedInUserDetails.getUserName());      ;//prepareBaseUserInformation(account);
+>>>>>>> 9251312013bb811e4403d57cfce578bc837a5b18
 		return Response.status(Status.OK).entity(baseUserInfo).build();
 	}
 

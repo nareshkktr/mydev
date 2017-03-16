@@ -20,5 +20,10 @@ public interface AccountService {
 	BaseUserInformation login(LoginRequest loginRequest) throws InternalServerException, RecordNotFoundException;
 
 	BaseUserInformation prepareBaseUserInformation(Account account) throws InternalServerException, RecordNotFoundException;
+<<<<<<< HEAD
+=======
+
+	BaseUserInformation prepareLoggedInUserInfo(String userName) throws InternalServerException, RecordNotFoundException;
+>>>>>>> 9251312013bb811e4403d57cfce578bc837a5b18
 	
 }
