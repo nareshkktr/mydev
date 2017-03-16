@@ -15,7 +15,7 @@
 }
 
 .app_name_img img {
-	width: 50px;
+	width: 45px;
 	height: 40px;
 	border-radius: 50%;
 	vertical-align: middle;
@@ -31,7 +31,6 @@
 
 .copty_right_col {
 	letter-spacing: 1px;
-	margin-top: 15px;
 	text-align: center;
 }
 
@@ -42,8 +41,6 @@
 
 .social_icons_col {
 	text-align: center;
-	margin-top: 15px;
-	padding-top: 10px;
 }
 
 .social_icons_col i {
@@ -95,4 +92,10 @@
 	padding-left: 10px;
 	color: black;
 	font-size: 15px !important;
+}
+
+.footer_info {
+	display: flex;
+	height: 100%;
+	align-items: center;
 }

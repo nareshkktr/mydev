@@ -286,6 +286,7 @@ input[type="text"], input[type="password"], select {
 #header_search_box input[type="text"] {
 	width: 230px;
 	height: 30px !important;
+	padding-left: 35px;
 }
 
 .app_header .navbar-form {

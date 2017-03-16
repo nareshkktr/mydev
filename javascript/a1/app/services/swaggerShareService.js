@@ -26,6 +26,7 @@
                 let swaggerPromise = fetchAPIMetaData(hostName);
     			swaggerPromise.then(function(data){
     				apiMetaData.metaInfo = data;
+                    setAuthorization();
     				setMetaData(apiMetaData.metaInfo);
     			});
                 return swaggerPromise;
@@ -40,9 +41,6 @@
     		let swagger = new SwaggerClient({
                 url: hostName+'api/swagger.json',
                 success: function() {
-
-                    setAuthorization();
-
                     deferred.resolve(swagger);
                 },error: function(error){
                 	deferred.reject(error);
@@ -53,7 +51,7 @@
 
     	}
 
-        function setAuthorization(token){
+    	function setAuthorization(token){
 
             let accessToken;
 
@@ -61,10 +59,12 @@
                 accessToken = $cookies.get("access_token");      
             }else if(token){
                 accessToken = token;
+                $cookies.put("access_token",accessToken);
             }
 
             if(accessToken && apiMetaData.metaInfo){
                 var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization( "Authorization", "Bearer " + accessToken, "header" );
+                apiMetaData.metaInfo.clientAuthorizations.remove("bearer");
                 apiMetaData.metaInfo.clientAuthorizations.add("bearer",apiKeyAuth);
             }
         }

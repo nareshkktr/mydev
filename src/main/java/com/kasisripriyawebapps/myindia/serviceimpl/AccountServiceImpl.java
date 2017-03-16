@@ -104,7 +104,7 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	@Transactional
-	public BaseUserInformation prepareBaseUserInformation(Account account,HttpServletRequest servletRequest) throws InternalServerException, RecordNotFoundException {
+	public BaseUserInformation prepareBaseUserInformation(Account account) throws InternalServerException, RecordNotFoundException {
 
 		BaseUserInformation baseUserInfo = new BaseUserInformation();
 		JSONObject authTokenInfo = null;
@@ -127,8 +127,6 @@ public class AccountServiceImpl implements AccountService {
 		}
 		//populateLocationInformation
 		UserLocationDetails userLocationDetails=userService.getLoggedInUserLocation(account.getGuid());
-		HttpSession session = servletRequest.getSession(true);
-		session.setAttribute("userLocationDetails", userLocationDetails);
 		baseUserInfo.setUserLocation(userLocationDetails);
 		
 		return baseUserInfo;
@@ -143,7 +141,7 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public BaseUserInformation login(LoginRequest loginRequest,HttpServletRequest servletRequest)
+	public BaseUserInformation login(LoginRequest loginRequest)
 			throws InternalServerException, RecordNotFoundException {
 
 		BaseUserInformation baseUserInfo = new BaseUserInformation();
@@ -158,7 +156,22 @@ public class AccountServiceImpl implements AccountService {
 				throw new RecordNotFoundException(ExceptionConstants.LOGIN_ACCOUNT_NOT_FOUND_PASSWORD);
 			}
 		}
-		baseUserInfo = prepareBaseUserInformation(account,servletRequest);
+		baseUserInfo = prepareBaseUserInformation(account);
+		return baseUserInfo;
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public BaseUserInformation prepareLoggedInUserInfo(String userName)
+			throws InternalServerException, RecordNotFoundException {
+		
+		BaseUserInformation baseUserInfo = new BaseUserInformation();
+
+		Account account = getAccountByUserName(userName);
+		if (account == null) {
+			throw new RecordNotFoundException(ExceptionConstants.LOGIN_ACCOUNT_NOT_FOUND_USER_NAME);
+		}
+		baseUserInfo = prepareBaseUserInformation(account);
 		return baseUserInfo;
 	}
 }

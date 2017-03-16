@@ -2,7 +2,7 @@
 	position: fixed;
 	right: 0;
 	bottom: 47px;
-	z-index:1200;
+	z-index: 1200;
 }
 
 #add_objects_floating_icon {
@@ -23,14 +23,51 @@
 	font-weight: 100;
 	font-family: inherit;
 	top: -8px;
-	left: 19px;	
+	left: 19px;
 }
-.top_overlay_content{
+
+.top_overlay_content {
 	position: fixed;
-    right: 37px;
-    bottom: 150px;
-    z-index: 1200;
-    background-color: black;
-    color: white;
-    padding: 10px;
+	right: 0px;
+	bottom: 130px;
+	z-index: 1200;
+	color: black;
+	width: 210px;
+}
+
+.top_overlay_content .row {
+	margin-bottom: 17px;
+}
+
+.add_object_name {
+	direction: rtl;
+	width: 120px;
+}
+
+.add_object_img {
+	padding: 0px;
+	text-align: center;
+	position: fixed;
+	right: 40px;
+}
+
+.add_object_img span {
+	background-color: #f94c59;
+	padding: 10px;
+	color: white;
+	border-radius: 50%;
+	top: -4px;
+	font-size: 19px;
+}
+
+.add_object_name label {
+	    padding: 5px 9px 5px 10px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    background-color: white;
+    border-bottom: 1px solid lightgrey;
+}
+
+.add_object_name, .add_object_img {
+	float: left;
 }

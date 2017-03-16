@@ -1,9 +1,9 @@
 <div class="form-group">
-	<label for="elector_id_input">Elector's ID</label> <span
-		class="glyphicon glyphicon-user login_icon signup_user_icon"
-		aria-hidden="true"></span><input type="text" name="elector_id_input"
-		ng-model="signUp.electorId" placeholder="Elecotr's ID"
-		class="form-control" id="elector_id_input" ng-required="true">
+	<label for="elector_id_input">Elector's ID</label> <i
+		class="fa fa-user login_icon" aria-hidden="true"></i><input
+		type="text" name="elector_id_input" ng-model="signUp.electorId"
+		placeholder="Elecotr's ID" class="form-control" id="elector_id_input"
+		ng-required="true">
 
 	<div ng-messages="signup_form.elector_id_input.$error"
 		ng-if="signup_form.elector_id_input.$touched">
@@ -15,11 +15,11 @@
 </div>
 
 <div class="form-group">
-	<label for="elector_name_input">Elector's Name</label> <span
-		class="glyphicon glyphicon-user login_icon signup_user_icon"
-		aria-hidden="true"></span><input type="text" name="elector_name_input"
-		placeholder="Elecotr's Name" ng-model="signUp.electorName"
-		class="form-control" id="elector_name_input" ng-required="true">
+	<label for="elector_name_input">Elector's Name</label> <i
+		class="fa fa-user login_icon" aria-hidden="true"></i></span><input
+		type="text" name="elector_name_input" placeholder="Elecotr's Name"
+		ng-model="signUp.electorName" class="form-control"
+		id="elector_name_input" ng-required="true">
 
 	<div ng-messages="signup_form.elector_name_input.$error"
 		ng-if="signup_form.elector_name_input.$touched">
@@ -31,10 +31,9 @@
 </div>
 
 <div class="form-group">
-	<label for="reference_name_input">Reference Name</label> <span
-		class="glyphicon glyphicon-user login_icon signup_user_icon"
-		aria-hidden="true"></span><input type="text"
-		name="reference_name_input" placeholder="Reference Name"
+	<label for="reference_name_input">Reference Name</label><i
+		class="fa fa-user login_icon" aria-hidden="true"></i><input
+		type="text" name="reference_name_input" placeholder="Reference Name"
 		ng-model="signUp.referenceName" class="form-control"
 		id="reference_name_input" ng-required="true">
 

@@ -1,0 +1,36 @@
+Problem Status 
+
+
+Once the problem is created 
+We are listening to your problem!
+
+When the problem is in progress which will be after the first activity after create. 
+Working on it!
+
+Seeking any input from the owner
+Need little more info to help you!
+
+Once problem is escalated.
+Escalated!
+
+After Resolution ..satisfaction survey.
+Are you satisfied?
+
+Once user completes satisfaction survey.
+Hurray! knocked down!
+
+If problem is rjected
+Sorry! Problem Dismissed!
+
+If a rejected problem is re approved manually or based on votes/support count.
+Dismissal revoked! 
+ 
+----------------------------------------------------------------------------------------------
+
+Problem Severity
+
+No of affected people (Count) and Amount Involved -- ( Rupees)
+
+Normalize both to one ground.
+
+

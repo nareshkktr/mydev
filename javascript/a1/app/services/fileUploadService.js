@@ -1,11 +1,12 @@
 (function() {
 	'use strict';
 
-	angular.module('myindia-app').factory("fileUploadService", fileUploadService);
+	angular.module('myindia-app').factory("fileUploadService",
+			fileUploadService);
 
-	fileUploadService.$inject = [ '$q','swaggerShareService' ];
+	fileUploadService.$inject = [ '$q', 'swaggerShareService' ];
 
-	function fileUploadService($q,swaggerShareService) {
+	function fileUploadService($q, swaggerShareService) {
 
 		var services = {};
 
@@ -14,7 +15,8 @@
 		};
 
 		// // Call and save the data
-		let swaggerPromise = swaggerShareService.getAPIMetaData(setAPIMetaData);
+		let
+		swaggerPromise = swaggerShareService.getAPIMetaData(setAPIMetaData);
 
 		return fileUploadService;
 
@@ -22,53 +24,64 @@
 			services = metaInfo;
 		}
 
-		function uploadFile(files,objectGuid,objectType) {
+		function uploadFile(files, objectType,objectGuid, isMainPhotoURL,
+				category) {
 
-			let deferred = $q.defer();
+			let
+			deferred = $q.defer();
 
-			let promises = [];
+			let
+			promises = [];
 
 			angular.forEach(files, function(file, key) {
-	  				promises.push(preapreUploadFileRequest(file,objectType,objectGuid));
+				promises.push(preapreUploadFileRequest(file, objectType,
+						objectGuid, isMainPhotoURL,
+						category));
 			});
 
-			$q.all(promises).then(function(filesData){
+			$q.all(promises).then(function(filesData) {
 
-				services.image.addImages({body:JSON.stringify(filesData)},uploadSuccess,uploadFailure);
+				services.image.addImages({
+					body : JSON.stringify(filesData)
+				}, uploadSuccess, uploadFailure);
 
-				function uploadSuccess(data){
+				function uploadSuccess(data) {
 					deferred.resolve(data);
 				}
 
-				function uploadFailure(error){
-						deferred.reject(error);
+				function uploadFailure(error) {
+					deferred.reject(error);
 				}
 			})
 
 			return deferred.promise;
-			
+
 		}
 
-		function preapreUploadFileRequest(file,objectType,objectGuid) {
-            
-            let deferred = $q.defer();
+		function preapreUploadFileRequest(file, objectType, objectGuid, isMainPhotoURL,
+				category) {
 
-            var name = file.name;
-            var reader = new FileReader();  
-            reader.onload = function() { 
+			let
+			deferred = $q.defer();
 
-            	var req = {};		
-            	req.imageName = name;
-            	req.imageData = reader.result;
-            	req.objectType =  objectType;
-            	req.objectId = objectGuid;
-            	
-                deferred.resolve(req);
-            }
-            reader.readAsDataURL(file);
+			var name = file.name;
+			var reader = new FileReader();
+			reader.onload = function() {
 
-            return deferred.promise; 
-        }
+				var req = {};
+				req.imageName = name;
+				req.imageData = reader.result;
+				req.objectType = objectType;
+				req.objectId = objectGuid;
+				req.isMainPhotoURL = isMainPhotoURL;
+				req.category = category;
+
+				deferred.resolve(req);
+			}
+			reader.readAsDataURL(file);
+
+			return deferred.promise;
+		}
 	}
 
 })();

@@ -3,9 +3,7 @@
 
 	angular.module('myindia-app').factory("dataShareService", dataShareService);
 
-	dataShareService.$inject = [ '$rootScope' ];
-
-	function dataShareService($rootScope) {
+	function dataShareService() {
 
 		var data = {};
 

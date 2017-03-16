@@ -4,9 +4,11 @@
 package com.kasisripriyawebapps.myindia.endpoints;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
@@ -14,6 +16,7 @@ import javax.ws.rs.core.Response.Status;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.kasisripriyawebapps.myindia.configs.LoggedInUserDetails;
 import com.kasisripriyawebapps.myindia.constants.ApplicationConstants;
 import com.kasisripriyawebapps.myindia.constants.EndPointConstants;
 import com.kasisripriyawebapps.myindia.constants.ExceptionConstants;
@@ -35,12 +38,10 @@ import io.swagger.annotations.ApiOperation;
 @Path(EndPointConstants.ACCOUNT_ENDPOINT_REQUEST_MAPPING)
 @Api(value = EndPointConstants.ACCOUNT_ENDPOINT_API_VALUE, tags = {
 		EndPointConstants.ACCOUNT_ENDPOINT_API_TAGS }, description = EndPointConstants.ACCOUNT_ENDPOINT_API_DESCRIPTION)
-public class AccountEndPoint {
+public class AccountEndPoint extends BaseEndPoint{
 
 	@Autowired
 	AccountService accountService;
-
-	private @Autowired HttpServletRequest servletRequest;
 
 	@POST
 	@ApiOperation(value = EndPointConstants.CREATE_ACCOUNT_API_VALUE, nickname = EndPointConstants.CREATE_ACCOUNT_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.CREATE_ACCOUNT_API_DESCRIPTION)
@@ -52,7 +53,7 @@ public class AccountEndPoint {
 		if (validateCreateAccountRequest(createAccountRequest)
 				&& !validateDuplicateAccountByUserNameRequest(createAccountRequest.getLoginUserName())) {
 			Account account = accountService.createAccount(createAccountRequest);
-			baseUserInfo = accountService.prepareBaseUserInformation(account, servletRequest);
+			baseUserInfo = accountService.prepareBaseUserInformation(account);
 		}
 		NewCookie accessTokenCookie = new NewCookie("access_token", baseUserInfo.getAccessToken());
 
@@ -68,10 +69,23 @@ public class AccountEndPoint {
 		BaseUserInformation baseUserInfo = null;
 
 		if (validateLoginRequest(loginRequest)) {
-			baseUserInfo = accountService.login(loginRequest, servletRequest);
+			baseUserInfo = accountService.login(loginRequest);
 		}
 		NewCookie accessTokenCookie = new NewCookie("access_token", baseUserInfo.getAccessToken());
 		return Response.status(Status.OK).entity(baseUserInfo).cookie(accessTokenCookie).build();
+	}
+
+	@GET
+	@ApiOperation(value = EndPointConstants.GET_LOGGED_IN_API_VALUE, nickname = EndPointConstants.GET_LOGGED_IN_API_NICKNAME, httpMethod = EndPointConstants.HTTP_GET, notes = EndPointConstants.GET_LOGGED_IN_API_DESCRIPTION)
+	@Path(EndPointConstants.GET_LOGGED_IN_REQUEST_MAPPING)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getLoggedInUserInfo(LoginRequest loginRequest) throws InternalServerException,
+			RecordNotFoundException, PreConditionFailedException, PreConditionRequiredException {
+		BaseUserInformation baseUserInfo = null;
+		LoggedInUserDetails loggedInUserDetails = getLoggedInUserDetails();
+		//Account account = accountService.getAccountByUserName(loggedInUserDetails.getUserName());
+		baseUserInfo = accountService.prepareLoggedInUserInfo(loggedInUserDetails.getUserName());      ;//prepareBaseUserInformation(account);
+		return Response.status(Status.OK).entity(baseUserInfo).build();
 	}
 
 	private Boolean validateCreateAccountRequest(CreateAccountRequest createAccountRequest)

@@ -19,8 +19,10 @@ public interface AccountService {
 
 	Account getAccountByUserName(String userName) throws InternalServerException;
 
-	BaseUserInformation login(LoginRequest loginRequest, HttpServletRequest servletRequest) throws InternalServerException, RecordNotFoundException;
+	BaseUserInformation login(LoginRequest loginRequest) throws InternalServerException, RecordNotFoundException;
 
-	BaseUserInformation prepareBaseUserInformation(Account account, HttpServletRequest servletRequest) throws InternalServerException, RecordNotFoundException;
+	BaseUserInformation prepareBaseUserInformation(Account account) throws InternalServerException, RecordNotFoundException;
+
+	BaseUserInformation prepareLoggedInUserInfo(String userName) throws InternalServerException, RecordNotFoundException;
 	
 }

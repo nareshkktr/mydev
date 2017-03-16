@@ -56,18 +56,11 @@
 		}
 		
 		function pinLocation(){
-			locationChangePopUpService.pinLocation(locationChangePopUp.selectedLocation).then(pinLocationSuccess).catch(pinLocationFailure);
-
-    		function pinLocationSuccess(data){
-    			var userInfo=dataShareService.getUserInfo();
-    			userInfo.userLocation.locationName=locationChangePopUp.selectedLocation.locationName;
-    			userInfo.userLocation.locationGuid=locationChangePopUp.selectedLocation.locationGuid;
-    			dataShareService.setUserInfo(userInfo);
-    			locationChangePopUp.closePopUp();
-    		}
-    		function pinLocationFailure(error){
-    			alert(error);
-    		}
+			let userInfo=dataShareService.getUserInfo();
+    		userInfo.userLocation.locationName=locationChangePopUp.selectedLocation.locationName;
+    		userInfo.userLocation.locationGuid=locationChangePopUp.selectedLocation.locationGuid;
+    		dataShareService.setUserInfo(userInfo);
+    		locationChangePopUp.closePopUp();
     	}
 	}
 	

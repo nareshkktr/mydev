@@ -59,8 +59,9 @@
 .login_icon {
 	color: grey;
 	font-size: 12px !important;
-	left: -50px;
 	top: 37px !important;
+	left: -53px;
+    position: relative;
 }
 
 .password_row {
@@ -155,10 +156,6 @@
 #login_form form button, input[type="checkbox"] {
 	-webkit-box-shadow: 1px 5px 0px 1px rgba(249, 76, 89, 0.57);
 	box-shadow: 1px 5px 0px 1px rgba(249, 76, 89, 0.57);
-}
-
-.signin_user_icon {
-	left: -57px;
 }
 
 .help-block {
