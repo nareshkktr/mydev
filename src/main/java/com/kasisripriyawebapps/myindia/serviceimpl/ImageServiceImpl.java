@@ -8,15 +8,17 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.kasisripriyawebapps.myindia.configs.LoggedInUserDetails;
 import com.kasisripriyawebapps.myindia.constants.ApplicationConstants;
 import com.kasisripriyawebapps.myindia.constants.ExceptionConstants;
-import com.kasisripriyawebapps.myindia.dao.ImageDao;
+import com.kasisripriyawebapps.myindia.dao.ProblemDao;
 import com.kasisripriyawebapps.myindia.entity.CommentImage;
 import com.kasisripriyawebapps.myindia.entity.EventImage;
 import com.kasisripriyawebapps.myindia.entity.LocationImage;
 import com.kasisripriyawebapps.myindia.entity.PartyImage;
 import com.kasisripriyawebapps.myindia.entity.PoliticianImage;
 import com.kasisripriyawebapps.myindia.entity.PostImage;
+import com.kasisripriyawebapps.myindia.entity.Problem;
 import com.kasisripriyawebapps.myindia.entity.ProblemImage;
 import com.kasisripriyawebapps.myindia.entity.UserImage;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
@@ -30,105 +32,116 @@ import com.kasisripriyawebapps.myindia.util.CommonUtil;
 public class ImageServiceImpl implements ImageService {
 
 	@Autowired
-	ImageDao imageDao;
+	private Environment env;
 
 	@Autowired
-	private Environment env;
+	ProblemDao problemDao;
 
 	@Override
 	@Transactional
-	public void addImages(List<CreateUpdateImageRequest> createUpdateImageRequest)
+	public void addImages(List<CreateUpdateImageRequest> createUpdateImageRequest,
+			LoggedInUserDetails loggedInUserDetails)
 			throws InternalServerException, PreConditionRequiredException, PreConditionFailedException {
 		for (CreateUpdateImageRequest eachImageRequest : createUpdateImageRequest) {
-			addImage(eachImageRequest);
+			addImage(eachImageRequest, loggedInUserDetails);
 		}
 	}
 
 	@Override
-	public String addImageToLocalDrive(String objectType, String objectId, String imageData, String imageName)
+	public String addImageToLocalDrive(String objectType, Long objectId, String imageData, String imageName)
 			throws InternalServerException {
 		String imageSavedLocationRootPath = env.getProperty("project.apache.htdocs_path");
 		File objectTypeGuidDirectory = new File(
 				imageSavedLocationRootPath + File.separator + objectType + File.separator + objectId);
 		if (!objectTypeGuidDirectory.exists())
 			objectTypeGuidDirectory.mkdirs();
-		String fileUrl = CommonUtil.getImageLocation(imageData,
+		String fileUrl = CommonUtil.saveFileIntoLocal(imageData,
 				objectTypeGuidDirectory.getAbsolutePath() + File.separator + imageName);
 		return fileUrl;
 	}
 
 	@Override
 	@Transactional
-	public boolean addImage(CreateUpdateImageRequest createUpdateImageRequest)
+	public boolean addImage(CreateUpdateImageRequest createUpdateImageRequest, LoggedInUserDetails loggedInUserDetails)
 			throws InternalServerException, PreConditionRequiredException, PreConditionFailedException {
 		if (validateAddImageRequest(createUpdateImageRequest)) {
 			String fileUrl = addImageToLocalDrive(createUpdateImageRequest.getObjectType(),
 					createUpdateImageRequest.getObjectId(), createUpdateImageRequest.getImageData(),
 					createUpdateImageRequest.getImageName());
 			if (fileUrl != null && !fileUrl.isEmpty()) {
-				Object imageEntity = prepareImageEntityData(createUpdateImageRequest, fileUrl);
-				if (imageEntity != null) {
-					imageDao.addImage(imageEntity);
-				}
+				prepareImageEntityData(createUpdateImageRequest, fileUrl, loggedInUserDetails);
 			}
 		}
 		return true;
 	}
 
-	private Object prepareImageEntityData(CreateUpdateImageRequest createUpdateImageRequest, String fileUrl) {
-		Object imageObj = null;
+	private void prepareImageEntityData(CreateUpdateImageRequest createUpdateImageRequest, String fileUrl,
+			LoggedInUserDetails loggedInUserDetails) throws InternalServerException {
+
 		if (createUpdateImageRequest.getObjectType().equalsIgnoreCase(ApplicationConstants.OBJECT_TYPE_COMMENT)) {
 			CommentImage imageEntity = new CommentImage();
 			imageEntity.setImageName(createUpdateImageRequest.getImageName());
 			imageEntity.setImageURL(fileUrl);
 			imageEntity.setCreatedTimeStamp(CommonUtil.getCurrentGMTTimestamp());
-			imageObj = imageEntity;
+
 		} else if (createUpdateImageRequest.getObjectType().equalsIgnoreCase(ApplicationConstants.OBJECT_TYPE_EVENT)) {
 			EventImage imageEntity = new EventImage();
 			imageEntity.setImageName(createUpdateImageRequest.getImageName());
 			imageEntity.setImageURL(fileUrl);
 			imageEntity.setCreatedTimeStamp(CommonUtil.getCurrentGMTTimestamp());
-			imageObj = imageEntity;
+
 		} else if (createUpdateImageRequest.getObjectType()
 				.equalsIgnoreCase(ApplicationConstants.OBJECT_TYPE_LOCATION)) {
 			LocationImage imageEntity = new LocationImage();
 			imageEntity.setImageName(createUpdateImageRequest.getImageName());
 			imageEntity.setImageURL(fileUrl);
 			imageEntity.setCreatedTimeStamp(CommonUtil.getCurrentGMTTimestamp());
-			imageObj = imageEntity;
+
 		} else if (createUpdateImageRequest.getObjectType().equalsIgnoreCase(ApplicationConstants.OBJECT_TYPE_PARTY)) {
 			PartyImage imageEntity = new PartyImage();
 			imageEntity.setImageName(createUpdateImageRequest.getImageName());
 			imageEntity.setImageURL(fileUrl);
 			imageEntity.setCreatedTimeStamp(CommonUtil.getCurrentGMTTimestamp());
-			imageObj = imageEntity;
+
 		} else if (createUpdateImageRequest.getObjectType()
 				.equalsIgnoreCase(ApplicationConstants.OBJECT_TYPE_POLTIICIAN)) {
 			PoliticianImage imageEntity = new PoliticianImage();
 			imageEntity.setImageName(createUpdateImageRequest.getImageName());
 			imageEntity.setImageURL(fileUrl);
 			imageEntity.setCreatedTimeStamp(CommonUtil.getCurrentGMTTimestamp());
-			imageObj = imageEntity;
+
 		} else if (createUpdateImageRequest.getObjectType().equalsIgnoreCase(ApplicationConstants.OBJECT_TYPE_POST)) {
 			PostImage imageEntity = new PostImage();
 			imageEntity.setImageName(createUpdateImageRequest.getImageName());
 			imageEntity.setImageURL(fileUrl);
-			imageObj = imageEntity;
+
 		} else if (createUpdateImageRequest.getObjectType()
 				.equalsIgnoreCase(ApplicationConstants.OBJECT_TYPE_PROBLEM)) {
-			ProblemImage imageEntity = new ProblemImage();
-			// imageEntity.setImageName(createUpdateImageRequest.getImageName());
-			imageEntity.setImageURL(fileUrl);
-			imageEntity.setCreatedTimeStamp(CommonUtil.getCurrentGMTTimestamp());
-			imageObj = imageEntity;
+
+			Problem problem = problemDao.getProblemByGuid(createUpdateImageRequest.getObjectId());
+
+			if (createUpdateImageRequest.getIsMainPhotoURL()) {
+				problem.setPhotoURL(fileUrl);
+				problemDao.updateProblem(problem);
+				
+			} else {
+				
+				ProblemImage imageEntity = new ProblemImage();
+				imageEntity.setImageName(createUpdateImageRequest.getImageName());
+				imageEntity.setImageURL(fileUrl);
+				imageEntity.setCreatedTimeStamp(CommonUtil.getCurrentGMTTimestamp());
+				imageEntity.setCreatedBy(loggedInUserDetails.getGuid());
+				imageEntity.setCategory(createUpdateImageRequest.getCategory());
+				imageEntity.setProblem(problem);
+			}
+
 		} else if (createUpdateImageRequest.getObjectType().equalsIgnoreCase(ApplicationConstants.OBJECT_TYPE_USER)) {
 			UserImage imageEntity = new UserImage();
 			imageEntity.setImageName(createUpdateImageRequest.getImageName());
 			imageEntity.setImageURL(fileUrl);
 			imageEntity.setCreatedTimeStamp(CommonUtil.getCurrentGMTTimestamp());
-			imageObj = imageEntity;
+
 		}
-		return imageObj;
 	}
 
 	private boolean validateAddImageRequest(CreateUpdateImageRequest createUpdateImageRequest)
@@ -147,7 +160,7 @@ public class ImageServiceImpl implements ImageService {
 			throw new PreConditionFailedException(ExceptionConstants.IMAGE_NOT_FOUND);
 		} else if (createUpdateImageRequest.getObjectType().isEmpty()) {
 			throw new PreConditionFailedException(ExceptionConstants.OBJECT_TYPE_NOT_FOUND);
-		} else if (createUpdateImageRequest.getObjectId().isEmpty()) {
+		} else if (createUpdateImageRequest.getObjectId().equals((Long.valueOf(0)))) {
 			throw new PreConditionFailedException(ExceptionConstants.OBJECT_ID_NOT_FOUND);
 		} else if (!CommonUtil.isValueExistInList(createUpdateImageRequest.getObjectType(), CommonUtil.objectTypes)) {
 			throw new PreConditionFailedException(ExceptionConstants.INVALID_OBECT_TYPE);

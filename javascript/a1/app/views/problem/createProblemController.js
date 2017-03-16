@@ -18,8 +18,6 @@
 		createProblem.saveProblem=saveProblem;
 		createProblem.locatedInName=dataShareService.getUserInfo().userLocation.locationName;
 		createProblem.uploadCover = uploadCover;
-
-		
 		    
 		getAllProblemTypes();
 		
@@ -28,6 +26,9 @@
 			createProblemService.saveProblem(createProblem).then(saveProblemSuccess).catch(saveProblemFailure);
 
     		function saveProblemSuccess(data){
+    			if(createProblem.coverPhotoFile!=undefined && createProblem.coverPhotoFile!=null){
+    				addMainPhotoToProblem(data.saveUpdateDeleteRecordId);
+    			}
             }
     		function saveProblemFailure(error){
     			alert(error);
@@ -49,9 +50,13 @@
 
 		function uploadCover(files){
 			createProblem.coverPhotoFile = files[0];
-			
-			// Move it to  a place where u are going to create problem.
-			fileUploadService.uploadFile(files,12,"Problem").then(uploadSuccess).catch(uploadFailure);
+		}
+		
+		function addMainPhotoToProblem(problemGuid){
+
+			let files=[createProblem.coverPhotoFile];
+	
+			fileUploadService.uploadFile(files,"Problem",problemGuid,true,null).then(uploadSuccess).catch(uploadFailure);
 
 			function uploadSuccess(data){
 				console.log(data);

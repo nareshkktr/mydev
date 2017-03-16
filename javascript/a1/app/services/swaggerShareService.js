@@ -53,7 +53,7 @@
 
     	}
 
-        function setAuthorization(token){
+    	function setAuthorization(token){
 
             let accessToken;
 
@@ -61,6 +61,7 @@
                 accessToken = $cookies.get("access_token");      
             }else if(token){
                 accessToken = token;
+                $cookies.put("access_token",accessToken);
             }
 
             if(accessToken && apiMetaData.metaInfo){

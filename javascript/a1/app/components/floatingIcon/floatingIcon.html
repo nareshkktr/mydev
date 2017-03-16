@@ -1,24 +1,34 @@
 <div id="add_objects_floating_content">
 	<div id="add_objects_floating_icon"
 		ng-click="floatingIcon.toggleOverlay()">
-		<span class="glyphicon glyphicon-plus"></span>
+		<span class="glyphicon glyphicon-plus" ng-if="!floatingIcon.showOverlay"></span>
+		<span class="glyphicon glyphicon-minus" ng-if="floatingIcon.showOverlay"></span>
 	</div>
 </div>
 <overlay ng-if="floatingIcon.showOverlay"></overlay>
 <div ng-if="floatingIcon.showOverlay" class="top_overlay_content">
 	<div class="row">
-		<div class="col-xs-12">
-			Problem &nbsp;&nbsp;<span class="glyphicon glyphicon-globe"></span>
+		<div class="add_object_name">
+			<label>Create Problem</label>
+		</div>
+		<div class="add_object_img">
+			<span class="glyphicon glyphicon-globe"></span>
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-xs-12">
-			Event &nbsp;&nbsp;<span class="glyphicon glyphicon-globe"></span>
+		<div class="add_object_name">
+			<label>Add Event</label>
+		</div>
+		<div class="add_object_img">
+			<span class="glyphicon glyphicon-calendar"></span>
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-xs-12">
-			Group &nbsp;&nbsp;<span class="glyphicon glyphicon-globe"></span>
+		<div class="add_object_name">
+			<label>Create Group</label>
+		</div>
+		<div class="add_object_img">
+			<span class="glyphicon glyphicon-user"></span>
 		</div>
 	</div>
 </div>

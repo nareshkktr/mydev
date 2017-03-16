@@ -46,12 +46,12 @@ public class ProblemTypeServiceImpl implements ProblemTypeService {
 		if (validateDuplicateProblemTypeByTypeNameRequest(createUpdateDeleteProblemTypeRequest)) {
 			ProblemType problemType = new ProblemType();
 			problemType.setProblemTypeName(createUpdateDeleteProblemTypeRequest.getProblemTypeName());
-			problemType.setProblemTypePhotoURL(
+			/*problemType.setProblemTypePhotoURL(
 					imageService.addImageToLocalDrive(ApplicationConstants.OBJECT_TYPE_PROBLEM_TYPE,
 							createUpdateDeleteProblemTypeRequest.getProblemTypeName(),
 							createUpdateDeleteProblemTypeRequest.getProblemTypePhoto(),
 							createUpdateDeleteProblemTypeRequest.getProblemTypeName()));
-			problemTypeGuid = problemTypeDao.createProblemType(problemType);
+			*/problemTypeGuid = problemTypeDao.createProblemType(problemType);
 		}
 		return problemTypeGuid;
 	}

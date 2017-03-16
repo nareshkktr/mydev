@@ -14,11 +14,20 @@ import com.kasisripriyawebapps.myindia.exception.InternalServerException;
  */
 @Repository
 public class ProblemDaoImpl extends BaseDaoImpl<Long, Problem> implements ProblemDao {
-	
-	
+
 	@Override
 	public Long saveProblem(Problem problem) throws InternalServerException {
 		return save(problem);
+	}
+
+	@Override
+	public Problem getProblemByGuid(Long objectId) throws InternalServerException {
+		return getById(objectId);
+	}
+
+	@Override
+	public void updateProblem(Problem problem) throws InternalServerException {
+		update(problem);
 	}
 
 }

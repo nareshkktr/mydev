@@ -42,6 +42,12 @@ public class ProblemHistory implements Serializable {
 	@JoinColumn(name = "PROBLEM_GUID")
 	private Problem problem;
 
+	@Column(name = "STATUS")
+	private String status;
+
+	@Column(name = "ACCOUNT_ID")
+	private Long accountId;
+
 	public Long getGuid() {
 		return guid;
 	}
@@ -82,4 +88,21 @@ public class ProblemHistory implements Serializable {
 		this.problem = problem;
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public Long getAccountId() {
+		return accountId;
+	}
+
+	public void setAccountId(Long accountId) {
+		this.accountId = accountId;
+	}
+
+	
 }

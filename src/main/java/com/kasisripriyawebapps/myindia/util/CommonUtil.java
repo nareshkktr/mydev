@@ -4,6 +4,7 @@
 package com.kasisripriyawebapps.myindia.util;
 
 import java.awt.image.BufferedImage;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -25,6 +26,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -275,13 +277,37 @@ public class CommonUtil {
 		byte[] decodedBytes = null;
 		try {
 			decodedBytes = decoder.decodeBuffer(base64String);
-			String uploadFile = fsFileName + ".png";
+			String uploadFile = fsFileName;
 			BufferedImage image = ImageIO.read(new ByteArrayInputStream(decodedBytes));
 			image = decodeToImage(base64String);
 			File f = new File(uploadFile);
-			// write the image
-			ImageIO.write(image, "png", f);
+
+			ImageIO.write(image, FilenameUtils.getExtension(fsFileName), f);
 			lsFilePath = f.getAbsolutePath();
+		} catch (IOException e) {
+			new InternalServerException(e.getMessage());
+		}
+
+		return lsFilePath;
+	}
+
+	public static String saveFileIntoLocal(String fsBase64, String fsFileName) throws InternalServerException {
+		String lsFilePath = "";
+		String base64String = fsBase64;
+		BASE64Decoder decoder = new BASE64Decoder();
+		byte[] decodedBytes = null;
+		try {
+			decodedBytes = decoder.decodeBuffer(base64String);
+			String uploadFile = fsFileName;
+
+			File f = new File(uploadFile);
+			lsFilePath = f.getAbsolutePath();
+			
+			FileOutputStream  writer = new FileOutputStream (uploadFile);
+			writer.write(decodedBytes);
+			writer.flush();
+			writer.close();
+
 		} catch (IOException e) {
 			new InternalServerException(e.getMessage());
 		}

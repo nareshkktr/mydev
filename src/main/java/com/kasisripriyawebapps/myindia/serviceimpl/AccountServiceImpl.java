@@ -104,19 +104,20 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	@Transactional
-	public BaseUserInformation prepareBaseUserInformation(Account account,HttpServletRequest servletRequest) throws InternalServerException, RecordNotFoundException {
+	public BaseUserInformation prepareBaseUserInformation(Account account)
+			throws InternalServerException, RecordNotFoundException {
 
 		BaseUserInformation baseUserInfo = new BaseUserInformation();
 		JSONObject authTokenInfo = null;
-		
+
 		UserInfo userInfo = account.getUserInfo();
-		
+
 		baseUserInfo.setName(userInfo.getElectorName());
 		baseUserInfo.setUserGuid(userInfo.getGuid());
 		baseUserInfo.setGender(userInfo.getGender());
 		baseUserInfo.setUserImage(userInfo.getPhotoURL());
 		baseUserInfo.setUserName(account.getUserName());
-		
+
 		if (account != null) {
 			try {
 				authTokenInfo = oAuthService.getAuthTokenInfo(account.getUserName(), account.getPassword());
@@ -125,12 +126,10 @@ public class AccountServiceImpl implements AccountService {
 				throw new InternalServerException(e.getMessage());
 			}
 		}
-		//populateLocationInformation
-		UserLocationDetails userLocationDetails=userService.getLoggedInUserLocation(account.getGuid());
-		HttpSession session = servletRequest.getSession(true);
-		session.setAttribute("userLocationDetails", userLocationDetails);
+		// populateLocationInformation
+		UserLocationDetails userLocationDetails = userService.getLoggedInUserLocation(account.getGuid());
 		baseUserInfo.setUserLocation(userLocationDetails);
-		
+
 		return baseUserInfo;
 	}
 
@@ -143,7 +142,7 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public BaseUserInformation login(LoginRequest loginRequest,HttpServletRequest servletRequest)
+	public BaseUserInformation login(LoginRequest loginRequest)
 			throws InternalServerException, RecordNotFoundException {
 
 		BaseUserInformation baseUserInfo = new BaseUserInformation();
@@ -158,7 +157,7 @@ public class AccountServiceImpl implements AccountService {
 				throw new RecordNotFoundException(ExceptionConstants.LOGIN_ACCOUNT_NOT_FOUND_PASSWORD);
 			}
 		}
-		baseUserInfo = prepareBaseUserInformation(account,servletRequest);
+		baseUserInfo = prepareBaseUserInformation(account);
 		return baseUserInfo;
 	}
 }

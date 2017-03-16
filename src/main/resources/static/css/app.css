@@ -2,7 +2,7 @@
 	position: fixed;
 	right: 0;
 	bottom: 47px;
-	z-index:1200;
+	z-index: 1200;
 }
 
 #add_objects_floating_icon {
@@ -23,16 +23,53 @@
 	font-weight: 100;
 	font-family: inherit;
 	top: -8px;
-	left: 19px;	
+	left: 19px;
 }
-.top_overlay_content{
+
+.top_overlay_content {
 	position: fixed;
-    right: 37px;
-    bottom: 150px;
-    z-index: 1200;
-    background-color: black;
-    color: white;
-    padding: 10px;
+	right: 0px;
+	bottom: 130px;
+	z-index: 1200;
+	color: black;
+	width: 210px;
+}
+
+.top_overlay_content .row {
+	margin-bottom: 17px;
+}
+
+.add_object_name {
+	direction: rtl;
+	width: 120px;
+}
+
+.add_object_img {
+	padding: 0px;
+	text-align: center;
+	position: fixed;
+	right: 40px;
+}
+
+.add_object_img span {
+	background-color: #f94c59;
+	padding: 10px;
+	color: white;
+	border-radius: 50%;
+	top: -4px;
+	font-size: 19px;
+}
+
+.add_object_name label {
+	    padding: 5px 9px 5px 10px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    background-color: white;
+    border-bottom: 1px solid lightgrey;
+}
+
+.add_object_name, .add_object_img {
+	float: left;
 }
 @CHARSET "ISO-8859-1";
 
@@ -51,7 +88,7 @@
 }
 
 .app_name_img img {
-	width: 50px;
+	width: 45px;
 	height: 40px;
 	border-radius: 50%;
 	vertical-align: middle;
@@ -67,7 +104,6 @@
 
 .copty_right_col {
 	letter-spacing: 1px;
-	margin-top: 15px;
 	text-align: center;
 }
 
@@ -78,8 +114,6 @@
 
 .social_icons_col {
 	text-align: center;
-	margin-top: 15px;
-	padding-top: 10px;
 }
 
 .social_icons_col i {
@@ -132,6 +166,13 @@
 	color: black;
 	font-size: 15px !important;
 }
+
+.footer_info {
+	display: flex;
+	height: 100%;
+	align-items: center;
+}
+
 @CHARSET "ISO-8859-1";
 
 body {
@@ -142,7 +183,7 @@ body {
 	background-color: #ebebeb;
 	height: 100%;
 	width: 100%;
-	padding: 0px 0px 30px 0px;
+	padding: 0px 0px 0px 0px !important;
 }
 
 .app_header {
@@ -420,6 +461,7 @@ input[type="text"], input[type="password"], select {
 #header_search_box input[type="text"] {
 	width: 230px;
 	height: 30px !important;
+	padding-left: 35px;
 }
 
 .app_header .navbar-form {
@@ -503,7 +545,6 @@ input[type="text"], input[type="password"], select {
 		display: none;
 	}
 }
-
 #location_change_search_box {
 	width: 99%;
 }
@@ -552,7 +593,7 @@ input[type="text"], input[type="password"], select {
 	position: fixed;
 	width: 100%;
 	height: 100%;
-	background-color: #ebebeb;
+	background-color: #989494;
 	opacity: 0.7;
 	top: 0;
 	z-index:1100;
@@ -822,6 +863,29 @@ input[type="text"], input[type="password"], select {
 	height: 100%;
 }
 
+.view_problem_container {
+	margin: 0px !important;
+}
+
+#view_problem_left_sidebar {
+	
+}
+
+#view_problem_content {
+	
+}
+
+#view_problem_left_side_content {
+	
+}
+
+#view_problem_related_problems_side_bar {
+	
+}
+
+#problem_main_photo_url {
+	
+}
 #login-container {
 	background-color: #ebebeb;
 	height: 100%;
@@ -883,8 +947,9 @@ input[type="text"], input[type="password"], select {
 .login_icon {
 	color: grey;
 	font-size: 12px !important;
-	left: -50px;
 	top: 37px !important;
+	left: -53px;
+    position: relative;
 }
 
 .password_row {
@@ -979,10 +1044,6 @@ input[type="text"], input[type="password"], select {
 #login_form form button, input[type="checkbox"] {
 	-webkit-box-shadow: 1px 5px 0px 1px rgba(249, 76, 89, 0.57);
 	box-shadow: 1px 5px 0px 1px rgba(249, 76, 89, 0.57);
-}
-
-.signin_user_icon {
-	left: -57px;
 }
 
 .help-block {

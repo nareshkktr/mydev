@@ -12,9 +12,9 @@
 				</div>
 
 				<div class="form-group">
-					<label for="search_college">User name</label> <span
-						class="glyphicon glyphicon-user login_icon signin_user_icon"
-						aria-hidden="true"></span> <input type="text" name="form_username"
+					<label for="search_college">User name</label> <i
+						class="fa fa-user login_icon"
+						aria-hidden="true"></i> <input type="text" name="form_username"
 						ng-model="signIn.userName" placeholder="Username"
 						class="form-username form-control" id="form-username"
 						ng-required="true">
@@ -29,8 +29,9 @@
 				</div>
 
 				<div class="form-group password_row">
-					<label for="search_college">Password</label> <span
-						class="glyphicon glyphicon-lock login_icon" aria-hidden="true"></span>
+					<label for="search_college">Password</label> <i
+						class="fa fa-lock login_icon"
+						aria-hidden="true"></i>
 					<input type="password" name="form_password"
 						ng-model="signIn.password" placeholder="Password"
 						class="form-password form-control" id="form-password"
@@ -58,8 +59,8 @@
 				</div>
 				<div class="form-group connected_row">
 					<label class='sign_up_connect_lbl'>Wanna get connected?</label>
-					<button type="button" class="btn app_btn" ng-click="signIn.gotoSignUp()"
-						id="connect-btn">Connect</button>
+					<button type="button" class="btn app_btn"
+						ng-click="signIn.gotoSignUp()" id="connect-btn">Connect</button>
 				</div>
 			</form>
 		</div>

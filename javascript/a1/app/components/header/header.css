@@ -8,7 +8,7 @@ body {
 	background-color: #ebebeb;
 	height: 100%;
 	width: 100%;
-	padding: 0px 0px 30px 0px;
+	padding: 0px 0px 0px 0px !important;
 }
 
 .app_header {
@@ -286,6 +286,7 @@ input[type="text"], input[type="password"], select {
 #header_search_box input[type="text"] {
 	width: 230px;
 	height: 30px !important;
+	padding-left: 35px;
 }
 
 .app_header .navbar-form {
