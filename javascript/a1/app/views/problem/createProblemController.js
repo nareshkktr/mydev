@@ -3,9 +3,9 @@
 
 	angular.module('myindia-app').controller("createProblemController",
 			createProblemController);
-	createProblemController.$inject = [ 'createProblemService','fileUploadService','dataShareService','userInfoService' ];
+	createProblemController.$inject = [ 'createProblemService','fileUploadService','dataShareService','userInfoService','$scope' ];
 	
-	function createProblemController(createProblemService,fileUploadService,dataShareService,userInfoService) {
+	function createProblemController(createProblemService,fileUploadService,dataShareService,userInfoService,$scope) {
 		
 		var createProblem=this;
 		createProblem.problemTypesResults = [];
@@ -14,23 +14,13 @@
 		createProblem.grivienceDescription;
 		createProblem.noOfAffectedCitizens;
 		createProblem.moneyAtStake;
-		createProblem.userData = dataShareService.getUserInfo();
 
-		if(!createProblem.userData){
-			userInfoService.getUserInfo().then(userInfoSuccess).catch(userInfoFailure);
+		processUserData();
 
-			function userInfoSuccess(data){
-				createProblem.userData = data;
-				angular.copy(createProblem.userData.userLocation.locationName,createProblem.locatedInName);
-			}
-
-			function userInfoFailure(error){
-				alert(error);
-			}
-		}else if(createProblem.userData.userLocation){
-			angular.copy(createProblem.userData.userLocation.locationName,createProblem.locatedInName);
-		}
-
+		//Register event to listen to userinfo chnages 
+		$scope.$on('userInfoChanged',function(event){
+			processUserData();
+		});
 		
 
 		createProblem.saveProblem=saveProblem;
@@ -52,6 +42,25 @@
     		}
 		}
 		
+		function processUserData(){
+			createProblem.userData = dataShareService.getUserInfo();
+
+			if(!createProblem.userData){
+				userInfoService.getUserInfo().then(userInfoSuccess).catch(userInfoFailure);
+
+				function userInfoSuccess(data){
+					createProblem.userData = data;
+					createProblem.locatedInName = createProblem.userData.userLocation.locationName;
+				}
+
+				function userInfoFailure(error){
+					alert(error);
+				}
+			}else if(createProblem.userData.userLocation){
+				createProblem.locatedInName = createProblem.userData.userLocation.locationName;
+			}
+		}
+
 		function getAllProblemTypes(){
 			
 			createProblemService.getAllProblemTypes().then(getAllProblemTypesSuccess).catch(getAllProblemTypesFailure);

@@ -57,9 +57,11 @@
 		
 		function pinLocation(){
 			let userInfo=dataShareService.getUserInfo();
-    		userInfo.userLocation.locationName=locationChangePopUp.selectedLocation.locationName;
-    		userInfo.userLocation.locationGuid=locationChangePopUp.selectedLocation.locationGuid;
-    		dataShareService.setUserInfo(userInfo);
+			if(userInfo){
+    			userInfo.userLocation.locationName=locationChangePopUp.selectedLocation.locationName;
+    			userInfo.userLocation.locationGuid=locationChangePopUp.selectedLocation.locationGuid;
+    			dataShareService.setUserInfo(userInfo);
+    		}
     		locationChangePopUp.closePopUp();
     	}
 	}

@@ -3,7 +3,9 @@
 
 	angular.module('myindia-app').factory("dataShareService", dataShareService);
 
-	function dataShareService() {
+	dataShareService.$inject = ['$rootScope'];
+
+	function dataShareService($rootScope) {
 
 		var data = {};
 
@@ -20,6 +22,13 @@
 
 		function setUserInfo(userInfo) {
 			data.userInfo = userInfo;
+
+			// Broadcast event
+			broadcast('userInfoChanged');
+		}
+
+		function broadcast(eventName){
+			$rootScope.$broadcast(eventName);
 		}
 	}
 
