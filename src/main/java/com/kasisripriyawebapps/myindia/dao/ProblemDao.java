@@ -13,4 +13,6 @@ public interface ProblemDao {
 
 	Long saveProblem(Problem problem) throws InternalServerException;
 
+	Problem getProblemByGuid(Long problemGuid) throws InternalServerException;
+
 }

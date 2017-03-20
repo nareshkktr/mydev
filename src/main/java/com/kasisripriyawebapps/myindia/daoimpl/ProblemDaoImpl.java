@@ -21,4 +21,10 @@ public class ProblemDaoImpl extends BaseDaoImpl<Long, Problem> implements Proble
 		return save(problem);
 	}
 
+	@Override
+	public Problem getProblemByGuid(Long problemGuid) throws InternalServerException {
+		// TODO Auto-generated method stub
+		return getById(problemGuid);
+	}
+
 }

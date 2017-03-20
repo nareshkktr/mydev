@@ -17,6 +17,7 @@ import com.kasisripriyawebapps.myindia.entity.Problem;
 import com.kasisripriyawebapps.myindia.entity.ProblemType;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.CreateUpdateProblemRequestData;
+import com.kasisripriyawebapps.myindia.requestresponsemodel.ProblemResponse;
 import com.kasisripriyawebapps.myindia.service.ImageService;
 import com.kasisripriyawebapps.myindia.service.ProblemService;
 import com.kasisripriyawebapps.myindia.util.CommonUtil;
@@ -60,6 +61,34 @@ public class ProblemServiceImpl implements ProblemService {
 		problem.setProblemType(problemType);
 		problemGuid = problemDao.saveProblem(problem);
 		return problemGuid;
+	}
+
+	@Override
+	public ProblemResponse retreiveProblem(Long problemGuid, LoggedInUserDetails loggedInUserDetails) throws InternalServerException {
+		
+		Problem problem = problemDao.getProblemByGuid(problemGuid);
+		
+		ProblemResponse problemResponse = new ProblemResponse();
+		
+		problemResponse.setAmountInvolved(problem.getAmountInvolved());
+		// Here we wont get?
+		problemResponse.setCreatedLocation(problem.getCreatedLocation());
+		problemResponse.setCreatedTimeStamp(problem.getCreatedTimeStamp());
+		problemResponse.setEscalationEnabled(problem.getEscalationEnabled());
+		problemResponse.setGuid(problem.getGuid());
+		problemResponse.setNoOfAffectedPeople(problem.getNoOfAffectedPeople());
+		problemResponse.setPhotoURL(problem.getPhotoURL());
+		problemResponse.setProblemLongDescription(problem.getProblemLongDescription());
+		problemResponse.setProblemSeverity(problem.getProblemSeverity());
+		problemResponse.setProblemShortDescription(problem.getProblemShortDescription());
+		problemResponse.setProblemStatus(problem.getProblemStatus());
+		problemResponse.setProblemType(problem.getProblemType());
+		problemResponse.setRootCause(problem.getRootCause());
+		
+		
+//		problemResponse.setOwner(owner);
+//		problemResponse.setCreatedBy(createdBy);
+		return problemResponse;
 	}
 
 }
