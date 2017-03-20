@@ -3,9 +3,9 @@
 
     angular.module('myindia-app').factory("swaggerShareService", swaggerShareService);
 
-    swaggerShareService.$inject = ['$q','$cookies'];
+    swaggerShareService.$inject = ['$q'];
 
-    function swaggerShareService($q,$cookies) {
+    function swaggerShareService($q) {
 
         var apiMetaData = {};
 
@@ -55,11 +55,11 @@
 
             let accessToken;
 
-            if($cookies.get("access_token")){
-                accessToken = $cookies.get("access_token");      
+            if(sessionStorage.getItem("access_token")){
+                accessToken = sessionStorage.getItem("access_token");   
             }else if(token){
                 accessToken = token;
-                $cookies.put("access_token",accessToken);
+                sessionStorage.setItem("access_token",accessToken);
             }
 
             if(accessToken && apiMetaData.metaInfo){

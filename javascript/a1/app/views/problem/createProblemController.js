@@ -26,7 +26,7 @@
 		createProblem.saveProblem=saveProblem;
 		createProblem.uploadCover = uploadCover;
 		    
-		//getAllProblemTypes();
+		getAllProblemTypes();
 		
 		function saveProblem(){
 			

@@ -1,105 +1,105 @@
-1,Agriculture ,,Ministry of Agriculture and Farmers Welfare
-2,Banking,,Ministry of Finance
-3,Birth/Death Certificates,,Ministry of Home Affairs
-4,BPL Card/Aadhar card,,Ministry of Electronics and Information Technology
-5,Chemicals & Fertilizers,,Ministry of Chemicals and Fertilizers
-6,Children Issues,,Ministry of Women and Child Development
-7,Construction - Building Plan Submission - Rural,,Ministry of Rural Development
-8,Construction - Building Plan Submission - Urban,,Ministry of Urban Development
-9,Construction - Others - Rural,,Ministry of Rural Development
-10,Construction - Others - Urban,,Ministry of Urban Development
-11,Consumer Issues - Food And Public Distribution,,"Ministry of Consumer Affairs\, Food and Public Distribution"
-12,Consumer Issues - Others,,"Ministry of Consumer Affairs\, Food and Public Distribution"
-13,Corporate Affairs,,Ministry of Corporate Affairs
-14,Corruption/Vigilance Issues,,Ministry of Finance
-15,Drinking Water Issues,,Ministry of Drinking Water and Sanitation
-16,Education - College Examinations,,Ministry of Human Resource Development
-17,Education - Government College Fees,,Ministry of Human Resource Development
-18,Education - Government College Infrastructure,,Ministry of Human Resource Development
-19,Education - Government College Staffing,,Ministry of Human Resource Development
-20,Education - Government Schools Fees,,Ministry of Human Resource Development
-21,Education - Government Schools Food facilities,,Ministry of Human Resource Development
-22,Education - Government Schools Infrastructure,,Ministry of Human Resource Development
-23,Education - Government Schools Primary,,Ministry of Human Resource Development
-24,Education - Government Schools Staffing,,Ministry of Human Resource Development
-25,Education - Others,,Ministry of Human Resource Development
-26,Education - School Examinations,,Ministry of Human Resource Development
-27,Electricity Board(EB),,Ministry of Power
-28,Employment(Government related jobs etc),,Ministry of Labour and Employment
-29,External Affairs - Others,,Ministry of External Affairs
-30,Fire Department,,"Ministry of Environment\, Forest and Climate Change"
-31,Flood Relief,,Ministry of Health and Family Welfare
-32,Food Commodity Issues,,Ministry of Food Processing Industries
-33,Harrasment/Atrocities,,"Ministry of Personnel\, Public Grievances and Pensions"
-34,Health - Government Hospitals - Ambulance,,Ministry of Health and Family Welfare
-35,Health - Government Hospitals - Infrastructure Issues,,Ministry of Health and Family Welfare
-36,Health - Government Hospitals - Medical Facilities Issue,,Ministry of Health and Family Welfare
-37,Health - Government Hospitals - Staffing Issues,,Ministry of Health and Family Welfare
-38,Health - Medical Reimbursement,,Ministry of Health and Family Welfare
-39,Health - Others,,Ministry of Health and Family Welfare
-40,Housing Issues,,Ministry of Housing and Urban Poverty Alleviation
-41,Human Rights Commision,,Ministry of Human Resource Development
-42,Insurance - ESI Insurance,,Ministry of Finance
-43,Insurance - Others,,Ministry of Finance
-44,Land & Estates - Rural,,Ministry of Rural Development
-45,Land & Estates - Urban,,Ministry of Urban Development
-46,Legal Issues/Law -Civil,,Ministry of Law and Justice
-47,Legal Issues/Law -Criminal,,Ministry of Law and Justice
-48,Legal Issues/Law -Others,,Ministry of Law and Justice
-49,Natural Gas & LPG,,Ministry of Petroleum and Natural Gas
-50,Others,,Others
-51,Passport Authority,,Ministry of External Affairs
-52,Pension services - Others,,"Ministry of Personnel\, Public Grievances and Pensions"
-53,Pension services - Service Pension,,"Ministry of Personnel\, Public Grievances and Pensions"
-54,Petroleum & Diesel - Complaints,,Ministry of Petroleum and Natural Gas
-55,Petroleum & Diesel - Others,,Ministry of Petroleum and Natural Gas
-56,Petroleum & Diesel - Stations,,Ministry of Petroleum and Natural Gas
-57,Police Department,,Ministry of Home Affairs
-58,Post Office,,Ministry of Communications
-59,Public Grievance,,"Ministry of Personnel\, Public Grievances and Pensions"
-60,Public Nuisance,,"Ministry of Personnel\, Public Grievances and Pensions"
-61,Public Transportation - Bus Transportation,,Ministry of Road Transport and Highways
-62,Public Transportation - Others,,Ministry of Road Transport and Highways
-63,Public Transportation - Railway Transportation,,Ministry of Railways
-64,Regional Transportation Office (RTO) - Driver Issue,,Ministry of Road Transport and Highways
-65,Regional Transportation Office (RTO) - Vehicle Issue,,Ministry of Road Transport and Highways
-66,Regional Transportation Office (RTO) -Others,,Ministry of Road Transport and Highways
-67,Relief Funds,,Ministry of Health and Family Welfare
-68,Road & Highways - Bridges,,Ministry of Road Transport and Highways
-69,Road & Highways - Highways Issues,,Ministry of Road Transport and Highways
-70,"Road & Highways - Local Road Issues (Naming & Renaming street\, parks etc)",,Ministry of Road Transport and Highways
-71,Road & Highways - Maintainence Issue,,Ministry of Road Transport and Highways
-72,Road & Highways - New Road Construction Request,,Ministry of Road Transport and Highways
-73,Road & Highways - Others,,Ministry of Road Transport and Highways
-74,Road & Highways - Road Sweeping,,Ministry of Road Transport and Highways
-75,Road & Highways - Roads to be relaid,,Ministry of Road Transport and Highways
-76,Road & Highways - Street Lighting,,Ministry of Road Transport and Highways
-77,Savings Scheme -National Savings,,Ministry of Finance
-78,Savings Scheme -Others,,Ministry of Finance
-79,Savings Scheme -Provident Fund,,Ministry of Finance
-80,Sewage Disposal,,Ministry of Drinking Water and Sanitation
-81,Shipping Issues,,Ministry of Shipping
-82,Social Injustice,,Ministry of Social Justice and Empowerment
-83,Sports Department,,Ministry of Youth Affairs and Sports
-84,Storm Water Drain - Others,,"Ministry of Water Resources\, River Development and Ganga Rejuvenation"
-85,Storm Water Drain - Rain Water Harvesting,,"Ministry of Water Resources\, River Development and Ganga Rejuvenation"
-86,Storm Water Drain -Water logging,,"Ministry of Water Resources\, River Development and Ganga Rejuvenation"
-87,Tax payment - Drinage/Sewage Tax,,Ministry of Finance
-88,Tax payment - Others,,Ministry of Finance
-89,Tax payment - Property Tax,,Ministry of Finance
-90,Tax payment - Water Tax,,Ministry of Finance
-91,Telecommunication - Braodband Facilities,,Ministry of Communications
-92,Telecommunication - Connectivity Issues,,Ministry of Communications
-93,Telecommunication - Mobile recharge plans,,Ministry of Communications
-94,Telecommunication - Mobile Sim Cards,,Ministry of Communications
-95,Telecommunication - Phone / Land line,,Ministry of Communications
-96,Telecommunication -Others,,Ministry of Communications
-97,Tourism Issues,,Ministry of Tourism
-98,Waste Management - Door to door garbage collection,,"Ministry of Environment\, Forest and Climate Change"
-99,Waste Management - Garbage Disrribution Stations(street level),,"Ministry of Environment\, Forest and Climate Change"
-100,Waste Management - Others,,"Ministry of Environment\, Forest and Climate Change"
-101,WasteManagement - Garbage Disrribution Stations -Clearance frequency,,"Ministry of Environment\, Forest and Climate Change"
-102,WasteManagement - Garbage Disrribution Stations -New Installation,,"Ministry of Environment\, Forest and Climate Change"
-103,Water Supply,,"Ministry of Water Resources\, River Development and Ganga Rejuvenation"
-104,Women Related Issues,,Ministry of Women and Child Development
-105,"Yoga\, Siddha\, Unani & Homeopathy ",,Ministry of AYUSH
+1,Agriculture ,,Ministry of Agriculture and Farmers Welfare,Agriculture
+2,Banking,,Ministry of Finance,Banking
+3,Birth/Death Certificates,,Ministry of Home Affairs,Identity Cards & Certificates
+4,BPL Card/Aadhar card,,Ministry of Electronics and Information Technology,Identity Cards & Certificates
+5,Chemicals & Fertilizers,,Ministry of Chemicals and Fertilizers,Others
+6,Children Issues,,Ministry of Women and Child Development,Women and Child development
+7,Building Plan Submission - Rural,,Ministry of Rural Development,Construction
+8,Building Plan Submission - Urban,,Ministry of Urban Development,Construction
+9,Others - Rural,,Ministry of Rural Development,Construction
+10,Others - Urban,,Ministry of Urban Development,Construction
+11,Food And Public Distribution,,"Ministry of Consumer Affairs\, Food and Public Distribution",Consumer Issues
+12,Consumer Issues - Others,,"Ministry of Consumer Affairs\, Food and Public Distribution",Consumer Issues
+13,Corporate Affairs,,Ministry of Corporate Affairs,Corporate Affairs
+14,Corruption/Vigilance Issues,,Ministry of Finance,Corruption/Vigilance Issues
+15,Drinking Water Issues,,Ministry of Drinking Water and Sanitation,Water & Sanitation
+16,College Examinations,,Ministry of Human Resource Development,Education
+17,Government College Fees,,Ministry of Human Resource Development,Education
+18,Government College Infrastructure,,Ministry of Human Resource Development,Education
+19,Government College Staffing,,Ministry of Human Resource Development,Education
+20,Government Schools Fees,,Ministry of Human Resource Development,Education
+21,Government Schools Food facilities,,Ministry of Human Resource Development,Education
+22,Government Schools Infrastructure,,Ministry of Human Resource Development,Education
+23,Government Schools Primary,,Ministry of Human Resource Development,Education
+24,Government Schools Staffing,,Ministry of Human Resource Development,Education
+25,Education - Others,,Ministry of Human Resource Development,Education
+26,School Examinations,,Ministry of Human Resource Development,Education
+27,Electricity Board(EB),,Ministry of Power,Electricity
+28,Employment(Government related jobs etc),,Ministry of Labour and Employment,Employment
+29,External Affairs - Others,,Ministry of External Affairs,External Affairs
+30,Fire Department,,"Ministry of Environment\, Forest and Climate Change",Emergency Services
+31,Flood Relief,,Ministry of Health and Family Welfare,Natural Disaster Relief
+32,Food Commodity Issues,,Ministry of Food Processing Industries,Consumer Issues
+33,Harrasment/Atrocities,,"Ministry of Personnel\, Public Grievances and Pensions","Personal, Public Grievances & Pensions"
+34,Ambulance,,Ministry of Health and Family Welfare,Health
+35,Infrastructure Issues,,Ministry of Health and Family Welfare,Health
+36,Medical Facilities Issue,,Ministry of Health and Family Welfare,Health
+37,Staffing Issues,,Ministry of Health and Family Welfare,Health
+38,Medical Reimbursement,,Ministry of Health and Family Welfare,Health
+39,Health - Others,,Ministry of Health and Family Welfare,Health
+40,Housing Issues,,Ministry of Housing and Urban Poverty Alleviation,Others
+41,Human Rights Commision,,Ministry of Human Resource Development,"Personal, Public Grievances & Pensions"
+42, ESI Insurance,,Ministry of Finance,Insurance
+43,Insurance - Others,,Ministry of Finance,Insurance
+44,Land & Estates - Rural,,Ministry of Rural Development,Real Estates
+45,Land & Estates - Urban,,Ministry of Urban Development,Real Estates
+46,Legal Issues/Law -Civil,,Ministry of Law and Justice,Legal Issues
+47,Legal Issues/Law -Criminal,,Ministry of Law and Justice,Legal Issues
+48,Legal Issues/Law -Others,,Ministry of Law and Justice,Legal Issues
+49,Natural Gas & LPG,,Ministry of Petroleum and Natural Gas,Fuel & Gas
+50,Others,,Others,Others
+51,Passport Authority,,Ministry of External Affairs,Identity Cards & Certificates
+52,Pension services - Others,,"Ministry of Personnel\, Public Grievances and Pensions","Personal, Public Grievances & Pensions"
+53,Service Pension,,"Ministry of Personnel\, Public Grievances and Pensions","Personal, Public Grievances & Pensions"
+54,Petroleum & Diesel - Complaints,,Ministry of Petroleum and Natural Gas,Fuel & Gas
+55,Petroleum & Diesel - Others,,Ministry of Petroleum and Natural Gas,Fuel & Gas
+56,Petroleum & Diesel - Stations,,Ministry of Petroleum and Natural Gas,Fuel & Gas
+57,Police Department,,Ministry of Home Affairs,Emergency Services
+58,Post Office,,Ministry of Communications,Communications
+59,Public Grievance,,"Ministry of Personnel\, Public Grievances and Pensions","Personal, Public Grievances & Pensions"
+60,Public Nuisance,,"Ministry of Personnel\, Public Grievances and Pensions","Personal, Public Grievances & Pensions"
+61,Bus Transportation,,Ministry of Road Transport and Highways,Transportation
+62,Public Transportation - Others,,Ministry of Road Transport and Highways,Transportation
+63,Railway Transportation,,Ministry of Railways,Transportation
+64,Regional Transportation Office (RTO) - Driver Issue,,Ministry of Road Transport and Highways,Transportation
+65,Regional Transportation Office (RTO) - Vehicle Issue,,Ministry of Road Transport and Highways,Transportation
+66,Regional Transportation Office (RTO) -Others,,Ministry of Road Transport and Highways,Transportation
+67,Relief Funds,,Ministry of Health and Family Welfare,Others
+68,Bridges,,Ministry of Road Transport and Highways,Road & Highways
+69,Highways Issues,,Ministry of Road Transport and Highways,Road & Highways
+70,"Local Road Issues (Naming & Renaming street\, parks etc)",,Ministry of Road Transport and Highways,Road & Highways
+71,Maintainence Issue,,Ministry of Road Transport and Highways,Road & Highways
+72,New Road Construction Request,,Ministry of Road Transport and Highways,Road & Highways
+73,Road & Highways - Others,,Ministry of Road Transport and Highways,Road & Highways
+74,Road Sweeping,,Ministry of Road Transport and Highways,Road & Highways
+75,Roads to be relaid,,Ministry of Road Transport and Highways,Road & Highways
+76,Street Lighting,,Ministry of Road Transport and Highways,Road & Highways
+77,Savings Scheme -National Savings,,Ministry of Finance,Others
+78,Savings Scheme -Others,,Ministry of Finance,Others
+79,Savings Scheme -Provident Fund,,Ministry of Finance,Others
+80,Sewage Disposal,,Ministry of Drinking Water and Sanitation,Water & Sanitation
+81,Shipping Issues,,Ministry of Shipping,Others
+82,Social Injustice,,Ministry of Social Justice and Empowerment,"Personal, Public Grievances & Pensions"
+83,Sports Department,,Ministry of Youth Affairs and Sports,Sports
+84,Storm Water Drain - Others,,"Ministry of Water Resources\, River Development and Ganga Rejuvenation",Water & Sanitation
+85,Rain Water Harvesting,,"Ministry of Water Resources\, River Development and Ganga Rejuvenation",Water & Sanitation
+86,Water logging,,"Ministry of Water Resources\, River Development and Ganga Rejuvenation",Water & Sanitation
+87,Drinage/Sewage Tax,,Ministry of Finance,Taxes
+88,Tax payment - Others,,Ministry of Finance,Taxes
+89,Property Tax,,Ministry of Finance,Taxes
+90,Water Tax,,Ministry of Finance,Taxes
+91,Braodband Facilities,,Ministry of Communications,Communications
+92,Connectivity Issues,,Ministry of Communications,Communications
+93,Mobile recharge plans,,Ministry of Communications,Communications
+94,Mobile Sim Cards,,Ministry of Communications,Communications
+95,Phone / Land line,,Ministry of Communications,Communications
+96,Telecommunication -Others,,Ministry of Communications,Communications
+97,Tourism Issues,,Ministry of Tourism,Tourism
+98,Door to door garbage collection,,"Ministry of Environment\, Forest and Climate Change",Waste Management
+99,Garbage Disrribution Stations(street level),,"Ministry of Environment\, Forest and Climate Change",Waste Management
+100,Waste Management - Others,,"Ministry of Environment\, Forest and Climate Change",Waste Management
+101,Garbage Disrribution Stations -Clearance frequency,,"Ministry of Environment\, Forest and Climate Change",Waste Management
+102,Garbage Disrribution Stations -New Installation,,"Ministry of Environment\, Forest and Climate Change",Waste Management
+103,Water Supply,,"Ministry of Water Resources\, River Development and Ganga Rejuvenation",Water & Sanitation
+104,Women Related Issues,,Ministry of Women and Child Development,Women and Child development
+105,"Yoga\, Siddha\, Unani & Homeopathy ",,Ministry of AYUSH,Others

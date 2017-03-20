@@ -29,7 +29,7 @@
 					}
 				}
 
-			}else if(!$state.includes('signIn') && !$state.includes('signUp')){
+			}else{
 
 				//If shared data has not been set yet.Call the service.
 				userInfoService.getUserInfo().then(userInfoSuccess).catch(userInfoFailure);
