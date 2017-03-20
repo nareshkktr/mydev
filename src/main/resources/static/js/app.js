@@ -698,6 +698,11 @@
 			templateUrl : resource + 'partials/createProblem.html',
 			controller : 'createProblemController',
 			controllerAs : 'createProblem'
+		}).state('viewProblem', {
+			url : '/viewProblem',
+			templateUrl : resource + 'partials/viewProblem.html',
+			controller : 'viewProblemController',
+			controllerAs : 'viewProblem'
 		});
 	}
 })();
@@ -707,9 +712,9 @@
 
 	angular.module('myindia-app').factory("dataShareService", dataShareService);
 
-	dataShareService.$inject = [ '$rootScope' ];
+	dataShareService.$inject = [ '$rootScope', 'userInfoService' ];
 
-	function dataShareService($rootScope) {
+	function dataShareService($rootScope, userInfoService) {
 
 		var data = {};
 
@@ -721,11 +726,104 @@
 		return dataShareService;
 
 		function getUserInfo() {
+			if (data.userInfo == undefined) {
+				userInfoService.getUserInfo().then(function(data){
+					setUserInfo(data);
+				});
+				
+			}
 			return data.userInfo;
 		}
 
 		function setUserInfo(userInfo) {
 			data.userInfo = userInfo;
+		}
+	}
+
+})();
+(function() {
+	'use strict';
+
+	angular.module('myindia-app').factory("fileUploadService",
+			fileUploadService);
+
+	fileUploadService.$inject = [ '$q', 'swaggerShareService' ];
+
+	function fileUploadService($q, swaggerShareService) {
+
+		var services = {};
+
+		var fileUploadService = {
+			uploadFile : uploadFile
+		};
+
+		// // Call and save the data
+		let
+		swaggerPromise = swaggerShareService.getAPIMetaData(setAPIMetaData);
+
+		return fileUploadService;
+
+		function setAPIMetaData(metaInfo) {
+			services = metaInfo;
+		}
+
+		function uploadFile(files, objectType,objectGuid, isMainPhotoURL,
+				category) {
+
+			let
+			deferred = $q.defer();
+
+			let
+			promises = [];
+
+			angular.forEach(files, function(file, key) {
+				promises.push(preapreUploadFileRequest(file, objectType,
+						objectGuid, isMainPhotoURL,
+						category));
+			});
+
+			$q.all(promises).then(function(filesData) {
+
+				services.image.addImages({
+					body : JSON.stringify(filesData)
+				}, uploadSuccess, uploadFailure);
+
+				function uploadSuccess(data) {
+					deferred.resolve(data);
+				}
+
+				function uploadFailure(error) {
+					deferred.reject(error);
+				}
+			})
+
+			return deferred.promise;
+
+		}
+
+		function preapreUploadFileRequest(file, objectType, objectGuid, isMainPhotoURL,
+				category) {
+
+			let
+			deferred = $q.defer();
+
+			var name = file.name;
+			var reader = new FileReader();
+			reader.onload = function() {
+
+				var req = {};
+				req.imageName = name;
+				req.imageData = reader.result;
+				req.objectType = objectType;
+				req.objectId = objectGuid;
+				req.isMainPhotoURL = isMainPhotoURL;
+				req.category = category;
+
+				deferred.resolve(req);
+			}
+			reader.readAsDataURL(file);
+
+			return deferred.promise;
 		}
 	}
 
@@ -785,7 +883,7 @@
 
     	}
 
-        function setAuthorization(token){
+    	function setAuthorization(token){
 
             let accessToken;
 
@@ -793,9 +891,10 @@
                 accessToken = $cookies.get("access_token");      
             }else if(token){
                 accessToken = token;
+                $cookies.put("access_token",accessToken);
             }
 
-            if(accessToken){
+            if(accessToken && apiMetaData.metaInfo){
                 var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization( "Authorization", "Bearer " + accessToken, "header" );
                 apiMetaData.metaInfo.clientAuthorizations.add("bearer",apiKeyAuth);
             }
@@ -803,6 +902,64 @@
 
         
     }
+
+})();
+(function() {
+	'use strict';
+
+	angular.module('myindia-app').factory("userInfoService", userInfoService);
+
+	userInfoService.$inject = [ '$q', 'swaggerShareService' ];
+
+	function userInfoService($q, swaggerShareService) {
+
+		var services = {};
+
+		var userInfoService = {
+			getUserInfo : getUserInfo
+		};
+
+		// Call and save the data
+		let swaggerPromise = swaggerShareService.getAPIMetaData(setAPIMetaData);
+
+
+		return userInfoService;
+
+		function setAPIMetaData(metaInfo) {
+			services = metaInfo;
+		}
+
+		function getUserInfo() {
+
+			let
+			deferred = $q.defer();
+
+			if (swaggerPromise) {
+				swaggerPromise.then(function() {
+					services.account.getLoggedInUserInfo({},
+							getUserInfoSuccess, getUserInfoFailure);
+
+					swaggerPromise = undefined;
+				})
+			} else {
+				services.account.getLoggedInUserInfo({}, getUserInfoSuccess,
+						getUserInfoFailure);
+
+			}
+
+			return deferred.promise;
+
+			function getUserInfoSuccess(data) {
+				deferred.resolve(data.obj);
+			}
+
+			function getUserInfoFailure(error) {
+				deferred.reject(error);
+			}
+
+		}
+
+	}
 
 })();
 (function() {
@@ -908,9 +1065,9 @@
 
 	angular.module('myindia-app').controller("createProblemController",
 			createProblemController);
-	createProblemController.$inject = [ 'createProblemService','dataShareService' ];
+	createProblemController.$inject = [ 'createProblemService','fileUploadService','dataShareService' ];
 	
-	function createProblemController(createProblemService,dataShareService) {
+	function createProblemController(createProblemService,fileUploadService,dataShareService) {
 		
 		var createProblem=this;
 		createProblem.problemTypesResults = [];
@@ -923,8 +1080,6 @@
 		createProblem.saveProblem=saveProblem;
 		createProblem.locatedInName=dataShareService.getUserInfo().userLocation.locationName;
 		createProblem.uploadCover = uploadCover;
-
-		
 		    
 		getAllProblemTypes();
 		
@@ -933,6 +1088,9 @@
 			createProblemService.saveProblem(createProblem).then(saveProblemSuccess).catch(saveProblemFailure);
 
     		function saveProblemSuccess(data){
+    			if(createProblem.coverPhotoFile!=undefined && createProblem.coverPhotoFile!=null){
+    				addMainPhotoToProblem(data.saveUpdateDeleteRecordId);
+    			}
             }
     		function saveProblemFailure(error){
     			alert(error);
@@ -952,8 +1110,23 @@
 			}
 		}
 
-		function uploadCover(file){
-			createProblem.coverPhotoFile = file[0];
+		function uploadCover(files){
+			createProblem.coverPhotoFile = files[0];
+		}
+		
+		function addMainPhotoToProblem(problemGuid){
+
+			let files=[createProblem.coverPhotoFile];
+	
+			fileUploadService.uploadFile(files,"Problem",problemGuid,true,null).then(uploadSuccess).catch(uploadFailure);
+
+			function uploadSuccess(data){
+				console.log(data);
+			}
+
+			function uploadFailure(error){
+				alert(error);
+			}
 		}
 	}
 
@@ -1027,16 +1200,10 @@
             }
             let deferred = $q.defer();
             
-            if(swaggerPromise){
-				swaggerPromise.then(function(){
-					services.problem.createProblem({body:JSON.stringify(requestBody)},
-							saveProblemSuccess, saveProblemFailure);
-					swaggerPromise = undefined;
-				})
-			}else{
+           
 				services.problem.createProblem({body:JSON.stringify(requestBody)},
 						saveProblemSuccess, saveProblemFailure);
-			}
+			
             
             return deferred.promise;
 
@@ -1054,6 +1221,26 @@
 
 })();
 (function() {
+	'use strict';
+
+	angular.module('myindia-app').controller("viewProblemController",
+			viewProblemController);
+	viewProblemController.$inject = [];
+
+	function viewProblemController() {
+
+		var viewProblem = this;
+		viewProblem.problemBasicDetails = {};
+
+		viewProblem.problemBasicDetails.problemMainPhotoURL = "C:\\Apache24\\htdocs\\Problem\\10\\water_problem.png";
+	}
+
+})();
+
+/**
+ * 
+ */
+;(function() {
     'use strict';
 
     angular.module('myindia-app').controller("signInController", signInController);

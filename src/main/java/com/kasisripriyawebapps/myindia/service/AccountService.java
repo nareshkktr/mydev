@@ -3,7 +3,6 @@
  */
 package com.kasisripriyawebapps.myindia.service;
 
-import javax.servlet.http.HttpServletRequest;
 
 import com.kasisripriyawebapps.myindia.entity.Account;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;

@@ -3,17 +3,21 @@
  */
 package com.kasisripriyawebapps.myindia.serviceimpl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kasisripriyawebapps.myindia.configs.LoggedInUserDetails;
-import com.kasisripriyawebapps.myindia.constants.ApplicationConstants;
+import com.kasisripriyawebapps.myindia.constants.ProblemStatusParameters;
 import com.kasisripriyawebapps.myindia.dao.LocationMasterDao;
 import com.kasisripriyawebapps.myindia.dao.ProblemDao;
 import com.kasisripriyawebapps.myindia.dao.ProblemTypeDao;
 import com.kasisripriyawebapps.myindia.entity.LocationMaster;
 import com.kasisripriyawebapps.myindia.entity.Problem;
+import com.kasisripriyawebapps.myindia.entity.ProblemHistory;
 import com.kasisripriyawebapps.myindia.entity.ProblemType;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.CreateUpdateProblemRequestData;
@@ -59,6 +63,19 @@ public class ProblemServiceImpl implements ProblemService {
 		ProblemType problemType = problemTypeDao
 				.getProblemTypeById(createUpdateProblemRequestData.getProblemType().getGuid());
 		problem.setProblemType(problemType);
+		problem.setProblemStatus(ProblemStatusParameters.CREATED);
+
+		ProblemHistory problemHistory = new ProblemHistory();
+		problemHistory.setProblem(problem);
+		problemHistory.setCreatedBy(loggedInUserDetails.getGuid());
+		problemHistory.setCreatedTimeStamp(CommonUtil.getCurrentGMTTimestamp());
+		problemHistory.setComments(ProblemStatusParameters.CREATED);
+		problemHistory.setStatus(ProblemStatusParameters.CREATED);
+
+		List<ProblemHistory> problemHistoryList = new ArrayList<ProblemHistory>();
+		problemHistoryList.add(problemHistory);
+		problem.setProblemHistory(problemHistoryList);
+
 		problemGuid = problemDao.saveProblem(problem);
 		return problemGuid;
 	}

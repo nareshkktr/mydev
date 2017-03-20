@@ -14,8 +14,7 @@ import com.kasisripriyawebapps.myindia.exception.InternalServerException;
  */
 @Repository
 public class ProblemDaoImpl extends BaseDaoImpl<Long, Problem> implements ProblemDao {
-	
-	
+
 	@Override
 	public Long saveProblem(Problem problem) throws InternalServerException {
 		return save(problem);
@@ -23,8 +22,13 @@ public class ProblemDaoImpl extends BaseDaoImpl<Long, Problem> implements Proble
 
 	@Override
 	public Problem getProblemByGuid(Long problemGuid) throws InternalServerException {
-		// TODO Auto-generated method stub
 		return getById(problemGuid);
+	}
+
+
+	@Override
+	public void updateProblem(Problem problem) throws InternalServerException {
+		update(problem);
 	}
 
 }

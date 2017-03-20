@@ -108,15 +108,15 @@ public class AccountServiceImpl implements AccountService {
 
 		BaseUserInformation baseUserInfo = new BaseUserInformation();
 		JSONObject authTokenInfo = null;
-		
+
 		UserInfo userInfo = account.getUserInfo();
-		
+
 		baseUserInfo.setName(userInfo.getElectorName());
 		baseUserInfo.setUserGuid(userInfo.getGuid());
 		baseUserInfo.setGender(userInfo.getGender());
 		baseUserInfo.setUserImage(userInfo.getPhotoURL());
 		baseUserInfo.setUserName(account.getUserName());
-		
+
 		if (account != null) {
 			try {
 				authTokenInfo = oAuthService.getAuthTokenInfo(account.getUserName(), account.getPassword());
@@ -128,7 +128,7 @@ public class AccountServiceImpl implements AccountService {
 		//populateLocationInformation
 		UserLocationDetails userLocationDetails=userService.getLoggedInUserLocation(account.getGuid());
 		baseUserInfo.setUserLocation(userLocationDetails);
-		
+
 		return baseUserInfo;
 	}
 

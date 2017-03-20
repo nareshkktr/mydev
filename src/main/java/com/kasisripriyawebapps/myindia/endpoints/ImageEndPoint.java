@@ -11,6 +11,7 @@ import javax.ws.rs.core.Response.Status;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.kasisripriyawebapps.myindia.configs.LoggedInUserDetails;
 import com.kasisripriyawebapps.myindia.constants.ApplicationConstants;
 import com.kasisripriyawebapps.myindia.constants.EndPointConstants;
 import com.kasisripriyawebapps.myindia.constants.ExceptionConstants;
@@ -26,7 +27,7 @@ import io.swagger.annotations.ApiOperation;
 @Path(value = EndPointConstants.IMAGE_ENDPOINT_REQUEST_MAPPING)
 @Api(value = EndPointConstants.IMAGE_ENDPOINT_API_VALUE, tags = {
 		EndPointConstants.IMAGE_ENDPOINT_API_TAGS }, description = EndPointConstants.IMAGE_ENDPOINT_API_DESCRIPTION)
-public class ImageEndPoint {
+public class ImageEndPoint extends BaseEndPoint {
 
 	@Autowired
 	ImageService imageService;
@@ -37,8 +38,9 @@ public class ImageEndPoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response addImages(final List<CreateUpdateImageRequest> createUpdateImageRequest)
 			throws InternalServerException, PreConditionFailedException, PreConditionRequiredException {
+		LoggedInUserDetails loggedInUserDetails = getLoggedInUserDetails();
 		if (validateAddImages(createUpdateImageRequest)) {
-			imageService.addImages(createUpdateImageRequest);
+			imageService.addImages(createUpdateImageRequest, loggedInUserDetails);
 		}
 		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
 	}

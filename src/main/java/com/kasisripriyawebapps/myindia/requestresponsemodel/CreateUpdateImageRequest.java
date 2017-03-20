@@ -13,7 +13,13 @@ public class CreateUpdateImageRequest {
 	@ApiModelProperty(value = "objectType", required = true)
 	private String objectType;
 	@ApiModelProperty(value = "objectId", required = true)
-	private String objectId;
+	private Long objectId;
+
+	@ApiModelProperty(value = "category", required = true)
+	private String category;
+
+	@ApiModelProperty(value = "mainPhotoURL", required = true)
+	private Boolean isMainPhotoURL;
 
 	public String getImageName() {
 		return imageName;
@@ -39,12 +45,28 @@ public class CreateUpdateImageRequest {
 		this.objectType = objectType;
 	}
 
-	public String getObjectId() {
+	public Long getObjectId() {
 		return objectId;
 	}
 
-	public void setObjectId(String objectId) {
+	public void setObjectId(Long objectId) {
 		this.objectId = objectId;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public Boolean getIsMainPhotoURL() {
+		return isMainPhotoURL;
+	}
+
+	public void setIsMainPhotoURL(Boolean isMainPhotoURL) {
+		this.isMainPhotoURL = isMainPhotoURL;
 	}
 
 }

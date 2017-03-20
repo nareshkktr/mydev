@@ -64,6 +64,12 @@ public class OAuth2SecurityConfiguration {
 
 		@Value("${oauth.client_secret}")
 		private String clientSecret;
+		
+		@Value("${oauth.accesstoken.validity.size}")
+		private int accessTokenValiditySeconds;
+		
+		@Value("${oauth.refreshtoken.validity.size}")
+		private int refreshTokenValiditySeconds;
 
 		@Override
 		public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
@@ -77,7 +83,7 @@ public class OAuth2SecurityConfiguration {
 			clients.inMemory().withClient(clientId)
 					.authorizedGrantTypes("password", "authorization_code", "refresh_token", "implicit")
 					.authorities("ROLE_CLIENT", "ROLE_TRUSTED_CLIENT").scopes("read", "write", "trust")
-					.secret(clientSecret).accessTokenValiditySeconds(120).refreshTokenValiditySeconds(600);
+					.secret(clientSecret).accessTokenValiditySeconds(accessTokenValiditySeconds).refreshTokenValiditySeconds(refreshTokenValiditySeconds);
 		}
 
 		@Bean

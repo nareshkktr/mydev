@@ -15,4 +15,6 @@ public interface ProblemDao {
 
 	Problem getProblemByGuid(Long problemGuid) throws InternalServerException;
 
+	void updateProblem(Problem problem) throws InternalServerException;
+
 }

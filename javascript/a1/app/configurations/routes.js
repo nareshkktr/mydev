@@ -49,6 +49,11 @@
 			templateUrl : resource + 'partials/createProblem.html',
 			controller : 'createProblemController',
 			controllerAs : 'createProblem'
+		}).state('viewProblem', {
+			url : '/viewProblem',
+			templateUrl : resource + 'partials/viewProblem.html',
+			controller : 'viewProblemController',
+			controllerAs : 'viewProblem'
 		});
 	}
 })();

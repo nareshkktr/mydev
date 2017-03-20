@@ -29,6 +29,9 @@ public class ProblemImage implements Serializable {
 
 	@Column(name = "IMAGE_URL")
 	private String imageURL;
+	
+	@Column(name = "IMAGE_NAME")
+	private String imageName;
 
 	@Column(name = "CREATED_TIMESTAMP")
 	private Timestamp createdTimeStamp;
@@ -36,14 +39,8 @@ public class ProblemImage implements Serializable {
 	@Column(name = "CREATED_BY")
 	private Long createdBy;
 	
-	@Column(name = "MODIFIED_TIMESTAMP")
-	private Timestamp modifiedTimestamp;
-
-	@Column(name = "MODIFIED_BY")
-	private Long modifiedBy;
-	
 	@Column(name = "CATEGORY")
-	private Long category;
+	private String category;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "PROBLEM_GUID")
@@ -89,4 +86,21 @@ public class ProblemImage implements Serializable {
 		this.problem = problem;
 	}
 
+	public String getImageName() {
+		return imageName;
+	}
+
+	public void setImageName(String imageName) {
+		this.imageName = imageName;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	
 }
