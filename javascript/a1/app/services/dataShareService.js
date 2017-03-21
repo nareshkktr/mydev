@@ -21,6 +21,20 @@
 		}
 
 		function setUserInfo(userInfo) {
+
+			if(userInfo.userSelectedLocation){
+				userInfo.displayLocation = userInfo.userSelectedLocation;
+			}else if(data.userInfo && data.userInfo.userSelectedLocation){
+				userInfo.userSelectedLocation = data.userInfo.userSelectedLocation;
+				userInfo.displayLocation = userInfo.userSelectedLocation;
+			}else if(sessionStorage.getItem("display_location")){
+				userInfo.displayLocation = JSON.parse(sessionStorage.getItem("display_location"));
+			}else{
+				userInfo.displayLocation = userInfo.userLocation;
+			}
+
+			sessionStorage.setItem("display_location",JSON.stringify(userInfo.displayLocation));
+
 			data.userInfo = userInfo;
 
 			// Broadcast event
