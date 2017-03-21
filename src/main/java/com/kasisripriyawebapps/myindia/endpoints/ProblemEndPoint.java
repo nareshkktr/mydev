@@ -7,6 +7,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -21,6 +22,7 @@ import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 import com.kasisripriyawebapps.myindia.exception.PreConditionFailedException;
 import com.kasisripriyawebapps.myindia.exception.PreConditionRequiredException;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.CreateUpdateProblemRequestData;
+import com.kasisripriyawebapps.myindia.requestresponsemodel.ProblemResponse;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.SaveOrUpdateDeleteObjectResponse;
 import com.kasisripriyawebapps.myindia.service.ProblemService;
 
@@ -61,6 +63,26 @@ public class ProblemEndPoint extends BaseEndPoint {
 		}
 		SaveOrUpdateDeleteObjectResponse saveObjResponse = new SaveOrUpdateDeleteObjectResponse(problemGuid);
 		return Response.status(Status.OK).entity(saveObjResponse).build();
+	}
+	
+	@GET
+	@ApiOperation(value = EndPointConstants.CREATE_PROBLEM_API_VALUE, nickname = EndPointConstants.CREATE_PROBLEM_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.CREATE_PROBLEM_API_DESCRIPTION)
+	@Path(EndPointConstants.CREATE_PROBLEM_REQUEST_MAPPING)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getProblemByGuid(@QueryParam("problemGuid") Long problemGuid)
+			throws InternalServerException, PreConditionFailedException, PreConditionRequiredException,
+			ConflictException {
+		
+		LoggedInUserDetails loggedInUserDetails = getLoggedInUserDetails();
+		ProblemResponse problem = null;
+		
+		if (problemGuid != null) {
+			problem = problemService.retreiveProblem(problemGuid, loggedInUserDetails);
+		}else{
+			throw new PreConditionFailedException(ExceptionConstants.REQUEST_NOT_NULL);
+		}
+		
+		return Response.status(Status.OK).entity(problem).build();
 	}
 
 	private boolean validateCreateUpdateProblemRequest(CreateUpdateProblemRequestData createUpdateProblemRequestData)

@@ -143,8 +143,10 @@ public class ProblemTypeServiceImpl implements ProblemTypeService {
 			ProblemType problemType = new ProblemType();
 			String problemTypeName = eachRow.getCell(0).getStringCellValue();
 			String problemTypeMinistry = eachRow.getCell(1).getStringCellValue();
+			String problemTypeCategory = eachRow.getCell(2).getStringCellValue();
 			problemType.setProblemTypeName(problemTypeName);
 			problemType.setProblemTypeMinistry(problemTypeMinistry);
+			problemType.setProblemCategory(problemTypeCategory);
 
 			if (!newProblemTypesList.contains(problemType) && !existingProblemTypesList.contains(problemType)) {
 				newProblemTypesList.add(problemType);

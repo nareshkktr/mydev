@@ -38,6 +38,9 @@ public class ProblemType implements Serializable {
 
 	@Column(name = "PROBLEM_TYPE_PHOTO_URL")
 	private String problemTypePhotoURL;
+	
+	@Column(name = "PROBLEM_CATEGORY")
+	private String problemCategory;
 
 	@OneToMany(mappedBy = "problemType", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonIgnore
@@ -95,6 +98,14 @@ public class ProblemType implements Serializable {
 
 	public void setProblemTypeMinistry(String problemTypeMinistry) {
 		this.problemTypeMinistry = problemTypeMinistry;
+	}
+
+	public String getProblemCategory() {
+		return problemCategory;
+	}
+
+	public void setProblemCategory(String problemCategory) {
+		this.problemCategory = problemCategory;
 	}
 
 	

@@ -21,9 +21,10 @@ public class ProblemDaoImpl extends BaseDaoImpl<Long, Problem> implements Proble
 	}
 
 	@Override
-	public Problem getProblemByGuid(Long objectId) throws InternalServerException {
-		return getById(objectId);
+	public Problem getProblemByGuid(Long problemGuid) throws InternalServerException {
+		return getById(problemGuid);
 	}
+
 
 	@Override
 	public void updateProblem(Problem problem) throws InternalServerException {
