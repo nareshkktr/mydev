@@ -184,15 +184,21 @@
 	angular.module('myindia-app').controller("floaingIconController",
 			floaingIconController);
 
-	floaingIconController.$inject = [];
-	
-	function floaingIconController() {
+	floaingIconController.$inject = ['$state'];
+
+	function floaingIconController($state) {
 		var floatingIcon = this;
 		floatingIcon.showOverlay = false;
 		floatingIcon.toggleOverlay = toggleOverlay;
-
+		floatingIcon.gotoCreateProblem=gotoCreateProblem;
+		
 		function toggleOverlay() {
 			floatingIcon.showOverlay = !floatingIcon.showOverlay;
+		}
+
+		function gotoCreateProblem() {
+			toggleOverlay();
+			$state.go('createProblem.problemTypeSelection');
 		}
 	}
 })();
@@ -275,9 +281,9 @@
 	angular.module('myindia-app').controller("headerController",
 			headerController);
 
-	headerController.$inject = [ '$state', 'dataShareService' ];
+	headerController.$inject = [ '$state'];
 
-	function headerController($state, dataShareService) {
+	function headerController($state) {
 
 		var header = this;
 		header.searchTerm = '';
@@ -288,25 +294,9 @@
 				+ "partials/locationChangePopUp.html";
 		header.showLocationChangeModal = false;
 		header.closeLocationChangeModal = closeLocationChangeModal;
-		header.userInfo = dataShareService.getUserInfo();
 
 		header.modalControllerName = "locationChangePopUpController";
 		header.modalControllerAlias = "locationChangePopUp";
-
-		if (header.userInfo) {
-
-			// Preapre user profile image
-			if (!header.userInfo.userImage) {
-				if (header.userInfo.gender == 'Male') {
-					header.userInfo.userImage = resource
-							+ 'Users-User-Male-icon.png';
-				} else if (header.userInfo.gender == 'Female') {
-					header.userInfo.userImage = resource
-							+ 'Users-User-Female-icon.png';
-				}
-			}
-
-		}
 
 		function gotoSearch() {
 			$state.go('search', {
@@ -329,9 +319,58 @@
 
 	angular.module('myindia-app').directive("myindiaHeader", myIndiaHeader);
 
-	function myIndiaHeader() {
+	myIndiaHeader.$inject = ['dataShareService','userInfoService','$state'];
+
+	function myIndiaHeader(dataShareService,userInfoService,$state) {
 
 		function link(scope, element, attrs) {
+
+			scope.header.userInfo = dataShareService.getUserInfo();
+
+			
+
+			if (scope.header.userInfo) {
+
+				// Preapre user profile image
+				if (!scope.header.userInfo.userImage) {
+					if (scope.header.userInfo.gender == 'Male') {
+						scope.header.userInfo.userImage = resource
+								+ 'Users-User-Male-icon.png';
+					} else if (header.userInfo.gender == 'Female') {
+						scope.header.userInfo.userImage = resource
+								+ 'Users-User-Female-icon.png';
+					}
+				}
+
+			}
+			else if(!$state.includes('signIn') && !$state.includes('signUp')){
+
+				// If shared data has not been set yet.Call the service.
+				if(!scope.header.userInfo){
+					userInfoService.getUserInfo().then(userInfoSuccess).catch(userInfoFailure);
+
+					function userInfoSuccess(data){
+						scope.header.userInfo = data;
+						// Preapre user profile image
+						if (!scope.header.userInfo.userImage) {
+							if (scope.header.userInfo.gender == 'Male') {
+								scope.header.userInfo.userImage = resource
+										+ 'Users-User-Male-icon.png';
+							} else if (header.userInfo.gender == 'Female') {
+								scope.header.userInfo.userImage = resource
+										+ 'Users-User-Female-icon.png';
+							}
+						}
+					}
+
+					function userInfoFailure(error){
+						alert(error);
+					}
+				}
+
+			}
+
+			
 
 		};
 
@@ -404,18 +443,11 @@
 		}
 		
 		function pinLocation(){
-			locationChangePopUpService.pinLocation(locationChangePopUp.selectedLocation).then(pinLocationSuccess).catch(pinLocationFailure);
-
-    		function pinLocationSuccess(data){
-    			var userInfo=dataShareService.getUserInfo();
-    			userInfo.userLocation.locationName=locationChangePopUp.selectedLocation.locationName;
-    			userInfo.userLocation.locationGuid=locationChangePopUp.selectedLocation.locationGuid;
-    			dataShareService.setUserInfo(userInfo);
-    			locationChangePopUp.closePopUp();
-    		}
-    		function pinLocationFailure(error){
-    			alert(error);
-    		}
+			let userInfo=dataShareService.getUserInfo();
+    		userInfo.userLocation.locationName=locationChangePopUp.selectedLocation.locationName;
+    		userInfo.userLocation.locationGuid=locationChangePopUp.selectedLocation.locationGuid;
+    		dataShareService.setUserInfo(userInfo);
+    		locationChangePopUp.closePopUp();
     	}
 	}
 	
@@ -512,6 +544,40 @@
 	}
 
 })();
+(function() {
+	'use strict';
+	angular.module('myindia-app').controller("mobileHeaderController",
+			mobileHeaderController);
+
+	function mobileHeaderController() {
+
+		var mobileHeader = this;
+
+	}
+})();
+
+(function() {
+	'use strict';
+
+	angular.module('myindia-app').directive("myindiaMobileHeader",
+			myindiaMobileHeader);
+
+	function myindiaMobileHeader() {
+
+		function link(scope, element, attrs) {
+		}
+		
+		return {
+			restrict : 'E',
+			link : link,
+			templateUrl : resource + 'partials/mobileHeader.html',
+			controller : 'mobileHeaderController',
+			controllerAs : 'mobileHeader'
+		}
+	}
+
+})();
+
 (function() {
 	'use strict';
 
@@ -698,6 +764,16 @@
 			templateUrl : resource + 'partials/createProblem.html',
 			controller : 'createProblemController',
 			controllerAs : 'createProblem'
+		}).state('createProblem.problemTypeSelection', {
+			url : '/problemTypeSelection',
+			templateUrl : resource + 'partials/problemTypeSelection.html',
+			controller : 'problemTypeSelectionController',
+			controllerAs : 'problemTypeSelection'
+		}).state('createProblem.problemSelection', {
+			url : '/problemSelection',
+			templateUrl : resource + 'partials/problemSelection.html',
+			controller : 'problemSelectionController',
+			controllerAs : 'problemSelection'
 		}).state('viewProblem', {
 			url : '/viewProblem',
 			templateUrl : resource + 'partials/viewProblem.html',
@@ -712,9 +788,7 @@
 
 	angular.module('myindia-app').factory("dataShareService", dataShareService);
 
-	dataShareService.$inject = [ '$rootScope', 'userInfoService' ];
-
-	function dataShareService($rootScope, userInfoService) {
+	function dataShareService() {
 
 		var data = {};
 
@@ -726,12 +800,6 @@
 		return dataShareService;
 
 		function getUserInfo() {
-			if (data.userInfo == undefined) {
-				userInfoService.getUserInfo().then(function(data){
-					setUserInfo(data);
-				});
-				
-			}
 			return data.userInfo;
 		}
 
@@ -741,6 +809,7 @@
 	}
 
 })();
+
 (function() {
 	'use strict';
 
@@ -856,6 +925,7 @@
                 let swaggerPromise = fetchAPIMetaData(hostName);
     			swaggerPromise.then(function(data){
     				apiMetaData.metaInfo = data;
+                    setAuthorization();
     				setMetaData(apiMetaData.metaInfo);
     			});
                 return swaggerPromise;
@@ -870,9 +940,6 @@
     		let swagger = new SwaggerClient({
                 url: hostName+'api/swagger.json',
                 success: function() {
-
-                    setAuthorization();
-
                     deferred.resolve(swagger);
                 },error: function(error){
                 	deferred.reject(error);
@@ -896,6 +963,7 @@
 
             if(accessToken && apiMetaData.metaInfo){
                 var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization( "Authorization", "Bearer " + accessToken, "header" );
+                apiMetaData.metaInfo.clientAuthorizations.remove("bearer");
                 apiMetaData.metaInfo.clientAuthorizations.add("bearer",apiKeyAuth);
             }
         }
@@ -1065,9 +1133,9 @@
 
 	angular.module('myindia-app').controller("createProblemController",
 			createProblemController);
-	createProblemController.$inject = [ 'createProblemService','fileUploadService','dataShareService' ];
+	createProblemController.$inject = [ 'createProblemService','fileUploadService','dataShareService','userInfoService' ];
 	
-	function createProblemController(createProblemService,fileUploadService,dataShareService) {
+	function createProblemController(createProblemService,fileUploadService,dataShareService,userInfoService) {
 		
 		var createProblem=this;
 		createProblem.problemTypesResults = [];
@@ -1076,9 +1144,26 @@
 		createProblem.grivienceDescription;
 		createProblem.noOfAffectedCitizens;
 		createProblem.moneyAtStake;
-		createProblem.locatedIn=dataShareService.getUserInfo().userLocation;
+		createProblem.userData = dataShareService.getUserInfo();
+
+		if(!createProblem.userData){
+			userInfoService.getUserInfo().then(userInfoSuccess).catch(userInfoFailure);
+
+			function userInfoSuccess(data){
+				createProblem.userData = data;
+				angular.copy(createProblem.userData.userLocation.locationName,createProblem.locatedInName);
+			}
+
+			function userInfoFailure(error){
+				alert(error);
+			}
+		}else if(createProblem.userData.userLocation){
+			angular.copy(createProblem.userData.userLocation.locationName,createProblem.locatedInName);
+		}
+
+		
+
 		createProblem.saveProblem=saveProblem;
-		createProblem.locatedInName=dataShareService.getUserInfo().userLocation.locationName;
 		createProblem.uploadCover = uploadCover;
 		    
 		getAllProblemTypes();
@@ -1223,6 +1308,85 @@
 (function() {
 	'use strict';
 
+	angular.module('myindia-app').controller("problemSelectionController",
+			problemSelectionController);
+	problemSelectionController.$inject = [];
+
+	function problemSelectionController() {
+
+		var problemSelection = this;
+		problemSelection.problems = [];
+
+		for (var i = 0; i < 20; i++) {
+			var severity = "";
+
+			if (i % 2 == 0) {
+				severity = "critical";
+			} else if (i % 3 == 0) {
+				severity = "high";
+			} else if (i % 5 == 0) {
+				severity = "medium";
+			} else {
+				severity = "low";
+			}
+			var problem = {
+				"problemName" : "Water Problem Type Water Problem Type Water Problem Type "
+						+ i,
+				"locatedIn" : "Pulipadu,Prakasam(District)",
+				"severity" : severity,
+				"severityLevel" : severity === "critical" ? "C"
+						: severity === "high" ? "H"
+								: severity === "medium" ? "M" : "L"
+			};
+			problemSelection.problems.push(problem);
+		}
+	}
+
+})();
+
+(function() {
+	'use strict';
+
+	angular.module('myindia-app').controller("problemTypeSelectionController",
+			problemTypeSelectionController);
+	problemTypeSelectionController.$inject = ['$state'];
+
+	function problemTypeSelectionController($state) {
+
+		var problemTypeSelection = this;
+		problemTypeSelection.problemTypes = [];
+		problemTypeSelection.chooseExistingProblem = chooseExistingProblem;
+
+		for (var i = 0; i < 20; i++) {
+			var imageName = "";
+
+			if (i % 2 == 0) {
+				imageName = "power_problem.jpg";
+			} else if (i % 3 == 0) {
+				imageName = "agriculture_problem.jpg";
+			} else if (i % 5 == 0) {
+				imageName = "water_problem.jpg";
+			} else {
+				imageName = "road_problem.jpg";
+			}
+			var problemType = {
+				"problemTypeName" : "Problem Type " + i,
+				"problemTypeImage" : resource + "problem/" + imageName
+			};
+			problemTypeSelection.problemTypes.push(problemType);
+		}
+
+		function chooseExistingProblem() {
+			$state.go('createProblem.problemSelection');
+		}
+
+	}
+
+})();
+
+(function() {
+	'use strict';
+
 	angular.module('myindia-app').controller("viewProblemController",
 			viewProblemController);
 	viewProblemController.$inject = [];
@@ -1232,7 +1396,7 @@
 		var viewProblem = this;
 		viewProblem.problemBasicDetails = {};
 
-		viewProblem.problemBasicDetails.problemMainPhotoURL = "C:\\Apache24\\htdocs\\Problem\\10\\water_problem.png";
+		viewProblem.problemBasicDetails.problemMainPhotoURL = resource+"problem/water_problem.jpg";
 	}
 
 })();

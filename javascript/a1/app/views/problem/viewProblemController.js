@@ -10,7 +10,7 @@
 		var viewProblem = this;
 		viewProblem.problemBasicDetails = {};
 
-		viewProblem.problemBasicDetails.problemMainPhotoURL = resource+"power_problem.png";
+		viewProblem.problemBasicDetails.problemMainPhotoURL = resource+"problem/water_problem.jpg";
 	}
 
 })();

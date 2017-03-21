@@ -2,7 +2,7 @@
 	<div class="row footer_info"
 		ng-if="$state.includes('signIn') || $state.includes('signUp') ">
 		<div class="col-xs-4 app_name_img">
-			<img src="assets/app_icon.jpg">
+			<img src="assets/app_icon.jpg">&nbsp;<label>MyIndia</label>
 		</div>
 		<div class="col-xs-4 copty_right_col">
 			&copy;&nbsp;Copyright <label>MyIndia</label>
@@ -11,51 +11,6 @@
 			<i class="fa fa-facebook-official" aria-hidden="true"></i> <i
 				class="fa fa-twitter" aria-hidden="true"></i> <i
 				class="fa fa-google-plus-official" aria-hidden="true"></i>
-		</div>
-	</div>
-	<div class="row"
-		ng-if="!$state.includes('signIn') && !$state.includes('signUp') "
-		id="footer_nofitication_box">
-		<div class="col-xs-2 footer_nofitication_icon">
-			<button class="btn btn-default">
-				<span class="glyphicon glyphicon-globe"></span> <span
-					class="badge badge-notify">3</span>
-			</button>
-		</div>
-		<div class="col-xs-2 footer_nofitication_icon">
-			<button class="btn btn-default">
-				<span class="glyphicon glyphicon-flag"></span> <span
-					class="badge badge-notify">3</span>
-			</button>
-		</div>
-		<div class="col-xs-2 footer_nofitication_icon">
-			<button class="btn btn-default">
-				<span class="glyphicon glyphicon-comment"></span> <span
-					class="badge badge-notify">3</span>
-			</button>
-		</div>
-		<div class="col-xs-2 footer_nofitication_icon">
-			<button class="btn btn-default">
-				<span class="glyphicon glyphicon-user"></span> <span
-					class="badge badge-notify">3</span>
-			</button>
-		</div>
-		<div class="col-xs-2 footer_nofitication_icon">
-			<button class="btn btn-default">
-				<span class="glyphicon glyphicon-map-marker"></span>
-			</button>
-		</div>
-		<div class="col-xs-2 footer_nofitication_icon"
-			ng-click="showFooterSearchBox()">
-			<button class="btn btn-default">
-				<span class="glyphicon glyphicon-search"></span>
-			</button>
-		</div>
-		<div class="footer_search_bar_container"
-			ng-show="footer.showSearchBox">
-			<input type="text" class="form-control" placeholder="Search"
-				ng-model="footer.searchTerm"
-				my-india-enter-key="footer.gotoSearch()"
 		</div>
 	</div>
 </div>

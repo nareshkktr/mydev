@@ -8,7 +8,7 @@
 #add_objects_floating_icon {
 	position: fixed;
 	right: 30px;
-	bottom: 75px;
+	bottom: 40px;
 	background-color: #f94c59;
 	color: #ebebeb;
 	padding: 0px;
@@ -61,15 +61,19 @@
 }
 
 .add_object_name label {
-	    padding: 5px 9px 5px 10px;
-    font-weight: 900;
-    letter-spacing: 1px;
-    background-color: white;
-    border-bottom: 1px solid lightgrey;
+	padding: 5px 9px 5px 10px;
+	font-weight: 900;
+	letter-spacing: 1px;
+	background-color: white;
+	border-bottom: 1px solid lightgrey;
 }
 
 .add_object_name, .add_object_img {
 	float: left;
+}
+
+.add_object, .add_object .add_object_name, .add_object .add_object_img {
+	cursor: pointer;
 }
 @CHARSET "ISO-8859-1";
 
@@ -84,7 +88,6 @@
 
 .app_name_img {
 	text-align: center;
-	margin-top: 4px;
 }
 
 .app_name_img img {
@@ -121,58 +124,11 @@
 	padding-left: 10px;
 }
 
-.footer_nofitication_icon {
-	text-align: center;
-	padding-top: 8px;
-	padding-bottom: 0px;
-	padding-right: 1px !important;
-	padding-left: 5px !important;
-}
-
-.footer_nofitication_icon button, .footer_nofitication_icon button:HOVER
-	{
-	background-color: #f94c59;
-	color: #ebebeb;
-	border: none;
-	font-size: 19px;
-}
-
-#app_footer .badge-notify {
-	background: #e5e0e0;
-	position: relative;
-	top: -14px;
-	left: -10px;
-}
-
-#app_footer .badge {
-	padding: 2px 5px;
-	font-size: 12px;
-	color: #f94c59;
-}
-
-.footer_search_bar_container {
-	position: fixed;
-	height: 47px;
-	width: 100%;
-}
-
-.footer_search_bar_container input[type="text"] {
-	height: 35px;
-	margin-top: 5px;
-	width: 90%;
-	margin-right: 3px;
-	margin-left: 17px;
-	padding-left: 10px;
-	color: black;
-	font-size: 15px !important;
-}
-
 .footer_info {
 	display: flex;
 	height: 100%;
 	align-items: center;
 }
-
 @CHARSET "ISO-8859-1";
 
 body {
@@ -453,7 +409,7 @@ input[type="text"], input[type="password"], select {
 		#header_logged_in_location_box, #header_notification_icons_box {
 		display: inline-table;
 	}
-	#footer_nofitication_box {
+	#app_mobile_header {
 		display: none;
 	}
 }
@@ -521,7 +477,7 @@ input[type="text"], input[type="password"], select {
 	#header_search_box input[type="text"] {
 		width: 160px;
 	}
-	#footer_nofitication_box {
+	#app_mobile_header {
 		display: none;
 	}
 }
@@ -541,7 +497,7 @@ input[type="text"], input[type="password"], select {
 	#header_search_box input[type="text"] {
 		width: 100px;
 	}
-	#footer_nofitication_box {
+	#app_mobile_header {
 		display: none;
 	}
 }
@@ -588,6 +544,69 @@ input[type="text"], input[type="password"], select {
 .pin_location {
 	background-color: #f94c59 !important;
 	color: white;
+}
+@CHARSET "ISO-8859-1";
+
+#app_mobile_header {
+	background-color: #f94c59;
+	position: fixed;
+	width: 100%;
+	bottom: 0px;
+	color: #ebebeb;
+	height: 47px;
+}
+
+
+.footer_nofitication_icon {
+	text-align: center;
+	padding-top: 8px;
+	padding-bottom: 0px;
+	padding-right: 1px !important;
+	padding-left: 5px !important;
+}
+
+.footer_nofitication_icon button, .footer_nofitication_icon button:HOVER
+	{
+	background-color: #f94c59;
+	color: #ebebeb;
+	border: none;
+	font-size: 19px;
+}
+
+#app_mobile_header .badge-notify {
+	background: #e5e0e0;
+	position: relative;
+	top: -14px;
+	left: -10px;
+}
+
+#app_mobile_header .badge {
+	padding: 2px 5px;
+	font-size: 12px;
+	color: #f94c59;
+}
+
+.footer_search_bar_container {
+	position: fixed;
+	height: 47px;
+	width: 100%;
+}
+
+.footer_search_bar_container input[type="text"] {
+	height: 35px;
+	margin-top: 5px;
+	width: 90%;
+	margin-right: 3px;
+	margin-left: 17px;
+	padding-left: 10px;
+	color: black;
+	font-size: 15px !important;
+}
+
+.footer_info {
+	display: flex;
+	height: 100%;
+	align-items: center;
 }
 #overlay {
 	position: fixed;
@@ -724,6 +743,10 @@ input[type="text"], input[type="password"], select {
 	padding: 20px;
 }
 
+.cretae_problem_container_row {
+	margin: 0px !important;
+}
+
 .relative_problem_content {
 	margin-left: 0px !important;
 	margin-right: 0px !important;
@@ -815,7 +838,7 @@ input[type="text"], input[type="password"], select {
 	background-color: white;
 }
 
-.problem_cover_file_upload{
+.problem_cover_file_upload {
 	display: block !important;
 }
 
@@ -855,35 +878,192 @@ input[type="text"], input[type="password"], select {
 	max-height: 122px;
 	overflow-y: auto;
 }
-.problem_desc_editor_content{
+
+.problem_desc_editor_content {
 	margin-top: 20px;
 }
-.problem_cover_photo{
+
+.problem_cover_photo {
 	width: 100%;
 	height: 100%;
 }
+@CHARSET "ISO-8859-1";
 
+#problem_selection_container {
+	padding: 5px !important;
+}
+
+#problem_selection_container .problem {
+	background-color: white;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+#problem_selection_container .problem .problem_severity {
+	text-align: center;
+	padding: 10px;
+}
+
+#problem_selection_container .problem .problem_severity .problem_severity_circle
+	{
+	border-radius: 50%;
+	text-align: center;
+	padding: 10px;
+}
+
+#problem_selection_container .problem .problem_name {
+	letter-spacing: 1px;
+	font-size: 12px;
+	padding: 10px;
+}
+
+#problem_selection_container .problem .problem_located_in {
+	letter-spacing: 1px;
+	font-size: 12px;
+	padding-left: 70px;
+}
+
+#problem_selection_container .problem .critical {
+	background-color: red;
+}
+
+#problem_selection_container .problem .high {
+	background-color: orange;
+}
+
+#problem_selection_container .problem .medium {
+	background-color: blue;
+}
+
+#problem_selection_container .problem .low {
+	background-color: green;
+}
+
+#problem_selection_container .problem .row {
+	margin: 0px !important;
+}
+
+#problem_selection_container .problem  .problem_located_in i {
+	font-size: 16px;
+	margin-right: 7px;
+}
+
+#problem_selection_container .problem .problem_severity label {
+	color: white;
+	padding-top: 9px;
+	font-size: 20px;
+}
+
+#problem_selection_container .problem .problem_short_actions {
+	margin-top: 20px !important;
+	background-color: #bdbbba;
+	padding: 6px 0px 2px 0px;
+}
+
+#problem_selection_container .problem .problem_short_actions .problem_short_action label
+	{
+	background-color: #6b6666;
+	color: white;
+	padding: 2px 5px 2px 5px;
+	margin-left: 7px;
+	border-radius: 3px;
+}
+
+#problem_selection_container .problem .problem_short_actions .problem_short_action i
+	{
+	font-size: 18px;
+	vertical-align: text-bottom
+}
+
+.problem_selection_content {
+	margin: 0px !important;
+}
+@CHARSET "ISO-8859-1";
+
+.problem_type {
+	margin-top: 20px;
+	cursor: pointer;
+}
+
+.problem_type img {
+	width: 100%;
+	border-radius: 3px;
+	height: 175px;
+}
+
+#problem_type_selection_container {
+	padding: 0px 50px 0px 50px;
+}
+
+.problem_type_img {
+	
+}
+
+.problem_type_name {
+	background-color: black;
+	position: relative;
+	bottom: 30px;
+	opacity: 0.8;
+	padding: 5px 0px 0px 10px;
+	letter-spacing: 1px;
+}
+
+.problem_type_name label {
+	color: white;
+}
+
+.problem_type_search_content {
+	margin: 10px 0px 0px 0px;
+}
+
+.problem_type_search_content input[type="text"] {
+	width: 100%;
+	height: 50px !important;
+	font-size: 20px !important;
+	border-radius: 10px;
+}
 .view_problem_container {
 	margin: 0px !important;
 }
 
 #view_problem_left_sidebar {
-	
+	padding: 0px;
 }
 
 #view_problem_content {
-	
-}
-
-#view_problem_left_side_content {
-	
+	padding: 0px;
 }
 
 #view_problem_related_problems_side_bar {
-	
+	padding: 0px;
 }
 
 #problem_main_photo_url {
+	width: 100%;
+	height: 350px;
+}
+
+#problem_basic_details_content {
+	
+}
+
+.problem_count_bar {
+	
+}
+
+.problem_count_name {
+	
+}
+
+.problem_count_value {
+	
+}
+
+.problem_count_value label {
+	
+}
+
+.popular {
 	
 }
 #login-container {
@@ -919,6 +1099,7 @@ input[type="text"], input[type="password"], select {
 
 #login_form form .form-group {
 	margin-bottom: 30px;
+	position: relative;
 }
 
 #login_form form .form-group label {
@@ -947,9 +1128,11 @@ input[type="text"], input[type="password"], select {
 .login_icon {
 	color: grey;
 	font-size: 12px !important;
-	top: 37px !important;
-	left: -53px;
-    position: relative;
+	top: 29px !important;
+	position: absolute;
+	padding: 11px;
+	pointer-events: none;
+	left: 6px;
 }
 
 .password_row {
@@ -1061,7 +1244,8 @@ input[type="text"], input[type="password"], select {
 		margin: 0 auto;
 	}
 }
-#login_form input[type="text"],input[type="password"] {
+
+#login_form input[type="text"], input[type="password"] {
 	padding-left: 35px;
 }
 #signup-container {
@@ -1098,6 +1282,7 @@ input[type="text"], input[type="password"], select {
 
 #signup_form form .form-group {
 	margin-bottom: 17px;
+	position: relative;
 }
 
 #signup_form form .form-group label {
@@ -1190,6 +1375,16 @@ input[type="text"], input[type="password"], select {
 		width: 96%;
 		margin: 0 auto;
 	}
+}
+
+#signup_form input[type="text"], input[type="password"] {
+	padding-left: 35px;
+}
+
+#signup_form .info_icon {
+	padding-left: 10px;
+    font-size: 13px;
+    cursor: pointer;
 }
 
 /*# sourceMappingURL=app.css.map*/

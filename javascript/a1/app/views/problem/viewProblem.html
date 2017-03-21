@@ -1,16 +1,51 @@
 <div class="container-fluid wrapper page-container">
 	<div class="row view_problem_container">
-		<div class="col-lg-2 col-md-2 col-sm-6 col-xs-12"
-			id="view_problem_left_sidebar"></div>
-		<div class="col-lg-10 col-md-10 col-sm-6 col-xs-12"
+		<div class="col-lg-2 col-md-2 col-sm-3 col-xs-12"
+			id="view_problem_left_sidebar">
+
+			<div class="problem_count_bar">
+				<div class="problem_count_name">
+					<label> Popular </label>
+				</div>
+				<div class="problem_count_value popular">
+					<label> 100 </label>
+				</div>
+			</div>
+			<div class="problem_count_bar">
+				<div class="problem_count_name">
+					<label> Supporting </label>
+				</div>
+				<div class="problem_count_value support">
+					<label> 200 </label>
+				</div>
+			</div>
+			<div class="problem_count_bar">
+				<div class="problem_count_name">
+					<label> Following </label>
+				</div>
+				<div class="problem_count_value following">
+					<label> 300 </label>
+				</div>
+			</div>
+			<div class="problem_count_bar">
+				<div class="problem_count_name">
+					<label> Sharing </label>
+				</div>
+				<div class="problem_count_value share">
+					<label> 400 </label>
+				</div>
+			</div>
+
+
+		</div>
+		<div class="col-lg-7 col-md-7 col-sm-6 col-xs-12"
 			id="view_problem_content">
-			<div class="col-lg-9 col-md-9 col-sm-6 col-xs-12"
-				id="view_problem_left_side_content">
+			<div id="problem_basic_details_content">
 				<img id="problem_main_photo_url"
 					ng-src="{{viewProblem.problemBasicDetails.problemMainPhotoURL}}">
 			</div>
-			<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12"
-				id="view_problem_related_problems_side_bar"></div>
 		</div>
+		<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12"
+			id="view_problem_related_problems_side_bar"></div>
 	</div>
 </div>

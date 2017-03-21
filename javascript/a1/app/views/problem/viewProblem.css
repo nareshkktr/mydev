@@ -3,21 +3,42 @@
 }
 
 #view_problem_left_sidebar {
-	
+	padding: 0px;
 }
 
 #view_problem_content {
-	
-}
-
-#view_problem_left_side_content {
-	
+	padding: 0px;
 }
 
 #view_problem_related_problems_side_bar {
-	
+	padding: 0px;
 }
 
 #problem_main_photo_url {
+	width: 100%;
+	height: 350px;
+}
+
+#problem_basic_details_content {
+	
+}
+
+.problem_count_bar {
+	
+}
+
+.problem_count_name {
+	
+}
+
+.problem_count_value {
+	
+}
+
+.problem_count_value label {
+	
+}
+
+.popular {
 	
 }

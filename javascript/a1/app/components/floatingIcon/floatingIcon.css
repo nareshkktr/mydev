@@ -8,7 +8,7 @@
 #add_objects_floating_icon {
 	position: fixed;
 	right: 30px;
-	bottom: 75px;
+	bottom: 40px;
 	background-color: #f94c59;
 	color: #ebebeb;
 	padding: 0px;
@@ -61,13 +61,17 @@
 }
 
 .add_object_name label {
-	    padding: 5px 9px 5px 10px;
-    font-weight: 900;
-    letter-spacing: 1px;
-    background-color: white;
-    border-bottom: 1px solid lightgrey;
+	padding: 5px 9px 5px 10px;
+	font-weight: 900;
+	letter-spacing: 1px;
+	background-color: white;
+	border-bottom: 1px solid lightgrey;
 }
 
 .add_object_name, .add_object_img {
 	float: left;
+}
+
+.add_object, .add_object .add_object_name, .add_object .add_object_img {
+	cursor: pointer;
 }

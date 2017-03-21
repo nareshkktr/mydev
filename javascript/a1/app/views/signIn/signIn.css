@@ -31,6 +31,7 @@
 
 #login_form form .form-group {
 	margin-bottom: 30px;
+	position: relative;
 }
 
 #login_form form .form-group label {
@@ -59,9 +60,11 @@
 .login_icon {
 	color: grey;
 	font-size: 12px !important;
-	top: 37px !important;
-	left: -53px;
-    position: relative;
+	top: 29px !important;
+	position: absolute;
+	padding: 11px;
+	pointer-events: none;
+	left: 6px;
 }
 
 .password_row {
@@ -173,6 +176,7 @@
 		margin: 0 auto;
 	}
 }
-#login_form input[type="text"],input[type="password"] {
+
+#login_form input[type="text"], input[type="password"] {
 	padding-left: 35px;
 }

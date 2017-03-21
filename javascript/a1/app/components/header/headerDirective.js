@@ -3,9 +3,9 @@
 
 	angular.module('myindia-app').directive("myindiaHeader", myIndiaHeader);
 
-	myIndiaHeader.$inject = ['dataShareService','userInfoService'];
+	myIndiaHeader.$inject = ['dataShareService','userInfoService','$state'];
 
-	function myIndiaHeader(dataShareService,userInfoService) {
+	function myIndiaHeader(dataShareService,userInfoService,$state) {
 
 		function link(scope, element, attrs) {
 
@@ -26,9 +26,10 @@
 					}
 				}
 
-			}else{
+			}
+			else if(!$state.includes('signIn') && !$state.includes('signUp')){
 
-				//If shared data has not been set yet.Call the service.
+				// If shared data has not been set yet.Call the service.
 				if(!scope.header.userInfo){
 					userInfoService.getUserInfo().then(userInfoSuccess).catch(userInfoFailure);
 

@@ -1,0 +1,39 @@
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"
+	id="problem_selection_container">
+	<div class="row problem_selection_content">
+		<div ng-repeat="eachProblem in problemSelection.problems"
+			class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+			<div class="problem">
+				<div class="row problem_name_severity">
+					<div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 problem_severity">
+						<div class="problem_severity_circle {{eachProblem.severity}}">
+							<label>{{eachProblem.severityLevel}}</label>
+						</div>
+					</div>
+					<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 problem_name">
+						<label>{{eachProblem.problemName}}</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12 problem_located_in">
+						<i class="fa fa-map-marker" aria-hidden="true"></i><label>{{eachProblem.locatedIn}}</label>
+					</div>
+				</div>
+				<div class="row problem_short_actions">
+					<div class="col-xs-4 problem_short_action">
+						<i class="fa fa-map-marker" aria-hidden="true"></i> <label>
+							100 </label>
+					</div>
+					<div class="col-xs-4 problem_short_action">
+						<i class="fa fa-map-marker" aria-hidden="true"></i> <label>
+							100 </label>
+					</div>
+					<div class="col-xs-4 problem_short_action">
+						<i class="fa fa-share-alt" aria-hidden="true"></i> <label>
+							100 </label>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,25 @@
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"
+	id="problem_type_selection_container">
+	<div class="row problem_type_search_content">
+		<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+			<form role="form">
+				<div class="form-group">
+					<input type="text" class="form-control"
+						placeholder="Search Problem Types Here" />
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="row">
+		<div ng-repeat="eachproblemType in problemTypeSelection.problemTypes"
+			class="col-lg-2 col-md-3 col-sm-4 col-xs-12 problem_type"
+			ng-click="problemTypeSelection.chooseExistingProblem()">
+			<div class="problem_type_img">
+				<img ng-src="{{eachproblemType.problemTypeImage}}" />
+			</div>
+			<div class="problem_type_name">
+				<label>{{eachproblemType.problemTypeName}}</label>
+			</div>
+		</div>
+	</div>
+</div>

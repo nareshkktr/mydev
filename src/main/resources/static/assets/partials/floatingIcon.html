@@ -7,7 +7,7 @@
 </div>
 <overlay ng-if="floatingIcon.showOverlay"></overlay>
 <div ng-if="floatingIcon.showOverlay" class="top_overlay_content">
-	<div class="row">
+	<div class="row add_object" ng-click="floatingIcon.gotoCreateProblem()">
 		<div class="add_object_name">
 			<label>Create Problem</label>
 		</div>
@@ -15,7 +15,7 @@
 			<span class="glyphicon glyphicon-globe"></span>
 		</div>
 	</div>
-	<div class="row">
+	<div class="row add_object">
 		<div class="add_object_name">
 			<label>Add Event</label>
 		</div>
@@ -23,7 +23,7 @@
 			<span class="glyphicon glyphicon-calendar"></span>
 		</div>
 	</div>
-	<div class="row">
+	<div class="row add_object">
 		<div class="add_object_name">
 			<label>Create Group</label>
 		</div>
