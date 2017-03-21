@@ -49,15 +49,14 @@
 				userInfoService.getUserInfo().then(userInfoSuccess).catch(userInfoFailure);
 
 				function userInfoSuccess(data){
-					createProblem.userData = data;
-					createProblem.locatedInName = createProblem.userData.userLocation.locationName;
+					dataShareService.setUserInfo(data);
 				}
 
 				function userInfoFailure(error){
 					alert(error);
 				}
-			}else if(createProblem.userData.userLocation){
-				createProblem.locatedInName = createProblem.userData.userLocation.locationName;
+			}else if(createProblem.userData.displayLocation){
+				createProblem.locatedInName = createProblem.userData.displayLocation.locationName;
 			}
 		}
 

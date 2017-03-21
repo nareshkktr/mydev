@@ -58,8 +58,7 @@
 		function pinLocation(){
 			let userInfo=dataShareService.getUserInfo();
 			if(userInfo){
-    			userInfo.userLocation.locationName=locationChangePopUp.selectedLocation.locationName;
-    			userInfo.userLocation.locationGuid=locationChangePopUp.selectedLocation.locationGuid;
+    			userInfo.userSelectedLocation=locationChangePopUp.selectedLocation;
     			dataShareService.setUserInfo(userInfo);
     		}
     		locationChangePopUp.closePopUp();

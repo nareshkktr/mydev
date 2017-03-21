@@ -35,17 +35,7 @@
 				userInfoService.getUserInfo().then(userInfoSuccess).catch(userInfoFailure);
 
 				function userInfoSuccess(data){
-					scope.header.userInfo = data;
-					// Preapre user profile image
-					if (!scope.header.userInfo.userImage) {
-						if (scope.header.userInfo.gender == 'Male') {
-							scope.header.userInfo.userImage = resource
-									+ 'Users-User-Male-icon.png';
-						} else if (header.userInfo.gender == 'Female') {
-							scope.header.userInfo.userImage = resource
-									+ 'Users-User-Female-icon.png';
-						}
-					}
+					dataShareService.setUserInfo(data);
 				}
 
 				function userInfoFailure(error){
