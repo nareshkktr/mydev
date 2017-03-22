@@ -951,4 +951,17 @@ public class EndPointConstants {
 	/** The Constant CREATE_ACCOUNT_API_DESCRIPTION. */
 	public static final String GET_LOGGED_IN_API_DESCRIPTION = "Get Logged In User Details";
 
+	
+	/** The Constant GET_PROBLEMS_BY_TYPE_REQUEST_MAPPING. */
+	public static final String GET_PROBLEMS_BY_TYPE_REQUEST_MAPPING = "getProblemsByType";
+
+	/** The Constant GET_PROBLEMS_BY_TYPE_API_VALUE. */
+	public static final String GET_PROBLEMS_BY_TYPE_API_VALUE = "getProblemsByType";
+
+	/** The Constant GET_PROBLEMS_BY_TYPE_API_NICKNAME. */
+	public static final String GET_PROBLEMS_BY_TYPE_API_NICKNAME = "getProblemsByType";
+
+	/** The Constant GET_PROBLEMS_BY_TYPE_API_DESCRIPTION. */
+	public static final String GET_PROBLEMS_BY_TYPE_API_DESCRIPTION = "Get Problems By Problem Type.";
+
 }

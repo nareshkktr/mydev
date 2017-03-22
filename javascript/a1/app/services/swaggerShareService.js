@@ -55,11 +55,11 @@
 
             let accessToken;
 
-            if(sessionStorage.getItem("access_token")){
-                accessToken = sessionStorage.getItem("access_token");   
-            }else if(token){
+            if(token){
                 accessToken = token;
                 sessionStorage.setItem("access_token",accessToken);
+            }else if(sessionStorage.getItem("access_token")){
+                accessToken = sessionStorage.getItem("access_token");   
             }
 
             if(accessToken && apiMetaData.metaInfo){

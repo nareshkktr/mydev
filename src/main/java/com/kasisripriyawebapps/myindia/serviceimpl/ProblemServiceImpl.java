@@ -117,30 +117,66 @@ public class ProblemServiceImpl implements ProblemService {
 	}
 
 	@Override
-	public ProblemResponse retreiveProblem(Long problemGuid, LoggedInUserDetails loggedInUserDetails)
-			throws InternalServerException {
-
+	@Transactional
+	public ProblemResponse retreiveProblem(Long problemGuid, LoggedInUserDetails loggedInUserDetails) throws InternalServerException {
+		
 		Problem problem = problemDao.getProblemByGuid(problemGuid);
+		
+		ProblemResponse problemResponse = null;
+		
+		List<Problem> problems = new ArrayList<Problem>();
+		problems.add(problem);
+		
+		List<ProblemResponse> problemResponses = prepareProblemResponse(problems);
+		
+		if(problemResponses != null && problemResponses.size()>0){
+			problemResponse = problemResponses.get(0);
+		}
+		
+		return problemResponse;
+	}
+	
+	
 
-		ProblemResponse problemResponse = new ProblemResponse();
+	private List<ProblemResponse> prepareProblemResponse(List<Problem> problems) {
 
-		problemResponse.setAmountInvolved(problem.getAmountInvolved());
-		// Here we wont get?
-		problemResponse.setCreatedLocation(problem.getCreatedLocation());
-		problemResponse.setCreatedTimeStamp(problem.getCreatedTimeStamp());
-		problemResponse.setEscalationEnabled(problem.getEscalationEnabled());
-		problemResponse.setGuid(problem.getGuid());
-		problemResponse.setNoOfAffectedPeople(problem.getNoOfAffectedPeople());
-		problemResponse.setPhotoURL(problem.getPhotoURL());
-		problemResponse.setProblemLongDescription(problem.getProblemLongDescription());
-		problemResponse.setProblemSeverity(problem.getProblemSeverity());
-		problemResponse.setProblemShortDescription(problem.getProblemShortDescription());
-		problemResponse.setProblemStatus(problem.getProblemStatus());
-		problemResponse.setProblemType(problem.getProblemType());
-		problemResponse.setRootCause(problem.getRootCause());
+		List<ProblemResponse> problemResponses = new ArrayList<ProblemResponse>();
+		
+		for(Problem problem: problems){
+			ProblemResponse problemResponse = new ProblemResponse();
 
-		// problemResponse.setOwner(owner);
-		// problemResponse.setCreatedBy(createdBy);
+			problemResponse.setAmountInvolved(problem.getAmountInvolved());
+			// Here we wont get?
+			problemResponse.setCreatedLocation(problem.getCreatedLocation());
+			problemResponse.setCreatedTimeStamp(problem.getCreatedTimeStamp());
+			problemResponse.setEscalationEnabled(problem.getEscalationEnabled());
+			problemResponse.setGuid(problem.getGuid());
+			problemResponse.setNoOfAffectedPeople(problem.getNoOfAffectedPeople());
+			problemResponse.setPhotoURL(problem.getPhotoURL());
+			problemResponse.setProblemLongDescription(problem.getProblemLongDescription());
+			problemResponse.setProblemSeverity(problem.getProblemSeverity());
+			problemResponse.setProblemShortDescription(problem.getProblemShortDescription());
+			problemResponse.setProblemStatus(problem.getProblemStatus());
+			problemResponse.setProblemType(problem.getProblemType());
+			problemResponse.setRootCause(problem.getRootCause());
+			
+			//			problemResponse.setOwner(owner);
+			//		problemResponse.setCreatedBy(createdBy);
+			
+			problemResponses.add(problemResponse);
+		}
+
+		return problemResponses;
+	}
+
+	@Override
+	@Transactional
+	public List<ProblemResponse> retreiveProblemsByType(Long problemTypeGuid, LoggedInUserDetails loggedInUserDetails)
+			throws InternalServerException {
+		// TODO Auto-generated method stub
+		ProblemType problemType = problemTypeDao.getProblemTypeById(problemTypeGuid);
+		List<Problem> probObj = problemType.getProblems();
+		List<ProblemResponse> problemResponse = prepareProblemResponse(probObj);
 		return problemResponse;
 	}
 

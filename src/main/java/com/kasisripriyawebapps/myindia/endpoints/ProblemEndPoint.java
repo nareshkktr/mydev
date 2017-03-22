@@ -3,6 +3,8 @@
  */
 package com.kasisripriyawebapps.myindia.endpoints;
 
+import java.util.List;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -83,6 +85,26 @@ public class ProblemEndPoint extends BaseEndPoint {
 		}
 		
 		return Response.status(Status.OK).entity(problem).build();
+	}
+	
+	@GET
+	@ApiOperation(value = EndPointConstants.GET_PROBLEMS_BY_TYPE_API_VALUE, nickname = EndPointConstants.GET_PROBLEMS_BY_TYPE_API_NICKNAME, httpMethod = EndPointConstants.HTTP_GET, notes = EndPointConstants.GET_PROBLEMS_BY_TYPE_API_DESCRIPTION)
+	@Path(EndPointConstants.GET_PROBLEMS_BY_TYPE_REQUEST_MAPPING)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getProblemsByProblemType(@QueryParam("problemTypeGuid") Long problemTypeGuid)
+			throws InternalServerException, PreConditionFailedException, PreConditionRequiredException,
+			ConflictException {
+		
+		LoggedInUserDetails loggedInUserDetails = getLoggedInUserDetails();
+		List<ProblemResponse> problems = null;
+		
+		if (problemTypeGuid != null) {
+			problems = problemService.retreiveProblemsByType(problemTypeGuid, loggedInUserDetails);
+		}else{
+			throw new PreConditionFailedException(ExceptionConstants.REQUEST_NOT_NULL);
+		}
+		
+		return Response.status(Status.OK).entity(problems).build();
 	}
 
 	private boolean validateCreateUpdateProblemRequest(CreateUpdateProblemRequestData createUpdateProblemRequestData)
