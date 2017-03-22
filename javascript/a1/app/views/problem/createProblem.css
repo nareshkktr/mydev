@@ -1,144 +1,92 @@
-.cretae_problem_container_row {
-	margin: 0px !important;
+@CHARSET "ISO-8859-1";
+
+#problem_selection_container {
+	padding: 5px !important;
 }
 
-.relative_problem_content {
-	margin-left: 0px !important;
-	margin-right: 0px !important;
-}
-
-.relative_problem {
-	padding: 0px !important;
-	border: 1px solid #d3cece;
-	border-left: 20px solid #528658;
-	margin-top: 15px;
+#problem_selection_container .problem {
 	background-color: white;
-}
-
-.relative_problem_details {
-	padding-left: 0px !important;
-	padding-right: 0px !important;
-	background-color: white;
-}
-
-.relative_problem_short_text {
-	color: #528658;
-	letter-spacing: 1px;
-	padding: 10px;
-}
-
-.relative_problem_location {
-	padding: 0px 0px 0px 10px;
-}
-
-.relative_problem_icons {
-	border-top: 1px solid lightgray;
 	margin-top: 10px;
-}
-
-.relative_problem_icon {
-	text-align: center;
-	padding-top: 4px;
-	padding-bottom: 0px;
-	padding-right: 1px !important;
-	padding-left: 5px !important;
-	border-right: 1px solid lightgray;
-	border-bottom: 1px solid lightgray;
-	background-color: white;
-}
-
-.relative_problem_icon button, .relative_problem_icon button:HOVER {
-	background-color: white;
-	color: #f94c59;
-	border: none;
-	font-size: 14px;
-}
-
-.cretae_problem_container {
-	padding: 20px;
-}
-
-.cretae_problem_container .row {
 	margin-bottom: 10px;
 }
 
-.cretae_problem_container textarea {
-	height: 160px !important;
-}
-
-.impacted_row {
-	margin-left: 60px;
-	margin-top: 14px;
-}
-
-.problem_cover_photo_content {
-	width: 100%;
-	height: 245px;
-	border: 4px dashed #f94c59;
-	background-color: white;
-}
-
-.problem_cover_photo_content .cover_photo_btn {
-	display: flex;
-	height: 34px;
-	margin: 0 auto;
-	margin-top: 100px;
-	width: 22%;
-}
-
-.upload_problem_docs {
-	height: 170px;
-	border: 1px dotted black;
-	margin-left: 10px;
-	background-color: white;
-}
-
-.problem_cover_file_upload {
-	display: block !important;
-}
-
-.upload_problem_docs button {
-	display: flex;
-	margin: 0 auto;
-	margin-top: 64px;
+#problem_selection_container .problem .problem_severity {
+	text-align: center;
 	padding: 10px;
 }
 
-.problem_desc_editor_container {
-	box-shadow: 1px 5px 0px 1px rgba(0, 0, 0, .075) !important;
-	border-radius: 10px !important;
-	display: block;
-	width: 100%;
-	height: 34px;
-	padding: 0px 0px;
+#problem_selection_container .problem .problem_severity .problem_severity_circle
+	{
+	border-radius: 50%;
+	text-align: center;
+	width: 46px;
+	height: 46px;
+}
+
+#problem_selection_container .problem .problem_name {
+	letter-spacing: 1px;
 	font-size: 14px;
-	line-height: 1.42857143;
-	color: #555;
-	background-color: #fff;
-	background-image: none;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-	box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-	-webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow
-		ease-in-out .15s;
-	-o-transition: border-color ease-in-out .15s, box-shadow ease-in-out
-		.15s;
-	transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-	height: 163px;
+	padding: 10px;
 }
 
-.problem_desc_editor_container .trix-content {
-	height: 122px;
-	max-height: 122px;
-	overflow-y: auto;
+#problem_selection_container .problem .problem_located_in {
+	letter-spacing: 1px;
+	font-size: 12px;
+	text-align: center;
 }
 
-.problem_desc_editor_content {
-	margin-top: 20px;
+#problem_selection_container .problem .critical {
+	background-color: red;
 }
 
-.problem_cover_photo {
-	width: 100%;
-	height: 100%;
+#problem_selection_container .problem .high {
+	background-color: orange;
+}
+
+#problem_selection_container .problem .medium {
+	background-color: blue;
+}
+
+#problem_selection_container .problem .low {
+	background-color: green;
+}
+
+#problem_selection_container .problem .row {
+	margin: 0px !important;
+}
+
+#problem_selection_container .problem  .problem_located_in i {
+	font-size: 16px;
+	margin-right: 7px;
+}
+
+#problem_selection_container .problem .problem_severity label {
+	color: white;
+	padding-top: 9px;
+	font-size: 20px;
+}
+
+#problem_selection_container .problem .problem_short_actions {
+	margin-top: 20px !important;
+	background-color: #bdbbba;
+	padding: 6px 0px 2px 0px;
+}
+
+#problem_selection_container .problem .problem_short_actions .problem_short_action label
+	{
+	background-color: #6b6666;
+	color: white;
+	padding: 2px 5px 2px 5px;
+	margin-left: 7px;
+	border-radius: 3px;
+}
+
+#problem_selection_container .problem .problem_short_actions .problem_short_action i
+	{
+	font-size: 18px;
+	vertical-align: text-bottom
+}
+
+.problem_selection_content {
+	margin: 0px !important;
 }

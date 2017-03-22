@@ -15,9 +15,8 @@
     		signInService.login(signIn.userName,signIn.password).then(loginSuccess).catch(loginFailure);
 
     		function loginSuccess(data){
-    			alert("Login Success");
                 dataShareService.setUserInfo(data);
-    			$state.go('createProblem');
+                $state.go('createProblem.problemTypeSelection');
     		}
 
     		function loginFailure(error){

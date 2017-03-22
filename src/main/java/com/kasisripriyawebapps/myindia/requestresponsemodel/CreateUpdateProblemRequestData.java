@@ -15,11 +15,11 @@ public class CreateUpdateProblemRequestData implements Serializable {
 	private Long problemGuId;
 	private String problemName;
 	private String problemDesc;
-	private String problemMainPhoto;
 	private SolrLocationMaster problemLocation;
 	private ProblemType problemType;
 	private Long noOfAffectdCitizens;
 	private Long moneyAtStake;
+	private String tags;
 
 	public Long getProblemGuId() {
 		return problemGuId;
@@ -43,14 +43,6 @@ public class CreateUpdateProblemRequestData implements Serializable {
 
 	public void setProblemDesc(String problemDesc) {
 		this.problemDesc = problemDesc;
-	}
-
-	public String getProblemMainPhoto() {
-		return problemMainPhoto;
-	}
-
-	public void setProblemMainPhoto(String problemMainPhoto) {
-		this.problemMainPhoto = problemMainPhoto;
 	}
 
 	public SolrLocationMaster getProblemLocation() {
@@ -83,6 +75,14 @@ public class CreateUpdateProblemRequestData implements Serializable {
 
 	public void setMoneyAtStake(Long moneyAtStake) {
 		this.moneyAtStake = moneyAtStake;
+	}
+
+	public String getTags() {
+		return tags;
+	}
+
+	public void setTags(String tags) {
+		this.tags = tags;
 	}
 
 }

@@ -53,16 +53,14 @@
 		}
 		
 		function saveProblem(problemData){
-
-			
             let requestBody = {
             		problemName: problemData.grivienceName,
             		problemDesc: problemData.grivienceDescription,
-            		problemMainPhoto: problemData.problemMainPhoto,
-            		problemLocation:problemData.locatedIn,
+            		problemLocation:problemData.selectedLocation,
             		problemType:problemData.grivienceType,
-            		noOfAffectdCitizens:problemData.noOfAffectedCitizens,
-            		moneyAtStake:problemData.moneyAtStake
+            		noOfAffectdCitizens:parseInt(problemData.noOfAffectedCitizens),
+            		moneyAtStake:parseInt(problemData.moneyAtStake),
+            		tags:problemData.tagValues
             }
             let deferred = $q.defer();
             

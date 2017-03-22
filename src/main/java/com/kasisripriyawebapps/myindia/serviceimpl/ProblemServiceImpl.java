@@ -64,6 +64,10 @@ public class ProblemServiceImpl implements ProblemService {
 				.getProblemTypeById(createUpdateProblemRequestData.getProblemType().getGuid());
 		problem.setProblemType(problemType);
 		problem.setProblemStatus(ProblemStatusParameters.CREATED);
+		problem.setTags(createUpdateProblemRequestData.getTags());
+
+		String problemSeverity = calculateProblemSeverity(createUpdateProblemRequestData);
+		problem.setProblemSeverity(problemSeverity);
 
 		ProblemHistory problemHistory = new ProblemHistory();
 		problemHistory.setProblem(problem);
@@ -80,13 +84,46 @@ public class ProblemServiceImpl implements ProblemService {
 		return problemGuid;
 	}
 
+	private String calculateProblemSeverity(CreateUpdateProblemRequestData createUpdateProblemRequestData) {
+		String problemSeverity = "";
+		if (createUpdateProblemRequestData.getNoOfAffectdCitizens() != null) {
+			if (createUpdateProblemRequestData.getMoneyAtStake() != null) {
+				Long averageSeverityCount = (createUpdateProblemRequestData.getNoOfAffectdCitizens()
+						+ createUpdateProblemRequestData.getMoneyAtStake()) / 2;
+				Double averageSeverityCountDbl = Math.ceil(averageSeverityCount.doubleValue());
+				problemSeverity = getSeverity(averageSeverityCountDbl.longValue());
+			} else {
+				problemSeverity = getSeverity(createUpdateProblemRequestData.getNoOfAffectdCitizens());
+			}
+		} else {
+			if (createUpdateProblemRequestData.getMoneyAtStake() != null) {
+				problemSeverity = getSeverity(createUpdateProblemRequestData.getMoneyAtStake());
+			}
+		}
+		return problemSeverity;
+	}
+
+	private String getSeverity(Long severityLevel) {
+
+		if (severityLevel == 1) {
+			return "Critical";
+		} else if (severityLevel == 2) {
+			return "High";
+		} else if (severityLevel == 3) {
+			return "Medium";
+		} else {
+			return "Low";
+		}
+	}
+
 	@Override
-	public ProblemResponse retreiveProblem(Long problemGuid, LoggedInUserDetails loggedInUserDetails) throws InternalServerException {
-		
+	public ProblemResponse retreiveProblem(Long problemGuid, LoggedInUserDetails loggedInUserDetails)
+			throws InternalServerException {
+
 		Problem problem = problemDao.getProblemByGuid(problemGuid);
-		
+
 		ProblemResponse problemResponse = new ProblemResponse();
-		
+
 		problemResponse.setAmountInvolved(problem.getAmountInvolved());
 		// Here we wont get?
 		problemResponse.setCreatedLocation(problem.getCreatedLocation());
@@ -101,10 +138,9 @@ public class ProblemServiceImpl implements ProblemService {
 		problemResponse.setProblemStatus(problem.getProblemStatus());
 		problemResponse.setProblemType(problem.getProblemType());
 		problemResponse.setRootCause(problem.getRootCause());
-		
-		
-//		problemResponse.setOwner(owner);
-//		problemResponse.setCreatedBy(createdBy);
+
+		// problemResponse.setOwner(owner);
+		// problemResponse.setCreatedBy(createdBy);
 		return problemResponse;
 	}
 

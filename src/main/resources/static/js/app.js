@@ -1,9 +1,7 @@
 (function() {
      'use strict';
-	var myIndiaApp=angular.module('myindia-app', ['ui.router','ui.bootstrap','ngAnimate','ngMessages','ngCookies','angularTrix']);
-	myIndiaApp.run(function($state, $rootScope){
-		   $rootScope.$state = $state;
-		})
+	var myIndiaApp=angular.module('myindia-app', ['ui.router','ui.bootstrap','ngAnimate','ngMessages','angularTrix','ngTagsInput']);
+	
 })();
 
 (function() {
@@ -319,16 +317,19 @@
 
 	angular.module('myindia-app').directive("myindiaHeader", myIndiaHeader);
 
-	myIndiaHeader.$inject = ['dataShareService','userInfoService','$state'];
+	myIndiaHeader.$inject = ['dataShareService','userInfoService'];
 
-	function myIndiaHeader(dataShareService,userInfoService,$state) {
+	function myIndiaHeader(dataShareService,userInfoService) {
 
 		function link(scope, element, attrs) {
 
-			scope.header.userInfo = dataShareService.getUserInfo();
-
+			processUserInfo(scope);
 			
+		};
 
+		function processUserInfo(scope){
+			scope.header.userInfo = dataShareService.getUserInfo();
+			
 			if (scope.header.userInfo) {
 
 				// Preapre user profile image
@@ -342,37 +343,21 @@
 					}
 				}
 
-			}
-			else if(!$state.includes('signIn') && !$state.includes('signUp')){
+			}else{
 
-				// If shared data has not been set yet.Call the service.
-				if(!scope.header.userInfo){
-					userInfoService.getUserInfo().then(userInfoSuccess).catch(userInfoFailure);
+				//If shared data has not been set yet.Call the service.
+				userInfoService.getUserInfo().then(userInfoSuccess).catch(userInfoFailure);
 
-					function userInfoSuccess(data){
-						scope.header.userInfo = data;
-						// Preapre user profile image
-						if (!scope.header.userInfo.userImage) {
-							if (scope.header.userInfo.gender == 'Male') {
-								scope.header.userInfo.userImage = resource
-										+ 'Users-User-Male-icon.png';
-							} else if (header.userInfo.gender == 'Female') {
-								scope.header.userInfo.userImage = resource
-										+ 'Users-User-Female-icon.png';
-							}
-						}
-					}
+				function userInfoSuccess(data){
+					dataShareService.setUserInfo(data);
+				}
 
-					function userInfoFailure(error){
-						alert(error);
-					}
+				function userInfoFailure(error){
+					alert(error);
 				}
 
 			}
-
-			
-
-		};
+		}
 
 		return {
 			restrict : 'E',
@@ -444,9 +429,10 @@
 		
 		function pinLocation(){
 			let userInfo=dataShareService.getUserInfo();
-    		userInfo.userLocation.locationName=locationChangePopUp.selectedLocation.locationName;
-    		userInfo.userLocation.locationGuid=locationChangePopUp.selectedLocation.locationGuid;
-    		dataShareService.setUserInfo(userInfo);
+			if(userInfo){
+    			userInfo.userSelectedLocation=locationChangePopUp.selectedLocation;
+    			dataShareService.setUserInfo(userInfo);
+    		}
     		locationChangePopUp.closePopUp();
     	}
 	}
@@ -714,6 +700,19 @@
 }());
 
 (function() {
+     'use strict';
+	
+	angular.module('myindia-app').run(routeTrack);
+
+	routeTrack.$inject = ['$rootScope','$state'];
+
+	function routeTrack($rootScope,$state){
+		$rootScope.$state = $state;
+	}
+
+
+})();
+(function() {
 	'use strict';
 
 	angular.module('myindia-app').config(routeConfig);
@@ -774,6 +773,11 @@
 			templateUrl : resource + 'partials/problemSelection.html',
 			controller : 'problemSelectionController',
 			controllerAs : 'problemSelection'
+		}).state('createProblem.logProblem', {
+			url : '/logProblem',
+			templateUrl : resource + 'partials/logProblem.html',
+			controller : 'logProblemController',
+			controllerAs : 'logProblem'
 		}).state('viewProblem', {
 			url : '/viewProblem',
 			templateUrl : resource + 'partials/viewProblem.html',
@@ -788,7 +792,9 @@
 
 	angular.module('myindia-app').factory("dataShareService", dataShareService);
 
-	function dataShareService() {
+	dataShareService.$inject = ['$rootScope'];
+
+	function dataShareService($rootScope) {
 
 		var data = {};
 
@@ -804,12 +810,32 @@
 		}
 
 		function setUserInfo(userInfo) {
+
+			if(userInfo.userSelectedLocation){
+				userInfo.displayLocation = userInfo.userSelectedLocation;
+			}else if(data.userInfo && data.userInfo.userSelectedLocation){
+				userInfo.userSelectedLocation = data.userInfo.userSelectedLocation;
+				userInfo.displayLocation = userInfo.userSelectedLocation;
+			}else if(sessionStorage.getItem("display_location")){
+				userInfo.displayLocation = JSON.parse(sessionStorage.getItem("display_location"));
+			}else{
+				userInfo.displayLocation = userInfo.userLocation;
+			}
+
+			sessionStorage.setItem("display_location",JSON.stringify(userInfo.displayLocation));
+
 			data.userInfo = userInfo;
+
+			// Broadcast event
+			broadcast('userInfoChanged');
+		}
+
+		function broadcast(eventName){
+			$rootScope.$broadcast(eventName);
 		}
 	}
 
 })();
-
 (function() {
 	'use strict';
 
@@ -902,9 +928,9 @@
 
     angular.module('myindia-app').factory("swaggerShareService", swaggerShareService);
 
-    swaggerShareService.$inject = ['$q','$cookies'];
+    swaggerShareService.$inject = ['$q'];
 
-    function swaggerShareService($q,$cookies) {
+    function swaggerShareService($q) {
 
         var apiMetaData = {};
 
@@ -954,11 +980,11 @@
 
             let accessToken;
 
-            if($cookies.get("access_token")){
-                accessToken = $cookies.get("access_token");      
+            if(sessionStorage.getItem("access_token")){
+                accessToken = sessionStorage.getItem("access_token");   
             }else if(token){
                 accessToken = token;
-                $cookies.put("access_token",accessToken);
+                sessionStorage.setItem("access_token",accessToken);
             }
 
             if(accessToken && apiMetaData.metaInfo){
@@ -1133,86 +1159,12 @@
 
 	angular.module('myindia-app').controller("createProblemController",
 			createProblemController);
-	createProblemController.$inject = [ 'createProblemService','fileUploadService','dataShareService','userInfoService' ];
-	
-	function createProblemController(createProblemService,fileUploadService,dataShareService,userInfoService) {
-		
-		var createProblem=this;
-		createProblem.problemTypesResults = [];
-		createProblem.grivienceName="";
-		createProblem.grivienceType;
-		createProblem.grivienceDescription;
-		createProblem.noOfAffectedCitizens;
-		createProblem.moneyAtStake;
-		createProblem.userData = dataShareService.getUserInfo();
+	createProblemController.$inject = [];
 
-		if(!createProblem.userData){
-			userInfoService.getUserInfo().then(userInfoSuccess).catch(userInfoFailure);
+	function createProblemController() {
 
-			function userInfoSuccess(data){
-				createProblem.userData = data;
-				angular.copy(createProblem.userData.userLocation.locationName,createProblem.locatedInName);
-			}
+		var createProblem = this;
 
-			function userInfoFailure(error){
-				alert(error);
-			}
-		}else if(createProblem.userData.userLocation){
-			angular.copy(createProblem.userData.userLocation.locationName,createProblem.locatedInName);
-		}
-
-		
-
-		createProblem.saveProblem=saveProblem;
-		createProblem.uploadCover = uploadCover;
-		    
-		getAllProblemTypes();
-		
-		function saveProblem(){
-			
-			createProblemService.saveProblem(createProblem).then(saveProblemSuccess).catch(saveProblemFailure);
-
-    		function saveProblemSuccess(data){
-    			if(createProblem.coverPhotoFile!=undefined && createProblem.coverPhotoFile!=null){
-    				addMainPhotoToProblem(data.saveUpdateDeleteRecordId);
-    			}
-            }
-    		function saveProblemFailure(error){
-    			alert(error);
-    		}
-		}
-		
-		function getAllProblemTypes(){
-			
-			createProblemService.getAllProblemTypes().then(getAllProblemTypesSuccess).catch(getAllProblemTypesFailure);
-			
-			function getAllProblemTypesSuccess(data){
-				createProblem.problemTypesResults = data;
-				console.log(createProblem.problemTypesResults);
-			}
-			function getAllProblemTypesFailure(error){
-				alert(error);
-			}
-		}
-
-		function uploadCover(files){
-			createProblem.coverPhotoFile = files[0];
-		}
-		
-		function addMainPhotoToProblem(problemGuid){
-
-			let files=[createProblem.coverPhotoFile];
-	
-			fileUploadService.uploadFile(files,"Problem",problemGuid,true,null).then(uploadSuccess).catch(uploadFailure);
-
-			function uploadSuccess(data){
-				console.log(data);
-			}
-
-			function uploadFailure(error){
-				alert(error);
-			}
-		}
 	}
 
 })();
@@ -1272,16 +1224,14 @@
 		}
 		
 		function saveProblem(problemData){
-
-			
             let requestBody = {
             		problemName: problemData.grivienceName,
             		problemDesc: problemData.grivienceDescription,
-            		problemMainPhoto: problemData.problemMainPhoto,
-            		problemLocation:problemData.locatedIn,
+            		problemLocation:problemData.selectedLocation,
             		problemType:problemData.grivienceType,
-            		noOfAffectdCitizens:problemData.noOfAffectedCitizens,
-            		moneyAtStake:problemData.moneyAtStake
+            		noOfAffectdCitizens:parseInt(problemData.noOfAffectedCitizens),
+            		moneyAtStake:parseInt(problemData.moneyAtStake),
+            		tags:problemData.tagValues
             }
             let deferred = $q.defer();
             
@@ -1308,14 +1258,200 @@
 (function() {
 	'use strict';
 
+	angular.module('myindia-app').controller("logProblemController",
+			logProblemController);
+	logProblemController.$inject = [ 'createProblemService','fileUploadService','dataShareService','userInfoService','$scope','locationChangePopUpService' ];
+	
+	function logProblemController(createProblemService,fileUploadService,dataShareService,userInfoService,$scope,locationChangePopUpService) {
+		
+		var logProblem=this;
+		logProblem.problemTypesResults = [];
+		logProblem.grivienceName="";
+		logProblem.grivienceType;
+		logProblem.grivienceDescription;
+		logProblem.noOfAffectedCitizens;
+		logProblem.moneyAtStake;
+		logProblem.noOfAffectedCitizensData={4:"<5",3:"Between 5 and 100",2:"Between 100 and 1000",1:">1000"};
+		logProblem.moneyAtStakeData={4:"<1,00,000",3:"Between 1,00,000 and 10,00,000",2:"Between 10,00,000 and 50,00,000",1:">50,00,000"};
+		logProblem.tags = [];
+		logProblem.generateTags=generateTags;
+		logProblem.searchLocation=searchLocation;
+		logProblem.searchedLocations=[];
+		logProblem.selectLocation = selectLocation;
+		logProblem.selectedLocation=null;
+		logProblem.showLocationSearchBox=false;
+		logProblem.locatedIn="";
+		logProblem.tagValues="";
+		
+		logProblem.problems = [];
+		
+		for (var i = 0; i < 20; i++) {
+			var severity = "";
+
+			if (i % 2 == 0) {
+				severity = "critical";
+			} else if (i % 3 == 0) {
+				severity = "high";
+			} else if (i % 5 == 0) {
+				severity = "medium";
+			} else {
+				severity = "low";
+			}
+			var problem = {
+				"problemName" : "Water Problem Type Water Problem Type Water Problem Type "
+						+ i,
+				"locatedIn" : "Pulipadu,Prakasam(District)",
+				"severity" : severity,
+				"severityLevel" : severity === "critical" ? "C"
+						: severity === "high" ? "H"
+								: severity === "medium" ? "M" : "L"
+			};
+			logProblem.problems.push(problem);
+		}
+
+		processUserData();
+
+		$scope.$on('userInfoChanged',function(event){
+			processUserData();
+		});
+		
+
+		logProblem.saveProblem=saveProblem;
+		logProblem.uploadCover = uploadCover;
+		    
+		getAllProblemTypes();
+		
+		function saveProblem(){
+			
+			if(logProblem.tagValues!=undefined){
+				logProblem.tagValues=logProblem.tagValues.substr(0,logProblem.tagValues.length-1);
+			}
+			
+			createProblemService.saveProblem(logProblem).then(saveProblemSuccess).catch(saveProblemFailure);
+
+    		function saveProblemSuccess(data){
+    			if(logProblem.coverPhotoFile!=undefined && logProblem.coverPhotoFile!=null){
+    				addMainPhotoToProblem(data.saveUpdateDeleteRecordId);
+    			}
+            }
+    		function saveProblemFailure(error){
+    			alert(error);
+    		}
+		}
+		
+		function processUserData(){
+			logProblem.userData = dataShareService.getUserInfo();
+
+			if(!logProblem.userData){
+				userInfoService.getUserInfo().then(userInfoSuccess).catch(userInfoFailure);
+
+				function userInfoSuccess(data){
+					dataShareService.setUserInfo(data);
+				}
+
+				function userInfoFailure(error){
+					alert(error);
+				}
+			}else if(logProblem.userData.displayLocation){
+				logProblem.selectedLocation = logProblem.userData.displayLocation;
+				logProblem.locatedIn=logProblem.userData.displayLocation.locationName;
+			}
+		}
+
+		function getAllProblemTypes(){
+			
+			createProblemService.getAllProblemTypes().then(getAllProblemTypesSuccess).catch(getAllProblemTypesFailure);
+			
+			function getAllProblemTypesSuccess(data){
+				logProblem.problemTypesResults = data;
+				console.log(logProblem.problemTypesResults);
+			}
+			function getAllProblemTypesFailure(error){
+				alert(error);
+			}
+		}
+
+		function uploadCover(files){
+			logProblem.coverPhotoFile = files[0];
+		}
+		
+		function addMainPhotoToProblem(problemGuid){
+
+			let files=[logProblem.coverPhotoFile];
+	
+			fileUploadService.uploadFile(files,"Problem",problemGuid,true,null).then(uploadSuccess).catch(uploadFailure);
+
+			function uploadSuccess(data){
+				console.log(data);
+			}
+
+			function uploadFailure(error){
+				alert(error);
+			}
+		}
+		
+		function generateTags(){
+			let grivienceNameWords = logProblem.grivienceName.split(" ");
+			if(grivienceNameWords.length>1){
+			for(var i =0; i < grivienceNameWords.length; i++){
+				var tagObj= { text: grivienceNameWords[i] };
+				if(grivienceNameWords[i]!=null && grivienceNameWords[i]!=undefined && grivienceNameWords[i]!="" && grivienceNameWords[i].length>=3 && !arrayContainsValue(grivienceNameWords[i])){
+					logProblem.tags.push(tagObj);
+					logProblem.tagValues+=grivienceNameWords[i]+",";
+				}
+			}
+			
+		}
+		}
+		
+		function arrayContainsValue(tagName){
+			var isContained=false;
+			for(var i=0;i<logProblem.tags.length;i++){
+				var tagObj= logProblem.tags[i];
+				if(tagObj.text==tagName){
+					isContained=true;
+					break;
+				}
+			}
+			return isContained;
+		}
+		
+		function searchLocation(){
+			if(logProblem.locatedIn.length>=3){
+				logProblem.showLocationSearchBox=true;
+				if(logProblem.locatedIn.length>=3){
+					locationChangePopUpService.getSearchResults(logProblem.locatedIn).then(searchLocationsSuccess).catch(searchLocationsFailure);
+		    		function searchLocationsSuccess(data){
+		    			logProblem.searchedLocations=data;
+		    		}
+		    		function searchLocationsFailure(error){
+		    			alert(error);
+		    		}
+				}
+			}
+		}
+		
+		function selectLocation(searchLocation){
+			logProblem.selectedLocation=searchLocation;
+			logProblem.locatedIn=searchLocation.locationName;
+			logProblem.showLocationSearchBox=false;
+		}
+	}
+
+})();
+
+(function() {
+	'use strict';
+
 	angular.module('myindia-app').controller("problemSelectionController",
 			problemSelectionController);
-	problemSelectionController.$inject = [];
+	problemSelectionController.$inject = ['$state'];
 
-	function problemSelectionController() {
+	function problemSelectionController($state) {
 
 		var problemSelection = this;
 		problemSelection.problems = [];
+		problemSelection.logNewProblem = logNewProblem;
 
 		for (var i = 0; i < 20; i++) {
 			var severity = "";
@@ -1339,6 +1475,10 @@
 								: severity === "medium" ? "M" : "L"
 			};
 			problemSelection.problems.push(problem);
+		}
+		
+		function logNewProblem() {
+			$state.go('createProblem.logProblem');
 		}
 	}
 
@@ -1421,9 +1561,8 @@
     		signInService.login(signIn.userName,signIn.password).then(loginSuccess).catch(loginFailure);
 
     		function loginSuccess(data){
-    			alert("Login Success");
                 dataShareService.setUserInfo(data);
-    			$state.go('createProblem');
+                $state.go('createProblem.problemTypeSelection');
     		}
 
     		function loginFailure(error){

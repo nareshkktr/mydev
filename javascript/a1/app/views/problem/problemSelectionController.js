@@ -3,12 +3,13 @@
 
 	angular.module('myindia-app').controller("problemSelectionController",
 			problemSelectionController);
-	problemSelectionController.$inject = [];
+	problemSelectionController.$inject = ['$state'];
 
-	function problemSelectionController() {
+	function problemSelectionController($state) {
 
 		var problemSelection = this;
 		problemSelection.problems = [];
+		problemSelection.logNewProblem = logNewProblem;
 
 		for (var i = 0; i < 20; i++) {
 			var severity = "";
@@ -32,6 +33,10 @@
 								: severity === "medium" ? "M" : "L"
 			};
 			problemSelection.problems.push(problem);
+		}
+		
+		function logNewProblem() {
+			$state.go('createProblem.logProblem');
 		}
 	}
 
