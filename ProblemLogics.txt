@@ -10,6 +10,9 @@ Working on it!
 Seeking any input from the owner
 Need little more info to help you!
 
+Once user adds info 
+More info provided!
+
 Once problem is escalated.
 Escalated!
 
@@ -30,7 +33,15 @@ Dismissal revoked!
 Problem Severity
 
 No of affected people (Count) and Amount Involved -- ( Rupees)
-
 Normalize both to one ground.
+
+4 levels for each
+average of each to obtain actual severity if both present.
+
+---------------------------------
+
+
+
+
 
 

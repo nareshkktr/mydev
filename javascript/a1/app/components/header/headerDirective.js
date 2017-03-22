@@ -10,6 +10,11 @@
 		function link(scope, element, attrs) {
 
 			processUserInfo(scope);
+
+			//Register event to listen to userinfo chnages 
+			scope.$on('userInfoChanged',function(event){
+				processUserInfo();
+			});
 			
 		};
 

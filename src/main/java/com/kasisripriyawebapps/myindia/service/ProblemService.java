@@ -3,6 +3,8 @@
  */
 package com.kasisripriyawebapps.myindia.service;
 
+import java.util.List;
+
 import com.kasisripriyawebapps.myindia.configs.LoggedInUserDetails;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.CreateUpdateProblemRequestData;
@@ -17,5 +19,7 @@ public interface ProblemService {
 			LoggedInUserDetails loggedInUserDetails) throws InternalServerException;
 
 	ProblemResponse retreiveProblem(Long problemGuid, LoggedInUserDetails loggedInUserDetails) throws InternalServerException;
+
+	List<ProblemResponse> retreiveProblemsByType(Long problemTypeGuid, LoggedInUserDetails loggedInUserDetails) throws InternalServerException;
 
 }
