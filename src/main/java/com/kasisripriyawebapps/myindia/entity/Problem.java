@@ -39,8 +39,6 @@ public class Problem implements Serializable {
 		// TODO Auto-generated constructor stub
 	}
 
-	
-
 	public Problem(LocationMaster createdLocation, String problemShortDescription, String problemLongDescription,
 			String rootCause, String problemStatus, String problemSeverity, String photoURL, Long noOfAffectedPeople,
 			Long amountInvolved, Timestamp createdTimeStamp, Timestamp updatedTimeStamp,
@@ -67,19 +65,13 @@ public class Problem implements Serializable {
 		this.problemHistory = problemHistory;
 	}
 
-
-
 	public Boolean getEscalationEnabled() {
 		return escalationEnabled;
 	}
 
-
-
 	public void setEscalationEnabled(Boolean escalationEnabled) {
 		this.escalationEnabled = escalationEnabled;
 	}
-
-
 
 	public String getRootCause() {
 		return rootCause;
@@ -135,13 +127,13 @@ public class Problem implements Serializable {
 
 	@Column(name = "LONG_DESCRIPTION")
 	private String problemLongDescription;
-	
+
 	@Column(name = "ROOT_CAUSE")
 	private String rootCause;
-	
+
 	@Column(name = "PROBLEM_STATUS")
 	private String problemStatus;
-	
+
 	@Column(name = "PROLEM_SEVERITY")
 	private String problemSeverity;
 
@@ -150,7 +142,7 @@ public class Problem implements Serializable {
 
 	@Column(name = "PEOPLE_AFFECTED_COUNT")
 	private Long noOfAffectedPeople;
-	
+
 	@Column(name = "AMOUNT_INVOLVED")
 	private Long amountInvolved;
 
@@ -161,11 +153,11 @@ public class Problem implements Serializable {
 	/** The updated time stamp. */
 	@Column(name = "MODIFIED_TIMESTAMP")
 	private Timestamp updatedTimeStamp;
-	
+
 	/** The updated time stamp. */
 	@Column(name = "MANUAL_ESCALATION_TIME")
 	private Timestamp manualEscalationTimestamp;
-	
+
 	@Column(name = "ESCALATION_ENABLED")
 	private Boolean escalationEnabled;
 
@@ -186,6 +178,9 @@ public class Problem implements Serializable {
 
 	@OneToMany(mappedBy = "problem", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<ProblemHistory> problemHistory = new ArrayList<ProblemHistory>(0);
+
+	@Column(name = "TAGS")
+	private String tags;
 
 	public Long getGuid() {
 		return guid;
@@ -295,6 +290,14 @@ public class Problem implements Serializable {
 		if (problemHistory != null) {
 			this.problemHistory.addAll(problemHistory);
 		}
+	}
+
+	public String getTags() {
+		return tags;
+	}
+
+	public void setTags(String tags) {
+		this.tags = tags;
 	}
 
 }

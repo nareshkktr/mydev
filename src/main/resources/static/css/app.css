@@ -743,6 +743,98 @@ input[type="text"], input[type="password"], select {
 	padding: 20px;
 }
 
+@CHARSET "ISO-8859-1";
+
+#problem_selection_container {
+	padding: 5px !important;
+}
+
+#problem_selection_container .problem {
+	background-color: white;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+#problem_selection_container .problem .problem_severity {
+	text-align: center;
+	padding: 10px;
+}
+
+#problem_selection_container .problem .problem_severity .problem_severity_circle
+	{
+	border-radius: 50%;
+	text-align: center;
+	width: 46px;
+	height: 46px;
+}
+
+#problem_selection_container .problem .problem_name {
+	letter-spacing: 1px;
+	font-size: 14px;
+	padding: 10px;
+}
+
+#problem_selection_container .problem .problem_located_in {
+	letter-spacing: 1px;
+	font-size: 12px;
+	text-align: center;
+}
+
+#problem_selection_container .problem .critical {
+	background-color: red;
+}
+
+#problem_selection_container .problem .high {
+	background-color: orange;
+}
+
+#problem_selection_container .problem .medium {
+	background-color: blue;
+}
+
+#problem_selection_container .problem .low {
+	background-color: green;
+}
+
+#problem_selection_container .problem .row {
+	margin: 0px !important;
+}
+
+#problem_selection_container .problem  .problem_located_in i {
+	font-size: 16px;
+	margin-right: 7px;
+}
+
+#problem_selection_container .problem .problem_severity label {
+	color: white;
+	padding-top: 9px;
+	font-size: 20px;
+}
+
+#problem_selection_container .problem .problem_short_actions {
+	margin-top: 20px !important;
+	background-color: #bdbbba;
+	padding: 6px 0px 2px 0px;
+}
+
+#problem_selection_container .problem .problem_short_actions .problem_short_action label
+	{
+	background-color: #6b6666;
+	color: white;
+	padding: 2px 5px 2px 5px;
+	margin-left: 7px;
+	border-radius: 3px;
+}
+
+#problem_selection_container .problem .problem_short_actions .problem_short_action i
+	{
+	font-size: 18px;
+	vertical-align: text-bottom
+}
+
+.problem_selection_content {
+	margin: 0px !important;
+}
 .cretae_problem_container_row {
 	margin: 0px !important;
 }
@@ -752,59 +844,12 @@ input[type="text"], input[type="password"], select {
 	margin-right: 0px !important;
 }
 
-.relative_problem {
-	padding: 0px !important;
-	border: 1px solid #d3cece;
-	border-left: 20px solid #528658;
-	margin-top: 15px;
-	background-color: white;
-}
-
-.relative_problem_details {
-	padding-left: 0px !important;
-	padding-right: 0px !important;
-	background-color: white;
-}
-
-.relative_problem_short_text {
-	color: #528658;
-	letter-spacing: 1px;
-	padding: 10px;
-}
-
-.relative_problem_location {
-	padding: 0px 0px 0px 10px;
-}
-
-.relative_problem_icons {
-	border-top: 1px solid lightgray;
-	margin-top: 10px;
-}
-
-.relative_problem_icon {
-	text-align: center;
-	padding-top: 4px;
-	padding-bottom: 0px;
-	padding-right: 1px !important;
-	padding-left: 5px !important;
-	border-right: 1px solid lightgray;
-	border-bottom: 1px solid lightgray;
-	background-color: white;
-}
-
-.relative_problem_icon button, .relative_problem_icon button:HOVER {
-	background-color: white;
-	color: #f94c59;
-	border: none;
-	font-size: 14px;
-}
-
 .cretae_problem_container {
 	padding: 20px;
 }
 
 .cretae_problem_container .row {
-	margin-bottom: 10px;
+	margin: 0px 0px 10px 0px;
 }
 
 .cretae_problem_container textarea {
@@ -887,97 +932,47 @@ input[type="text"], input[type="password"], select {
 	width: 100%;
 	height: 100%;
 }
-@CHARSET "ISO-8859-1";
 
-#problem_selection_container {
-	padding: 5px !important;
-}
-
-#problem_selection_container .problem {
+#problem_impacts_row {
+	border: 1px solid black;
+	padding: 20px 20px 0px 20px;
+	margin-top: 5px;
+	height: 103px;
 	background-color: white;
-	margin-top: 10px;
-	margin-bottom: 10px;
+	border: 1px solid #ccc;
+	border-radius: 10px;
+	position: relative;
 }
 
-#problem_selection_container .problem .problem_severity {
-	text-align: center;
-	padding: 10px;
+tags-input .tags {
+	height: 102px !important;
+	overflow-y: auto !important;
+	padding: 5px !important;
+	box-shadow: 1px 5px 0px 1px rgba(0, 0, 0, .075) !important;
+	border-radius: 10px !important;
 }
 
-#problem_selection_container .problem .problem_severity .problem_severity_circle
-	{
-	border-radius: 50%;
-	text-align: center;
-	padding: 10px;
-}
-
-#problem_selection_container .problem .problem_name {
+tags-input .tags .tag-item {
+	background: -webkit-linear-gradient(top, #f0f9ff 0, #eca1a7 47%, #f94c59 100%)
+		!important;;
+	background: linear-gradient(to bottom, #f0f9ff 0, #eca1a7 47%, #f94c59 100%)
+		!important;;
+	font-weight: 600;
+	font-size: 13px;
 	letter-spacing: 1px;
-	font-size: 12px;
-	padding: 10px;
 }
 
-#problem_selection_container .problem .problem_located_in {
-	letter-spacing: 1px;
-	font-size: 12px;
-	padding-left: 70px;
+.search_locations_content {
+	border: 1px solid #bbb;
+	background-color: ghostwhite;
+	max-height: 252px;
+	overflow-y: auto;
+	z-index: 4000 !important;
+	position: absolute;
+	width: 94%;
+	border-radius: 10px;
 }
 
-#problem_selection_container .problem .critical {
-	background-color: red;
-}
-
-#problem_selection_container .problem .high {
-	background-color: orange;
-}
-
-#problem_selection_container .problem .medium {
-	background-color: blue;
-}
-
-#problem_selection_container .problem .low {
-	background-color: green;
-}
-
-#problem_selection_container .problem .row {
-	margin: 0px !important;
-}
-
-#problem_selection_container .problem  .problem_located_in i {
-	font-size: 16px;
-	margin-right: 7px;
-}
-
-#problem_selection_container .problem .problem_severity label {
-	color: white;
-	padding-top: 9px;
-	font-size: 20px;
-}
-
-#problem_selection_container .problem .problem_short_actions {
-	margin-top: 20px !important;
-	background-color: #bdbbba;
-	padding: 6px 0px 2px 0px;
-}
-
-#problem_selection_container .problem .problem_short_actions .problem_short_action label
-	{
-	background-color: #6b6666;
-	color: white;
-	padding: 2px 5px 2px 5px;
-	margin-left: 7px;
-	border-radius: 3px;
-}
-
-#problem_selection_container .problem .problem_short_actions .problem_short_action i
-	{
-	font-size: 18px;
-	vertical-align: text-bottom
-}
-
-.problem_selection_content {
-	margin: 0px !important;
-}
 @CHARSET "ISO-8859-1";
 
 .problem_type {

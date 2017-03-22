@@ -59,6 +59,11 @@
 			templateUrl : resource + 'partials/problemSelection.html',
 			controller : 'problemSelectionController',
 			controllerAs : 'problemSelection'
+		}).state('createProblem.logProblem', {
+			url : '/logProblem',
+			templateUrl : resource + 'partials/logProblem.html',
+			controller : 'logProblemController',
+			controllerAs : 'logProblem'
 		}).state('viewProblem', {
 			url : '/viewProblem',
 			templateUrl : resource + 'partials/viewProblem.html',

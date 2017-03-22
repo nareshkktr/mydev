@@ -66,6 +66,10 @@ public class ProblemServiceImpl implements ProblemService {
 				.getProblemTypeById(createUpdateProblemRequestData.getProblemType().getGuid());
 		problem.setProblemType(problemType);
 		problem.setProblemStatus(ProblemStatusParameters.CREATED);
+		problem.setTags(createUpdateProblemRequestData.getTags());
+
+		String problemSeverity = calculateProblemSeverity(createUpdateProblemRequestData);
+		problem.setProblemSeverity(problemSeverity);
 
 		ProblemHistory problemHistory = new ProblemHistory();
 		problemHistory.setProblem(problem);
@@ -80,6 +84,38 @@ public class ProblemServiceImpl implements ProblemService {
 
 		problemGuid = problemDao.saveProblem(problem);
 		return problemGuid;
+	}
+
+	private String calculateProblemSeverity(CreateUpdateProblemRequestData createUpdateProblemRequestData) {
+		String problemSeverity = "";
+		if (createUpdateProblemRequestData.getNoOfAffectdCitizens() != null) {
+			if (createUpdateProblemRequestData.getMoneyAtStake() != null) {
+				Long averageSeverityCount = (createUpdateProblemRequestData.getNoOfAffectdCitizens()
+						+ createUpdateProblemRequestData.getMoneyAtStake()) / 2;
+				Double averageSeverityCountDbl = Math.ceil(averageSeverityCount.doubleValue());
+				problemSeverity = getSeverity(averageSeverityCountDbl.longValue());
+			} else {
+				problemSeverity = getSeverity(createUpdateProblemRequestData.getNoOfAffectdCitizens());
+			}
+		} else {
+			if (createUpdateProblemRequestData.getMoneyAtStake() != null) {
+				problemSeverity = getSeverity(createUpdateProblemRequestData.getMoneyAtStake());
+			}
+		}
+		return problemSeverity;
+	}
+
+	private String getSeverity(Long severityLevel) {
+
+		if (severityLevel == 1) {
+			return "Critical";
+		} else if (severityLevel == 2) {
+			return "High";
+		} else if (severityLevel == 3) {
+			return "Medium";
+		} else {
+			return "Low";
+		}
 	}
 
 	@Override

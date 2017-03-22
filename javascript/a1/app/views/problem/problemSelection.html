@@ -2,7 +2,8 @@
 	id="problem_selection_container">
 	<div class="row problem_selection_content">
 		<div ng-repeat="eachProblem in problemSelection.problems"
-			class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+			class="col-lg-3 col-md-4 col-sm-6 col-xs-12"
+			ng-click="problemSelection.logNewProblem()">
 			<div class="problem">
 				<div class="row problem_name_severity">
 					<div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 problem_severity">
