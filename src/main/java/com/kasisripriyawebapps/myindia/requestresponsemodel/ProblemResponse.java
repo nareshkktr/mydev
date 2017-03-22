@@ -4,13 +4,14 @@ import java.sql.Timestamp;
 
 import com.kasisripriyawebapps.myindia.entity.LocationMaster;
 import com.kasisripriyawebapps.myindia.entity.ProblemType;
+import com.kasisripriyawebapps.myindia.solr.entity.SolrLocationMaster;
 
 
 
 public class ProblemResponse {
 	
 	private Long guid;
-	private LocationMaster createdLocation;
+	private SolrLocationMaster createdLocation;
 	private String problemShortDescription;
 	private String problemLongDescription;
 	private String rootCause;
@@ -23,7 +24,7 @@ public class ProblemResponse {
 	private Boolean escalationEnabled;
 	private BaseUserInformation createdBy;
 	private PoliticianResponse owner;
-	private ProblemType problemType;
+	private ProblemTypeResponse problemType;
 	
 	
 	public Long getGuid() {
@@ -32,10 +33,11 @@ public class ProblemResponse {
 	public void setGuid(Long guid) {
 		this.guid = guid;
 	}
-	public LocationMaster getCreatedLocation() {
+	
+	public SolrLocationMaster getCreatedLocation() {
 		return createdLocation;
 	}
-	public void setCreatedLocation(LocationMaster createdLocation) {
+	public void setCreatedLocation(SolrLocationMaster createdLocation) {
 		this.createdLocation = createdLocation;
 	}
 	public String getProblemShortDescription() {
@@ -104,10 +106,11 @@ public class ProblemResponse {
 	public void setCreatedBy(BaseUserInformation createdBy) {
 		this.createdBy = createdBy;
 	}
-	public ProblemType getProblemType() {
+	
+	public ProblemTypeResponse getProblemType() {
 		return problemType;
 	}
-	public void setProblemType(ProblemType problemType) {
+	public void setProblemType(ProblemTypeResponse problemType) {
 		this.problemType = problemType;
 	}
 	public PoliticianResponse getOwner() {

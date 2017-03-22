@@ -963,5 +963,17 @@ public class EndPointConstants {
 
 	/** The Constant GET_PROBLEMS_BY_TYPE_API_DESCRIPTION. */
 	public static final String GET_PROBLEMS_BY_TYPE_API_DESCRIPTION = "Get Problems By Problem Type.";
+	
+	/** The Constant GET_PROBLEMS_BY_TYPE_REQUEST_MAPPING. */
+	public static final String GET_PROBLEM_BY_ID_REQUEST_MAPPING = "getProblemByGuid";
+
+	/** The Constant GET_PROBLEMS_BY_TYPE_API_VALUE. */
+	public static final String GET_PROBLEM_BY_ID_API_VALUE = "getProblemByGuid";
+
+	/** The Constant GET_PROBLEMS_BY_TYPE_API_NICKNAME. */
+	public static final String GET_PROBLEM_BY_ID_API_NICKNAME = "getProblemByGuid";
+
+	/** The Constant GET_PROBLEMS_BY_TYPE_API_DESCRIPTION. */
+	public static final String GET_PROBLEM_BY_ID_API_DESCRIPTION = "Get Problem By Problem Guid.";
 
 }

@@ -68,8 +68,8 @@ public class ProblemEndPoint extends BaseEndPoint {
 	}
 	
 	@GET
-	@ApiOperation(value = EndPointConstants.CREATE_PROBLEM_API_VALUE, nickname = EndPointConstants.CREATE_PROBLEM_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.CREATE_PROBLEM_API_DESCRIPTION)
-	@Path(EndPointConstants.CREATE_PROBLEM_REQUEST_MAPPING)
+	@ApiOperation(value = EndPointConstants.GET_PROBLEM_BY_ID_API_VALUE, nickname = EndPointConstants.GET_PROBLEM_BY_ID_API_NICKNAME, httpMethod = EndPointConstants.HTTP_GET, notes = EndPointConstants.GET_PROBLEM_BY_ID_API_DESCRIPTION)
+	@Path(EndPointConstants.GET_PROBLEM_BY_ID_REQUEST_MAPPING)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getProblemByGuid(@QueryParam("problemGuid") Long problemGuid)
 			throws InternalServerException, PreConditionFailedException, PreConditionRequiredException,
@@ -78,7 +78,7 @@ public class ProblemEndPoint extends BaseEndPoint {
 		LoggedInUserDetails loggedInUserDetails = getLoggedInUserDetails();
 		ProblemResponse problem = null;
 		
-		if (problemGuid != null) {
+		if (problemGuid != null) {	
 			problem = problemService.retreiveProblem(problemGuid, loggedInUserDetails);
 		}else{
 			throw new PreConditionFailedException(ExceptionConstants.REQUEST_NOT_NULL);
