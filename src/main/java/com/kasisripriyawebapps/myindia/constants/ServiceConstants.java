@@ -3,8 +3,6 @@
  */
 package com.kasisripriyawebapps.myindia.constants;
 
-import java.util.Date;
-
 // TODO: Auto-generated Javadoc
 /**
  * The Class ServiceConstants.

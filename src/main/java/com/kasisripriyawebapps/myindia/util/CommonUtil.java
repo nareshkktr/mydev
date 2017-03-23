@@ -4,7 +4,6 @@
 package com.kasisripriyawebapps.myindia.util;
 
 import java.awt.image.BufferedImage;
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -26,7 +25,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -302,12 +300,27 @@ public class CommonUtil {
 
 			File f = new File(uploadFile);
 			lsFilePath = f.getAbsolutePath();
-			
-			FileOutputStream  writer = new FileOutputStream (uploadFile);
+
+			FileOutputStream writer = new FileOutputStream(uploadFile);
 			writer.write(decodedBytes);
 			writer.flush();
 			writer.close();
 
+		} catch (IOException e) {
+			new InternalServerException(e.getMessage());
+		}
+
+		return lsFilePath;
+	}
+
+	public static String saveFileIntoAmazonS3(String bucketName, String folderName, String fsBase64, String fsFileName)
+			throws InternalServerException {
+		String lsFilePath = "";
+		String base64String = fsBase64;
+		BASE64Decoder decoder = new BASE64Decoder();
+		byte[] decodedBytes = null;
+		try {
+			decodedBytes = decoder.decodeBuffer(base64String);
 		} catch (IOException e) {
 			new InternalServerException(e.getMessage());
 		}

@@ -1,6 +1,7 @@
 package com.kasisripriyawebapps.myindia.serviceimpl;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,10 @@ import com.kasisripriyawebapps.myindia.exception.PreConditionFailedException;
 import com.kasisripriyawebapps.myindia.exception.PreConditionRequiredException;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.CreateUpdateImageRequest;
 import com.kasisripriyawebapps.myindia.service.ImageService;
+import com.kasisripriyawebapps.myindia.util.AmazonS3Util;
 import com.kasisripriyawebapps.myindia.util.CommonUtil;
+
+import sun.misc.BASE64Decoder;
 
 @Service
 public class ImageServiceImpl implements ImageService {
@@ -48,16 +52,26 @@ public class ImageServiceImpl implements ImageService {
 	}
 
 	@Override
-	public String addImageToLocalDrive(String objectType, Long objectId, String imageData, String imageName)
+	public String addImageToLocalDrive(String objectType, Long objectId, String fileData, String fileName)
 			throws InternalServerException {
-		String imageSavedLocationRootPath = env.getProperty("project.apache.htdocs_path");
-		File objectTypeGuidDirectory = new File(
-				imageSavedLocationRootPath + File.separator + objectType + File.separator + objectId);
-		if (!objectTypeGuidDirectory.exists())
-			objectTypeGuidDirectory.mkdirs();
-		String fileUrl = CommonUtil.saveFileIntoLocal(imageData,
-				objectTypeGuidDirectory.getAbsolutePath() + File.separator + imageName);
-		return fileUrl;
+
+		String bucketName = objectType.equalsIgnoreCase(ApplicationConstants.OBJECT_TYPE_PROBLEM)
+				? env.getProperty("amazon.s3.problem.bucket.name") : "";
+		String folderName = objectType.equalsIgnoreCase(ApplicationConstants.OBJECT_TYPE_PROBLEM)
+				? env.getProperty("amazon.s3.problem.problems.folder.name") : "";
+		try {
+			BASE64Decoder decoder = new BASE64Decoder();
+			byte[] decodedBytes = decoder.decodeBuffer(fileData);
+			fileName = folderName + File.separator + fileName;
+			try {
+				AmazonS3Util.createFile(bucketName, folderName, decodedBytes, fileName);
+			} catch (InternalServerException e) {
+				throw e;
+			}
+		} catch (IOException e) {
+			throw new InternalServerException(e.getMessage());
+		}
+		return fileName;
 	}
 
 	@Override
@@ -123,9 +137,9 @@ public class ImageServiceImpl implements ImageService {
 			if (createUpdateImageRequest.getIsMainPhotoURL()) {
 				problem.setPhotoURL(fileUrl);
 				problemDao.updateProblem(problem);
-				
+
 			} else {
-				
+
 				ProblemImage imageEntity = new ProblemImage();
 				imageEntity.setImageName(createUpdateImageRequest.getImageName());
 				imageEntity.setImageURL(fileUrl);
