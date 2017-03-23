@@ -3,11 +3,8 @@
  */
 package com.kasisripriyawebapps.myindia.endpoints;
 
-<<<<<<< HEAD
-=======
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
->>>>>>> 51df86a96b45a663db3753797ae93b79ccef14fa
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
