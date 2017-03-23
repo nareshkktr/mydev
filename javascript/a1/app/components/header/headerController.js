@@ -3,9 +3,9 @@
 	angular.module('myindia-app').controller("headerController",
 			headerController);
 
-	headerController.$inject = [ '$state'];
+	headerController.$inject = [ '$state','logoutService'];
 
-	function headerController($state) {
+	function headerController($state,logoutService) {
 
 		var header = this;
 		header.searchTerm = '';
@@ -19,6 +19,7 @@
 
 		header.modalControllerName = "locationChangePopUpController";
 		header.modalControllerAlias = "locationChangePopUp";
+		header.logout = logout;
 
 		function gotoSearch() {
 			$state.go('search', {
@@ -31,6 +32,19 @@
 		}
 		function closeLocationChangeModal() {
 			header.showLocationChangeModal = false;
+		}
+
+		function logout(){
+
+			logoutService.logout().then(logoutSuccess).catch(logoutFailure);
+
+			function logoutSuccess(data){
+				$state.go('signIn');
+			}
+
+			function logoutFailure(error){
+				alert(error);
+			}
 		}
 
 	}

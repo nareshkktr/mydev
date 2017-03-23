@@ -22,8 +22,10 @@ import com.kasisripriyawebapps.myindia.entity.ProblemType;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.CreateUpdateProblemRequestData;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.ProblemResponse;
+import com.kasisripriyawebapps.myindia.requestresponsemodel.ProblemTypeResponse;
 import com.kasisripriyawebapps.myindia.service.ImageService;
 import com.kasisripriyawebapps.myindia.service.ProblemService;
+import com.kasisripriyawebapps.myindia.solr.entity.SolrLocationMaster;
 import com.kasisripriyawebapps.myindia.util.CommonUtil;
 
 /**
@@ -147,7 +149,7 @@ public class ProblemServiceImpl implements ProblemService {
 
 			problemResponse.setAmountInvolved(problem.getAmountInvolved());
 			// Here we wont get?
-			problemResponse.setCreatedLocation(problem.getCreatedLocation());
+			problemResponse.setCreatedLocation(prepareSolrLocationMaster(problem.getCreatedLocation()));
 			problemResponse.setCreatedTimeStamp(problem.getCreatedTimeStamp());
 			problemResponse.setEscalationEnabled(problem.getEscalationEnabled());
 			problemResponse.setGuid(problem.getGuid());
@@ -157,7 +159,7 @@ public class ProblemServiceImpl implements ProblemService {
 			problemResponse.setProblemSeverity(problem.getProblemSeverity());
 			problemResponse.setProblemShortDescription(problem.getProblemShortDescription());
 			problemResponse.setProblemStatus(problem.getProblemStatus());
-			problemResponse.setProblemType(problem.getProblemType());
+			problemResponse.setProblemType(prepareProblemTypeResponse(problem.getProblemType()));
 			problemResponse.setRootCause(problem.getRootCause());
 			
 			//			problemResponse.setOwner(owner);
@@ -167,6 +169,29 @@ public class ProblemServiceImpl implements ProblemService {
 		}
 
 		return problemResponses;
+	}
+
+	private ProblemTypeResponse prepareProblemTypeResponse(ProblemType problemType) {
+		
+		ProblemTypeResponse problemTypeResponse = new ProblemTypeResponse();
+		problemTypeResponse.setProblemTypeGuid(problemType.getGuid());
+		problemTypeResponse.setProblemCategory(problemType.getProblemCategory());
+		problemTypeResponse.setProblemTypeMinistry(problemType.getProblemTypeMinistry());
+		problemTypeResponse.setProblemTypeName(problemType.getProblemTypeName());
+		problemTypeResponse.setProblemTypePhotoURL(problemType.getProblemTypePhotoURL());
+		
+		return problemTypeResponse;
+	}
+
+	private SolrLocationMaster prepareSolrLocationMaster(LocationMaster createdLocation) {
+		
+		SolrLocationMaster location = new SolrLocationMaster();
+		location.setLocationGuid(createdLocation.getGuid());
+		location.setLocationCode(createdLocation.getLocationCode());
+		location.setLocationName(createdLocation.getLocationName());
+		location.setLocationType(createdLocation.getLocationType());
+		location.setParentLocationGuid(createdLocation.getParentLocationGuid());
+		return location;
 	}
 
 	@Override

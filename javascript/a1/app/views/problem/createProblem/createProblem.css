@@ -35,19 +35,19 @@
 	text-align: center;
 }
 
-#problem_selection_container .problem .critical {
+#problem_selection_container .problem .Critical {
 	background-color: red;
 }
 
-#problem_selection_container .problem .high {
+#problem_selection_container .problem .High {
 	background-color: orange;
 }
 
-#problem_selection_container .problem .medium {
+#problem_selection_container .problem .Medium {
 	background-color: blue;
 }
 
-#problem_selection_container .problem .low {
+#problem_selection_container .problem .Low {
 	background-color: green;
 }
 

@@ -17,6 +17,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler;
+import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
@@ -50,8 +51,6 @@ public class OAuth2SecurityConfiguration {
 	@EnableAuthorizationServer
 	protected static class AuthorizationServerConfiguration extends AuthorizationServerConfigurerAdapter {
 
-		private TokenStore tokenStore = new InMemoryTokenStore();
-
 		@Autowired
 		@Qualifier("authenticationManagerBean")
 		private AuthenticationManager authenticationManager;
@@ -70,10 +69,15 @@ public class OAuth2SecurityConfiguration {
 		
 		@Value("${oauth.refreshtoken.validity.size}")
 		private int refreshTokenValiditySeconds;
+		
+		@Bean
+		public TokenStore tokenStore() {
+		    return new InMemoryTokenStore();
+		}
 
 		@Override
 		public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-			endpoints.tokenStore(this.tokenStore).authenticationManager(this.authenticationManager)
+			endpoints.tokenStore(tokenStore()).authenticationManager(this.authenticationManager)
 					.userDetailsService(customUserDetailsService);
 		}
 
@@ -85,13 +89,14 @@ public class OAuth2SecurityConfiguration {
 					.authorities("ROLE_CLIENT", "ROLE_TRUSTED_CLIENT").scopes("read", "write", "trust")
 					.secret(clientSecret).accessTokenValiditySeconds(accessTokenValiditySeconds).refreshTokenValiditySeconds(refreshTokenValiditySeconds);
 		}
-
-		@Bean
+		
+		
 		@Primary
-		public DefaultTokenServices tokenServices() {
-			DefaultTokenServices tokenServices = new DefaultTokenServices();
+		@Bean
+		public DefaultTokenServices defaultTokenServices() {
+			final DefaultTokenServices tokenServices = new DefaultTokenServices();
 			tokenServices.setSupportRefreshToken(true);
-			tokenServices.setTokenStore(this.tokenStore);
+			tokenServices.setTokenStore(tokenStore());
 			return tokenServices;
 		}
 
