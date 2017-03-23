@@ -13,7 +13,7 @@
 	<div class="row">
 		<div ng-repeat="eachproblemType in problemTypeSelection.problemTypes"
 			class="col-lg-2 col-md-3 col-sm-4 col-xs-12 problem_type"
-			ng-click="problemTypeSelection.chooseExistingProblem()">
+			ng-click="problemTypeSelection.chooseExistingProblem(eachproblemType.guid)">
 			<div class="problem_type_img">
 				<img ng-src="{{eachproblemType.problemTypeImage}}" />
 			</div>

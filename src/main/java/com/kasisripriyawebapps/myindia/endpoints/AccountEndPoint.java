@@ -4,17 +4,21 @@
 package com.kasisripriyawebapps.myindia.endpoints;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 
 import com.kasisripriyawebapps.myindia.configs.LoggedInUserDetails;
 import com.kasisripriyawebapps.myindia.constants.ApplicationConstants;
@@ -42,6 +46,13 @@ public class AccountEndPoint extends BaseEndPoint{
 
 	@Autowired
 	AccountService accountService;
+	
+	private @Autowired HttpServletRequest servletRequest;
+	
+	private @Autowired HttpServletResponse servletResponse;
+	
+//	@Autowired
+//	private DefaultTokenServices defaultTokenServices;
 
 	@POST
 	@ApiOperation(value = EndPointConstants.CREATE_ACCOUNT_API_VALUE, nickname = EndPointConstants.CREATE_ACCOUNT_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.CREATE_ACCOUNT_API_DESCRIPTION)
@@ -88,6 +99,23 @@ public class AccountEndPoint extends BaseEndPoint{
 		return Response.status(Status.OK).entity(baseUserInfo).build();
 	}
 
+	@POST
+	@ApiOperation(value = EndPointConstants.LOGOUT_ACCOUNT_API_VALUE, nickname = EndPointConstants.LOGOUT_ACCOUNT_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.LOGOUT_ACCOUNT_API_DESCRIPTION)
+	@Path(EndPointConstants.LOGOUT_ACCOUNT_REQUEST_MAPPING)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response logout() {
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (auth != null){    
+			new SecurityContextLogoutHandler().logout(servletRequest, servletResponse, auth);
+		}
+		SecurityContextHolder.getContext().setAuthentication(null);	
+		auth.setAuthenticated(false);
+		//defaultTokenServices.revokeToken(servletRequest.getHeader("Authorization").split(" ")[1]);
+		
+		return Response.status(Status.OK).build();
+	}
+	
 	private Boolean validateCreateAccountRequest(CreateAccountRequest createAccountRequest)
 			throws PreConditionFailedException, PreConditionRequiredException {
 		if (createAccountRequest == null) {

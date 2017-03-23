@@ -58,7 +58,10 @@
 			url : '/problemSelection',
 			templateUrl : resource + 'partials/problemSelection.html',
 			controller : 'problemSelectionController',
-			controllerAs : 'problemSelection'
+			controllerAs : 'problemSelection',
+			params: { 
+				'selectedProblemType' : '' 
+			}
 		}).state('createProblem.logProblem', {
 			url : '/logProblem',
 			templateUrl : resource + 'partials/logProblem.html',

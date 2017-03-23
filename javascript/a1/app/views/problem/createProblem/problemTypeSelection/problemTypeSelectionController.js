@@ -25,13 +25,14 @@
 			}
 			var problemType = {
 				"problemTypeName" : "Problem Type " + i,
-				"problemTypeImage" : resource + "problem/" + imageName
+				"problemTypeImage" : resource + "problem/" + imageName,
+				"guid": 417
 			};
 			problemTypeSelection.problemTypes.push(problemType);
 		}
 
-		function chooseExistingProblem() {
-			$state.go('createProblem.problemSelection');
+		function chooseExistingProblem(problemTypeGuid) {
+			$state.go('createProblem.problemSelection',{selectedProblemType:problemTypeGuid});
 		}
 
 	}
