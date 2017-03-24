@@ -15,7 +15,6 @@ import com.kasisripriyawebapps.myindia.constants.ServiceConstants;
 import com.kasisripriyawebapps.myindia.dao.LocationDao;
 import com.kasisripriyawebapps.myindia.entity.Location;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
-import com.kasisripriyawebapps.myindia.util.CommonUtil;
 
 /**
  * The Class LocationDaoImpl.

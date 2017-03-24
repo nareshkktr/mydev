@@ -13,7 +13,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.kasisripriyawebapps.myindia.constants.ApplicationConstants;
 import com.kasisripriyawebapps.myindia.constants.ExceptionConstants;
 import com.kasisripriyawebapps.myindia.constants.ServiceConstants;
 import com.kasisripriyawebapps.myindia.dao.ProblemTypeDao;
