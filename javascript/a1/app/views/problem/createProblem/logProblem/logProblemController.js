@@ -3,12 +3,12 @@
 
 	angular.module('myindia-app').controller("logProblemController",
 			logProblemController);
-	logProblemController.$inject = [ 'createProblemService','fileUploadService','dataShareService','userInfoService','$scope','locationChangePopUpService' ];
+	logProblemController.$inject = [ 'createProblemService','fileUploadService','dataShareService','userInfoService','$scope','locationChangePopUpService','$state' ];
 	
-	function logProblemController(createProblemService,fileUploadService,dataShareService,userInfoService,$scope,locationChangePopUpService) {
+	function logProblemController(createProblemService,fileUploadService,dataShareService,userInfoService,$scope,locationChangePopUpService,$state) {
 		
 		var logProblem=this;
-		logProblem.problemTypesResults = [];
+		logProblem.problemTypesResults = $state.params.problemTypes;
 		logProblem.grivienceName="";
 		logProblem.grivienceType;
 		logProblem.grivienceDescription;
@@ -62,7 +62,7 @@
 		logProblem.saveProblem=saveProblem;
 		logProblem.uploadCover = uploadCover;
 		    
-		getAllProblemTypes();
+		
 		
 		function saveProblem(){
 			
@@ -98,19 +98,6 @@
 			}else if(logProblem.userData.displayLocation){
 				logProblem.selectedLocation = logProblem.userData.displayLocation;
 				logProblem.locatedIn=logProblem.userData.displayLocation.locationName;
-			}
-		}
-
-		function getAllProblemTypes(){
-			
-			createProblemService.getAllProblemTypes().then(getAllProblemTypesSuccess).catch(getAllProblemTypesFailure);
-			
-			function getAllProblemTypesSuccess(data){
-				logProblem.problemTypesResults = data;
-				console.log(logProblem.problemTypesResults);
-			}
-			function getAllProblemTypesFailure(error){
-				alert(error);
 			}
 		}
 

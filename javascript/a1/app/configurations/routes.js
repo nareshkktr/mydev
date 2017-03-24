@@ -60,13 +60,18 @@
 			controller : 'problemSelectionController',
 			controllerAs : 'problemSelection',
 			params: { 
-				'selectedProblemType' : '' 
+				'selectedProblemCategory' : '',
+				'problemTypes' : ''
 			}
 		}).state('createProblem.logProblem', {
 			url : '/logProblem',
 			templateUrl : resource + 'partials/logProblem.html',
 			controller : 'logProblemController',
-			controllerAs : 'logProblem'
+			controllerAs : 'logProblem',
+			params: { 
+				'selectedProblemCategory' : '',
+				'problemTypes' : ''
+			}
 		}).state('viewProblem', {
 			url : '/viewProblem',
 			templateUrl : resource + 'partials/viewProblem.html',

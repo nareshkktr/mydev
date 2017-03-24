@@ -198,10 +198,25 @@ public class ProblemServiceImpl implements ProblemService {
 	@Transactional
 	public List<ProblemResponse> retreiveProblemsByType(Long problemTypeGuid, LoggedInUserDetails loggedInUserDetails)
 			throws InternalServerException {
-		// TODO Auto-generated method stub
 		ProblemType problemType = problemTypeDao.getProblemTypeById(problemTypeGuid);
 		List<Problem> probObj = problemType.getProblems();
 		List<ProblemResponse> problemResponse = prepareProblemResponse(probObj);
+		return problemResponse;
+	}
+
+	@Override
+	@Transactional
+	public List<ProblemResponse> retreiveProblemsByTypeCategory(String problemTypeCategory,
+			LoggedInUserDetails loggedInUserDetails) throws InternalServerException {
+		List<ProblemType> problemTypes = problemTypeDao.getProblemTypesByCategory(problemTypeCategory);
+		
+		List<Problem> problems= new ArrayList<Problem>();
+		
+		for(ProblemType problemType: problemTypes){
+			problems.addAll(problemType.getProblems());
+		}
+		
+		List<ProblemResponse> problemResponse = prepareProblemResponse(problems);
 		return problemResponse;
 	}
 

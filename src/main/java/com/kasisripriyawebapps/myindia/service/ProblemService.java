@@ -22,4 +22,7 @@ public interface ProblemService {
 
 	List<ProblemResponse> retreiveProblemsByType(Long problemTypeGuid, LoggedInUserDetails loggedInUserDetails) throws InternalServerException;
 
+	List<ProblemResponse> retreiveProblemsByTypeCategory(String problemTypeCategory,
+			LoggedInUserDetails loggedInUserDetails) throws InternalServerException;
+
 }

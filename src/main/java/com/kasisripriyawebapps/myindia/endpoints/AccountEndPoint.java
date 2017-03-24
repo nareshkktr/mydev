@@ -17,6 +17,7 @@ import javax.ws.rs.core.Response.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.provider.token.ConsumerTokenServices;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 
@@ -51,8 +52,8 @@ public class AccountEndPoint extends BaseEndPoint{
 	
 	private @Autowired HttpServletResponse servletResponse;
 	
-//	@Autowired
-//	private DefaultTokenServices defaultTokenServices;
+	@Autowired
+	private ConsumerTokenServices defaultTokenServices;
 
 	@POST
 	@ApiOperation(value = EndPointConstants.CREATE_ACCOUNT_API_VALUE, nickname = EndPointConstants.CREATE_ACCOUNT_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.CREATE_ACCOUNT_API_DESCRIPTION)
@@ -111,7 +112,7 @@ public class AccountEndPoint extends BaseEndPoint{
 		}
 		SecurityContextHolder.getContext().setAuthentication(null);	
 		auth.setAuthenticated(false);
-		//defaultTokenServices.revokeToken(servletRequest.getHeader("Authorization").split(" ")[1]);
+		defaultTokenServices.revokeToken(servletRequest.getHeader("Authorization").split(" ")[1]);
 		
 		return Response.status(Status.OK).build();
 	}

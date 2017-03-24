@@ -11,7 +11,7 @@
 		var services = {};
 
 		var problemSelectionService = {
-			getProblemsByType: getProblemsByType
+			getProblemsByCategory: getProblemsByCategory
 		};
 
 		// Call and save the data
@@ -23,29 +23,29 @@
 			services = metaInfo;
 		}
 
-		function getProblemsByType(problemTypeGuid) {
+		function getProblemsByCategory(problemTypeCategory) {
 
 			let deferred = $q.defer();
 			
 			if(swaggerPromise){
 				swaggerPromise.then(function(){
-					services.problem.getProblemsByType({problemTypeGuid:problemTypeGuid},
-						getProblemsByTypeSuccess, getProblemsByTypeFailure);
+					services.problem.getProblemsByProblemCategory({problemTypeCategory:problemTypeCategory},
+						getProblemsByProblemCategorySuccess, getProblemsByProblemCategoryFailure);
 					swaggerPromise = undefined;
 				})
 			}else{
-				services.problem.getProblemsByType({problemTypeGuid:problemTypeGuid},
-						getProblemsByTypeSuccess, getProblemsByTypeFailure);
+				services.problem.getProblemsByProblemCategory({problemTypeCategory:problemTypeCategory},
+						getProblemsByProblemCategorySuccess, getProblemsByProblemCategoryFailure);
 			}
 			
 
 			return deferred.promise;
 
-			function getProblemsByTypeSuccess(data) {
+			function getProblemsByProblemCategorySuccess(data) {
 				deferred.resolve(data.obj);
 			}
 
-			function getProblemsByTypeFailure(error) {
+			function getProblemsByProblemCategoryFailure(error) {
 				deferred.reject(error);
 			}
 
