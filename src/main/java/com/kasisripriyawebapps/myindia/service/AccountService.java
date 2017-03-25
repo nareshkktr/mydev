@@ -4,6 +4,8 @@
 package com.kasisripriyawebapps.myindia.service;
 
 
+import org.codehaus.jettison.json.JSONObject;
+
 import com.kasisripriyawebapps.myindia.entity.Account;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 import com.kasisripriyawebapps.myindia.exception.RecordNotFoundException;
@@ -23,5 +25,7 @@ public interface AccountService {
 	BaseUserInformation prepareBaseUserInformation(Account account) throws InternalServerException, RecordNotFoundException;
 
 	BaseUserInformation prepareLoggedInUserInfo(String userName) throws InternalServerException, RecordNotFoundException;
+
+	JSONObject refreshAccessToken(String refreshToken) throws InternalServerException;
 	
 }

@@ -171,4 +171,13 @@ public class AccountServiceImpl implements AccountService {
 		baseUserInfo = prepareBaseUserInformation(account);
 		return baseUserInfo;
 	}
+
+	@Override
+	public JSONObject refreshAccessToken(String refreshToken) throws InternalServerException {
+		// TODO Auto-generated method stub
+		
+		JSONObject tokenInfo = oAuthService.getAccessTokenByRefreshToken(refreshToken);
+		
+		return null;
+	}
 }

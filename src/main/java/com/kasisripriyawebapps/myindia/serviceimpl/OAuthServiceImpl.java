@@ -64,4 +64,25 @@ public class OAuthServiceImpl implements OAuthService {
 		}
 		return tokenInfo;
 	}
+
+	@Override
+	public JSONObject getAccessTokenByRefreshToken(String refreshToken) throws InternalServerException {
+		RestTemplate restTemplate = new RestTemplate();
+		HttpEntity<String> request = new HttpEntity<String>(getHeadersWithClientCredentials());
+		String grantTypeURL = String.format(env.getProperty("oauth.grant_type_refresh_url"),refreshToken);
+		ResponseEntity<Object> response = restTemplate.exchange(
+				env.getProperty("oauth.authorization_url") + grantTypeURL, HttpMethod.POST, request, Object.class);
+		LinkedHashMap<String, Object> map = (LinkedHashMap<String, Object>) response.getBody();
+		JSONObject tokenInfo = null;
+		if (map != null) {
+			tokenInfo = new JSONObject();
+			try {
+				tokenInfo.put("access_token", (String) map.get("access_token"));
+				tokenInfo.put("refresh_token", (String) map.get("refresh_token"));
+			} catch (JSONException e) {
+				throw new InternalServerException(e.getMessage());
+			}
+		}
+		return tokenInfo;
+	}
 }

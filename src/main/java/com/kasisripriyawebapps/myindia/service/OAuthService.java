@@ -8,4 +8,6 @@ public interface OAuthService {
 
 	JSONObject getAuthTokenInfo(String loginUserName, String password) throws InternalServerException;
 
+	JSONObject getAccessTokenByRefreshToken(String refreshToken) throws InternalServerException;
+
 }
