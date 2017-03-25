@@ -41,11 +41,6 @@ public class ExternalServieImpl implements ExternalService {
 	public ExternalServiceResponse invokeExternalService(Map<String, Object> serviceParams)
 			throws InternalServerException {
 
-		System.setProperty("http.proxyHost", "proxy.cat.com");
-		System.setProperty("http.proxyPort", "80");
-		System.setProperty("https.proxyHost", "proxy.cat.com");
-		System.setProperty("https.proxyPort", "80");
-
 		int statusCode = 0;
 		String line = null;
 		String message = "";

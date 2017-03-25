@@ -25,12 +25,6 @@ public class UserUtil {
 
 	private static List<User> parseElectroralData(ElectroralRollesURL eachURLData) {
 
-		System.setProperty("http.proxyHost", "proxy.cat.com");
-		System.setProperty("http.proxyPort", "80");
-
-		System.setProperty("https.proxyHost", "proxy.cat.com");
-		System.setProperty("https.proxyPort", "80");
-
 		List<User> eachPageUsers = new ArrayList<User>();
 		String pdfURL = eachURLData.getPdfUrl();
 		if (pdfURL != null && !pdfURL.isEmpty()) {

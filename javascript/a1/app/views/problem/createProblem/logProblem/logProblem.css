@@ -135,3 +135,9 @@ tags-input .tags .tag-item {
 	width: 94%;
 	border-radius: 10px;
 }
+
+.cretae_problem_container .info_icon {
+	padding-left: 10px;
+	font-size: 13px;
+	cursor: pointer;
+}

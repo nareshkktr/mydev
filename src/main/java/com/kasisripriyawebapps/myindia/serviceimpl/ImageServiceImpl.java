@@ -1,7 +1,8 @@
 package com.kasisripriyawebapps.myindia.serviceimpl;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +31,6 @@ import com.kasisripriyawebapps.myindia.service.ImageService;
 import com.kasisripriyawebapps.myindia.util.AmazonS3Util;
 import com.kasisripriyawebapps.myindia.util.CommonUtil;
 
-import sun.misc.BASE64Decoder;
-
 @Service
 public class ImageServiceImpl implements ImageService {
 
@@ -40,6 +39,8 @@ public class ImageServiceImpl implements ImageService {
 
 	@Autowired
 	ProblemDao problemDao;
+
+	private static final String SUFFIX = "/";
 
 	@Override
 	@Transactional
@@ -59,18 +60,16 @@ public class ImageServiceImpl implements ImageService {
 				? env.getProperty("amazon.s3.problem.bucket.name") : "";
 		String folderName = objectType.equalsIgnoreCase(ApplicationConstants.OBJECT_TYPE_PROBLEM)
 				? env.getProperty("amazon.s3.problem.problems.folder.name") : "";
+
+		fileData = fileData.split(",")[1];
+		byte[] decodedBytes = Base64.getDecoder().decode(fileData.getBytes(StandardCharsets.UTF_8));
+		fileName = folderName + SUFFIX + fileName;
 		try {
-			BASE64Decoder decoder = new BASE64Decoder();
-			byte[] decodedBytes = decoder.decodeBuffer(fileData);
-			fileName = folderName + File.separator + fileName;
-			try {
-				AmazonS3Util.createFile(bucketName, folderName, decodedBytes, fileName);
-			} catch (InternalServerException e) {
-				throw e;
-			}
-		} catch (IOException e) {
-			throw new InternalServerException(e.getMessage());
+			AmazonS3Util.createFile(bucketName, folderName, decodedBytes, fileName);
+		} catch (InternalServerException e) {
+			throw e;
 		}
+
 		return fileName;
 	}
 

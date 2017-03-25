@@ -46,12 +46,6 @@ public class LocationUtil {
 
 		System.setProperty("sun.security.ssl.allowUnsafeRenegotiation", "true");
 
-		System.setProperty("http.proxyHost", "proxy.cat.com");
-		System.setProperty("http.proxyPort", "80");
-
-		System.setProperty("https.proxyHost", "proxy.cat.com");
-		System.setProperty("https.proxyPort", "80");
-
 	}
 
 	public static void loadMainPage() throws InterruptedException {

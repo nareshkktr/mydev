@@ -3,7 +3,10 @@
 	<form role="form" method="post" name="create_problem_form" novalidate>
 		<div class="row">
 			<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 form-group">
-				<label for="search_college">Upload Cover</label>
+				<label for="search_college">Upload Cover</label><i
+					class="fa fa-info-circle info_icon" aria-hidden="true"
+					tooltip-placement="top"
+					uib-tooltip="EPIC Number mentioned on the Voter ID Card"></i>
 				<div class="problem_cover_photo_content">
 					<label class="problem_cover_file_upload" for="file-upload"
 						ng-if="!logProblem.coverPhotoFile">
@@ -15,13 +18,19 @@
 				</div>
 			</div>
 			<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 form-group">
-				<label for="search_college">What is your grievance?</label> <input
+				<label for="search_college">What is your grievance?</label><i
+					class="fa fa-info-circle info_icon" aria-hidden="true"
+					tooltip-placement="top"
+					uib-tooltip="EPIC Number mentioned on the Voter ID Card"></i> <input
 					type="text" name="grivience_name"
 					ng-model="logProblem.grivienceName"
 					placeholder="Type your grievance" class="form-control"
 					ng-required="true" ng-blur="logProblem.generateTags()">
 				<div class="problem_desc_editor_content">
-					<label for="search_college">Could you elaborate on it?</label>
+					<label for="search_college">Could you elaborate on it?</label><i
+						class="fa fa-info-circle info_icon" aria-hidden="true"
+						tooltip-placement="top"
+						uib-tooltip="EPIC Number mentioned on the Voter ID Card"></i>
 					<div class="problem_desc_editor_container">
 						<trix-editor class="trix-content" angular-trix
 							ng-model="logProblem.grivienceDescription"></trix-editor>
@@ -31,7 +40,10 @@
 		</div>
 		<div class="row">
 			<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 form-group">
-				<label for="search_college">Is it related to one of these?</label> <select
+				<label for="search_college">Is it related to one of these?</label><i
+					class="fa fa-info-circle info_icon" aria-hidden="true"
+					tooltip-placement="top"
+					uib-tooltip="EPIC Number mentioned on the Voter ID Card"></i> <select
 					class="form-control" name="grivience_type"
 					ng-model="logProblem.grivienceType"
 					ng-options="problemType.problemTypeName for problemType in logProblem.problemTypesResults"
@@ -40,9 +52,11 @@
 				</select>
 			</div>
 			<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 form-group">
-				<label for="search_college">Where it located?</label> <input
-					type="text" name="located_in"
-					ng-model="logProblem.locatedIn"
+				<label for="search_college">Where it located?</label><i
+					class="fa fa-info-circle info_icon" aria-hidden="true"
+					tooltip-placement="top"
+					uib-tooltip="EPIC Number mentioned on the Voter ID Card"></i> <input
+					type="text" name="located_in" ng-model="logProblem.locatedIn"
 					placeholder="Where it located" class="form-control"
 					ng-required="true" value="" ng-keyup="logProblem.searchLocation()">
 
@@ -60,7 +74,10 @@
 		</div>
 		<div class="row">
 			<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 form-group">
-				<label for="search_college">What are the impacts?</label>
+				<label for="search_college">What are the impacts?</label><i
+					class="fa fa-info-circle info_icon" aria-hidden="true"
+					tooltip-placement="top"
+					uib-tooltip="EPIC Number mentioned on the Voter ID Card"></i>
 				<div class="row" id="problem_impacts_row">
 					<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
 						<select class="form-control"
@@ -80,7 +97,10 @@
 				</div>
 			</div>
 			<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 form-group">
-				<label for="search_college">Tags</label>
+				<label for="search_college">Tags</label><i
+					class="fa fa-info-circle info_icon" aria-hidden="true"
+					tooltip-placement="top"
+					uib-tooltip="EPIC Number mentioned on the Voter ID Card"></i>
 				<tags-input ng-model="logProblem.tags"> </tags-input>
 			</div>
 		</div>

@@ -13,7 +13,7 @@
 
 			//Register event to listen to userinfo chnages 
 			scope.$on('userInfoChanged',function(event){
-				processUserInfo();
+				processUserInfo(scope);
 			});
 			
 		};

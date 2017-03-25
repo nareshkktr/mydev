@@ -364,11 +364,6 @@ public class CommonUtil {
 	public static ExternalServiceResponse callURL(String myURL) throws InternalServerException {
 		ExternalServiceResponse serviceResponse = new ExternalServiceResponse();
 
-		System.setProperty("http.proxyHost", "proxy.cat.com");
-		System.setProperty("http.proxyPort", "80");
-		System.setProperty("https.proxyHost", "proxy.cat.com");
-		System.setProperty("https.proxyPort", "80");
-
 		StringBuilder sb = new StringBuilder();
 		URLConnection urlConn = null;
 		InputStreamReader in = null;
