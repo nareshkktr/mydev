@@ -1,5 +1,6 @@
 package com.kasisripriyawebapps.myindia.daoimpl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.criterion.Criterion;
@@ -67,6 +68,17 @@ public class ProblemTypeDaoImpl extends BaseDaoImpl<Long, ProblemType> implement
 	public void deleteProblemTypes(List<ProblemType> existingProblemTypesList) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public List<ProblemType> getProblemTypesByCategory(String problemTypeCategory) throws InternalServerException {
+		Criterion criterionObj = Restrictions.eq("problemCategory", problemTypeCategory);
+		List<Criterion> criterions = new ArrayList<Criterion>();
+		criterions.add(criterionObj);
+		SortCriteriaData sortCriteria = new SortCriteriaData();
+		sortCriteria.setProperty("problemCategory");
+		sortCriteria.setIsAscending(true);
+		return getAllByConditions(criterions, sortCriteria);
 	}
 
 }

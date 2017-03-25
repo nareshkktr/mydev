@@ -987,6 +987,30 @@ public class EndPointConstants {
 
 	/** The Constant LOGOUT_ACCOUNT_API_DESCRIPTION. */
 	public static final String LOGOUT_ACCOUNT_API_DESCRIPTION = "Logout the user.";
+	
+	/** The Constant GET_PROBLEMS_BY_PROBLEM_CATEGORY_REQUEST_MAPPING. */
+	public static final String GET_PROBLEMS_BY_PROBLEM_CATEGORY_REQUEST_MAPPING = "getProblemsByProblemCategory";
+
+	/** The Constant GET_PROBLEMS_BY_PROBLEM_CATEGORY_API_VALUE. */
+	public static final String GET_PROBLEMS_BY_PROBLEM_CATEGORY_API_VALUE = "getProblemsByProblemCategory";
+
+	/** The Constant GET_PROBLEMS_BY_PROBLEM_CATEGORY_API_NICKNAME. */
+	public static final String GET_PROBLEMS_BY_PROBLEM_CATEGORY_API_NICKNAME = "getProblemsByProblemCategory";
+
+	/** The Constant GET_PROBLEMS_BY_PROBLEM_CATEGORY_API_DESCRIPTION. */
+	public static final String GET_PROBLEMS_BY_PROBLEM_CATEGORY_API_DESCRIPTION = "Get Problem By Problem Type Category.";
+	
+	/** The Constant REFRESH_ACCESS_TOKEN_REQUEST_MAPPING. */
+	public static final String REFRESH_ACCESS_TOKEN_REQUEST_MAPPING = "refreshAccessToken";
+
+	/** The Constant REFRESH_ACCESS_TOKEN_API_VALUE. */
+	public static final String REFRESH_ACCESS_TOKEN_API_VALUE = "refreshAccessToken";
+
+	/** The Constant GET_PROBLEMS_BY_PROBLEM_CATEGORY_API_NICKNAME. */
+	public static final String REFRESH_ACCESS_TOKEN_API_NICKNAME = "refreshAccessToken";
+
+	/** The Constant GET_PROBLEMS_BY_PROBLEM_CATEGORY_API_DESCRIPTION. */
+	public static final String REFRESH_ACCESS_TOKEN_API_DESCRIPTION = "Refresh Access Token.";
 
 
 }

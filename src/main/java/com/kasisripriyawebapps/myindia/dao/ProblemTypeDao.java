@@ -23,8 +23,10 @@ public interface ProblemTypeDao {
 
 	void saveProblemTypes(List<ProblemType> newProblemTypesList) throws InternalServerException;
 
-	void updateProblemTypes(List<ProblemType> updatedProblemTypesList);
+	void updateProblemTypes(List<ProblemType> updatedProblemTypesList) throws InternalServerException;
 
-	void deleteProblemTypes(List<ProblemType> existingProblemTypesList);
+	void deleteProblemTypes(List<ProblemType> existingProblemTypesList) throws InternalServerException;
+
+	List<ProblemType> getProblemTypesByCategory(String problemTypeCategory) throws InternalServerException;
 
 }

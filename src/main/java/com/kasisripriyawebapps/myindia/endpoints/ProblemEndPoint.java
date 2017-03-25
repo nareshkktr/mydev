@@ -106,6 +106,26 @@ public class ProblemEndPoint extends BaseEndPoint {
 		
 		return Response.status(Status.OK).entity(problems).build();
 	}
+	
+	@GET
+	@ApiOperation(value = EndPointConstants.GET_PROBLEMS_BY_PROBLEM_CATEGORY_API_VALUE, nickname = EndPointConstants.GET_PROBLEMS_BY_PROBLEM_CATEGORY_API_NICKNAME, httpMethod = EndPointConstants.HTTP_GET, notes = EndPointConstants.GET_PROBLEMS_BY_PROBLEM_CATEGORY_API_DESCRIPTION)
+	@Path(EndPointConstants.GET_PROBLEMS_BY_PROBLEM_CATEGORY_REQUEST_MAPPING)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getProblemsByProblemCategory(@QueryParam("problemTypeCategory") String problemTypeCategory)
+			throws InternalServerException, PreConditionFailedException, PreConditionRequiredException,
+			ConflictException {
+		
+		LoggedInUserDetails loggedInUserDetails = getLoggedInUserDetails();
+		List<ProblemResponse> problems = null;
+		
+		if (problemTypeCategory != null) {
+			problems = problemService.retreiveProblemsByTypeCategory(problemTypeCategory, loggedInUserDetails);
+		}else{
+			throw new PreConditionFailedException(ExceptionConstants.REQUEST_NOT_NULL);
+		}
+		
+		return Response.status(Status.OK).entity(problems).build();
+	}
 
 	private boolean validateCreateUpdateProblemRequest(CreateUpdateProblemRequestData createUpdateProblemRequestData)
 			throws PreConditionFailedException, PreConditionRequiredException {

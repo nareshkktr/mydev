@@ -14,10 +14,11 @@ import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
+import org.springframework.security.oauth2.provider.token.ConsumerTokenServices;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 
 import com.kasisripriyawebapps.myindia.configs.LoggedInUserDetails;
@@ -51,8 +52,8 @@ public class AccountEndPoint extends BaseEndPoint{
 	
 	private @Autowired HttpServletResponse servletResponse;
 	
-//	@Autowired
-//	private DefaultTokenServices defaultTokenServices;
+	@Autowired
+	private ConsumerTokenServices defaultTokenServices;
 
 	@POST
 	@ApiOperation(value = EndPointConstants.CREATE_ACCOUNT_API_VALUE, nickname = EndPointConstants.CREATE_ACCOUNT_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.CREATE_ACCOUNT_API_DESCRIPTION)
@@ -111,11 +112,34 @@ public class AccountEndPoint extends BaseEndPoint{
 		}
 		SecurityContextHolder.getContext().setAuthentication(null);	
 		auth.setAuthenticated(false);
-		//defaultTokenServices.revokeToken(servletRequest.getHeader("Authorization").split(" ")[1]);
+		defaultTokenServices.revokeToken(servletRequest.getHeader("Authorization").split(" ")[1]);
 		
 		return Response.status(Status.OK).build();
 	}
 	
+	@POST
+	@ApiOperation(value = EndPointConstants.REFRESH_ACCESS_TOKEN_API_VALUE, nickname = EndPointConstants.REFRESH_ACCESS_TOKEN_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.REFRESH_ACCESS_TOKEN_API_DESCRIPTION)
+	@Path(EndPointConstants.REFRESH_ACCESS_TOKEN_REQUEST_MAPPING)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response refreshAccessToken(String refreshToken) throws InternalServerException, PreConditionFailedException {
+		
+		JSONObject tokenInfo = null;
+		
+		if(validateRefreshAccessTokenRequest(refreshToken))
+			tokenInfo = accountService.refreshAccessToken(refreshToken);
+		
+		return Response.status(Status.OK).entity(tokenInfo).build();
+	}
+	
+	
+	private boolean validateRefreshAccessTokenRequest(String refreshToken) throws PreConditionFailedException {
+		
+		if(refreshToken == null){
+			throw new PreConditionFailedException(ExceptionConstants.REQUEST_NOT_NULL);
+		}
+		return true;
+	}
+
 	private Boolean validateCreateAccountRequest(CreateAccountRequest createAccountRequest)
 			throws PreConditionFailedException, PreConditionRequiredException {
 		if (createAccountRequest == null) {
