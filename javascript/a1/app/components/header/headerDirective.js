@@ -34,7 +34,7 @@
 					}
 				}
 
-			}else{
+			}else if(sessionStorage.getItem("access_token")){
 
 				//If shared data has not been set yet.Call the service.
 				userInfoService.getUserInfo().then(userInfoSuccess).catch(userInfoFailure);
