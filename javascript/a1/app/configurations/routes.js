@@ -59,7 +59,7 @@
 			templateUrl : resource + 'partials/problemSelection.html',
 			controller : 'problemSelectionController',
 			controllerAs : 'problemSelection',
-			params: { 
+			params : {
 				'selectedProblemCategory' : '',
 				'problemTypes' : ''
 			}
@@ -68,7 +68,7 @@
 			templateUrl : resource + 'partials/logProblem.html',
 			controller : 'logProblemController',
 			controllerAs : 'logProblem',
-			params: { 
+			params : {
 				'selectedProblemCategory' : '',
 				'problemTypes' : ''
 			}
@@ -76,7 +76,10 @@
 			url : '/viewProblem',
 			templateUrl : resource + 'partials/viewProblem.html',
 			controller : 'viewProblemController',
-			controllerAs : 'viewProblem'
+			controllerAs : 'viewProblem',
+			params : {
+				'selectedProblemGuid' : ''
+			}
 		});
 	}
 })();

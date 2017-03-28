@@ -28,7 +28,7 @@ public class GlobalSearchRequest {
 
 	public Integer getPageLimit() {
 		if (pageLimit == null || pageLimit == 0) {
-			pageLimit = 15;
+			pageLimit = 25;
 		}
 		return pageLimit;
 	}

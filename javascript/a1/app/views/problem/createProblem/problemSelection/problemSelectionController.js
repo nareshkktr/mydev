@@ -9,9 +9,10 @@
 
 		var problemSelection = this;
 		problemSelection.problems = [];
-		problemSelection.logNewProblem = logNewProblem;
+		problemSelection.viewProblem = viewProblem;
 		problemSelection.chosenProblemCategory = $state.params.selectedProblemCategory;
 		problemSelection.problemTypes = $state.params.problemTypes;
+		problemSelection.logNewProblem=logNewProblem;
 
 		problemSelectionService.getProblemsByCategory(problemSelection.chosenProblemCategory).then(getProblemsByTypeSuccess).catch(getProblemsByTypeFailure);
 
@@ -23,30 +24,10 @@
 			alert(error);
 		}
 
-		// for (var i = 0; i < 20; i++) {
-		// 	var severity = "";
-
-		// 	if (i % 2 == 0) {
-		// 		severity = "critical";
-		// 	} else if (i % 3 == 0) {
-		// 		severity = "high";
-		// 	} else if (i % 5 == 0) {
-		// 		severity = "medium";
-		// 	} else {
-		// 		severity = "low";
-		// 	}
-		// 	var problem = {
-		// 		"problemName" : "Water Problem Type Water Problem Type Water Problem Type "
-		// 				+ i,
-		// 		"locatedIn" : "Pulipadu,Prakasam(District)",
-		// 		"severity" : severity,
-		// 		"severityLevel" : severity === "critical" ? "C"
-		// 				: severity === "high" ? "H"
-		// 						: severity === "medium" ? "M" : "L"
-		// 	};
-		// 	problemSelection.problems.push(problem);
-		// }
 		
+		function viewProblem(problemGuid) {
+			$state.go('viewProblem',{selectedProblemGuid:problemGuid});
+		}
 		function logNewProblem() {
 			$state.go('createProblem.logProblem',{selectedProblemCategory:problemSelection.chosenProblemCategory,problemTypes:problemSelection.problemTypes});
 		}

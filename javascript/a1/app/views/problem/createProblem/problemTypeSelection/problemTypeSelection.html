@@ -10,15 +10,19 @@
 			</form>
 		</div>
 	</div>
-	<div class="row">
-		<div ng-repeat="eachproblemType in problemTypeSelection.problemTypeCategories"
-			class="col-lg-2 col-md-3 col-sm-4 col-xs-12 problem_type"
+	<div class="row problem_types">
+		<div
+			ng-repeat="eachproblemType in problemTypeSelection.problemTypeCategories"
+			class="col-lg-2 col-md-3 col-sm-6 col-xs-12 problem_type"
 			ng-click="problemTypeSelection.chooseExistingProblem(eachproblemType.problemCategory)">
-				<div class="problem_type_img">
-					<img ng-src="{{eachproblemType.problemTypePhotoURL}}" />
-				</div>
+			<div class="problem_type_content">
 				<div class="problem_type_name">
 					<label>{{eachproblemType.problemCategory}}</label>
+				</div>
+				<div class="problem_type_img">
+					<!-- <img ng-src="{{eachproblemType.problemTypePhotoURL}}" /> -->
+					<img ng-src="assets/problem/agriculture_problem.jpg" />
+				</div>
 			</div>
 		</div>
 	</div>

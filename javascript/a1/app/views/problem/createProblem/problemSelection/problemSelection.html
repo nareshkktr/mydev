@@ -1,22 +1,31 @@
 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"
 	id="problem_selection_container">
+	<div class="row problem_selection_header_content">
+		<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12"></div>
+		<div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+			<button type="button" class="btn app_btn"
+				ng-click="problemSelection.logNewProblem()">Skip</button>
+		</div>
+	</div>
 	<div class="row problem_selection_content">
 		<div ng-repeat="eachProblem in problemSelection.problems"
 			class="col-lg-3 col-md-4 col-sm-6 col-xs-12"
-			ng-click="problemSelection.logNewProblem()">
+			ng-click="problemSelection.viewProblem(eachProblem.guid)">
 			<div class="problem">
 				<div class="row problem_name_severity">
-					<div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 problem_severity">
-						<div class="problem_severity_circle {{eachProblem.problemSeverity}}">
+					<div class="problem_severity">
+						<div
+							class="problem_severity_circle {{eachProblem.problemSeverity}}">
 							<label>{{eachProblem.severityLevelCode}}</label>
 						</div>
 					</div>
-					<div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 problem_name">
+					<div class="problem_name">
 						<label>{{eachProblem.problemShortDescription}}</label>
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-xs-12 problem_located_in">
+					<div class="col-xs-2">&nbsp;</div>
+					<div class="col-xs-10 problem_located_in">
 						<i class="fa fa-map-marker" aria-hidden="true"></i><label>{{eachProblem.createdLocation.locationName}}</label>
 					</div>
 				</div>

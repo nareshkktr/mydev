@@ -63,9 +63,10 @@ public class ImageServiceImpl implements ImageService {
 
 		fileData = fileData.split(",")[1];
 		byte[] decodedBytes = Base64.getDecoder().decode(fileData.getBytes(StandardCharsets.UTF_8));
-		fileName = folderName + SUFFIX + fileName;
+		fileName = folderName + SUFFIX + objectId.toString() + SUFFIX + fileName;
 		try {
 			AmazonS3Util.createFile(bucketName, folderName, decodedBytes, fileName);
+			fileName = env.getProperty("amazon.s3.host.name") + bucketName + SUFFIX + fileName;
 		} catch (InternalServerException e) {
 			throw e;
 		}

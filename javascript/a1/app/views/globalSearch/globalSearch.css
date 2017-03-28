@@ -11,13 +11,13 @@
 
 .search-item-img {
 	float: left;
+	width: 50px;
 }
 
 .search-item-name-sub-type {
 	float: left;
-	max-width: 270px;
 	padding-left: 10px;
-	height: 50px;
+	width: calc(100% - 50px);
 }
 
 .search-item-img img {
@@ -25,9 +25,12 @@
 }
 
 .search-item-img-name {
-	padding-left: 0px !important;
-	padding-right: 0px !important;
+	padding-left: 15px !important;
+	padding-right: 19px !important;
 	width: 100%;
+	background-color: white;
+	padding-top: 10px;
+	padding-bottom: 10px;
 }
 
 .search-item {
@@ -36,13 +39,9 @@
 	margin-bottom: 10px;
 	cursor: pointer;
 	border-radius: 5px;
-	background: rgb(221, 220, 220);
-	margin-left: 10px;
-	min-width: 340px !important;
+	margin-left: 0px;
 	PADDING-LEFT: 10px !important;
 	padding-right: 10px !important;
-	padding-top: 10px !important;
-	padding-bottom: 15px !important;
 }
 
 .search-item img {
@@ -56,6 +55,12 @@
 	letter-spacing: 1px;
 	cursor: pointer;
 	line-height: 30px;
+	color: black;
+	font-weight: 600;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	word-wrap: break-word;
 }
 
 .search-item-sub-type {

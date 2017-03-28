@@ -8,6 +8,7 @@
 	function logProblemController(createProblemService,fileUploadService,dataShareService,userInfoService,$scope,locationChangePopUpService,$state) {
 		
 		var logProblem=this;
+		logProblem.chosenProblemCategory = $state.params.selectedProblemCategory;
 		logProblem.problemTypesResults = $state.params.problemTypes;
 		logProblem.grivienceName="";
 		logProblem.grivienceType;
@@ -25,8 +26,14 @@
 		logProblem.showLocationSearchBox=false;
 		logProblem.locatedIn="";
 		logProblem.tagValues="";
-		
 		logProblem.problems = [];
+		logProblem.changeProblemType=changeProblemType;
+		
+		generateTags();
+
+		function changeProblemType(){
+			generateTags();
+		}
 		
 		for (var i = 0; i < 20; i++) {
 			var severity = "";
@@ -98,6 +105,8 @@
 			}else if(logProblem.userData.displayLocation){
 				logProblem.selectedLocation = logProblem.userData.displayLocation;
 				logProblem.locatedIn=logProblem.userData.displayLocation.locationName;
+				
+				generateTags();
 			}
 		}
 
@@ -121,17 +130,26 @@
 		}
 		
 		function generateTags(){
-			let grivienceNameWords = logProblem.grivienceName.split(" ");
-			if(grivienceNameWords.length>1){
-			for(var i =0; i < grivienceNameWords.length; i++){
-				var tagObj= { text: grivienceNameWords[i] };
-				if(grivienceNameWords[i]!=null && grivienceNameWords[i]!=undefined && grivienceNameWords[i]!="" && grivienceNameWords[i].length>=3 && !arrayContainsValue(grivienceNameWords[i])){
-					logProblem.tags.push(tagObj);
-					logProblem.tagValues+=grivienceNameWords[i]+",";
-				}
+			
+			let content=logProblem.chosenProblemCategory;
+			content+=" "+logProblem.grivienceName;
+			if(logProblem.grivienceType!=undefined){
+				content+=" "+logProblem.grivienceType.problemTypeName;
+			}
+			if(logProblem.selectedLocation!=undefined){
+				content+=" "+logProblem.selectedLocation.locationName;
 			}
 			
-		}
+			let contentWords = content.split(" ");
+			if(contentWords.length>1){
+			for(var i =0; i < contentWords.length; i++){
+				var tagObj= { text: contentWords[i] };
+				if(contentWords[i]!=null && contentWords[i]!=undefined && contentWords[i]!="" && contentWords[i].length>=3 && !arrayContainsValue(contentWords[i])){
+					logProblem.tags.push(tagObj);
+					logProblem.tagValues+=contentWords[i]+",";
+				}
+				}
+			}
 		}
 		
 		function arrayContainsValue(tagName){
@@ -165,6 +183,7 @@
 			logProblem.selectedLocation=searchLocation;
 			logProblem.locatedIn=searchLocation.locationName;
 			logProblem.showLocationSearchBox=false;
+			generateTags();
 		}
 	}
 

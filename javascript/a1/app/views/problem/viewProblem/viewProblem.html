@@ -1,51 +1,69 @@
 <div class="container-fluid wrapper page-container">
 	<div class="row view_problem_container">
-		<div class="col-lg-2 col-md-2 col-sm-3 col-xs-12"
+		<div class="col-lg-2 col-md-2 col-sm-4 col-xs-12"
 			id="view_problem_left_sidebar">
-
-			<div class="problem_count_bar">
-				<div class="problem_count_name">
-					<label> Popular </label>
+			<div id="problem_main_photo"
+				class="{{viewProblem.problemDetails.problemSeverity}}">
+				<img class="img-responsive"
+					ng-src="{{viewProblem.problemDetails.photoURL}}">
+			</div>
+			<div id="problem_highlites">
+				<div id="problem_category_name">
+					<label>
+						{{viewProblem.problemDetails.problemType.problemCategory}} </label>
 				</div>
-				<div class="problem_count_value popular">
-					<label> 100 </label>
+				<div id="problem_status"></div>
+				<div id="problem_popularity">
+					<span uib-rating ng-model="viewProblem.rating" max="5"
+						read-only="true"
+						titles="['one','two','three','four','five']"
+						aria-labelledby="default-rating"></span>
 				</div>
 			</div>
-			<div class="problem_count_bar">
-				<div class="problem_count_name">
-					<label> Supporting </label>
+			<div id="problem_tabs">
+				<div class="problem_tab">
+					<span class="problem_tab_icon"><i class="fa fa-info"
+						aria-hidden="true"></i></span> <span class="problem_tab_name">Overview</span>
 				</div>
-				<div class="problem_count_value support">
-					<label> 200 </label>
+				<div class="problem_tab">
+					<span class="problem_tab_icon"><i class="fa fa-tasks"
+						aria-hidden="true"></i></span> <span class="problem_tab_name">Activities</span>
+				</div>
+				<div class="problem_tab">
+					<span class="problem_tab_icon"><i class="fa fa-picture-o"
+						aria-hidden="true"></i></span> <span class="problem_tab_name">Photos</span>
+				</div>
+				<div class="problem_tab">
+					<span class="problem_tab_icon"><i class="fa fa-video-camera"
+						aria-hidden="true"></i></span> <span class="problem_tab_name">Videos</span>
+				</div>
+				<div class="problem_tab">
+					<span class="problem_tab_icon"><i class="fa fa-users"
+						aria-hidden="true"></i></span> <span class="problem_tab_name">Contributors</span>
+				</div>
+				<div class="problem_tab">
+					<span class="problem_tab_icon"><i class="fa fa-video-camera"
+						aria-hidden="true"></i></span> <span class="problem_tab_name">Videos</span>
 				</div>
 			</div>
-			<div class="problem_count_bar">
-				<div class="problem_count_name">
-					<label> Following </label>
-				</div>
-				<div class="problem_count_value following">
-					<label> 300 </label>
-				</div>
-			</div>
-			<div class="problem_count_bar">
-				<div class="problem_count_name">
-					<label> Sharing </label>
-				</div>
-				<div class="problem_count_value share">
-					<label> 400 </label>
-				</div>
-			</div>
-
-
 		</div>
-		<div class="col-lg-7 col-md-7 col-sm-6 col-xs-12"
+		<div class="col-lg-10 col-md-10 col-sm-8 col-xs-12"
 			id="view_problem_content">
-			<div id="problem_basic_details_content">
-				<img id="problem_main_photo_url"
-					ng-src="{{viewProblem.problemBasicDetails.problemMainPhotoURL}}">
+			<div id="problem_basic_details_container" class="row">
+				<div id="problem_basic_details_content"
+					class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+					<div id="problem_name">
+						<p>{{viewProblem.problemDetails.problemShortDescription}}</p>
+					</div>
+					<div id="problem_status"></div>
+				</div>
+				<div id="problem_basic_details_actions_content"
+					class="col-lg-3 col-md-3 col-sm-3 col-xs-12"></div>
+			</div>
+			<div class="row">
+				<div></div>
+				<div id="relative_problems_container"></div>
 			</div>
 		</div>
-		<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12"
-			id="view_problem_related_problems_side_bar"></div>
 	</div>
 </div>

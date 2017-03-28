@@ -47,7 +47,8 @@
 					class="form-control" name="grivience_type"
 					ng-model="logProblem.grivienceType"
 					ng-options="problemType.problemTypeName for problemType in logProblem.problemTypesResults"
-					ng-required="true">
+					ng-required="true"
+					ng-change="logProblem.changeProblemType()">
 					<option value=''>Select grievance type</option>
 				</select>
 			</div>

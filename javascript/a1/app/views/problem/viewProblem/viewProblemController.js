@@ -3,14 +3,25 @@
 
 	angular.module('myindia-app').controller("viewProblemController",
 			viewProblemController);
-	viewProblemController.$inject = [];
+	viewProblemController.$inject = ['$state','viewProblemService'];
 
-	function viewProblemController() {
+	function viewProblemController($state,viewProblemService) {
 
 		var viewProblem = this;
-		viewProblem.problemBasicDetails = {};
+		viewProblem.problemDetails = {};
+		viewProblem.selectedProblemGuid = $state.params.selectedProblemGuid;
+		
+		viewProblemService.getProblemDetails(viewProblem.selectedProblemGuid).then(getProblemDetailsSuccess).catch(getProblemDetailsFailure);
 
-		viewProblem.problemBasicDetails.problemMainPhotoURL = resource+"problem/water_problem.jpg";
+		function getProblemDetailsSuccess(data){
+			viewProblem.problemDetails = data;
+		}
+
+		function getProblemDetailsFailure(error){
+			alert(error);
+		}
+		
+	
 	}
 
 })();

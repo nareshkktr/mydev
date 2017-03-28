@@ -792,19 +792,27 @@
 			templateUrl : resource + 'partials/problemSelection.html',
 			controller : 'problemSelectionController',
 			controllerAs : 'problemSelection',
-			params: { 
-				'selectedProblemType' : '' 
+			params : {
+				'selectedProblemCategory' : '',
+				'problemTypes' : ''
 			}
 		}).state('createProblem.logProblem', {
 			url : '/logProblem',
 			templateUrl : resource + 'partials/logProblem.html',
 			controller : 'logProblemController',
-			controllerAs : 'logProblem'
+			controllerAs : 'logProblem',
+			params : {
+				'selectedProblemCategory' : '',
+				'problemTypes' : ''
+			}
 		}).state('viewProblem', {
 			url : '/viewProblem',
 			templateUrl : resource + 'partials/viewProblem.html',
 			controller : 'viewProblemController',
-			controllerAs : 'viewProblem'
+			controllerAs : 'viewProblem',
+			params : {
+				'selectedProblemGuid' : ''
+			}
 		});
 	}
 })();
@@ -1334,12 +1342,13 @@
 
 	angular.module('myindia-app').controller("logProblemController",
 			logProblemController);
-	logProblemController.$inject = [ 'createProblemService','fileUploadService','dataShareService','userInfoService','$scope','locationChangePopUpService' ];
+	logProblemController.$inject = [ 'createProblemService','fileUploadService','dataShareService','userInfoService','$scope','locationChangePopUpService','$state' ];
 	
-	function logProblemController(createProblemService,fileUploadService,dataShareService,userInfoService,$scope,locationChangePopUpService) {
+	function logProblemController(createProblemService,fileUploadService,dataShareService,userInfoService,$scope,locationChangePopUpService,$state) {
 		
 		var logProblem=this;
-		logProblem.problemTypesResults = [];
+		logProblem.chosenProblemCategory = $state.params.selectedProblemCategory;
+		logProblem.problemTypesResults = $state.params.problemTypes;
 		logProblem.grivienceName="";
 		logProblem.grivienceType;
 		logProblem.grivienceDescription;
@@ -1356,8 +1365,14 @@
 		logProblem.showLocationSearchBox=false;
 		logProblem.locatedIn="";
 		logProblem.tagValues="";
-		
 		logProblem.problems = [];
+		logProblem.changeProblemType=changeProblemType;
+		
+		generateTags();
+
+		function changeProblemType(){
+			generateTags();
+		}
 		
 		for (var i = 0; i < 20; i++) {
 			var severity = "";
@@ -1393,7 +1408,7 @@
 		logProblem.saveProblem=saveProblem;
 		logProblem.uploadCover = uploadCover;
 		    
-		getAllProblemTypes();
+		
 		
 		function saveProblem(){
 			
@@ -1429,19 +1444,8 @@
 			}else if(logProblem.userData.displayLocation){
 				logProblem.selectedLocation = logProblem.userData.displayLocation;
 				logProblem.locatedIn=logProblem.userData.displayLocation.locationName;
-			}
-		}
-
-		function getAllProblemTypes(){
-			
-			createProblemService.getAllProblemTypes().then(getAllProblemTypesSuccess).catch(getAllProblemTypesFailure);
-			
-			function getAllProblemTypesSuccess(data){
-				logProblem.problemTypesResults = data;
-				console.log(logProblem.problemTypesResults);
-			}
-			function getAllProblemTypesFailure(error){
-				alert(error);
+				
+				generateTags();
 			}
 		}
 
@@ -1465,17 +1469,26 @@
 		}
 		
 		function generateTags(){
-			let grivienceNameWords = logProblem.grivienceName.split(" ");
-			if(grivienceNameWords.length>1){
-			for(var i =0; i < grivienceNameWords.length; i++){
-				var tagObj= { text: grivienceNameWords[i] };
-				if(grivienceNameWords[i]!=null && grivienceNameWords[i]!=undefined && grivienceNameWords[i]!="" && grivienceNameWords[i].length>=3 && !arrayContainsValue(grivienceNameWords[i])){
-					logProblem.tags.push(tagObj);
-					logProblem.tagValues+=grivienceNameWords[i]+",";
-				}
+			
+			let content=logProblem.chosenProblemCategory;
+			content+=" "+logProblem.grivienceName;
+			if(logProblem.grivienceType!=undefined){
+				content+=" "+logProblem.grivienceType.problemTypeName;
+			}
+			if(logProblem.selectedLocation!=undefined){
+				content+=" "+logProblem.selectedLocation.locationName;
 			}
 			
-		}
+			let contentWords = content.split(" ");
+			if(contentWords.length>1){
+			for(var i =0; i < contentWords.length; i++){
+				var tagObj= { text: contentWords[i] };
+				if(contentWords[i]!=null && contentWords[i]!=undefined && contentWords[i]!="" && contentWords[i].length>=3 && !arrayContainsValue(contentWords[i])){
+					logProblem.tags.push(tagObj);
+					logProblem.tagValues+=contentWords[i]+",";
+				}
+				}
+			}
 		}
 		
 		function arrayContainsValue(tagName){
@@ -1509,6 +1522,7 @@
 			logProblem.selectedLocation=searchLocation;
 			logProblem.locatedIn=searchLocation.locationName;
 			logProblem.showLocationSearchBox=false;
+			generateTags();
 		}
 	}
 
@@ -1525,9 +1539,12 @@
 
 		var problemSelection = this;
 		problemSelection.problems = [];
-		problemSelection.logNewProblem = logNewProblem;
+		problemSelection.viewProblem = viewProblem;
+		problemSelection.chosenProblemCategory = $state.params.selectedProblemCategory;
+		problemSelection.problemTypes = $state.params.problemTypes;
+		problemSelection.logNewProblem=logNewProblem;
 
-		problemSelectionService.getProblemsByType($state.params.selectedProblemType).then(getProblemsByTypeSuccess).catch(getProblemsByTypeFailure);
+		problemSelectionService.getProblemsByCategory(problemSelection.chosenProblemCategory).then(getProblemsByTypeSuccess).catch(getProblemsByTypeFailure);
 
 		function getProblemsByTypeSuccess(data){
 			problemSelection.problems = data;
@@ -1537,32 +1554,12 @@
 			alert(error);
 		}
 
-		// for (var i = 0; i < 20; i++) {
-		// 	// var severity = "";
-
-		// 	// if (i % 2 == 0) {
-		// 	// 	severity = "critical";
-		// 	// } else if (i % 3 == 0) {
-		// 	// 	severity = "high";
-		// 	// } else if (i % 5 == 0) {
-		// 	// 	severity = "medium";
-		// 	// } else {
-		// 	// 	severity = "low";
-		// 	// }
-		// 	// var problem = {
-		// 	// 	"problemName" : "Water Problem Type Water Problem Type Water Problem Type "
-		// 	// 			+ i,
-		// 	// 	"locatedIn" : "Pulipadu,Prakasam(District)",
-		// 	// 	"severity" : severity,
-		// 	// 	"severityLevel" : severity === "critical" ? "C"
-		// 	// 			: severity === "high" ? "H"
-		// 	// 					: severity === "medium" ? "M" : "L"
-		// 	// };
-		// 	// problemSelection.problems.push(problem);
-		// }
 		
+		function viewProblem(problemGuid) {
+			$state.go('viewProblem',{selectedProblemGuid:problemGuid});
+		}
 		function logNewProblem() {
-			$state.go('createProblem.logProblem');
+			$state.go('createProblem.logProblem',{selectedProblemCategory:problemSelection.chosenProblemCategory,problemTypes:problemSelection.problemTypes});
 		}
 	}
 
@@ -1581,7 +1578,7 @@
 		var services = {};
 
 		var problemSelectionService = {
-			getProblemsByType: getProblemsByType
+			getProblemsByCategory: getProblemsByCategory
 		};
 
 		// Call and save the data
@@ -1593,29 +1590,29 @@
 			services = metaInfo;
 		}
 
-		function getProblemsByType(problemTypeGuid) {
+		function getProblemsByCategory(problemTypeCategory) {
 
 			let deferred = $q.defer();
 			
 			if(swaggerPromise){
 				swaggerPromise.then(function(){
-					services.problem.getProblemsByType({problemTypeGuid:problemTypeGuid},
-						getProblemsByTypeSuccess, getProblemsByTypeFailure);
+					services.problem.getProblemsByProblemCategory({problemTypeCategory:problemTypeCategory},
+						getProblemsByProblemCategorySuccess, getProblemsByProblemCategoryFailure);
 					swaggerPromise = undefined;
 				})
 			}else{
-				services.problem.getProblemsByType({problemTypeGuid:problemTypeGuid},
-						getProblemsByTypeSuccess, getProblemsByTypeFailure);
+				services.problem.getProblemsByProblemCategory({problemTypeCategory:problemTypeCategory},
+						getProblemsByProblemCategorySuccess, getProblemsByProblemCategoryFailure);
 			}
 			
 
 			return deferred.promise;
 
-			function getProblemsByTypeSuccess(data) {
+			function getProblemsByProblemCategorySuccess(data) {
 				deferred.resolve(data.obj);
 			}
 
-			function getProblemsByTypeFailure(error) {
+			function getProblemsByProblemCategoryFailure(error) {
 				deferred.reject(error);
 			}
 
@@ -1629,120 +1626,70 @@
 
 	angular.module('myindia-app').controller("problemTypeSelectionController",
 			problemTypeSelectionController);
-	problemTypeSelectionController.$inject = ['$state'];
+	problemTypeSelectionController.$inject = ['$state','createProblemService'];
 
-	function problemTypeSelectionController($state) {
-
-		var problemTypeSelection = this;
-		problemTypeSelection.problemTypes = [];
-		problemTypeSelection.chooseExistingProblem = chooseExistingProblem;
-
-		for (var i = 0; i < 20; i++) {
-			var imageName = "";
-
-			if (i % 2 == 0) {
-				imageName = "power_problem.jpg";
-			} else if (i % 3 == 0) {
-				imageName = "agriculture_problem.jpg";
-			} else if (i % 5 == 0) {
-				imageName = "water_problem.jpg";
-			} else {
-				imageName = "road_problem.jpg";
-			}
-			var problemType = {
-				"problemTypeName" : "Problem Type " + i,
-				"problemTypeImage" : resource + "problem/" + imageName,
-				"guid": 417
-			};
-			problemTypeSelection.problemTypes.push(problemType);
-		}
-
-		function chooseExistingProblem(problemTypeGuid) {
-			$state.go('createProblem.problemSelection',{selectedProblemType:problemTypeGuid});
-		}
-
-	}
-
-})();
-
-(function() {
-	'use strict';
-
-	angular.module('myindia-app').controller("problemTypeSelectionController",
-			problemTypeSelectionController);
-	problemTypeSelectionController.$inject = ['$state'];
-
-	function problemTypeSelectionController($state) {
+	function problemTypeSelectionController($state,createProblemService) {
 
 		var problemTypeSelection = this;
 		problemTypeSelection.problemTypes = [];
+		problemTypeSelection.problemTypeCategories = [];
 		problemTypeSelection.chooseExistingProblem = chooseExistingProblem;
 
-		for (var i = 0; i < 20; i++) {
-			var imageName = "";
+		getAllProblemTypes();
 
-			if (i % 2 == 0) {
-				imageName = "power_problem.jpg";
-			} else if (i % 3 == 0) {
-				imageName = "agriculture_problem.jpg";
-			} else if (i % 5 == 0) {
-				imageName = "water_problem.jpg";
-			} else {
-				imageName = "road_problem.jpg";
+		// for (var i = 0; i < 20; i++) {
+		// 	var imageName = "";
+
+		// 	if (i % 2 == 0) {
+		// 		imageName = "power_problem.jpg";
+		// 	} else if (i % 3 == 0) {
+		// 		imageName = "agriculture_problem.jpg";
+		// 	} else if (i % 5 == 0) {
+		// 		imageName = "water_problem.jpg";
+		// 	} else {
+		// 		imageName = "road_problem.jpg";
+		// 	}
+		// 	var problemType = {
+		// 		"problemTypeName" : "Problem Type " + i,
+		// 		"problemTypeImage" : resource + "problem/" + imageName,
+		// 		"guid": 417
+		// 	};
+		// 	problemTypeSelection.problemTypes.push(problemType);
+		// }
+
+		function chooseExistingProblem(problemCategory) {
+
+			let problemTypes = problemTypeSelection.problemTypes.filter(function( obj ) {
+			  return obj.problemCategory == problemCategory;
+			});
+
+			$state.go('createProblem.problemSelection',{selectedProblemCategory:problemCategory,problemTypes:problemTypes});
+		}
+
+		function getAllProblemTypes(){
+			
+			createProblemService.getAllProblemTypes().then(getAllProblemTypesSuccess).catch(getAllProblemTypesFailure);
+			
+			function getAllProblemTypesSuccess(data){
+				// let tempResults = data.map(function(a) {return a.problemCategory;});
+				problemTypeSelection.problemTypes = data;
+				// problemTypeSelection.problemTypeCategories = tempResults.filter((v, i, a) => a.indexOf(v) === i); 
+
+				// array.map(item => item.problemCategory)
+  				// 				.filter((value, index, self) => self.indexOf(value) === index)
+  				let categories = [];
+  				angular.forEach(data,function(problemType){
+  					if(categories.indexOf(problemType.problemCategory) == -1){
+  						categories.push(problemType.problemCategory);
+  						problemTypeSelection.problemTypeCategories.push(problemType);
+  					}
+  				})
+
+				console.log(problemTypeSelection.problemTypes);
 			}
-			var problemType = {
-				"problemTypeName" : "Problem Type " + i,
-				"problemTypeImage" : resource + "problem/" + imageName,
-				"guid": 417
-			};
-			problemTypeSelection.problemTypes.push(problemType);
-		}
-
-		function chooseExistingProblem(problemTypeGuid) {
-			$state.go('createProblem.problemSelection',{selectedProblemType:problemTypeGuid});
-		}
-
-	}
-
-})();
-
-
-;
-;(function() {
-	'use strict';
-
-	angular.module('myindia-app').controller("problemTypeSelectionController",
-			problemTypeSelectionController);
-	problemTypeSelectionController.$inject = ['$state'];
-
-	function problemTypeSelectionController($state) {
-
-		var problemTypeSelection = this;
-		problemTypeSelection.problemTypes = [];
-		problemTypeSelection.chooseExistingProblem = chooseExistingProblem;
-
-		for (var i = 0; i < 20; i++) {
-			var imageName = "";
-
-			if (i % 2 == 0) {
-				imageName = "power_problem.jpg";
-			} else if (i % 3 == 0) {
-				imageName = "agriculture_problem.jpg";
-			} else if (i % 5 == 0) {
-				imageName = "water_problem.jpg";
-			} else {
-				imageName = "road_problem.jpg";
+			function getAllProblemTypesFailure(error){
+				alert(error);
 			}
-			var problemType = {
-				"problemTypeName" : "Problem Type " + i,
-				"problemTypeImage" : resource + "problem/" + imageName,
-				"guid": 417
-			};
-			problemTypeSelection.problemTypes.push(problemType);
-		}
-
-		function chooseExistingProblem(problemTypeGuid) {
-			$state.go('createProblem.problemSelection',{selectedProblemType:problemTypeGuid});
 		}
 
 	}
@@ -1754,22 +1701,87 @@
 
 	angular.module('myindia-app').controller("viewProblemController",
 			viewProblemController);
-	viewProblemController.$inject = [];
+	viewProblemController.$inject = ['$state','viewProblemService'];
 
-	function viewProblemController() {
+	function viewProblemController($state,viewProblemService) {
 
 		var viewProblem = this;
-		viewProblem.problemBasicDetails = {};
+		viewProblem.problemDetails = {};
+		viewProblem.selectedProblemGuid = $state.params.selectedProblemGuid;
+		
+		viewProblemService.getProblemDetails(viewProblem.selectedProblemGuid).then(getProblemDetailsSuccess).catch(getProblemDetailsFailure);
 
-		viewProblem.problemBasicDetails.problemMainPhotoURL = resource+"problem/water_problem.jpg";
+		function getProblemDetailsSuccess(data){
+			viewProblem.problemDetails = data;
+		}
+
+		function getProblemDetailsFailure(error){
+			alert(error);
+		}
+		
+	
 	}
 
 })();
 
-/**
- * 
- */
-;(function() {
+(function() {
+	'use strict';
+
+	angular.module('myindia-app').factory("viewProblemService",
+			viewProblemService);
+
+	viewProblemService.$inject = [ '$q', 'swaggerShareService', '$timeout' ];
+
+	function viewProblemService($q, swaggerShareService, $timeout) {
+
+		var services = {};
+
+		var viewProblemService = {
+			getProblemDetails : getProblemDetails
+		};
+
+		// Call and save the data
+		let
+		swaggerPromise = swaggerShareService.getAPIMetaData(setAPIMetaData);
+
+		return viewProblemService;
+
+		function setAPIMetaData(metaInfo) {
+			services = metaInfo;
+		}
+
+		function getProblemDetails(problemGuid) {
+
+			let
+			deferred = $q.defer();
+
+			if (swaggerPromise) {
+				swaggerPromise
+						.then(function() {
+							services.problem.getProblemByGuid({problemGuid:problemGuid},
+									getProblemDetailsSuccess,
+									getProblemDetailsFailure);
+							swaggerPromise = undefined;
+						})
+			} else {
+				services.problem.getProblemByGuid({problemGuid:problemGuid}, getProblemDetailsSuccess,
+						getProblemDetailsFailure);
+			}
+
+			return deferred.promise;
+
+			function getProblemDetailsSuccess(data) {
+				deferred.resolve(data.obj);
+			}
+
+			function getProblemDetailsFailure(error) {
+				deferred.reject(error);
+			}
+
+		}
+	}
+})();
+(function() {
     'use strict';
 
     angular.module('myindia-app').controller("signInController", signInController);

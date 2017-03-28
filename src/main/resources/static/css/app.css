@@ -42,6 +42,7 @@
 .add_object_name {
 	direction: rtl;
 	width: 120px;
+	cursor: pointer;
 }
 
 .add_object_img {
@@ -66,6 +67,7 @@
 	letter-spacing: 1px;
 	background-color: white;
 	border-bottom: 1px solid lightgrey;
+	cursor: pointer;
 }
 
 .add_object_name, .add_object_img {
@@ -631,13 +633,13 @@ input[type="text"], input[type="password"], select {
 
 .search-item-img {
 	float: left;
+	width: 50px;
 }
 
 .search-item-name-sub-type {
 	float: left;
-	max-width: 270px;
 	padding-left: 10px;
-	height: 50px;
+	width: calc(100% - 50px);
 }
 
 .search-item-img img {
@@ -645,9 +647,12 @@ input[type="text"], input[type="password"], select {
 }
 
 .search-item-img-name {
-	padding-left: 0px !important;
-	padding-right: 0px !important;
+	padding-left: 15px !important;
+	padding-right: 19px !important;
 	width: 100%;
+	background-color: white;
+	padding-top: 10px;
+	padding-bottom: 10px;
 }
 
 .search-item {
@@ -656,13 +661,9 @@ input[type="text"], input[type="password"], select {
 	margin-bottom: 10px;
 	cursor: pointer;
 	border-radius: 5px;
-	background: rgb(221, 220, 220);
-	margin-left: 10px;
-	min-width: 340px !important;
+	margin-left: 0px;
 	PADDING-LEFT: 10px !important;
 	padding-right: 10px !important;
-	padding-top: 10px !important;
-	padding-bottom: 15px !important;
 }
 
 .search-item img {
@@ -676,6 +677,12 @@ input[type="text"], input[type="password"], select {
 	letter-spacing: 1px;
 	cursor: pointer;
 	line-height: 30px;
+	color: black;
+	font-weight: 600;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	word-wrap: break-word;
 }
 
 .search-item-sub-type {
@@ -753,11 +760,15 @@ input[type="text"], input[type="password"], select {
 	background-color: white;
 	margin-top: 10px;
 	margin-bottom: 10px;
+	-webkit-box-shadow: 0 10px 10px 0 rgba(36, 50, 56, 0.2);
+	box-shadow: 0px 10px 10px 0 rgba(36, 50, 56, 0.2);
 }
 
 #problem_selection_container .problem .problem_severity {
 	text-align: center;
-	padding: 10px;
+	padding: 10px 10px 0px 10px;
+	width: 60px;
+	float: left;
 }
 
 #problem_selection_container .problem .problem_severity .problem_severity_circle
@@ -771,13 +782,33 @@ input[type="text"], input[type="password"], select {
 #problem_selection_container .problem .problem_name {
 	letter-spacing: 1px;
 	font-size: 14px;
-	padding: 10px;
+	padding: 10px 10px 0px 10px;
+	float: left;
+	width: calc(100% - 60px);
+	cursor: pointer;
+	color: black;
+	font-weight: 600;
+	white-space: nowrap;
+}
+
+#problem_selection_container .problem .problem_name label {
+	display: block;
+	display: inline-block;
+	margin: 0 auto;
+	font-size: 14px;
+	line-height: 42px;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	word-break: break-word;
+	white-space: inherit;
 }
 
 #problem_selection_container .problem .problem_located_in {
 	letter-spacing: 1px;
 	font-size: 12px;
-	text-align: center;
+	padding: 0px 0px 0px 10px !important;
 }
 
 #problem_selection_container .problem .Critical {
@@ -812,15 +843,15 @@ input[type="text"], input[type="password"], select {
 }
 
 #problem_selection_container .problem .problem_short_actions {
-	margin-top: 20px !important;
-	background-color: #bdbbba;
+	margin-top: 5px !important;
+	background-color: #ffffff;
 	padding: 6px 0px 2px 0px;
+	border-top: 1px solid rgba(36, 50, 56, 0.2);
 }
 
 #problem_selection_container .problem .problem_short_actions .problem_short_action label
 	{
-	background-color: #6b6666;
-	color: white;
+	color: black;
 	padding: 2px 5px 2px 5px;
 	margin-left: 7px;
 	border-radius: 3px;
@@ -982,35 +1013,48 @@ tags-input .tags .tag-item {
 @CHARSET "ISO-8859-1";
 
 .problem_type {
-	margin-top: 20px;
+	margin-top: 0px;
 	cursor: pointer;
+	padding-right: 0px !important;
+	padding-left: 0px !important;
+	border-left: 1px solid #cfd8dc;
+	border-bottom: 1px solid #cfd8dc;
+}
+
+.problem_type:hover {
+	-webkit-box-shadow: 0 10px 10px 0 rgba(36, 50, 56, 0.2);
+	box-shadow: 0 10px 10px 0 rgba(36, 50, 56, 0.2);
+	z-index: 2;
 }
 
 .problem_type img {
 	width: 100%;
-	border-radius: 3px;
-	height: 175px;
+	border-radius: 5px;
+	height: 150px;
 }
 
 #problem_type_selection_container {
-	padding: 0px 50px 0px 50px;
+	padding: 0px 20px 0px 20px;
 }
 
 .problem_type_img {
-	
+	padding: 15px;
 }
 
 .problem_type_name {
-	background-color: black;
-	position: relative;
-	bottom: 30px;
-	opacity: 0.8;
-	padding: 5px 0px 0px 10px;
 	letter-spacing: 1px;
+	text-align: center;
+	padding-bottom: 10px;
+	font-size: 15px;
+	color: black;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	word-wrap: break-word;
 }
 
 .problem_type_name label {
-	color: white;
+	display: initial;
 }
 
 .problem_type_search_content {
@@ -1022,6 +1066,15 @@ tags-input .tags .tag-item {
 	height: 50px !important;
 	font-size: 20px !important;
 	border-radius: 10px;
+}
+
+.problem_types {
+	margin: 20px 0px 0px 0px !important;
+}
+
+.problem_type_content {
+	padding: 20px 20px 30px 20px;
+	background-color: white;
 }
 .view_problem_container {
 	margin: 0px !important;
@@ -1035,37 +1088,90 @@ tags-input .tags .tag-item {
 	padding: 0px;
 }
 
-#view_problem_related_problems_side_bar {
-	padding: 0px;
+#problem_main_photo {
+	height: 250px;
 }
 
-#problem_main_photo_url {
+#problem_main_photo img {
 	width: 100%;
-	height: 350px;
+	height: 100%;
 }
 
-#problem_basic_details_content {
+#view_problem_left_sidebar .Critical {
+	border-bottom: 10px solid red;
+}
+
+#view_problem_left_sidebar .High {
+	border-bottom: 10px solid orange;
+}
+
+#view_problem_left_sidebar .Medium {
+	border-bottom: 10px solid blue;
+}
+
+#view_problem_left_sidebar .Low {
+	border-bottom: 10px solid green;
+}
+
+#problem_basic_details_container {
+	background-color: white;
+	margin: 0px !important;
+}
+
+#problem_basic_details_content #problem_name {
+	color: black;
+	font-size: 17px;
+	letter-spacing: 1px;
+	font-weight: 600;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+#problem_tabs {
+	background-color: #646464;
+	padding: 10px;
+}
+
+#problem_tabs .problem_tab {
+	padding-bottom: 10px;
+	padding-top: 10px;
+	box-shadow: 0px 10px 10px 0 rgb(52, 52, 52);
+	padding-left: 10px;
+}
+
+#problem_tabs .problem_tab .problem_tab_icon {
+	color: white;
+	padding-right: 15px;
+	text-align: center;
+	padding-left: 2px;
+	font-size: 16px;
+}
+
+#problem_tabs .problem_tab .problem_tab_name {
+	color: white;
+	font-size: 17px;
+	letter-spacing: 1px;
+}
+
+#problem_highlites {
+	padding: 10px;
+}
+
+#problem_highlites #problem_category_name {
+	color: #646464;
+	letter-spacing: 1px;
+	font-size: 16px;
+}
+
+#problem_highlites #problem_status {
 	
 }
 
-.problem_count_bar {
-	
-}
-
-.problem_count_name {
-	
-}
-
-.problem_count_value {
-	
-}
-
-.problem_count_value label {
-	
-}
-
-.popular {
-	
+#problem_highlites #problem_popularity span span i {
+	color: #f94c59;
+	font-weight: 900;
+	font-size: 15px;
+	padding-right: 4px;
 }
 #login-container {
 	background-color: #ebebeb;
