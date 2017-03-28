@@ -37,6 +37,10 @@
 				angular.forEach(sessionStorage, function (item,key) {
 	          				sessionStorage.removeItem(key);
 	      		});
+
+				//Stop timer for refresh token
+				refreshAccessTokenService.stopTokenExpiryTimer(expiresIn);
+
 				deferred.resolve(data);
 			}
 

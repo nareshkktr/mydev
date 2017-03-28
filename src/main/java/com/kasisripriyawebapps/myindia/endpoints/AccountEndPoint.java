@@ -68,8 +68,9 @@ public class AccountEndPoint extends BaseEndPoint{
 			baseUserInfo = accountService.prepareBaseUserInformation(account);
 		}
 		NewCookie accessTokenCookie = new NewCookie("access_token", baseUserInfo.getAccessToken());
+		NewCookie refreshTokenCookie = new NewCookie("refresh_token", baseUserInfo.getRefreshToken());
 
-		return Response.status(Status.OK).entity(baseUserInfo).cookie(accessTokenCookie).build();
+		return Response.status(Status.OK).entity(baseUserInfo).cookie(accessTokenCookie).cookie(refreshTokenCookie).build();
 	}
 
 	@POST
@@ -128,7 +129,7 @@ public class AccountEndPoint extends BaseEndPoint{
 		if(validateRefreshAccessTokenRequest(refreshToken))
 			tokenInfo = accountService.refreshAccessToken(refreshToken);
 		
-		return Response.status(Status.OK).entity(tokenInfo).build();
+		return Response.status(Status.OK).entity(tokenInfo.toString()).build();
 	}
 	
 	

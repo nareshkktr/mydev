@@ -103,6 +103,17 @@ public class BaseDaoImpl<PK extends Serializable, T> implements BaseDao<PK, T> {
 		addSortCriteria(criteria, sortCriteria);
 		return criteria;
 	}
+	
+	public Criteria getCriteria(SortCriteriaData sortCriteria,List<Criterion> criterions) throws InternalServerException {
+		Criteria criteria = getSession().createCriteria(persistentClass);
+		addSortCriteria(criteria, sortCriteria);
+		if (criterions != null) {
+			for (Criterion criterion : criterions) {
+				criteria.add(criterion);
+			}
+		}
+		return criteria;
+	}
 
 	private void addSortCriteria(Criteria criteria, SortCriteriaData sortCriteria) {
 
@@ -326,6 +337,17 @@ public class BaseDaoImpl<PK extends Serializable, T> implements BaseDao<PK, T> {
 	public List<T> getAllByPage(SortCriteriaData sortCriteria, Integer pageNo, Integer pageLimit)
 			throws InternalServerException {
 		Criteria criteria = getCriteria();
+		criteria.setFirstResult((pageNo - 1) * pageLimit);
+		criteria.setMaxResults(pageLimit);
+		return criteria.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<T> getAllByConditionsByPage(List<Criterion> criterions,SortCriteriaData sortCriteria, Integer pageNo, Integer pageLimit)
+			throws InternalServerException {
+		
+		Criteria criteria = getCriteria(sortCriteria,criterions);
 		criteria.setFirstResult((pageNo - 1) * pageLimit);
 		criteria.setMaxResults(pageLimit);
 		return criteria.list();

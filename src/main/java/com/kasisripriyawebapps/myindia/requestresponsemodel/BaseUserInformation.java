@@ -8,6 +8,8 @@ public class BaseUserInformation {
 	private String gender;
 	private String userName;
 	private String accessToken;
+	private String refreshToken;
+	private Integer expirationTimeInSeconds;
 	private UserLocationDetails userLocation;
 
 	public BaseUserInformation() {
@@ -85,6 +87,22 @@ public class BaseUserInformation {
 
 	public void setUserLocation(UserLocationDetails userLocation) {
 		this.userLocation = userLocation;
+	}
+	
+	public String getRefreshToken() {
+		return refreshToken;
+	}
+	
+	public void setRefreshToken(String refreshToken) {
+		this.refreshToken = refreshToken;
+	}
+
+	public Integer getExpirationTimeInSeconds() {
+		return expirationTimeInSeconds;
+	}
+
+	public void setExpirationTimeInSeconds(Integer expirationTimeInSeconds) {
+		this.expirationTimeInSeconds = expirationTimeInSeconds;
 	}
 
 }

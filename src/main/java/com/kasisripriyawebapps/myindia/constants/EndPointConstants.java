@@ -1011,6 +1011,18 @@ public class EndPointConstants {
 
 	/** The Constant GET_PROBLEMS_BY_PROBLEM_CATEGORY_API_DESCRIPTION. */
 	public static final String REFRESH_ACCESS_TOKEN_API_DESCRIPTION = "Refresh Access Token.";
+	
+	/** The Constant FILTER_ENTITY_REQUEST_MAPPING. */
+	public static final String FILTER_ENTITY_REQUEST_MAPPING = "filterEntity";
+
+	/** The Constant FILTER_ENTITY_API_VALUE. */
+	public static final String FILTER_ENTITY_API_VALUE = "filterEntity";
+
+	/** The Constant FILTER_ENTITY_API_NICKNAME. */
+	public static final String FILTER_ENTITY_API_NICKNAME = "filterEntity";
+
+	/** The Constant FILTER_ENTITY_API_DESCRIPTION. */
+	public static final String FILTER_ENTITY_API_DESCRIPTION = "Filter Entities";
 
 
 }

@@ -956,6 +956,54 @@
 (function() {
 	'use strict';
 
+	angular.module('myindia-app').factory("filterEntityByCriteria",
+			filterEntityByCriteria);
+
+	filterEntityByCriteria.$inject = [ '$q', 'swaggerShareService' ];
+
+	function filterEntityByCriteria($q, swaggerShareService) {
+
+		var services = {};
+
+		var filterEntityByCriteria = {
+			filterEntities : filterEntities
+		};
+
+		// // Call and save the data
+		let
+		swaggerPromise = swaggerShareService.getAPIMetaData(setAPIMetaData);
+
+		return filterEntityByCriteria;
+
+		function setAPIMetaData(metaInfo) {
+			services = metaInfo;
+		}
+
+		function filterEntities(filterRequest) {
+
+			let
+			deferred = $q.defer();
+
+			services.search.filterEntity({body:JSON.stringify(filterRequest)}, filterEntitySuccess,
+						filterEntityFailure);
+			
+			function filterEntitySuccess(data){
+				deferred.resolve(data.obj);
+			}
+
+			function filterEntityFailure(error){
+				deferred.reject(error);
+			}
+
+			return deferred.promise;
+
+		}
+	}
+
+})();
+(function() {
+	'use strict';
+
 	angular.module('myindia-app').factory("logoutService",
 			logoutService);
 
@@ -992,6 +1040,10 @@
 				angular.forEach(sessionStorage, function (item,key) {
 	          				sessionStorage.removeItem(key);
 	      		});
+
+				//Stop timer for refresh token
+				refreshAccessTokenService.stopTokenExpiryTimer(expiresIn);
+
 				deferred.resolve(data);
 			}
 
@@ -1000,6 +1052,68 @@
 			}
 
 			return deferred.promise;
+
+		}
+	}
+
+})();
+(function() {
+	'use strict';
+
+	angular.module('myindia-app').factory("refreshAccessTokenService",
+			refreshAccessTokenService);
+
+	refreshAccessTokenService.$inject = [ '$q', 'swaggerShareService', '$interval','$state' ];
+
+	function refreshAccessTokenService($q, swaggerShareService,$interval,$state) {
+
+		var services = {};
+
+		var refreshAccessTokenService = {
+			startTokenExpiryTimer: startTokenExpiryTimer,
+			stopTokenExpiryTimer: stopTokenExpiryTimer
+		};
+
+		// // Call and save the data
+		let
+		swaggerPromise = swaggerShareService.getAPIMetaData(setAPIMetaData);
+
+		let interval;
+
+		return refreshAccessTokenService;
+
+		function setAPIMetaData(metaInfo) {
+			services = metaInfo;
+		}
+
+		function startTokenExpiryTimer(intervalTimeout){
+			interval = $interval(refreshAccessToken, intervalTimeout);
+		}
+
+		function stopTokenExpiryTimer(){
+			$interval.cancel(interval);
+		}
+
+		function refreshAccessToken() {
+
+			stopTokenExpiryTimer();
+
+			services.account.refreshAccessToken({body: sessionStorage.getItem("refresh_token")}, refreshAccessTokenSuccess,
+						refreshAccessTokenFailure);
+			
+			function refreshAccessTokenSuccess(data){
+				swaggerShareService.setAuthorization(data.obj.accessToken,data.obj.refreshToken,data.obj.expirationTimeInSeconds);
+				startTokenExpiryTimer(data.obj.expirationTimeInSeconds*100);
+			}
+
+			function refreshAccessTokenFailure(error){
+				//Remove everything from session
+				angular.forEach(sessionStorage, function (item,key) {
+	          				sessionStorage.removeItem(key);
+	      		});
+				// Redirect to signIn . As we cannot do any furthere processing
+				$state.go('signIn');
+			}
 
 		}
 	}
@@ -1058,13 +1172,15 @@
 
     	}
 
-    	function setAuthorization(token){
+    	function setAuthorization(token,refreshToken,expiresIn){
 
             let accessToken;
 
             if(token){
                 accessToken = token;
                 sessionStorage.setItem("access_token",accessToken);
+                sessionStorage.setItem("refresh_token",refreshToken);
+                sessionStorage.setItem("expires_in",expiresIn);
             }else if(sessionStorage.getItem("access_token")){
                 accessToken = sessionStorage.getItem("access_token");   
             }
@@ -1342,9 +1458,9 @@
 
 	angular.module('myindia-app').controller("logProblemController",
 			logProblemController);
-	logProblemController.$inject = [ 'createProblemService','fileUploadService','dataShareService','userInfoService','$scope','locationChangePopUpService','$state' ];
+	logProblemController.$inject = [ 'createProblemService','fileUploadService','dataShareService','userInfoService','$scope','locationChangePopUpService','$state','filterEntityByCriteria' ];
 	
-	function logProblemController(createProblemService,fileUploadService,dataShareService,userInfoService,$scope,locationChangePopUpService,$state) {
+	function logProblemController(createProblemService,fileUploadService,dataShareService,userInfoService,$scope,locationChangePopUpService,$state,filterEntityByCriteria) {
 		
 		var logProblem=this;
 		logProblem.chosenProblemCategory = $state.params.selectedProblemCategory;
@@ -1367,36 +1483,38 @@
 		logProblem.tagValues="";
 		logProblem.problems = [];
 		logProblem.changeProblemType=changeProblemType;
-		
-		generateTags();
+		logProblem.similarProblems = {};
+		logProblem.similarProblems.pageNo = 1;
+		logProblem.similarProblems.pageLimit = 4;
+
 
 		function changeProblemType(){
 			generateTags();
 		}
 		
-		for (var i = 0; i < 20; i++) {
-			var severity = "";
+		// for (var i = 0; i < 20; i++) {
+		// 	var severity = "";
 
-			if (i % 2 == 0) {
-				severity = "critical";
-			} else if (i % 3 == 0) {
-				severity = "high";
-			} else if (i % 5 == 0) {
-				severity = "medium";
-			} else {
-				severity = "low";
-			}
-			var problem = {
-				"problemName" : "Water Problem Type Water Problem Type Water Problem Type "
-						+ i,
-				"locatedIn" : "Pulipadu,Prakasam(District)",
-				"severity" : severity,
-				"severityLevel" : severity === "critical" ? "C"
-						: severity === "high" ? "H"
-								: severity === "medium" ? "M" : "L"
-			};
-			logProblem.problems.push(problem);
-		}
+		// 	if (i % 2 == 0) {
+		// 		severity = "critical";
+		// 	} else if (i % 3 == 0) {
+		// 		severity = "high";
+		// 	} else if (i % 5 == 0) {
+		// 		severity = "medium";
+		// 	} else {
+		// 		severity = "low";
+		// 	}
+		// 	var problem = {
+		// 		"problemName" : "Water Problem Type Water Problem Type Water Problem Type "
+		// 				+ i,
+		// 		"locatedIn" : "Pulipadu,Prakasam(District)",
+		// 		"severity" : severity,
+		// 		"severityLevel" : severity === "critical" ? "C"
+		// 				: severity === "high" ? "H"
+		// 						: severity === "medium" ? "M" : "L"
+		// 	};
+		// 	logProblem.problems.push(problem);
+		// }
 
 		processUserData();
 
@@ -1489,6 +1607,41 @@
 				}
 				}
 			}
+
+			//Reset page no to 1.
+			logProblem.similarProblems.pageNo = 1;
+			// Call to get similar problems based on multiple criteria.
+			fetchRelatedProblemsData(logProblem.similarProblems.pageNo,logProblem.similarProblems.pageLimit);
+		}
+
+		function fetchRelatedProblemsData(pageNo,pageLimit){
+
+			let filterEntityRequest = {
+					objectName: logProblem.grivienceName,
+					supportingFields: [logProblem.chosenProblemCategory],
+					objectType: "Problem",
+					pageNo: pageNo,
+					pageLimit: pageLimit
+			};
+
+			if(logProblem.grivienceType!=undefined){
+				filterEntityRequest.supportingFields.push(logProblem.grivienceType.problemTypeName);
+			}
+
+			if(logProblem.selectedLocation!=undefined){
+				filterEntityRequest.locationName = logProblem.selectedLocation.locationName;
+			}
+
+			filterEntityByCriteria.filterEntities(filterEntityRequest).then(filterEntitiesSuccess).catch(filterEntitiesFailure);
+
+			function filterEntitiesSuccess(data){
+				logProblem.problems = data;
+			}
+
+			function filterEntitiesFailure(error){
+				alert(error);
+			}
+
 		}
 		
 		function arrayContainsValue(tagName){
@@ -1701,18 +1854,56 @@
 
 	angular.module('myindia-app').controller("viewProblemController",
 			viewProblemController);
-	viewProblemController.$inject = ['$state','viewProblemService'];
+	viewProblemController.$inject = ['$state','viewProblemService','filterEntityByCriteria'];
 
-	function viewProblemController($state,viewProblemService) {
+	function viewProblemController($state,viewProblemService,filterEntityByCriteria) {
 
 		var viewProblem = this;
 		viewProblem.problemDetails = {};
 		viewProblem.selectedProblemGuid = $state.params.selectedProblemGuid;
+
+		viewProblem.similarProblems = {};
+		viewProblem.similarProblems.pageNo = 1;
+		viewProblem.similarProblems.pageLimit =4;
 		
 		viewProblemService.getProblemDetails(viewProblem.selectedProblemGuid).then(getProblemDetailsSuccess).catch(getProblemDetailsFailure);
 
 		function getProblemDetailsSuccess(data){
 			viewProblem.problemDetails = data;
+
+			//Call to fetch similar problems based on filter criteria
+			fetchRelatedProblemsData(viewProblem.similarProblems.pageNo,viewProblem.similarProblems.pageLimit)
+
+		}
+
+		function fetchRelatedProblemsData(pageNo,pageLimit){
+
+			let filterEntityRequest = {
+					objectName: viewProblem.problemDetails.problemShortDescription,
+					supportingFields: [viewProblem.problemDetails.problemType.problemCategory],
+					objectType: "Problem",
+					pageNo: pageNo,
+					pageLimit: pageLimit
+			};
+
+			if(viewProblem.problemDetails.problemType!=undefined){
+				filterEntityRequest.supportingFields.push(viewProblem.problemDetails.problemType.problemTypeName);
+			}
+
+			if(viewProblem.problemDetails.createdLocation!=undefined){
+				filterEntityRequest.locationName = viewProblem.problemDetails.createdLocation.locationName;
+			}
+
+			filterEntityByCriteria.filterEntities(filterEntityRequest).then(filterEntitiesSuccess).catch(filterEntitiesFailure);
+
+			function filterEntitiesSuccess(data){
+				viewProblem.similarProblems.problems = data;
+			}
+
+			function filterEntitiesFailure(error){
+				alert(error);
+			}
+
 		}
 
 		function getProblemDetailsFailure(error){
@@ -1794,6 +1985,11 @@
  		signIn.login = login;
  		signIn.gotoSignUp = gotoSignUp;
 
+        //If user has session storage values redirect to home page
+        if(sessionStorage.getItem("access_token")){
+            $state.go('home');
+        }
+
     	function login(){
     		signInService.login(signIn.userName,signIn.password).then(loginSuccess).catch(loginFailure);
 
@@ -1820,9 +2016,9 @@
 
     angular.module('myindia-app').factory("signInService", signInService);
 
-    signInService.$inject = ['$q','swaggerShareService'];
+    signInService.$inject = ['$q','swaggerShareService','refreshAccessTokenService'];
 
-    function signInService($q,swaggerShareService) {
+    function signInService($q,swaggerShareService,refreshAccessTokenService) {
 
         var services = {};
 
@@ -1853,7 +2049,11 @@
 
             function loginSuccess(data){
                 //Process cookie into swagger
-                swaggerShareService.setAuthorization(data.obj.accessToken);
+                swaggerShareService.setAuthorization(data.obj.accessToken,data.obj.refreshToken,data.obj.expirationTimeInSeconds);
+
+                //Start token expiration timer
+                refreshAccessTokenService.startTokenExpiryTimer(sessionStorage.getItem("expires_in")*100);
+
 
                 deferred.resolve(data.obj);
             }
@@ -1872,9 +2072,9 @@
 
     angular.module('myindia-app').factory("createAccountService", createAccountService);
 
-    createAccountService.$inject = ['$q','swaggerShareService'];
+    createAccountService.$inject = ['$q','swaggerShareService','refreshAccessTokenService'];
 
-    function createAccountService($q,swaggerShareService) {
+    function createAccountService($q,swaggerShareService,refreshAccessTokenService) {
 
         var services = {};
 
@@ -1909,7 +2109,11 @@
 
             function createAccountSuccess(data){
                 //Process cookie into swagger
-                swaggerShareService.setAuthorization(data.obj.accessToken);
+                swaggerShareService.setAuthorization(data.obj.accessToken,data.obj.refreshToken,data.obj.expirationTimeInSeconds);
+
+                //Start token expiration timer
+                refreshAccessTokenService.startTokenExpiryTimer(sessionStorage.getItem("expires_in")*100);
+
                 deferred.resolve(data.obj);
             }
 

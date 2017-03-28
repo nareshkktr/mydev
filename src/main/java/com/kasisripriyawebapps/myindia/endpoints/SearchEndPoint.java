@@ -3,6 +3,8 @@
  */
 package com.kasisripriyawebapps.myindia.endpoints;
 
+import java.util.List;
+
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -15,8 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.kasisripriyawebapps.myindia.configs.LoggedInUserDetails;
 import com.kasisripriyawebapps.myindia.constants.EndPointConstants;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
+import com.kasisripriyawebapps.myindia.requestresponsemodel.FilterEntityRequest;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.GlobalSearchRequest;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.GlobalSearchResponse;
+import com.kasisripriyawebapps.myindia.requestresponsemodel.ProblemResponse;
 import com.kasisripriyawebapps.myindia.service.SearchService;
 
 import io.swagger.annotations.Api;
@@ -41,9 +45,19 @@ public class SearchEndPoint extends BaseEndPoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAllGlobalSearchResults(final GlobalSearchRequest globalSearchRequest)
 			throws InternalServerException {
-
-		LoggedInUserDetails loggedInUserDetails = getLoggedInUserDetails();
 		GlobalSearchResponse globalSearchResponse = searchService.getGlobalSearchResults(globalSearchRequest);
 		return Response.status(Status.OK).entity(globalSearchResponse).build();
 	}
+	
+	@POST
+	@ApiOperation(value = EndPointConstants.FILTER_ENTITY_API_VALUE, nickname = EndPointConstants.FILTER_ENTITY_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.FILTER_ENTITY_API_DESCRIPTION)
+	@Path(EndPointConstants.FILTER_ENTITY_REQUEST_MAPPING)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getFilteredEntityResults(final FilterEntityRequest filterEntityRequest)
+			throws InternalServerException {
+
+		List<ProblemResponse> filteredProblems = searchService.filterEntity(filterEntityRequest);
+		return Response.status(Status.OK).entity(filteredProblems).build();
+	}
+	
 }

@@ -77,8 +77,9 @@ public class OAuthServiceImpl implements OAuthService {
 		if (map != null) {
 			tokenInfo = new JSONObject();
 			try {
-				tokenInfo.put("access_token", (String) map.get("access_token"));
-				tokenInfo.put("refresh_token", (String) map.get("refresh_token"));
+				tokenInfo.put("accessToken", (String) map.get("access_token"));
+				tokenInfo.put("refreshToken", (String) map.get("refresh_token"));
+				tokenInfo.put("expirationTimeInSeconds", (Integer) map.get("expires_in"));
 			} catch (JSONException e) {
 				throw new InternalServerException(e.getMessage());
 			}

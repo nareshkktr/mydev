@@ -3,9 +3,9 @@
 
 	angular.module('myindia-app').controller("logProblemController",
 			logProblemController);
-	logProblemController.$inject = [ 'createProblemService','fileUploadService','dataShareService','userInfoService','$scope','locationChangePopUpService','$state' ];
+	logProblemController.$inject = [ 'createProblemService','fileUploadService','dataShareService','userInfoService','$scope','locationChangePopUpService','$state','filterEntityByCriteria' ];
 	
-	function logProblemController(createProblemService,fileUploadService,dataShareService,userInfoService,$scope,locationChangePopUpService,$state) {
+	function logProblemController(createProblemService,fileUploadService,dataShareService,userInfoService,$scope,locationChangePopUpService,$state,filterEntityByCriteria) {
 		
 		var logProblem=this;
 		logProblem.chosenProblemCategory = $state.params.selectedProblemCategory;
@@ -28,36 +28,38 @@
 		logProblem.tagValues="";
 		logProblem.problems = [];
 		logProblem.changeProblemType=changeProblemType;
-		
-		generateTags();
+		logProblem.similarProblems = {};
+		logProblem.similarProblems.pageNo = 1;
+		logProblem.similarProblems.pageLimit = 4;
+
 
 		function changeProblemType(){
 			generateTags();
 		}
 		
-		for (var i = 0; i < 20; i++) {
-			var severity = "";
+		// for (var i = 0; i < 20; i++) {
+		// 	var severity = "";
 
-			if (i % 2 == 0) {
-				severity = "critical";
-			} else if (i % 3 == 0) {
-				severity = "high";
-			} else if (i % 5 == 0) {
-				severity = "medium";
-			} else {
-				severity = "low";
-			}
-			var problem = {
-				"problemName" : "Water Problem Type Water Problem Type Water Problem Type "
-						+ i,
-				"locatedIn" : "Pulipadu,Prakasam(District)",
-				"severity" : severity,
-				"severityLevel" : severity === "critical" ? "C"
-						: severity === "high" ? "H"
-								: severity === "medium" ? "M" : "L"
-			};
-			logProblem.problems.push(problem);
-		}
+		// 	if (i % 2 == 0) {
+		// 		severity = "critical";
+		// 	} else if (i % 3 == 0) {
+		// 		severity = "high";
+		// 	} else if (i % 5 == 0) {
+		// 		severity = "medium";
+		// 	} else {
+		// 		severity = "low";
+		// 	}
+		// 	var problem = {
+		// 		"problemName" : "Water Problem Type Water Problem Type Water Problem Type "
+		// 				+ i,
+		// 		"locatedIn" : "Pulipadu,Prakasam(District)",
+		// 		"severity" : severity,
+		// 		"severityLevel" : severity === "critical" ? "C"
+		// 				: severity === "high" ? "H"
+		// 						: severity === "medium" ? "M" : "L"
+		// 	};
+		// 	logProblem.problems.push(problem);
+		// }
 
 		processUserData();
 
@@ -150,6 +152,41 @@
 				}
 				}
 			}
+
+			//Reset page no to 1.
+			logProblem.similarProblems.pageNo = 1;
+			// Call to get similar problems based on multiple criteria.
+			fetchRelatedProblemsData(logProblem.similarProblems.pageNo,logProblem.similarProblems.pageLimit);
+		}
+
+		function fetchRelatedProblemsData(pageNo,pageLimit){
+
+			let filterEntityRequest = {
+					objectName: logProblem.grivienceName,
+					supportingFields: [logProblem.chosenProblemCategory],
+					objectType: "Problem",
+					pageNo: pageNo,
+					pageLimit: pageLimit
+			};
+
+			if(logProblem.grivienceType!=undefined){
+				filterEntityRequest.supportingFields.push(logProblem.grivienceType.problemTypeName);
+			}
+
+			if(logProblem.selectedLocation!=undefined){
+				filterEntityRequest.locationName = logProblem.selectedLocation.locationName;
+			}
+
+			filterEntityByCriteria.filterEntities(filterEntityRequest).then(filterEntitiesSuccess).catch(filterEntitiesFailure);
+
+			function filterEntitiesSuccess(data){
+				logProblem.problems = data;
+			}
+
+			function filterEntitiesFailure(error){
+				alert(error);
+			}
+
 		}
 		
 		function arrayContainsValue(tagName){

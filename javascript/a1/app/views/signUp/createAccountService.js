@@ -3,9 +3,9 @@
 
     angular.module('myindia-app').factory("createAccountService", createAccountService);
 
-    createAccountService.$inject = ['$q','swaggerShareService'];
+    createAccountService.$inject = ['$q','swaggerShareService','refreshAccessTokenService'];
 
-    function createAccountService($q,swaggerShareService) {
+    function createAccountService($q,swaggerShareService,refreshAccessTokenService) {
 
         var services = {};
 
@@ -40,7 +40,11 @@
 
             function createAccountSuccess(data){
                 //Process cookie into swagger
-                swaggerShareService.setAuthorization(data.obj.accessToken);
+                swaggerShareService.setAuthorization(data.obj.accessToken,data.obj.refreshToken,data.obj.expirationTimeInSeconds);
+
+                //Start token expiration timer
+                refreshAccessTokenService.startTokenExpiryTimer(sessionStorage.getItem("expires_in")*100);
+
                 deferred.resolve(data.obj);
             }
 

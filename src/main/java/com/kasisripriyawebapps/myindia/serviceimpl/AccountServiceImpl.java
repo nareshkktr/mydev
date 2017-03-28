@@ -118,6 +118,8 @@ public class AccountServiceImpl implements AccountService {
 			try {
 				authTokenInfo = oAuthService.getAuthTokenInfo(account.getUserName(), account.getPassword());
 				baseUserInfo.setAccessToken(authTokenInfo.getString("access_token"));
+				baseUserInfo.setRefreshToken(authTokenInfo.getString("refresh_token"));
+				baseUserInfo.setExpirationTimeInSeconds(authTokenInfo.getInt("expires_in"));
 			} catch (JSONException e) {
 				throw new InternalServerException(e.getMessage());
 			}
@@ -178,6 +180,6 @@ public class AccountServiceImpl implements AccountService {
 		
 		JSONObject tokenInfo = oAuthService.getAccessTokenByRefreshToken(refreshToken);
 		
-		return null;
+		return tokenInfo;
 	}
 }

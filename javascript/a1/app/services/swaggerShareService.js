@@ -51,13 +51,15 @@
 
     	}
 
-    	function setAuthorization(token){
+    	function setAuthorization(token,refreshToken,expiresIn){
 
             let accessToken;
 
             if(token){
                 accessToken = token;
                 sessionStorage.setItem("access_token",accessToken);
+                sessionStorage.setItem("refresh_token",refreshToken);
+                sessionStorage.setItem("expires_in",expiresIn);
             }else if(sessionStorage.getItem("access_token")){
                 accessToken = sessionStorage.getItem("access_token");   
             }

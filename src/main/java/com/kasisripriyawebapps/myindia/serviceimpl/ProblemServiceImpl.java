@@ -220,4 +220,15 @@ public class ProblemServiceImpl implements ProblemService {
 		return problemResponse;
 	}
 
+	@Override
+	@Transactional
+	public List<ProblemResponse> filterProblems(String tokenizedString, Integer pageNo, Integer pageLimit) throws InternalServerException {
+		
+		List<Problem> problems = problemDao.filterProblems(tokenizedString, pageNo, pageLimit);
+		
+		List<ProblemResponse> filteredProblems = prepareProblemResponse(problems);
+		
+		return filteredProblems;
+	}
+
 }

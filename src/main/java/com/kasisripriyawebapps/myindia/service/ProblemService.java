@@ -25,4 +25,6 @@ public interface ProblemService {
 	List<ProblemResponse> retreiveProblemsByTypeCategory(String problemTypeCategory,
 			LoggedInUserDetails loggedInUserDetails) throws InternalServerException;
 
+	List<ProblemResponse> filterProblems(String tokenizedString, Integer pageNo, Integer pageLimit) throws InternalServerException;
+
 }
