@@ -43,7 +43,7 @@
                 swaggerShareService.setAuthorization(data.obj.accessToken,data.obj.refreshToken,data.obj.expirationTimeInSeconds);
 
                 //Start token expiration timer
-                refreshAccessTokenService.startTokenExpiryTimer(sessionStorage.getItem("expires_in")*100);
+                refreshAccessTokenService.startTokenExpiryTimer(sessionStorage.getItem("expires_in"));
 
                 deferred.resolve(data.obj);
             }

@@ -1097,8 +1097,8 @@
 			services = metaInfo;
 		}
 
-		function startTokenExpiryTimer(intervalTimeout){
-			interval = $interval(refreshAccessToken, intervalTimeout);
+		function startTokenExpiryTimer(intervalTimeoutInSeconds){
+			interval = $interval(refreshAccessToken, intervalTimeoutInSeconds*1000);
 		}
 
 		function stopTokenExpiryTimer(){
@@ -1114,7 +1114,7 @@
 			
 			function refreshAccessTokenSuccess(data){
 				swaggerShareService.setAuthorization(data.obj.accessToken,data.obj.refreshToken,data.obj.expirationTimeInSeconds);
-				startTokenExpiryTimer(data.obj.expirationTimeInSeconds*100);
+				startTokenExpiryTimer(data.obj.expirationTimeInSeconds);
 			}
 
 			function refreshAccessTokenFailure(error){
@@ -1540,6 +1540,14 @@
 		
 		
 		function saveProblem(){
+
+
+			if(logProblem.tags){
+				logProblem.tagValues = "";
+				for(let i =0; i < logProblem.tags.length; i++){
+					logProblem.tagValues+=logProblem.tags[i].text+",";
+				}
+			}
 			
 			if(logProblem.tagValues!=undefined){
 				logProblem.tagValues=logProblem.tagValues.substr(0,logProblem.tagValues.length-1);
@@ -1598,6 +1606,8 @@
 		}
 		
 		function generateTags(){
+
+			logProblem.tags = [];
 			
 			let content=logProblem.chosenProblemCategory;
 			content+=" "+logProblem.grivienceName;
@@ -1610,12 +1620,11 @@
 			
 			let contentWords = content.split(" ");
 			if(contentWords.length>1){
-			for(var i =0; i < contentWords.length; i++){
-				var tagObj= { text: contentWords[i] };
-				if(contentWords[i]!=null && contentWords[i]!=undefined && contentWords[i]!="" && contentWords[i].length>=3 && !arrayContainsValue(contentWords[i])){
-					logProblem.tags.push(tagObj);
-					logProblem.tagValues+=contentWords[i]+",";
-				}
+				for(let i =0; i < contentWords.length; i++){
+					let tagObj= { text: contentWords[i] };
+					if(contentWords[i]!=null && contentWords[i]!=undefined && contentWords[i]!="" && contentWords[i].length>=3 && !arrayContainsValue(contentWords[i])){
+						logProblem.tags.push(tagObj);
+					}
 				}
 			}
 
@@ -2063,7 +2072,7 @@
                 swaggerShareService.setAuthorization(data.obj.accessToken,data.obj.refreshToken,data.obj.expirationTimeInSeconds);
 
                 //Start token expiration timer
-                refreshAccessTokenService.startTokenExpiryTimer(sessionStorage.getItem("expires_in")*100);
+                refreshAccessTokenService.startTokenExpiryTimer(sessionStorage.getItem("expires_in"));
 
 
                 deferred.resolve(data.obj);
@@ -2123,7 +2132,7 @@
                 swaggerShareService.setAuthorization(data.obj.accessToken,data.obj.refreshToken,data.obj.expirationTimeInSeconds);
 
                 //Start token expiration timer
-                refreshAccessTokenService.startTokenExpiryTimer(sessionStorage.getItem("expires_in")*100);
+                refreshAccessTokenService.startTokenExpiryTimer(sessionStorage.getItem("expires_in"));
 
                 deferred.resolve(data.obj);
             }

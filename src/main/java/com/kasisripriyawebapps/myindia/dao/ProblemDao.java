@@ -4,6 +4,7 @@
 package com.kasisripriyawebapps.myindia.dao;
 
 import java.util.List;
+import java.util.Set;
 
 import com.kasisripriyawebapps.myindia.entity.Problem;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
@@ -20,7 +21,7 @@ public interface ProblemDao {
 
 	void updateProblem(Problem problem) throws InternalServerException;
 
-	List<Problem> filterProblems(String tokenizedString, Integer pageNo, Integer pageLimit)
+	List<Problem> filterProblems(Set<String> tokens, Integer pageNo, Integer pageLimit)
 			throws InternalServerException;
 
 }

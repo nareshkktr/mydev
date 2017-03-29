@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class FilterEntityRequest {
 	
 	private String locationName;
@@ -53,34 +55,33 @@ public class FilterEntityRequest {
 	}
 	public Set<String> getTokens() {
 		
-		List<String> tags = new ArrayList<String>();
+		this.tokens = new HashSet<String>();
 		
 		if(this.locationName != null){
-			tags.add(this.locationName);
+			this.tokens.add(tokenize(this.locationName));
 		}
 		if(this.objectName != null){
-			tags.add(this.objectName);
+			this.tokens.add(tokenize(this.objectName));
 		}
 		if(this.supportingFields != null && !this.supportingFields.isEmpty()){
-			tags.addAll(this.supportingFields);
-		}
-		this.tokens = tokenize(tags);
-		
-		return tokens;
-	}
-	
-	private Set<String> tokenize(List<String> tags){
-		
-		Set<String> tokens = new HashSet<String>();
-		
-		for(String tag: tags){
-			StringTokenizer multiTokenizer = new StringTokenizer(tag," ,");
-			while (multiTokenizer.hasMoreTokens())
-			{
-				tokens.add(multiTokenizer.nextToken());
+			for(String tag: this.supportingFields){
+				this.tokens.add(tokenize(tag));
 			}
 		}
-		return tokens;
+		
+		return this.tokens;
+	}
+	
+	private String tokenize(String tag){
+		
+		Set<String> tokens = new HashSet<String>();
+		StringTokenizer multiTokenizer = new StringTokenizer(tag," ,");
+		while (multiTokenizer.hasMoreTokens())
+		{
+			tokens.add(multiTokenizer.nextToken());
+		}
+		
+		return ".*("+StringUtils.join(tokens, "|")+").*";
 		
 	}
 	

@@ -27,8 +27,8 @@
 			services = metaInfo;
 		}
 
-		function startTokenExpiryTimer(intervalTimeout){
-			interval = $interval(refreshAccessToken, intervalTimeout);
+		function startTokenExpiryTimer(intervalTimeoutInSeconds){
+			interval = $interval(refreshAccessToken, intervalTimeoutInSeconds*1000);
 		}
 
 		function stopTokenExpiryTimer(){
@@ -44,7 +44,7 @@
 			
 			function refreshAccessTokenSuccess(data){
 				swaggerShareService.setAuthorization(data.obj.accessToken,data.obj.refreshToken,data.obj.expirationTimeInSeconds);
-				startTokenExpiryTimer(data.obj.expirationTimeInSeconds*100);
+				startTokenExpiryTimer(data.obj.expirationTimeInSeconds);
 			}
 
 			function refreshAccessTokenFailure(error){

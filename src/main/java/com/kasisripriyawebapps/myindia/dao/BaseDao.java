@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Restrictions;
 
 import com.kasisripriyawebapps.myindia.dto.SortCriteriaData;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
@@ -116,6 +117,9 @@ public interface BaseDao<PK, T> {
 	List<T> getAllByCondition(Criterion criterion, SortCriteriaData sortCriteria) throws InternalServerException;
 
 	List<T> getAllByConditionsByPage(List<Criterion> criterions, SortCriteriaData sortCriteria, Integer pageNo,
+			Integer pageLimit) throws InternalServerException;
+
+	List<T> getAllByConditionsByPage(Criterion criterion, SortCriteriaData sortCriteria, Integer pageNo,
 			Integer pageLimit) throws InternalServerException;
 
 }

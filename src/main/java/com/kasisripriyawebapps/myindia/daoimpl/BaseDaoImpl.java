@@ -8,6 +8,7 @@ import java.lang.reflect.ParameterizedType;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.xmlbeans.impl.xb.xsdschema.RestrictionDocument.Restriction;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -111,6 +112,15 @@ public class BaseDaoImpl<PK extends Serializable, T> implements BaseDao<PK, T> {
 			for (Criterion criterion : criterions) {
 				criteria.add(criterion);
 			}
+		}
+		return criteria;
+	}
+	
+	public Criteria getCriteria(SortCriteriaData sortCriteria,Criterion criterion) throws InternalServerException {
+		Criteria criteria = getSession().createCriteria(persistentClass);
+		addSortCriteria(criteria, sortCriteria);
+		if (criterion != null) {
+				criteria.add(criterion);
 		}
 		return criteria;
 	}
@@ -348,6 +358,17 @@ public class BaseDaoImpl<PK extends Serializable, T> implements BaseDao<PK, T> {
 			throws InternalServerException {
 		
 		Criteria criteria = getCriteria(sortCriteria,criterions);
+		criteria.setFirstResult((pageNo - 1) * pageLimit);
+		criteria.setMaxResults(pageLimit);
+		return criteria.list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<T> getAllByConditionsByPage(Criterion criterion,SortCriteriaData sortCriteria, Integer pageNo, Integer pageLimit)
+			throws InternalServerException {
+		
+		Criteria criteria = getCriteria(sortCriteria,criterion);
 		criteria.setFirstResult((pageNo - 1) * pageLimit);
 		criteria.setMaxResults(pageLimit);
 		return criteria.list();

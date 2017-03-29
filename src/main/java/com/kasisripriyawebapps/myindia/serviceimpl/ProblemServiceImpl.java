@@ -5,6 +5,7 @@ package com.kasisripriyawebapps.myindia.serviceimpl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -222,9 +223,9 @@ public class ProblemServiceImpl implements ProblemService {
 
 	@Override
 	@Transactional
-	public List<ProblemResponse> filterProblems(String tokenizedString, Integer pageNo, Integer pageLimit) throws InternalServerException {
+	public List<ProblemResponse> filterProblems(Set<String> tokens, Integer pageNo, Integer pageLimit) throws InternalServerException {
 		
-		List<Problem> problems = problemDao.filterProblems(tokenizedString, pageNo, pageLimit);
+		List<Problem> problems = problemDao.filterProblems(tokens, pageNo, pageLimit);
 		
 		List<ProblemResponse> filteredProblems = prepareProblemResponse(problems);
 		

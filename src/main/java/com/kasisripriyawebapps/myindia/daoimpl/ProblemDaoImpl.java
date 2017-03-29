@@ -5,10 +5,13 @@ package com.kasisripriyawebapps.myindia.daoimpl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.type.StringType;
 import org.springframework.stereotype.Repository;
 
 import com.kasisripriyawebapps.myindia.dao.ProblemDao;
@@ -39,15 +42,20 @@ public class ProblemDaoImpl extends BaseDaoImpl<Long, Problem> implements Proble
 	}
 
 	@Override
-	public List<Problem> filterProblems(String tokenizedString,Integer pageNo, Integer pageLimit) throws InternalServerException {
+	public List<Problem> filterProblems(Set<String> tokens,Integer pageNo, Integer pageLimit) throws InternalServerException {
 	
-		Criterion criterionObj =Restrictions.sqlRestriction("this_.tags REGEXP \'"+ tokenizedString+"\'");// Restrictions.sqlRestriction(tags REGEXP tokenizedString);
-		List<Criterion> criterions = new ArrayList<Criterion>();
-		criterions.add(criterionObj);
+		Criterion[] criterionsArray =  new Criterion[tokens.size()];
+		int index=0;
+		for(String token:tokens){
+			Criterion criterionObj =Restrictions.sqlRestriction("this_.tags REGEXP \'"+ token+"\'");
+			criterionsArray[index] = criterionObj;
+			index++;
+		}
+		Criterion criterion = Restrictions.and(criterionsArray);
 		SortCriteriaData sortCriteria = new SortCriteriaData();
 		sortCriteria.setProperty("createdTimeStamp");
 		sortCriteria.setIsAscending(true);
-		return getAllByConditionsByPage(criterions,sortCriteria,pageNo,pageLimit);
+		return getAllByConditionsByPage(criterion,sortCriteria,pageNo,pageLimit);
 	}
 
 }

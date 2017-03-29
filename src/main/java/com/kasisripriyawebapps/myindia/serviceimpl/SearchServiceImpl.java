@@ -97,16 +97,12 @@ public class SearchServiceImpl implements SearchService {
 	public List<ProblemResponse> filterEntity(FilterEntityRequest filterEntityRequest) throws InternalServerException {
 		
 		Set<String> tagTokens = filterEntityRequest.getTokens();
-		
-		String tokenizedString =  StringUtils.join(tagTokens, "|");
-		
-		tokenizedString = ".*("+tokenizedString+").*";
-		
+
 		List<ProblemResponse> filteredEntity = null;
 		
 		if(filterEntityRequest.getObjectType() != null){
 			if(filterEntityRequest.getObjectType().equalsIgnoreCase(ApplicationConstants.OBJECT_TYPE_PROBLEM)){
-				filteredEntity = problemService.filterProblems(tokenizedString,filterEntityRequest.getPageNo(),filterEntityRequest.getPageLimit());
+				filteredEntity = problemService.filterProblems(tagTokens,filterEntityRequest.getPageNo(),filterEntityRequest.getPageLimit());
 			}
 		}
 		

@@ -4,6 +4,7 @@
 package com.kasisripriyawebapps.myindia.service;
 
 import java.util.List;
+import java.util.Set;
 
 import com.kasisripriyawebapps.myindia.configs.LoggedInUserDetails;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
@@ -25,6 +26,6 @@ public interface ProblemService {
 	List<ProblemResponse> retreiveProblemsByTypeCategory(String problemTypeCategory,
 			LoggedInUserDetails loggedInUserDetails) throws InternalServerException;
 
-	List<ProblemResponse> filterProblems(String tokenizedString, Integer pageNo, Integer pageLimit) throws InternalServerException;
+	List<ProblemResponse> filterProblems(Set<String> tagTokens, Integer pageNo, Integer pageLimit) throws InternalServerException;
 
 }
