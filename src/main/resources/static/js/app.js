@@ -657,6 +657,28 @@
 })();
 
 (function() {
+	'use strict';
+
+	angular.module('myindia-app').directive("problemDisplay", problemDisplay);
+
+	function problemDisplay() {
+
+		var problemDisplay = {
+			restrict : 'E',
+			scope: {
+				problems: '=',
+				columnSplitClass: '='
+			},
+			templateUrl : resource + 'partials/problemDisplay.html'
+		};
+
+		return problemDisplay;
+
+	}
+
+})();
+
+(function() {
     'use strict';
     angular.module('angularTrix', []).directive('angularTrix', function() {
         return {
@@ -730,12 +752,12 @@
 
 		$rootScope.$on("$stateChangeStart",function(event, toState, toParams, fromState, fromParams){
 
-			if(toState.name != "signIn" && toState.name.indexOf('signUp') == -1){
-				if(!sessionStorage.getItem("access_token")){
-					event.preventDefault();
-					$state.go('signIn');
-				}
-			}
+			// if(toState.name != "signIn" && toState.name.indexOf('signUp') == -1){
+			// 	if(!sessionStorage.getItem("access_token")){
+			// 		event.preventDefault();
+			// 		$state.go('signIn');
+			// 	}
+			// }
 
 		});
 	}
@@ -1885,8 +1907,35 @@
 		viewProblem.similarProblems = {};
 		viewProblem.similarProblems.pageNo = 1;
 		viewProblem.similarProblems.pageLimit =4;
+		viewProblem.similarProblems.problems = [];
+
+		for (var i = 0; i < 20; i++) {
+			var severity = "";
+
+			if (i % 2 == 0) {
+				severity = "critical";
+			} else if (i % 3 == 0) {
+				severity = "high";
+			} else if (i % 5 == 0) {
+				severity = "medium";
+			} else {
+				severity = "low";
+			}
+			var problem = {
+				"problemShortDescription" : "Water Problem Type Water Problem Type Water Problem Type "
+						+ i,
+				"locatedIn" : "Pulipadu,Prakasam(District)",
+				"severity" : severity,
+				"severityLevelCode" : severity === "critical" ? "C"
+						: severity === "high" ? "H"
+								: severity === "medium" ? "M" : "L"
+			};
+			viewProblem.similarProblems.problems.push(problem);
+		}
 		
 		viewProblemService.getProblemDetails(viewProblem.selectedProblemGuid).then(getProblemDetailsSuccess).catch(getProblemDetailsFailure);
+
+		
 
 		function getProblemDetailsSuccess(data){
 			viewProblem.problemDetails = data;

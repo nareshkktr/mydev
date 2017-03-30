@@ -1,0 +1,40 @@
+<div id="problem_selection_container">
+<div class="row problem_selection_content">
+		<div ng-repeat="eachProblem in problems"
+			ng-click="problemSelection.viewProblem(eachProblem.guid)"  ng-class="columnSplitClass">
+			<div class="problem">
+				<div class="row problem_name_severity">
+					<div class="problem_severity">
+						<div
+							class="problem_severity_circle {{eachProblem.problemSeverity}}">
+							<label>{{eachProblem.severityLevelCode}}</label>
+						</div>
+					</div>
+					<div class="problem_name">
+						<label>{{eachProblem.problemShortDescription}}</label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-2">&nbsp;</div>
+					<div class="col-xs-10 problem_located_in">
+						<i class="fa fa-map-marker" aria-hidden="true"></i><label>{{eachProblem.createdLocation.locationName}}</label>
+					</div>
+				</div>
+				<div class="row problem_short_actions">
+					<div class="col-xs-4 problem_short_action">
+						<i class="fa fa-map-marker" aria-hidden="true"></i> <label>
+							100 </label>
+					</div>
+					<div class="col-xs-4 problem_short_action">
+						<i class="fa fa-map-marker" aria-hidden="true"></i> <label>
+							100 </label>
+					</div>
+					<div class="col-xs-4 problem_short_action">
+						<i class="fa fa-share-alt" aria-hidden="true"></i> <label>
+							100 </label>
+					</div>
+				</div>
+			</div>
+		</div>
+</div>
+</div>

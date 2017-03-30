@@ -14,8 +14,35 @@
 		viewProblem.similarProblems = {};
 		viewProblem.similarProblems.pageNo = 1;
 		viewProblem.similarProblems.pageLimit =4;
+		viewProblem.similarProblems.problems = [];
+
+		for (var i = 0; i < 20; i++) {
+			var severity = "";
+
+			if (i % 2 == 0) {
+				severity = "critical";
+			} else if (i % 3 == 0) {
+				severity = "high";
+			} else if (i % 5 == 0) {
+				severity = "medium";
+			} else {
+				severity = "low";
+			}
+			var problem = {
+				"problemShortDescription" : "Water Problem Type Water Problem Type Water Problem Type "
+						+ i,
+				"locatedIn" : "Pulipadu,Prakasam(District)",
+				"severity" : severity,
+				"severityLevelCode" : severity === "critical" ? "C"
+						: severity === "high" ? "H"
+								: severity === "medium" ? "M" : "L"
+			};
+			viewProblem.similarProblems.problems.push(problem);
+		}
 		
 		viewProblemService.getProblemDetails(viewProblem.selectedProblemGuid).then(getProblemDetailsSuccess).catch(getProblemDetailsFailure);
+
+		
 
 		function getProblemDetailsSuccess(data){
 			viewProblem.problemDetails = data;
