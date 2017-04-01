@@ -101,7 +101,7 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	@Transactional
-	public BaseUserInformation prepareBaseUserInformation(Account account) throws InternalServerException, RecordNotFoundException {
+	public BaseUserInformation prepareBaseUserInformation(Account account,Boolean obtainTokenInfo) throws InternalServerException, RecordNotFoundException {
 
 		BaseUserInformation baseUserInfo = new BaseUserInformation();
 		JSONObject authTokenInfo = null;
@@ -114,7 +114,7 @@ public class AccountServiceImpl implements AccountService {
 		baseUserInfo.setUserImage(userInfo.getPhotoURL());
 		baseUserInfo.setUserName(account.getUserName());
 
-		if (account != null) {
+		if (account != null && obtainTokenInfo) {
 			try {
 				authTokenInfo = oAuthService.getAuthTokenInfo(account.getUserName(), account.getPassword());
 				baseUserInfo.setAccessToken(authTokenInfo.getString("access_token"));
@@ -137,6 +137,13 @@ public class AccountServiceImpl implements AccountService {
 		final Account account = accountDao.getAccountByUserName(userName);
 		return account;
 	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public BaseUserInformation getAccountByGuid(final Long accountId) throws InternalServerException, RecordNotFoundException {
+		final Account account = accountDao.getAccountById(accountId);
+		return prepareBaseUserInformation(account,false);
+	}
 
 	@Override
 	@Transactional(readOnly = true)
@@ -155,7 +162,7 @@ public class AccountServiceImpl implements AccountService {
 				throw new RecordNotFoundException(ExceptionConstants.LOGIN_ACCOUNT_NOT_FOUND_PASSWORD);
 			}
 		}
-		baseUserInfo = prepareBaseUserInformation(account);
+		baseUserInfo = prepareBaseUserInformation(account,true);
 		return baseUserInfo;
 	}
 
@@ -170,7 +177,7 @@ public class AccountServiceImpl implements AccountService {
 		if (account == null) {
 			throw new RecordNotFoundException(ExceptionConstants.LOGIN_ACCOUNT_NOT_FOUND_USER_NAME);
 		}
-		baseUserInfo = prepareBaseUserInformation(account);
+		baseUserInfo = prepareBaseUserInformation(account,true);
 		return baseUserInfo;
 	}
 

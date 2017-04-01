@@ -20,8 +20,8 @@ public class SolrGlobalSearchMaster {
 	@Field
 	private String objectType;
 
-	@Field
-	private String objectSubType;
+//	@Field
+//	private String objectSubType;
 
 	public Long getObjectGuid() {
 		return objectGuid;
@@ -47,12 +47,42 @@ public class SolrGlobalSearchMaster {
 		this.objectType = objectType;
 	}
 
-	public String getObjectSubType() {
-		return objectSubType;
-	}
-
-	public void setObjectSubType(String objectSubType) {
-		this.objectSubType = objectSubType;
-	}
+//	public String getObjectSubType() {
+//		return objectSubType;
+//	}
+//
+//	public void setObjectSubType(String objectSubType) {
+//		this.objectSubType = objectSubType;
+//	}
+	
+	public static Builder getBuilder(Long id, String title) {
+        return new Builder(id, title);
+    }
+ 
+    //Getters are omitted
+ 
+    public static class Builder {
+        private SolrGlobalSearchMaster build;
+ 
+        public Builder(Long id, String objName) {
+            build = new SolrGlobalSearchMaster();
+            build.objectGuid = id;
+            build.objectName = objName;
+        }
+ 
+        public Builder objectType(String objectType) {
+            build.objectType = objectType;
+            return this;
+        }
+        
+//        public Builder objectSubType(String objectSubType) {
+//            build.objectSubType = objectSubType;
+//            return this;
+//        }
+ 
+        public SolrGlobalSearchMaster build() {
+            return build;
+        }
+    }
 
 }

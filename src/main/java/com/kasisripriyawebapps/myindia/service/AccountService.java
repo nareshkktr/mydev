@@ -22,10 +22,13 @@ public interface AccountService {
 
 	BaseUserInformation login(LoginRequest loginRequest) throws InternalServerException, RecordNotFoundException;
 
-	BaseUserInformation prepareBaseUserInformation(Account account) throws InternalServerException, RecordNotFoundException;
-
 	BaseUserInformation prepareLoggedInUserInfo(String userName) throws InternalServerException, RecordNotFoundException;
 
 	JSONObject refreshAccessToken(String refreshToken) throws InternalServerException;
+
+	BaseUserInformation getAccountByGuid(Long accountId) throws InternalServerException, RecordNotFoundException;
+
+	BaseUserInformation prepareBaseUserInformation(Account account, Boolean obtainTokenInfo)
+			throws InternalServerException, RecordNotFoundException;
 	
 }

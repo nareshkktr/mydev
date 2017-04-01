@@ -23,6 +23,7 @@ import com.kasisripriyawebapps.myindia.exception.ConflictException;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 import com.kasisripriyawebapps.myindia.exception.PreConditionFailedException;
 import com.kasisripriyawebapps.myindia.exception.PreConditionRequiredException;
+import com.kasisripriyawebapps.myindia.exception.RecordNotFoundException;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.CreateUpdateProblemRequestData;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.ProblemResponse;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.SaveOrUpdateDeleteObjectResponse;
@@ -73,7 +74,7 @@ public class ProblemEndPoint extends BaseEndPoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getProblemByGuid(@QueryParam("problemGuid") Long problemGuid)
 			throws InternalServerException, PreConditionFailedException, PreConditionRequiredException,
-			ConflictException {
+			ConflictException, RecordNotFoundException {
 		
 		LoggedInUserDetails loggedInUserDetails = getLoggedInUserDetails();
 		ProblemResponse problem = null;
@@ -93,7 +94,7 @@ public class ProblemEndPoint extends BaseEndPoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getProblemsByProblemType(@QueryParam("problemTypeGuid") Long problemTypeGuid)
 			throws InternalServerException, PreConditionFailedException, PreConditionRequiredException,
-			ConflictException {
+			ConflictException, RecordNotFoundException {
 		
 		LoggedInUserDetails loggedInUserDetails = getLoggedInUserDetails();
 		List<ProblemResponse> problems = null;
@@ -113,7 +114,7 @@ public class ProblemEndPoint extends BaseEndPoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getProblemsByProblemCategory(@QueryParam("problemTypeCategory") String problemTypeCategory)
 			throws InternalServerException, PreConditionFailedException, PreConditionRequiredException,
-			ConflictException {
+			ConflictException, RecordNotFoundException {
 		
 		LoggedInUserDetails loggedInUserDetails = getLoggedInUserDetails();
 		List<ProblemResponse> problems = null;

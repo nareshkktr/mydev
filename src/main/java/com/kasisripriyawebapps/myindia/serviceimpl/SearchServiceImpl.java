@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import com.kasisripriyawebapps.myindia.constants.ApplicationConstants;
 import com.kasisripriyawebapps.myindia.dao.SearchDao;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
+import com.kasisripriyawebapps.myindia.exception.RecordNotFoundException;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.FilterEntityRequest;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.GlobalSearchRequest;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.GlobalSearchResponse;
@@ -83,7 +84,7 @@ public class SearchServiceImpl implements SearchService {
 			globalSearchResponse.setObjectsCount(objectsCount);
 
 			searchResults = searchResults.stream()
-					.skip(globalSearchRequest.getPageOffset() * globalSearchRequest.getPageLimit())
+					.skip((globalSearchRequest.getPageOffset()-1) * globalSearchRequest.getPageLimit())
 					.limit(globalSearchRequest.getPageLimit()).collect(Collectors.toList());
 
 			globalSearchResponse.setSearchResults(searchResults);
@@ -94,7 +95,7 @@ public class SearchServiceImpl implements SearchService {
 
 	@Override
 	@Transactional
-	public List<ProblemResponse> filterEntity(FilterEntityRequest filterEntityRequest) throws InternalServerException {
+	public List<ProblemResponse> filterEntity(FilterEntityRequest filterEntityRequest) throws InternalServerException, RecordNotFoundException {
 		
 		Set<String> tagTokens = filterEntityRequest.getTokens();
 

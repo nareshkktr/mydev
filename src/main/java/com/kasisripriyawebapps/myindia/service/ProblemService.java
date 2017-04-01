@@ -8,6 +8,7 @@ import java.util.Set;
 
 import com.kasisripriyawebapps.myindia.configs.LoggedInUserDetails;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
+import com.kasisripriyawebapps.myindia.exception.RecordNotFoundException;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.CreateUpdateProblemRequestData;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.ProblemResponse;
 
@@ -19,13 +20,13 @@ public interface ProblemService {
 	Long createProblem(CreateUpdateProblemRequestData createUpdateProblemRequestData,
 			LoggedInUserDetails loggedInUserDetails) throws InternalServerException;
 
-	ProblemResponse retreiveProblem(Long problemGuid, LoggedInUserDetails loggedInUserDetails) throws InternalServerException;
+	ProblemResponse retreiveProblem(Long problemGuid, LoggedInUserDetails loggedInUserDetails) throws InternalServerException, RecordNotFoundException;
 
-	List<ProblemResponse> retreiveProblemsByType(Long problemTypeGuid, LoggedInUserDetails loggedInUserDetails) throws InternalServerException;
+	List<ProblemResponse> retreiveProblemsByType(Long problemTypeGuid, LoggedInUserDetails loggedInUserDetails) throws InternalServerException, RecordNotFoundException;
 
 	List<ProblemResponse> retreiveProblemsByTypeCategory(String problemTypeCategory,
-			LoggedInUserDetails loggedInUserDetails) throws InternalServerException;
+			LoggedInUserDetails loggedInUserDetails) throws InternalServerException, RecordNotFoundException;
 
-	List<ProblemResponse> filterProblems(Set<String> tagTokens, Integer pageNo, Integer pageLimit) throws InternalServerException;
+	List<ProblemResponse> filterProblems(Set<String> tagTokens, Integer pageNo, Integer pageLimit) throws InternalServerException, RecordNotFoundException;
 
 }
