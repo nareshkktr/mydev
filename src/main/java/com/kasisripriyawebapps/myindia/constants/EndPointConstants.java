@@ -449,17 +449,17 @@ public class EndPointConstants {
 	/** The Constant CREATE_ACCOUNT_API_DESCRIPTION. */
 	public static final String GET_ALL_ACTIVITIES_API_DESCRIPTION = "Get All Activites";
 
-	/** The Constant CREATE_ACCOUNT_REQUEST_MAPPING. */
-	public static final String GET_ALL_EVENTS_REQUEST_MAPPING = "getAllEvents";
+	/** The Constant GET_ALL_EVENTS_REQUEST_MAPPING . */
+	public static final String GET_ALL_EVENTS_REQUEST_MAPPING = "getEventById/{eventGuid}";
 
-	/** The Constant CREATE_ACCOUNT_API_VALUE. */
-	public static final String GET_ALL_EVENTS_API_VALUE = "getAllEvents";
+	/** The Constant GET_ALL_EVENTS_API_VALUE. */
+	public static final String GET_ALL_EVENTS_API_VALUE = "getEventById";
 
-	/** The Constant CREATE_ACCOUNT_API_NICKNAME. */
-	public static final String GET_ALL_EVENTS_API_NICKNAME = "getAllEvents";
+	/** The Constant GET_ALL_EVENTS_API_NICKNAME. */
+	public static final String GET_ALL_EVENTS_API_NICKNAME = "getEventById";
 
-	/** The Constant CREATE_ACCOUNT_API_DESCRIPTION. */
-	public static final String GET_ALL_EVENTS_API_DESCRIPTION = "Get All Events";
+	/** The Constant GET_ALL_EVENTS_API_DESCRIPTION. */
+	public static final String GET_ALL_EVENTS_API_DESCRIPTION = "Get Event By Id";
 
 	/** The Constant CREATE_ACCOUNT_REQUEST_MAPPING. */
 	public static final String GET_ALL_PARTIES_REQUEST_MAPPING = "getAllParties";
@@ -1023,6 +1023,51 @@ public class EndPointConstants {
 
 	/** The Constant FILTER_ENTITY_API_DESCRIPTION. */
 	public static final String FILTER_ENTITY_API_DESCRIPTION = "Filter Entities";
+	
+	public static final String CREATE_EVENT_REQUEST_MAPPING = "createEvent";
+	public static final String CREATE_EVENT_API_VALUE = "createEvent";
+	public static final String CREATE_EVENT_API_NICKNAME = "createEvent";
+	public static final String CREATE_EVENT_API_DESCRIPTION = "Create Event";
+	
+	public static final String UPDATE_EVENT_REQUEST_MAPPING = "updateEvent";
+	public static final String UPDATE_EVENT_API_VALUE = "updateEvent";
+	public static final String UPDATE_EVENT_API_NICKNAME = "updateEvent";
+	public static final String UPDATE_EVENT_API_DESCRIPTION = "Update Event";
+	
+	public static final String DELETE_EVENT_REQUEST_MAPPING = "deleteEvent/{eventGuid}";
+	public static final String DELETE_EVENT_API_VALUE = "deleteEvent";
+	public static final String DELETE_EVENT_API_NICKNAME = "deleteEvent";
+	public static final String DELETE_EVENT_API_DESCRIPTION = "Delete Event";
+	
+	public static final String GROUP_ENDPOINT_REQUEST_MAPPING = "/group";
+	public static final String GROUP_ENDPOINT_API_VALUE = "group";
+	public static final String GROUP_ENDPOINT_API_TAGS = "group";
+	public static final String GROUP_ENDPOINT_API_DESCRIPTION = "Group/GroupMember Management API";
+	
+	public static final String CREATE_GROUP_REQUEST_MAPPING = "createGroup";
+	public static final String CREATE_GROUP_API_VALUE = "createGroup";
+	public static final String CREATE_GROUP_API_NICKNAME = "createGroup";
+	public static final String CREATE_GROUP_API_DESCRIPTION = "Create Group";
+	
+	public static final String UPDATE_GROUP_REQUEST_MAPPING = "updateGroup";
+	public static final String UPDATE_GROUP_API_VALUE = "updateGroup";
+	public static final String UPDATE_GROUP_API_NICKNAME = "updateGroup";
+	public static final String UPDATE_GROUP_API_DESCRIPTION = "Update Group";
+	
+	public static final String DELETE_GROUP_REQUEST_MAPPING = "deleteGroup/{groupGuid}";
+	public static final String DELETE_GROUP_API_VALUE = "deleteGroup";
+	public static final String DELETE_GROUP_API_NICKNAME = "deleteGroup";
+	public static final String DELETE_GROUP_API_DESCRIPTION = "Delete Group";
+	
+	public static final String ADD_GROUP_MEMBER_REQUEST_MAPPING = "addGroupMember";
+	public static final String ADD_GROUP_MEMBER_API_VALUE = "addGroupMember";
+	public static final String ADD_GROUP_MEMBER_API_NICKNAME = "addGroupMember";
+	public static final String ADD_GROUP_MEMBER_API_DESCRIPTION = "Add Group Member ";
+	
+	public static final String DELETE_GROUP_MEMBER_REQUEST_MAPPING = "deleteGroupMember/{groupGuid}";
+	public static final String DELETE_GROUP_MEMBER_API_VALUE = "deleteGroupMember";
+	public static final String DELETE_GROUP_MEMBER_API_NICKNAME = "deleteGroupMember";
+	public static final String DELETE_GROUP_MEMBER_API_DESCRIPTION = "Delete Group Member ";
 
 
 }
