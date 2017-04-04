@@ -5,10 +5,13 @@ package com.kasisripriyawebapps.myindia.daoimpl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import com.kasisripriyawebapps.myindia.dao.AccountDao;
+import com.kasisripriyawebapps.myindia.dto.SortCriteriaData;
 import com.kasisripriyawebapps.myindia.entity.Account;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 import com.kasisripriyawebapps.myindia.util.CommonUtil;
@@ -42,5 +45,14 @@ public class AccountDaoImpl extends BaseDaoImpl<Long, Account> implements Accoun
 	@Override
 	public Account getAccountById(Long accountGuid) throws InternalServerException {
 		return getById(accountGuid);
+	}
+
+	@Override
+	public List<Account> getAccountsById(Set<Long> accountGuids) throws InternalServerException {
+		SortCriteriaData sortCriteria = new SortCriteriaData();
+		sortCriteria.setProperty("createdTimeStamp");
+		sortCriteria.setIsAscending(true);
+		Long[] accountGuidsArray = accountGuids.toArray(new Long[accountGuids.size()]);
+		return getAllByPrimaryKeys(sortCriteria,accountGuidsArray);
 	}
 }

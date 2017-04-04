@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
+import com.kasisripriyawebapps.myindia.exception.RecordNotFoundException;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.FilterEntityRequest;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.GlobalSearchRequest;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.GlobalSearchResponse;
@@ -22,6 +23,6 @@ public interface SearchService {
 
 	GlobalSearchResponse getGlobalSearchResults(GlobalSearchRequest globalSearchRequest) throws InternalServerException;
 
-	List<ProblemResponse> filterEntity(FilterEntityRequest filterEntityRequest) throws InternalServerException;
+	List<ProblemResponse> filterEntity(FilterEntityRequest filterEntityRequest) throws InternalServerException, RecordNotFoundException;
 
 }

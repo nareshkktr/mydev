@@ -6,6 +6,9 @@ package com.kasisripriyawebapps.myindia.serviceimpl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,12 +24,16 @@ import com.kasisripriyawebapps.myindia.entity.Problem;
 import com.kasisripriyawebapps.myindia.entity.ProblemHistory;
 import com.kasisripriyawebapps.myindia.entity.ProblemType;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
+import com.kasisripriyawebapps.myindia.exception.RecordNotFoundException;
+import com.kasisripriyawebapps.myindia.requestresponsemodel.BaseUserInformation;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.CreateUpdateProblemRequestData;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.ProblemResponse;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.ProblemTypeResponse;
+import com.kasisripriyawebapps.myindia.service.AccountService;
 import com.kasisripriyawebapps.myindia.service.ImageService;
 import com.kasisripriyawebapps.myindia.service.ProblemService;
 import com.kasisripriyawebapps.myindia.solr.entity.SolrLocationMaster;
+import com.kasisripriyawebapps.myindia.solr.service.GlobalSearchMasterService;
 import com.kasisripriyawebapps.myindia.util.CommonUtil;
 
 /**
@@ -41,12 +48,18 @@ public class ProblemServiceImpl implements ProblemService {
 
 	@Autowired
 	ProblemTypeDao problemTypeDao;
+	
+	@Autowired
+	AccountService accountService;
 
 	@Autowired
 	private LocationMasterDao locationMasterDao;
 
 	@Autowired
 	ImageService imageService;
+	
+	@Resource
+    private GlobalSearchMasterService solrGlobalSearchService;
 
 	@Override
 	@Transactional
@@ -75,6 +88,7 @@ public class ProblemServiceImpl implements ProblemService {
 		ProblemHistory problemHistory = new ProblemHistory();
 		problemHistory.setProblem(problem);
 		problemHistory.setCreatedBy(loggedInUserDetails.getGuid());
+		problemHistory.setAccountId(loggedInUserDetails.getGuid());
 		problemHistory.setCreatedTimeStamp(CommonUtil.getCurrentGMTTimestamp());
 		problemHistory.setComments(ProblemStatusParameters.CREATED);
 		problemHistory.setStatus(ProblemStatusParameters.CREATED);
@@ -84,6 +98,11 @@ public class ProblemServiceImpl implements ProblemService {
 		problem.setProblemHistory(problemHistoryList);
 
 		problemGuid = problemDao.saveProblem(problem);
+		
+		problem.setGuid(problemGuid);
+		//Save into solr repository for global search
+		solrGlobalSearchService.addToIndex(problem);
+		
 		return problemGuid;
 	}
 
@@ -121,7 +140,7 @@ public class ProblemServiceImpl implements ProblemService {
 
 	@Override
 	@Transactional
-	public ProblemResponse retreiveProblem(Long problemGuid, LoggedInUserDetails loggedInUserDetails) throws InternalServerException {
+	public ProblemResponse retreiveProblem(Long problemGuid, LoggedInUserDetails loggedInUserDetails) throws InternalServerException, RecordNotFoundException {
 		
 		Problem problem = problemDao.getProblemByGuid(problemGuid);
 		
@@ -141,7 +160,7 @@ public class ProblemServiceImpl implements ProblemService {
 	
 	
 
-	private List<ProblemResponse> prepareProblemResponse(List<Problem> problems) {
+	private List<ProblemResponse> prepareProblemResponse(List<Problem> problems) throws InternalServerException, RecordNotFoundException {
 
 		List<ProblemResponse> problemResponses = new ArrayList<ProblemResponse>();
 		
@@ -164,7 +183,7 @@ public class ProblemServiceImpl implements ProblemService {
 			problemResponse.setRootCause(problem.getRootCause());
 			
 			//			problemResponse.setOwner(owner);
-			//		problemResponse.setCreatedBy(createdBy);
+			problemResponse.setCreatedBy(accountService.getAccountByGuid(problem.getCreatedBy()));
 			
 			problemResponses.add(problemResponse);
 		}
@@ -198,7 +217,7 @@ public class ProblemServiceImpl implements ProblemService {
 	@Override
 	@Transactional
 	public List<ProblemResponse> retreiveProblemsByType(Long problemTypeGuid, LoggedInUserDetails loggedInUserDetails)
-			throws InternalServerException {
+			throws InternalServerException, RecordNotFoundException {
 		ProblemType problemType = problemTypeDao.getProblemTypeById(problemTypeGuid);
 		List<Problem> probObj = problemType.getProblems();
 		List<ProblemResponse> problemResponse = prepareProblemResponse(probObj);
@@ -208,7 +227,7 @@ public class ProblemServiceImpl implements ProblemService {
 	@Override
 	@Transactional
 	public List<ProblemResponse> retreiveProblemsByTypeCategory(String problemTypeCategory,
-			LoggedInUserDetails loggedInUserDetails) throws InternalServerException {
+			LoggedInUserDetails loggedInUserDetails) throws InternalServerException, RecordNotFoundException {
 		List<ProblemType> problemTypes = problemTypeDao.getProblemTypesByCategory(problemTypeCategory);
 		
 		List<Problem> problems= new ArrayList<Problem>();
@@ -223,13 +242,31 @@ public class ProblemServiceImpl implements ProblemService {
 
 	@Override
 	@Transactional
-	public List<ProblemResponse> filterProblems(Set<String> tokens, Integer pageNo, Integer pageLimit) throws InternalServerException {
+	public List<ProblemResponse> filterProblems(Set<String> tokens, Integer pageNo, Integer pageLimit) throws InternalServerException, RecordNotFoundException {
 		
 		List<Problem> problems = problemDao.filterProblems(tokens, pageNo, pageLimit);
 		
 		List<ProblemResponse> filteredProblems = prepareProblemResponse(problems);
 		
 		return filteredProblems;
+	}
+
+	@Override
+	@Transactional
+	public List<BaseUserInformation> retreiveProblemContributorsByGuid(Long problemGuid) throws InternalServerException, RecordNotFoundException {
+		
+		Problem problem = problemDao.getProblemByGuid(problemGuid);
+		
+		List<ProblemHistory> problemHistory = problem.getProblemHistory();
+		
+		Set<Long> accountIds = problemHistory.stream().filter(q -> q.getAccountId() != null).collect(Collectors.groupingBy(problemHistoryObj->problemHistoryObj.getAccountId())).keySet();
+		
+		List<BaseUserInformation> contributors = null;
+		
+		if(accountIds != null &&!accountIds.isEmpty())
+			contributors = accountService.getAccountsByIds(accountIds);
+		
+		return contributors;
 	}
 
 }

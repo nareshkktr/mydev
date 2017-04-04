@@ -23,6 +23,8 @@ import com.kasisripriyawebapps.myindia.exception.ConflictException;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 import com.kasisripriyawebapps.myindia.exception.PreConditionFailedException;
 import com.kasisripriyawebapps.myindia.exception.PreConditionRequiredException;
+import com.kasisripriyawebapps.myindia.exception.RecordNotFoundException;
+import com.kasisripriyawebapps.myindia.requestresponsemodel.BaseUserInformation;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.CreateUpdateProblemRequestData;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.ProblemResponse;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.SaveOrUpdateDeleteObjectResponse;
@@ -73,7 +75,7 @@ public class ProblemEndPoint extends BaseEndPoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getProblemByGuid(@QueryParam("problemGuid") Long problemGuid)
 			throws InternalServerException, PreConditionFailedException, PreConditionRequiredException,
-			ConflictException {
+			ConflictException, RecordNotFoundException {
 		
 		LoggedInUserDetails loggedInUserDetails = getLoggedInUserDetails();
 		ProblemResponse problem = null;
@@ -93,7 +95,7 @@ public class ProblemEndPoint extends BaseEndPoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getProblemsByProblemType(@QueryParam("problemTypeGuid") Long problemTypeGuid)
 			throws InternalServerException, PreConditionFailedException, PreConditionRequiredException,
-			ConflictException {
+			ConflictException, RecordNotFoundException {
 		
 		LoggedInUserDetails loggedInUserDetails = getLoggedInUserDetails();
 		List<ProblemResponse> problems = null;
@@ -113,7 +115,7 @@ public class ProblemEndPoint extends BaseEndPoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getProblemsByProblemCategory(@QueryParam("problemTypeCategory") String problemTypeCategory)
 			throws InternalServerException, PreConditionFailedException, PreConditionRequiredException,
-			ConflictException {
+			ConflictException, RecordNotFoundException {
 		
 		LoggedInUserDetails loggedInUserDetails = getLoggedInUserDetails();
 		List<ProblemResponse> problems = null;
@@ -125,6 +127,25 @@ public class ProblemEndPoint extends BaseEndPoint {
 		}
 		
 		return Response.status(Status.OK).entity(problems).build();
+	}
+	
+	@GET
+	@ApiOperation(value = EndPointConstants.GET_PROBLEM_CONTRIBUTORS_BY_PROBLEM_ID_API_VALUE, nickname = EndPointConstants.GET_PROBLEM_CONTRIBUTORS_BY_PROBLEM_ID_API_NICKNAME, httpMethod = EndPointConstants.HTTP_GET, notes = EndPointConstants.GET_PROBLEM_CONTRIBUTORS_BY_PROBLEM_ID_API_DESCRIPTION)
+	@Path(EndPointConstants.GET_PROBLEM_CONTRIBUTORS_BY_PROBLEM_ID_REQUEST_MAPPING)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getProblemContributorsByProblemGuid(@QueryParam("problemGuid") Long problemGuid)
+			throws InternalServerException, PreConditionFailedException, PreConditionRequiredException,
+			ConflictException, RecordNotFoundException {
+
+		List<BaseUserInformation> contributors = null;
+		
+		if (problemGuid != null) {
+			contributors = problemService.retreiveProblemContributorsByGuid(problemGuid);
+		}else{
+			throw new PreConditionFailedException(ExceptionConstants.REQUEST_NOT_NULL);
+		}
+		
+		return Response.status(Status.OK).entity(contributors).build();
 	}
 
 	private boolean validateCreateUpdateProblemRequest(CreateUpdateProblemRequestData createUpdateProblemRequestData)

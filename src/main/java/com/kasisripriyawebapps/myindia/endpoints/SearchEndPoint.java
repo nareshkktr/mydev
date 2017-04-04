@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.kasisripriyawebapps.myindia.configs.LoggedInUserDetails;
 import com.kasisripriyawebapps.myindia.constants.EndPointConstants;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
+import com.kasisripriyawebapps.myindia.exception.RecordNotFoundException;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.FilterEntityRequest;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.GlobalSearchRequest;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.GlobalSearchResponse;
@@ -54,7 +55,7 @@ public class SearchEndPoint extends BaseEndPoint {
 	@Path(EndPointConstants.FILTER_ENTITY_REQUEST_MAPPING)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getFilteredEntityResults(final FilterEntityRequest filterEntityRequest)
-			throws InternalServerException {
+			throws InternalServerException, RecordNotFoundException {
 
 		List<ProblemResponse> filteredProblems = searchService.filterEntity(filterEntityRequest);
 		return Response.status(Status.OK).entity(filteredProblems).build();

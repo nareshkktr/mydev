@@ -124,5 +124,26 @@ public class ExceptionConstants {
 
 	public static final String PROBLEM_LOCATION_REQUIRED = "Problem Location Required";
 	public static final String PROBLEM_LOCATION_SHOULD_NOT_BE_EMPTY = "Problem Location Should Not Be Empty";
+	
+	public static final String EVENT_NOT_FOUND = "Event Not Found";
+	public static final String EVENT_NAME_REQUIRED = "Event Name Required";
+	public static final String EVENT_CREATEDLOCATIONGUID_REQUIRED = "Event created Location GuId Required";
+	public static final String EVENT_EVENTTYPEGUID_REQUIRED = "Event Type GuId Required";
+	public static final String EVENT_DESCRIPTION_REQUIRED = "Event Description Required";
+	public static final String EVENT_LOCATIONDETAILS_REQUIRED = "Event Location Details Required";
+	public static final String EVENT_PHOTOURL_REQUIRED = "Event Photo URL Required";
+	public static final String EVENT_NAME_SHOULD_NOT_BE_EMPTY = "Event Name Should Not Be Empty";
+	public static final String EVENT_DESCRIPTION_SHOULD_NOT_BE_EMPTY = "Event Description Should Not Be Empty";
+	public static final String EVENT_LOCATIONDETAILS_SHOULD_NOT_BE_EMPTY = "Event Location Details Should Not Be Empty";
+	
+	public static final String GROUP_NOT_FOUND = "Group Not Found";
 
+	public static final String COMMENT_OBJECT_GUID_REQUIRED = "Identity of object to which comment belongs is Required";
+	public static final String COMMENT_OBJECT_TYPE_REQUIRED = "Type of object to which comment belongs is Required";
+	public static final String COMMENTOR_OBJECT_GUID_REQUIRED = "Identity of commentor is Required";
+	public static final String COMMENTOR_OBJECT_TYPE_REQUIRED = "Type of commentor is Required";
+	public static final String COMMENT_TYPE_REQUIRED = "Type of comment is Required";
+	public static final String COMMENT_TEXT_REQUIRED = "Comment text is Required";
+	public static final String COMMENT_TEXT_SHOULD_NOT_BE_EMPTY = "Comment Text should not be empty.";
+	
 }
