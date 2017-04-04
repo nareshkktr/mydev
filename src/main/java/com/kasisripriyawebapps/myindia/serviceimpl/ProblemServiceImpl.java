@@ -6,6 +6,7 @@ package com.kasisripriyawebapps.myindia.serviceimpl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
@@ -24,6 +25,7 @@ import com.kasisripriyawebapps.myindia.entity.ProblemHistory;
 import com.kasisripriyawebapps.myindia.entity.ProblemType;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 import com.kasisripriyawebapps.myindia.exception.RecordNotFoundException;
+import com.kasisripriyawebapps.myindia.requestresponsemodel.BaseUserInformation;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.CreateUpdateProblemRequestData;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.ProblemResponse;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.ProblemTypeResponse;
@@ -86,6 +88,7 @@ public class ProblemServiceImpl implements ProblemService {
 		ProblemHistory problemHistory = new ProblemHistory();
 		problemHistory.setProblem(problem);
 		problemHistory.setCreatedBy(loggedInUserDetails.getGuid());
+		problemHistory.setAccountId(loggedInUserDetails.getGuid());
 		problemHistory.setCreatedTimeStamp(CommonUtil.getCurrentGMTTimestamp());
 		problemHistory.setComments(ProblemStatusParameters.CREATED);
 		problemHistory.setStatus(ProblemStatusParameters.CREATED);
@@ -246,6 +249,24 @@ public class ProblemServiceImpl implements ProblemService {
 		List<ProblemResponse> filteredProblems = prepareProblemResponse(problems);
 		
 		return filteredProblems;
+	}
+
+	@Override
+	@Transactional
+	public List<BaseUserInformation> retreiveProblemContributorsByGuid(Long problemGuid) throws InternalServerException, RecordNotFoundException {
+		
+		Problem problem = problemDao.getProblemByGuid(problemGuid);
+		
+		List<ProblemHistory> problemHistory = problem.getProblemHistory();
+		
+		Set<Long> accountIds = problemHistory.stream().filter(q -> q.getAccountId() != null).collect(Collectors.groupingBy(problemHistoryObj->problemHistoryObj.getAccountId())).keySet();
+		
+		List<BaseUserInformation> contributors = null;
+		
+		if(accountIds != null &&!accountIds.isEmpty())
+			contributors = accountService.getAccountsByIds(accountIds);
+		
+		return contributors;
 	}
 
 }

@@ -3,6 +3,9 @@
  */
 package com.kasisripriyawebapps.myindia.dao;
 
+import java.util.List;
+import java.util.Set;
+
 import com.kasisripriyawebapps.myindia.entity.Account;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 
@@ -15,5 +18,7 @@ public interface AccountDao {
 	Account getAccountByUserNameAndPassword(String userName, String salt, String password) throws InternalServerException;
 
 	Account getAccountById(Long accountGuid) throws InternalServerException;
+	
+	List<Account> getAccountsById(Set<Long> accountGuids) throws InternalServerException;
 
 }

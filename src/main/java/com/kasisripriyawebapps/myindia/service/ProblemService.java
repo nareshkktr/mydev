@@ -9,6 +9,7 @@ import java.util.Set;
 import com.kasisripriyawebapps.myindia.configs.LoggedInUserDetails;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 import com.kasisripriyawebapps.myindia.exception.RecordNotFoundException;
+import com.kasisripriyawebapps.myindia.requestresponsemodel.BaseUserInformation;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.CreateUpdateProblemRequestData;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.ProblemResponse;
 
@@ -28,5 +29,7 @@ public interface ProblemService {
 			LoggedInUserDetails loggedInUserDetails) throws InternalServerException, RecordNotFoundException;
 
 	List<ProblemResponse> filterProblems(Set<String> tagTokens, Integer pageNo, Integer pageLimit) throws InternalServerException, RecordNotFoundException;
+
+	List<BaseUserInformation> retreiveProblemContributorsByGuid(Long problemGuid) throws InternalServerException, RecordNotFoundException;
 
 }

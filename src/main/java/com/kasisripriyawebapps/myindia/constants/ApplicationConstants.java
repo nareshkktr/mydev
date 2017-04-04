@@ -117,4 +117,6 @@ public class ApplicationConstants {
 
 	public static final Object SUCCESS_MESSAGE = "Success";
 
+	public static final String COMMENT_TEXT = "Text";
+
 }

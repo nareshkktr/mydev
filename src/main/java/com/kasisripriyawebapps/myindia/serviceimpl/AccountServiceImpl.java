@@ -3,6 +3,10 @@
  */
 package com.kasisripriyawebapps.myindia.serviceimpl;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -188,5 +192,19 @@ public class AccountServiceImpl implements AccountService {
 		JSONObject tokenInfo = oAuthService.getAccessTokenByRefreshToken(refreshToken);
 		
 		return tokenInfo;
+	}
+
+	@Override
+	@Transactional
+	public List<BaseUserInformation> getAccountsByIds(Set<Long> accountIds)
+			throws InternalServerException, RecordNotFoundException {
+		List<Account> accounts = accountDao.getAccountsById(accountIds);
+		
+		List<BaseUserInformation> baseUserInfoForAccounts = new ArrayList<BaseUserInformation>();
+		
+		for(Account acc: accounts){
+			baseUserInfoForAccounts.add(prepareBaseUserInformation(acc,false));
+		}
+		return baseUserInfoForAccounts;
 	}
 }

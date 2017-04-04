@@ -1068,6 +1068,28 @@ public class EndPointConstants {
 	public static final String DELETE_GROUP_MEMBER_API_VALUE = "deleteGroupMember";
 	public static final String DELETE_GROUP_MEMBER_API_NICKNAME = "deleteGroupMember";
 	public static final String DELETE_GROUP_MEMBER_API_DESCRIPTION = "Delete Group Member ";
+	
+	public static final String GET_PROBLEM_CONTRIBUTORS_BY_PROBLEM_ID_REQUEST_MAPPING = "getProblemContributors";
+	public static final String GET_PROBLEM_CONTRIBUTORS_BY_PROBLEM_ID_API_VALUE = "getProblemContributors";
+	public static final String GET_PROBLEM_CONTRIBUTORS_BY_PROBLEM_ID_API_NICKNAME = "getProblemContributors";
+	public static final String GET_PROBLEM_CONTRIBUTORS_BY_PROBLEM_ID_API_DESCRIPTION = "Get list of problem Contributors";
 
+	/** The Constant COMMENT_ENDPOINT_REQUEST_MAPPING. */
+	public static final String COMMENT_ENDPOINT_REQUEST_MAPPING = "/comment";
 
+	/** The Constant COMMENT_ENDPOINT_API_VALUE. */
+	public static final String COMMENT_ENDPOINT_API_VALUE = "comment";
+
+	/** The Constant COMMENT_ENDPOINT_API_TAGS. */
+	public static final String COMMENT_ENDPOINT_API_TAGS = "comment";
+
+	/** The Constant COMMENT_ENDPOINT_API_DESCRIPTION. */
+	public static final String COMMENT_ENDPOINT_API_DESCRIPTION = "User Comment Management API";
+	
+	public static final String POST_COMMENT_REQUEST_MAPPING = "postComment";
+	public static final String POST_COMMENT_API_VALUE = "postComment";
+	public static final String POST_COMMENT_API_NICKNAME = "postComment";
+	public static final String POST_COMMENT_API_DESCRIPTION = "Post user comment";
+
+	
 }

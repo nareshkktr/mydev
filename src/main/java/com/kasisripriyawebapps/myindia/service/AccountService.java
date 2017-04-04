@@ -4,6 +4,9 @@
 package com.kasisripriyawebapps.myindia.service;
 
 
+import java.util.List;
+import java.util.Set;
+
 import org.codehaus.jettison.json.JSONObject;
 
 import com.kasisripriyawebapps.myindia.entity.Account;
@@ -30,5 +33,7 @@ public interface AccountService {
 
 	BaseUserInformation prepareBaseUserInformation(Account account, Boolean obtainTokenInfo)
 			throws InternalServerException, RecordNotFoundException;
+
+	List<BaseUserInformation> getAccountsByIds(Set<Long> accountIds) throws InternalServerException, RecordNotFoundException;
 	
 }
