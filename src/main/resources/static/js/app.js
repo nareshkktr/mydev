@@ -5,6 +5,47 @@
 })();
 
 (function() {
+	'use strict';
+	angular.module('myindia-app').controller("commentBoxController",
+			commentBoxController);
+
+	commentBoxController.$inject = [ '$scope' ];
+
+	function commentBoxController($scope) {
+		var commentBox = this;
+		console.log($scope.objectType);
+		console.log($scope.objectGuid);
+
+	}
+})();
+
+(function() {
+	'use strict';
+
+	angular.module('myindia-app').directive("commentBox", commentBox);
+
+	function commentBox() {
+
+		var commentBox = {
+			restrict : 'E',
+			scope : {
+				objectType : '=',
+				objectGuid : '='
+			},
+			templateUrl : resource + 'partials/commentBox.html',
+			controller : 'commentBoxController',
+			controllerAs : 'commentBox'
+		};
+
+		return commentBox;
+	}
+
+})();
+
+/**
+ * 
+ */
+;(function() {
     'use strict';
 
     angular.module('myindia-app').directive("compareEqualValidator", compareEqualValidator);
@@ -658,6 +699,25 @@
 
 (function() {
 	'use strict';
+	angular.module('myindia-app').controller("problemDisplayController",
+			problemDisplayController);
+
+	problemDisplayController.$inject = ['$state'];
+
+	function problemDisplayController($state) {
+		var problemDisplay = this;
+		problemDisplay.viewProblem = viewProblem;
+
+		function viewProblem(problemGuid) {
+			$state.go('viewProblem', {
+				selectedProblemGuid : problemGuid
+			});
+		}
+	}
+})();
+
+(function() {
+	'use strict';
 
 	angular.module('myindia-app').directive("problemDisplay", problemDisplay);
 
@@ -669,7 +729,9 @@
 				problems: '=',
 				columnSplitClass: '='
 			},
-			templateUrl : resource + 'partials/problemDisplay.html'
+			templateUrl : resource + 'partials/problemDisplay.html',
+			controller : 'problemDisplayController',
+			controllerAs : 'problemDisplay'
 		};
 
 		return problemDisplay;
@@ -752,12 +814,12 @@
 
 		$rootScope.$on("$stateChangeStart",function(event, toState, toParams, fromState, fromParams){
 
-			// if(toState.name != "signIn" && toState.name.indexOf('signUp') == -1){
-			// 	if(!sessionStorage.getItem("access_token")){
-			// 		event.preventDefault();
-			// 		$state.go('signIn');
-			// 	}
-			// }
+			if(toState.name != "signIn" && toState.name.indexOf('signUp') == -1){
+				if(!sessionStorage.getItem("access_token")){
+					event.preventDefault();
+					$state.go('signIn');
+				}
+			}
 
 		});
 	}
@@ -1734,7 +1796,6 @@
 
 		var problemSelection = this;
 		problemSelection.problems = [];
-		problemSelection.viewProblem = viewProblem;
 		problemSelection.chosenProblemCategory = $state.params.selectedProblemCategory;
 		problemSelection.problemTypes = $state.params.problemTypes;
 		problemSelection.logNewProblem=logNewProblem;
@@ -1748,11 +1809,7 @@
 		function getProblemsByTypeFailure(error){
 			alert(error);
 		}
-
 		
-		function viewProblem(problemGuid) {
-			$state.go('viewProblem',{selectedProblemGuid:problemGuid});
-		}
 		function logNewProblem() {
 			$state.go('createProblem.logProblem',{selectedProblemCategory:problemSelection.chosenProblemCategory,problemTypes:problemSelection.problemTypes});
 		}
@@ -1902,6 +1959,7 @@
 
 		var viewProblem = this;
 		viewProblem.problemDetails = {};
+		viewProblem.objectType="PROBLEM";
 		viewProblem.selectedProblemGuid = $state.params.selectedProblemGuid;
 
 		viewProblem.similarProblems = {};
@@ -1909,38 +1967,12 @@
 		viewProblem.similarProblems.pageLimit =4;
 		viewProblem.similarProblems.problems = [];
 
-		for (var i = 0; i < 20; i++) {
-			var severity = "";
-
-			if (i % 2 == 0) {
-				severity = "critical";
-			} else if (i % 3 == 0) {
-				severity = "high";
-			} else if (i % 5 == 0) {
-				severity = "medium";
-			} else {
-				severity = "low";
-			}
-			var problem = {
-				"problemShortDescription" : "Water Problem Type Water Problem Type Water Problem Type "
-						+ i,
-				"locatedIn" : "Pulipadu,Prakasam(District)",
-				"severity" : severity,
-				"severityLevelCode" : severity === "critical" ? "C"
-						: severity === "high" ? "H"
-								: severity === "medium" ? "M" : "L"
-			};
-			viewProblem.similarProblems.problems.push(problem);
-		}
-		
 		viewProblemService.getProblemDetails(viewProblem.selectedProblemGuid).then(getProblemDetailsSuccess).catch(getProblemDetailsFailure);
-
-		
 
 		function getProblemDetailsSuccess(data){
 			viewProblem.problemDetails = data;
 
-			//Call to fetch similar problems based on filter criteria
+			// Call to fetch similar problems based on filter criteria
 			fetchRelatedProblemsData(viewProblem.similarProblems.pageNo,viewProblem.similarProblems.pageLimit)
 
 		}

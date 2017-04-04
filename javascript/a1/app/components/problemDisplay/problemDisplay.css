@@ -1,7 +1,7 @@
 @CHARSET "ISO-8859-1";
 
 #problem_selection_container {
-	padding: 5px !important;
+	padding: 0px !important;
 }
 
 #problem_selection_container .problem {

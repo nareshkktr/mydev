@@ -9,7 +9,6 @@
 
 		var problemSelection = this;
 		problemSelection.problems = [];
-		problemSelection.viewProblem = viewProblem;
 		problemSelection.chosenProblemCategory = $state.params.selectedProblemCategory;
 		problemSelection.problemTypes = $state.params.problemTypes;
 		problemSelection.logNewProblem=logNewProblem;
@@ -23,11 +22,7 @@
 		function getProblemsByTypeFailure(error){
 			alert(error);
 		}
-
 		
-		function viewProblem(problemGuid) {
-			$state.go('viewProblem',{selectedProblemGuid:problemGuid});
-		}
 		function logNewProblem() {
 			$state.go('createProblem.logProblem',{selectedProblemCategory:problemSelection.chosenProblemCategory,problemTypes:problemSelection.problemTypes});
 		}
