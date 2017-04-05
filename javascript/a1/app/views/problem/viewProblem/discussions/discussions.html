@@ -1,0 +1,26 @@
+<div class="row" id="comments_list_container">
+	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 comment_container"
+		ng-repeat="eachComment in discussions.comments">
+		<div class="comment">
+			<div class="row">
+				<div class="col-lg-1 col-md-2 commentor_img">
+					<img ng-src="{{eachComment.commentor.userImage}}" />
+				</div>
+				<div class="col-lg-11 col-md-10 commentor_name_date">
+					<div class="commentor_name">
+						<label> {{eachComment.commentor.name}} </label>
+					</div>
+					<div class="commentor_date">
+						<label> {{eachComment.createdTimeStamp}} </label>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-1 col-md-2">&nbsp;</div>
+				<div class="col-lg-11 col-md-10 comment_text">
+					<p>{{eachComment.commentText}}</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -13,8 +13,8 @@
 	border-radius: 10px 0px 0px 10px !important;
 	display: block;
 	width: 100%;
-	padding: 0px 0px;
-	font-size: 14px;
+	padding: 5px;
+	font-size: 14px !important;
 	line-height: 1.42857143;
 	color: #555;
 	background-color: #fff;
@@ -29,8 +29,8 @@
 		.15s;
 	transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 	border: 1px solid #ccc;
-    resize: none;
-    border-right: none;
+	resize: none;
+	border-right: none;
 }
 
 .comment_box_container .addons {
@@ -40,7 +40,7 @@
 	border-radius: 0px 10px 10px 0px !important;
 	border: 1px solid #ccc;
 	background-color: white;
-	border-right:none;
+	border-right: none;
 }
 
 .comment_box_container .addons .row {
@@ -1145,6 +1145,54 @@ tags-input .tags .tag-item {
 	padding: 20px 20px 30px 20px;
 	background-color: white;
 }
+#comments_list_container {
+	margin: 0px !important;
+}
+
+#comments_list_container .comment_container {
+	padding: 0px !important;
+}
+
+#comments_list_container .comment {
+	margin: 5px !important;
+	border: 1px solid #ccc;
+	padding: 10px !important;
+	-webkit-box-shadow: 0 -4px 10px 0 rgba(36, 50, 56, 0.2);
+	box-shadow: 0px -4px 10px 0 rgba(36, 50, 56, 0.2);
+}
+
+#comments_list_container .comment .row {
+	
+}
+
+#comments_list_container .comment .row .commentor_img {
+	
+}
+
+#comments_list_container .comment .row .commentor_img img {
+	width: 50px;
+	border-radius: 50%;
+	height: 50px;
+	border: 3px solid #00a699
+}
+
+#comments_list_container .comment .row .commentor_name_date {
+	
+}
+
+#comments_list_container .comment .row .commentor_name_date .commentor_name
+	{
+	
+}
+
+#comments_list_container .comment .row .commentor_name_date .commentor_date
+	{
+	
+}
+
+#comments_list_container .comment .row .comment_text {
+	
+}
 .view_problem_container {
 	margin: 0px !important;
 }
@@ -1209,6 +1257,7 @@ tags-input .tags .tag-item {
 	padding-left: 10px;
 	background-color: #00a699;
 	margin-bottom: 10px;
+	cursor: pointer;
 }
 
 #problem_tabs .problem_tab .problem_tab_icon {
@@ -1353,31 +1402,39 @@ tags-input .tags .tag-item {
 }
 
 .affected_row {
-	border: 1px solid grey;
+	border-bottom: 1px solid grey;
 }
 
 .affected_row .people_affected_col {
 	font-size: 18px;
-	border-right: 1px solid gray;
+	border-right: 1px solid #ccc;
 	padding: 10px;
+	text-align: center;
 }
 
 .affected_row .people_affected_col .count {
 	float: left;
 	margin-top: 8px;
-	width: 60px;
+	width: 76px;
+	font-weight: 900;
+	color: #f94c59;
 }
 
 .affected_row .people_affected_col .desc {
 	float: left;
+	font-size: 14px;
+	color: #00a699;
+	font-weight: 600;
+	letter-spacing: 1px;
 }
 
 .problem_counts {
-	height: 57px;
+	height: 62px;
 	width: 75%;
 	margin: 0 auto !important;
 	margin-bottom: 6px !important;
 	border-bottom: 2px solid #00a699;
+	padding-top: 3px;
 }
 
 .problem_counts .problem_count {

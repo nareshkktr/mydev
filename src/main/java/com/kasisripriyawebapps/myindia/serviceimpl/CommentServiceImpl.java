@@ -23,8 +23,8 @@ import com.kasisripriyawebapps.myindia.service.CommentService;
 import com.kasisripriyawebapps.myindia.util.CommonUtil;
 
 @Service
-public class CommentServiceImpl implements CommentService{
-	
+public class CommentServiceImpl implements CommentService {
+
 	@Autowired
 	CommentDao commentDao;
 	
@@ -34,20 +34,16 @@ public class CommentServiceImpl implements CommentService{
 	@Override
 	@Transactional
 	public Long postComment(CommentRequest commentRequest) throws InternalServerException {
-		
+
 		Comment comment = preapreCommentObject(commentRequest);
-		
-		Long commentGuid = null;
-		
-		commentGuid = commentDao.saveComment(comment);
-		
+		Long commentGuid = commentDao.saveComment(comment);
 		return commentGuid;
 	}
 
 	private Comment preapreCommentObject(CommentRequest commentRequest) {
-		
+
 		Comment comment = new Comment();
-		
+
 		comment.setObjectGuid(commentRequest.getObjectGuid());
 		comment.setObjectType(commentRequest.getObjectType());
 		comment.setCommentorObjectGuid(commentRequest.getCommentorObjectGuid());

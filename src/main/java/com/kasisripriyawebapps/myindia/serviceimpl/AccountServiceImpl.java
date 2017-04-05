@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.gson.Gson;
+import com.kasisripriyawebapps.myindia.constants.ApplicationConstants;
 import com.kasisripriyawebapps.myindia.constants.ExceptionConstants;
 import com.kasisripriyawebapps.myindia.dao.AccountDao;
 import com.kasisripriyawebapps.myindia.dao.LocationDao;
@@ -74,7 +75,7 @@ public class AccountServiceImpl implements AccountService {
 		account.setCreatedTimeStamp(CommonUtil.getCurrentGMTTimestamp());
 		account.setUserEmail(createAccountRequest.getEmailAddress());
 		SolrUserMaster solrUser = userMasterRepository.findByUserGuid(createAccountRequest.getUserGuid());
-		account.setType("VOTER");
+		account.setType(ApplicationConstants.VOTER_ACCOUNT_TYPE);
 		UserInfo userInfo = new UserInfo();
 		if (solrUser != null) {
 			String solrUserJsonStr = new Gson().toJson(solrUser);
@@ -182,10 +183,11 @@ public class AccountServiceImpl implements AccountService {
 		final Account account = accountDao.getAccountByUserName(userName);
 		return account;
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
-	public BaseUserInformation getAccountByGuid(final Long accountId) throws InternalServerException, RecordNotFoundException {
+	public BaseUserInformation getAccountByGuid(final Long accountId)
+			throws InternalServerException, RecordNotFoundException {
 		final Account account = accountDao.getAccountById(accountId);
 		return prepareBasicSecondaryBaseUserInformation(account);
 	}
@@ -215,7 +217,7 @@ public class AccountServiceImpl implements AccountService {
 	@Transactional(readOnly = true)
 	public BaseUserInformation prepareLoggedInUserInfo(String userName)
 			throws InternalServerException, RecordNotFoundException {
-		
+
 		BaseUserInformation baseUserInfo = new BaseUserInformation();
 
 		Account account = getAccountByUserName(userName);
@@ -229,9 +231,9 @@ public class AccountServiceImpl implements AccountService {
 	@Override
 	public JSONObject refreshAccessToken(String refreshToken) throws InternalServerException {
 		// TODO Auto-generated method stub
-		
+
 		JSONObject tokenInfo = oAuthService.getAccessTokenByRefreshToken(refreshToken);
-		
+
 		return tokenInfo;
 	}
 
@@ -240,7 +242,7 @@ public class AccountServiceImpl implements AccountService {
 	public List<BaseUserInformation> getAccountsByIds(Set<Long> accountIds)
 			throws InternalServerException, RecordNotFoundException {
 		List<Account> accounts = accountDao.getAccountsById(accountIds);
-		
+
 		List<BaseUserInformation> baseUserInfoForAccounts = new ArrayList<BaseUserInformation>();
 		
 		for(Account acc: accounts){

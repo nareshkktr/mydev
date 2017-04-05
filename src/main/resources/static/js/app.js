@@ -9,13 +9,29 @@
 	angular.module('myindia-app').controller("commentBoxController",
 			commentBoxController);
 
-	commentBoxController.$inject = [ '$scope' ];
+	commentBoxController.$inject = [ '$scope','commentBoxService' ];
 
-	function commentBoxController($scope) {
+	function commentBoxController($scope,commentBoxService) {
 		var commentBox = this;
 		console.log($scope.objectType);
 		console.log($scope.objectGuid);
-
+		commentBox.commentText="";
+		commentBox.sendComment = sendComment;
+		
+		function sendComment(){
+			let commentData={};
+			commentData.objectType=$scope.objectType;
+			commentData.objectGuid=$scope.objectGuid;
+			commentData.commentText=commentBox.commentText;
+			
+			commentBoxService.sendComment(commentData).then(sendCommentSuccess).catch(sendCommentFailure);
+    		function sendCommentSuccess(data){
+    			alert(data);
+    		}
+    		function sendCommentFailure(error){
+    			alert(error);
+    		}
+		}
 	}
 })();
 
@@ -42,10 +58,56 @@
 
 })();
 
-/**
- * 
- */
-;(function() {
+(function() {
+	'use strict';
+
+	angular.module('myindia-app').factory("commentBoxService",
+			commentBoxService);
+
+	commentBoxService.$inject = [ '$q', 'swaggerShareService' ];
+
+	function commentBoxService($q, swaggerShareService) {
+
+		var services = {};
+
+		var commentBoxService = {
+			sendComment : sendComment
+		};
+
+		// Call and save the data
+		swaggerShareService.getAPIMetaData(setAPIMetaData);
+
+		return commentBoxService;
+
+		function setAPIMetaData(metaInfo) {
+			services = metaInfo;
+		}
+
+		function sendComment(commentData) {
+
+			let
+			deferred = $q.defer();
+
+			services.comment.postComment({
+				body : JSON.stringify(commentData)
+			}, sendCommentSuccess, sendCommentFailure);
+
+			return deferred.promise;
+
+			function sendCommentSuccess(data) {
+				deferred.resolve(data.obj);
+			}
+
+			function sendCommentFailure(error) {
+				deferred.reject(error);
+			}
+
+		}
+
+	}
+
+})();
+(function() {
     'use strict';
 
     angular.module('myindia-app').directive("compareEqualValidator", compareEqualValidator);
@@ -908,6 +970,14 @@
 			params : {
 				'selectedProblemGuid' : ''
 			}
+		}).state('viewProblem.overview', {
+			url : '/overview',
+			templateUrl : resource + 'partials/overview.html'
+		}).state('viewProblem.discussions', {
+			url : '/discussions',
+			templateUrl : resource + 'partials/discussions.html',
+			controller : 'discussionsController',
+			controllerAs : 'discussions',
 		});
 	}
 })();
@@ -1951,6 +2021,30 @@
 (function() {
 	'use strict';
 
+	angular.module('myindia-app').controller("discussionsController",
+			discussionsController);
+	discussionsController.$inject = [];
+
+	function discussionsController() {
+		var discussions = this;
+		discussions.comments=[];
+		
+		for(let i=0;i<20;i++){
+			var discussion={};
+			discussion.commentor={};
+			discussion.commentor.name="YESUDASU ADIPI";
+			discussion.commentor.userImage="https://s3.amazonaws.com/myindiaproblems/problems/31/Koala.jpg";
+			discussion.commentText=" For register grievance servi For register grievance servi For register grievance servi For register grievance servi For register grievance servi For register grievance servi For register grievance servi";
+			discussion.createdTimeStamp="2 Hours Ago";
+			discussions.comments.push(discussion);
+		}
+	}
+
+})();
+
+(function() {
+	'use strict';
+
 	angular.module('myindia-app').controller("viewProblemController",
 			viewProblemController);
 	viewProblemController.$inject = ['$state','viewProblemService','filterEntityByCriteria'];
@@ -1961,12 +2055,14 @@
 		viewProblem.problemDetails = {};
 		viewProblem.objectType="PROBLEM";
 		viewProblem.selectedProblemGuid = $state.params.selectedProblemGuid;
-
 		viewProblem.similarProblems = {};
 		viewProblem.similarProblems.pageNo = 1;
 		viewProblem.similarProblems.pageLimit =4;
 		viewProblem.similarProblems.problems = [];
-
+		viewProblem.changeTab=changeTab;
+		
+		changeTab('viewProblem.overview');
+		
 		viewProblemService.getProblemDetails(viewProblem.selectedProblemGuid).then(getProblemDetailsSuccess).catch(getProblemDetailsFailure);
 
 		function getProblemDetailsSuccess(data){
@@ -2004,14 +2100,14 @@
 			function filterEntitiesFailure(error){
 				alert(error);
 			}
-
 		}
-
 		function getProblemDetailsFailure(error){
 			alert(error);
 		}
 		
-	
+		function changeTab(tabURL){
+			$state.go(tabURL);
+		}
 	}
 
 })();
