@@ -117,6 +117,6 @@ public class GroupServiceImpl implements GroupService {
 	@Transactional
 	public Long deleteGroupMemberById(Long groupMemberId) throws InternalServerException, RecordNotFoundException {
 		groupDao.deleteGroupMemberById(groupMemberId);
-		return null;
+		return groupMemberId;
 	}
 }

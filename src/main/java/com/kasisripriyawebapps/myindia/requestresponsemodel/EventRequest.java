@@ -1,6 +1,7 @@
 package com.kasisripriyawebapps.myindia.requestresponsemodel;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -11,6 +12,7 @@ public class EventRequest {
 	private Long guid;
 	private Long eventTypeGuId;
 	private Long createdLocationGuId;
+	private List<EventRecipientRequest> eventRecipientRequests;
 	private String eventName;
 	private String eventDescription;
 	private String eventLocationDetails;
@@ -26,14 +28,15 @@ public class EventRequest {
 	private Long createdBy;
 	private Long updatedBy;
 	public EventRequest(){}
-	public EventRequest(Long guid, Long eventTypeGuId, Long createdLocationGuId, String eventName,
-			String eventDescription, String eventLocationDetails, String photoURL, Timestamp eventStartDate,
-			Timestamp eventEndDate, Timestamp createdTimeStamp, Timestamp updatedTimeStamp, Long createdBy,
-			Long updatedBy) {
+	public EventRequest(Long guid, Long eventTypeGuId, Long createdLocationGuId,
+			List<EventRecipientRequest> eventRecipientRequests, String eventName, String eventDescription,
+			String eventLocationDetails, String photoURL, Timestamp eventStartDate, Timestamp eventEndDate,
+			Timestamp createdTimeStamp, Timestamp updatedTimeStamp, Long createdBy, Long updatedBy) {
 		super();
 		this.guid = guid;
 		this.eventTypeGuId = eventTypeGuId;
 		this.createdLocationGuId = createdLocationGuId;
+		this.eventRecipientRequests = eventRecipientRequests;
 		this.eventName = eventName;
 		this.eventDescription = eventDescription;
 		this.eventLocationDetails = eventLocationDetails;
@@ -62,6 +65,12 @@ public class EventRequest {
 	}
 	public void setCreatedLocationGuId(Long createdLocationGuId) {
 		this.createdLocationGuId = createdLocationGuId;
+	}
+	public List<EventRecipientRequest> getEventRecipientRequests() {
+		return eventRecipientRequests;
+	}
+	public void setEventRecipientRequests(List<EventRecipientRequest> eventRecipientRequests) {
+		this.eventRecipientRequests = eventRecipientRequests;
 	}
 	public String getEventName() {
 		return eventName;
@@ -123,7 +132,6 @@ public class EventRequest {
 	public void setUpdatedBy(Long updatedBy) {
 		this.updatedBy = updatedBy;
 	}
-	
 	
 
 }
