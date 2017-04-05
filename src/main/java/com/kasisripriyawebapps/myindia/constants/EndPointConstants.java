@@ -1095,6 +1095,16 @@ public class EndPointConstants {
 	public static final String GET_FIRST_LEVEL_COMMENTS_API_VALUE = "getFirstLevelComments";
 	public static final String GET_FIRST_LEVEL_COMMENTS_API_NICKNAME = "getFirstLevelComments";
 	public static final String GET_FIRST_LEVEL_COMMENTS_API_DESCRIPTION = "Get First Level comments for the given object.";
+	
+	public static final String ADD_EVENT_RECIPIENT_REQUEST_MAPPING = "addEventRecipient";
+	public static final String ADD_EVENT_RECIPIENT_API_VALUE = "addEventRecipient";
+	public static final String ADD_EVENT_RECIPIENT_API_NICKNAME = "addEventRecipient";
+	public static final String ADD_EVENT_RECIPIENT_API_DESCRIPTION = "Add Event Recipient";
+	
+	public static final String REMOVE_EVENT_RECIPIENT_REQUEST_MAPPING = "removeEventRecipient/{eventGuid}";
+	public static final String REMOVE_EVENT_RECIPIENT_API_VALUE = "removeEventRecipient";
+	public static final String REMOVE_EVENT_RECIPIENT_API_NICKNAME = "removeEventRecipient";
+	public static final String REMOVE_EVENT_RECIPIENT_API_DESCRIPTION = "Remove Event Recipient ";
 
 	
 }

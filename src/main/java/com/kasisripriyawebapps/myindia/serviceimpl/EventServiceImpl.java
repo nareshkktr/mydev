@@ -185,4 +185,19 @@ public class EventServiceImpl implements EventService {
 		return eventId;
 
 	}
+
+	@Override
+	@Transactional
+	public Long addEventRecipient(EventRecipientRequest request, LoggedInUserDetails loggedInUserDetails)
+			throws InternalServerException {
+		Long responseId=eventDao.addEventRecipient(request,loggedInUserDetails);
+		return responseId;
+	}
+
+	@Override
+	@Transactional
+	public Long removeEventRecipientById(Long eventRecipientGuid) throws InternalServerException, RecordNotFoundException {
+		eventDao.removeEventRecipientById(eventRecipientGuid);
+		return eventRecipientGuid;
+	}
 }
