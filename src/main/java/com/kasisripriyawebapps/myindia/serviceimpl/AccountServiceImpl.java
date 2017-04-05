@@ -105,7 +105,7 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	@Transactional
-	public BaseUserInformation prepareBaseUserInformation(Account account,Boolean obtainTokenInfo,Boolean locationInfo) throws InternalServerException, RecordNotFoundException {
+	public BaseUserInformation prepareBaseUserInformation(Account account) throws InternalServerException, RecordNotFoundException {
 
 		BaseUserInformation baseUserInfo = new BaseUserInformation();
 		JSONObject authTokenInfo = null;
@@ -119,7 +119,7 @@ public class AccountServiceImpl implements AccountService {
 		baseUserInfo.setUserName(account.getUserName());
 		baseUserInfo.setAccountGuid(account.getGuid());
 
-		if (account != null && obtainTokenInfo) {
+		if (account != null ) {
 			try {
 				authTokenInfo = oAuthService.getAuthTokenInfo(account.getUserName(), account.getPassword());
 				baseUserInfo.setAccessToken(authTokenInfo.getString("access_token"));
@@ -129,12 +129,49 @@ public class AccountServiceImpl implements AccountService {
 				throw new InternalServerException(e.getMessage());
 			}
 		}
-		if(locationInfo){
-			//populateLocationInformation
-			UserLocationDetails userLocationDetails=userService.getLoggedInUserLocation(account.getGuid());
-			baseUserInfo.setUserLocation(userLocationDetails);
-		}
+		//populateLocationInformation
+		UserLocationDetails userLocationDetails=userService.getLoggedInUserLocation(account.getGuid());
+		baseUserInfo.setUserLocation(userLocationDetails);
+
+		return baseUserInfo;
+	}
+	
+	@Override
+	@Transactional
+	public BaseUserInformation prepareBasicPrimaryBaseUserInformation(Account account) throws InternalServerException, RecordNotFoundException {
+
+		BaseUserInformation baseUserInfo = new BaseUserInformation();
+
+		UserInfo userInfo = account.getUserInfo();
+
+		baseUserInfo.setName(userInfo.getElectorName());
+		baseUserInfo.setUserGuid(userInfo.getGuid());
+		baseUserInfo.setGender(userInfo.getGender());
+		baseUserInfo.setUserImage(userInfo.getPhotoURL());
+		baseUserInfo.setUserName(account.getUserName());
+		baseUserInfo.setAccountGuid(account.getGuid());
 		
+		return baseUserInfo;
+	}
+	
+	@Override
+	@Transactional
+	public BaseUserInformation prepareBasicSecondaryBaseUserInformation(Account account) throws InternalServerException, RecordNotFoundException {
+
+		BaseUserInformation baseUserInfo = new BaseUserInformation();
+
+		UserInfo userInfo = account.getUserInfo();
+
+		baseUserInfo.setName(userInfo.getElectorName());
+		baseUserInfo.setUserGuid(userInfo.getGuid());
+		baseUserInfo.setGender(userInfo.getGender());
+		baseUserInfo.setUserImage(userInfo.getPhotoURL());
+		baseUserInfo.setUserName(account.getUserName());
+		baseUserInfo.setAccountGuid(account.getGuid());
+
+		//populateLocationInformation
+		UserLocationDetails userLocationDetails=userService.getLoggedInUserLocation(account.getGuid());
+		baseUserInfo.setUserLocation(userLocationDetails);
 
 		return baseUserInfo;
 	}
@@ -150,7 +187,7 @@ public class AccountServiceImpl implements AccountService {
 	@Transactional(readOnly = true)
 	public BaseUserInformation getAccountByGuid(final Long accountId) throws InternalServerException, RecordNotFoundException {
 		final Account account = accountDao.getAccountById(accountId);
-		return prepareBaseUserInformation(account,false,true);
+		return prepareBasicSecondaryBaseUserInformation(account);
 	}
 
 	@Override
@@ -170,7 +207,7 @@ public class AccountServiceImpl implements AccountService {
 				throw new RecordNotFoundException(ExceptionConstants.LOGIN_ACCOUNT_NOT_FOUND_PASSWORD);
 			}
 		}
-		baseUserInfo = prepareBaseUserInformation(account,true,true);
+		baseUserInfo = prepareBaseUserInformation(account);
 		return baseUserInfo;
 	}
 
@@ -185,7 +222,7 @@ public class AccountServiceImpl implements AccountService {
 		if (account == null) {
 			throw new RecordNotFoundException(ExceptionConstants.LOGIN_ACCOUNT_NOT_FOUND_USER_NAME);
 		}
-		baseUserInfo = prepareBaseUserInformation(account,true,true);
+		baseUserInfo = prepareBaseUserInformation(account);
 		return baseUserInfo;
 	}
 
@@ -207,7 +244,7 @@ public class AccountServiceImpl implements AccountService {
 		List<BaseUserInformation> baseUserInfoForAccounts = new ArrayList<BaseUserInformation>();
 		
 		for(Account acc: accounts){
-			baseUserInfoForAccounts.add(prepareBaseUserInformation(acc,false,false));
+			baseUserInfoForAccounts.add(prepareBasicPrimaryBaseUserInformation(acc));
 		}
 		return baseUserInfoForAccounts;
 	}

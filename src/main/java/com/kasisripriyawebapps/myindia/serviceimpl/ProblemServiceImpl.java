@@ -185,6 +185,12 @@ public class ProblemServiceImpl implements ProblemService {
 			//			problemResponse.setOwner(owner);
 			problemResponse.setCreatedBy(accountService.getAccountByGuid(problem.getCreatedBy()));
 			
+			problemResponse.setFollowingCount(problem.getFollowingCount());
+			problemResponse.setShareCount(problem.getShareCount());
+			problemResponse.setSupportCount(problem.getSupportCount());
+			problemResponse.setViewCount(problem.getViewCount());
+			problemResponse.setPopularityCount(problem.getPopularityCount());
+			
 			problemResponses.add(problemResponse);
 		}
 

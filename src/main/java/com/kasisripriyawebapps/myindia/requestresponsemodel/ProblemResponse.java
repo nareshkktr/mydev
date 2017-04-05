@@ -24,6 +24,12 @@ public class ProblemResponse {
 	private BaseUserInformation createdBy;
 	private PoliticianResponse owner;
 	private ProblemTypeResponse problemType;
+	private Integer followingCount;
+	private Integer supportCount;
+	private Integer viewCount;
+	private Integer shareCount;
+	private Integer popularityCount;
+	
 
 	public Long getGuid() {
 		return guid;
@@ -155,6 +161,46 @@ public class ProblemResponse {
 
 	public void setSeverityLevelCode(String severityLevelCode) {
 		this.severityLevelCode = severityLevelCode;
+	}
+
+	public Integer getFollowingCount() {
+		return followingCount;
+	}
+
+	public void setFollowingCount(Integer followingCount) {
+		this.followingCount = followingCount;
+	}
+
+	public Integer getSupportCount() {
+		return supportCount;
+	}
+
+	public void setSupportCount(Integer supportCount) {
+		this.supportCount = supportCount;
+	}
+
+	public Integer getViewCount() {
+		return viewCount;
+	}
+
+	public void setViewCount(Integer viewCount) {
+		this.viewCount = viewCount;
+	}
+
+	public Integer getShareCount() {
+		return shareCount;
+	}
+
+	public void setShareCount(Integer shareCount) {
+		this.shareCount = shareCount;
+	}
+
+	public Integer getPopularityCount() {
+		return popularityCount;
+	}
+
+	public void setPopularityCount(Integer popularityCount) {
+		this.popularityCount = popularityCount;
 	}
 
 }

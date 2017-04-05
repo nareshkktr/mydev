@@ -168,6 +168,27 @@ public class Problem implements Serializable {
 	/** The updated by. */
 	@Column(name = "MODIFIED_BY")
 	private Long updatedBy;
+	
+	/** The following count. */
+	@Column(name = "FOLLOWING_COUNT")
+	private Integer followingCount ;
+	
+	/** The share count. */
+	@Column(name = "SHARE_COUNT")
+	private Integer shareCount;
+	
+	/** The Support count. */
+	@Column(name = "SUPPORT_COUNT")
+	private Integer supportCount;
+	
+	/** The view count. */
+	@Column(name = "VIEW_COUNT")
+	private Integer viewCount;
+	
+	/** The popularity count. */
+	@Column(name = "POPULARITY_COUNT")
+	private Integer popularityCount;
+	
 
 	@OneToMany(mappedBy = "problem", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<ProblemImage> problemImages = new ArrayList<ProblemImage>(0);
@@ -299,5 +320,47 @@ public class Problem implements Serializable {
 	public void setTags(String tags) {
 		this.tags = tags;
 	}
+
+	public Integer getFollowingCount() {
+		return followingCount;
+	}
+
+	public void setFollowingCount(Integer followingCount) {
+		this.followingCount = followingCount;
+	}
+
+	public Integer getShareCount() {
+		return shareCount;
+	}
+
+	public void setShareCount(Integer shareCount) {
+		this.shareCount = shareCount;
+	}
+
+	public Integer getSupportCount() {
+		return supportCount;
+	}
+
+	public void setSupportCount(Integer supportCount) {
+		this.supportCount = supportCount;
+	}
+
+	public Integer getViewCount() {
+		return viewCount;
+	}
+
+	public void setViewCount(Integer viewCount) {
+		this.viewCount = viewCount;
+	}
+
+	public Integer getPopularityCount() {
+		return popularityCount;
+	}
+
+	public void setPopularityCount(Integer popularityCount) {
+		this.popularityCount = popularityCount;
+	}
+	
+	
 
 }

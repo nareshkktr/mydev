@@ -33,7 +33,13 @@ public interface AccountService {
 
 	List<BaseUserInformation> getAccountsByIds(Set<Long> accountIds) throws InternalServerException, RecordNotFoundException;
 
-	BaseUserInformation prepareBaseUserInformation(Account account, Boolean obtainTokenInfo, Boolean locationInfo)
+	BaseUserInformation prepareBasicSecondaryBaseUserInformation(Account account)
+			throws InternalServerException, RecordNotFoundException;
+
+	BaseUserInformation prepareBasicPrimaryBaseUserInformation(Account account)
+			throws InternalServerException, RecordNotFoundException;
+
+	BaseUserInformation prepareBaseUserInformation(Account account)
 			throws InternalServerException, RecordNotFoundException;
 	
 }

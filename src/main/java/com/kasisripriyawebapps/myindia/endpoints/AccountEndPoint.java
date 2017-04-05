@@ -65,7 +65,7 @@ public class AccountEndPoint extends BaseEndPoint{
 		if (validateCreateAccountRequest(createAccountRequest)
 				&& !validateDuplicateAccountByUserNameRequest(createAccountRequest.getLoginUserName())) {
 			Account account = accountService.createAccount(createAccountRequest);
-			baseUserInfo = accountService.prepareBaseUserInformation(account,true,true);
+			baseUserInfo = accountService.prepareBaseUserInformation(account);
 		}
 		NewCookie accessTokenCookie = new NewCookie("access_token", baseUserInfo.getAccessToken());
 		NewCookie refreshTokenCookie = new NewCookie("refresh_token", baseUserInfo.getRefreshToken());
