@@ -1,5 +1,8 @@
 package com.kasisripriyawebapps.myindia.requestresponsemodel;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class BaseUserInformation {
 	
 	private Long userGuid;
@@ -11,6 +14,7 @@ public class BaseUserInformation {
 	private String refreshToken;
 	private Integer expirationTimeInSeconds;
 	private UserLocationDetails userLocation;
+	private Long accountGuid;
 
 	public BaseUserInformation() {
 		super();
@@ -104,5 +108,15 @@ public class BaseUserInformation {
 	public void setExpirationTimeInSeconds(Integer expirationTimeInSeconds) {
 		this.expirationTimeInSeconds = expirationTimeInSeconds;
 	}
+
+	public Long getAccountGuid() {
+		return accountGuid;
+	}
+
+	public void setAccountGuid(Long accountGuid) {
+		this.accountGuid = accountGuid;
+	}
+	
+	
 
 }

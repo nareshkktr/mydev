@@ -1,0 +1,6 @@
+<div ng-class="labelClass" ng-if="!imageUrl">
+	<label class="displayLabel">{{labelName}}</label>
+</div>
+
+<img ng-class="imageClass"
+ng-src="{{imageUrl}}" ng-if="imageUrl"/>

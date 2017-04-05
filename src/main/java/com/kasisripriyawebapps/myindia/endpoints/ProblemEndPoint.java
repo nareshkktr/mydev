@@ -74,7 +74,7 @@ public class ProblemEndPoint extends BaseEndPoint {
 	@Path(EndPointConstants.GET_PROBLEM_BY_ID_REQUEST_MAPPING)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getProblemByGuid(@QueryParam("problemGuid") Long problemGuid)
-			throws InternalServerException, PreConditionFailedException, PreConditionRequiredException,
+			throws InternalServerException, PreConditionRequiredException,
 			ConflictException, RecordNotFoundException {
 		
 		LoggedInUserDetails loggedInUserDetails = getLoggedInUserDetails();
@@ -83,7 +83,7 @@ public class ProblemEndPoint extends BaseEndPoint {
 		if (problemGuid != null) {	
 			problem = problemService.retreiveProblem(problemGuid, loggedInUserDetails);
 		}else{
-			throw new PreConditionFailedException(ExceptionConstants.REQUEST_NOT_NULL);
+			throw new PreConditionRequiredException(ExceptionConstants.REQUEST_NOT_NULL);
 		}
 		
 		return Response.status(Status.OK).entity(problem).build();
@@ -94,7 +94,7 @@ public class ProblemEndPoint extends BaseEndPoint {
 	@Path(EndPointConstants.GET_PROBLEMS_BY_TYPE_REQUEST_MAPPING)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getProblemsByProblemType(@QueryParam("problemTypeGuid") Long problemTypeGuid)
-			throws InternalServerException, PreConditionFailedException, PreConditionRequiredException,
+			throws InternalServerException, PreConditionRequiredException,
 			ConflictException, RecordNotFoundException {
 		
 		LoggedInUserDetails loggedInUserDetails = getLoggedInUserDetails();
@@ -103,7 +103,7 @@ public class ProblemEndPoint extends BaseEndPoint {
 		if (problemTypeGuid != null) {
 			problems = problemService.retreiveProblemsByType(problemTypeGuid, loggedInUserDetails);
 		}else{
-			throw new PreConditionFailedException(ExceptionConstants.REQUEST_NOT_NULL);
+			throw new PreConditionRequiredException(ExceptionConstants.REQUEST_NOT_NULL);
 		}
 		
 		return Response.status(Status.OK).entity(problems).build();
@@ -114,7 +114,7 @@ public class ProblemEndPoint extends BaseEndPoint {
 	@Path(EndPointConstants.GET_PROBLEMS_BY_PROBLEM_CATEGORY_REQUEST_MAPPING)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getProblemsByProblemCategory(@QueryParam("problemTypeCategory") String problemTypeCategory)
-			throws InternalServerException, PreConditionFailedException, PreConditionRequiredException,
+			throws InternalServerException, PreConditionRequiredException,
 			ConflictException, RecordNotFoundException {
 		
 		LoggedInUserDetails loggedInUserDetails = getLoggedInUserDetails();
@@ -123,7 +123,7 @@ public class ProblemEndPoint extends BaseEndPoint {
 		if (problemTypeCategory != null) {
 			problems = problemService.retreiveProblemsByTypeCategory(problemTypeCategory, loggedInUserDetails);
 		}else{
-			throw new PreConditionFailedException(ExceptionConstants.REQUEST_NOT_NULL);
+			throw new PreConditionRequiredException(ExceptionConstants.REQUEST_NOT_NULL);
 		}
 		
 		return Response.status(Status.OK).entity(problems).build();
@@ -134,7 +134,7 @@ public class ProblemEndPoint extends BaseEndPoint {
 	@Path(EndPointConstants.GET_PROBLEM_CONTRIBUTORS_BY_PROBLEM_ID_REQUEST_MAPPING)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getProblemContributorsByProblemGuid(@QueryParam("problemGuid") Long problemGuid)
-			throws InternalServerException, PreConditionFailedException, PreConditionRequiredException,
+			throws InternalServerException, PreConditionRequiredException,
 			ConflictException, RecordNotFoundException {
 
 		List<BaseUserInformation> contributors = null;
@@ -142,7 +142,7 @@ public class ProblemEndPoint extends BaseEndPoint {
 		if (problemGuid != null) {
 			contributors = problemService.retreiveProblemContributorsByGuid(problemGuid);
 		}else{
-			throw new PreConditionFailedException(ExceptionConstants.REQUEST_NOT_NULL);
+			throw new PreConditionRequiredException(ExceptionConstants.REQUEST_NOT_NULL);
 		}
 		
 		return Response.status(Status.OK).entity(contributors).build();

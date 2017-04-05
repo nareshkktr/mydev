@@ -1091,5 +1091,10 @@ public class EndPointConstants {
 	public static final String POST_COMMENT_API_NICKNAME = "postComment";
 	public static final String POST_COMMENT_API_DESCRIPTION = "Post user comment";
 
+	public static final String GET_FIRST_LEVEL_COMMENTS_REQUEST_MAPPING = "getFirstLevelComments";
+	public static final String GET_FIRST_LEVEL_COMMENTS_API_VALUE = "getFirstLevelComments";
+	public static final String GET_FIRST_LEVEL_COMMENTS_API_NICKNAME = "getFirstLevelComments";
+	public static final String GET_FIRST_LEVEL_COMMENTS_API_DESCRIPTION = "Get First Level comments for the given object.";
+
 	
 }
