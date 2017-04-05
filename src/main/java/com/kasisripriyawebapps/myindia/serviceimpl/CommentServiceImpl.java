@@ -15,10 +15,12 @@ import com.kasisripriyawebapps.myindia.dao.CommentDao;
 import com.kasisripriyawebapps.myindia.entity.Comment;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 import com.kasisripriyawebapps.myindia.exception.RecordNotFoundException;
+import com.kasisripriyawebapps.myindia.requestresponsemodel.ActivityRequest;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.BaseUserInformation;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.CommentRequest;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.CommentResponse;
 import com.kasisripriyawebapps.myindia.service.AccountService;
+import com.kasisripriyawebapps.myindia.service.ActivityService;
 import com.kasisripriyawebapps.myindia.service.CommentService;
 import com.kasisripriyawebapps.myindia.util.CommonUtil;
 
@@ -30,6 +32,9 @@ public class CommentServiceImpl implements CommentService {
 	
 	@Autowired
 	AccountService accountService;
+	
+	@Autowired
+	ActivityService activityService;
 
 	@Override
 	@Transactional
@@ -37,7 +42,43 @@ public class CommentServiceImpl implements CommentService {
 
 		Comment comment = preapreCommentObject(commentRequest);
 		Long commentGuid = commentDao.saveComment(comment);
+		
+		comment.setGuid(commentGuid);
+		ActivityRequest activityReq = preapreActivityRequest(comment);
+		
+		//Save For Activity Feed
+		activityService.saveActivity(activityReq);
+		
 		return commentGuid;
+	}
+
+	private ActivityRequest preapreActivityRequest(Comment comment) {
+		
+		ActivityRequest activityRequest = new ActivityRequest();
+		
+		activityRequest.setActivityContent(comment.getCommentText());
+		
+		if(comment.getParentCommentId() != null){
+			activityRequest.setActivityName(ApplicationConstants.COMMENT_REPLIED);
+			//Commented upon
+			activityRequest.setActivityObjectGuid1(comment.getParentCommentId());
+			activityRequest.setActivityObjectType1(ApplicationConstants.OBJECT_TYPE_COMMENT);
+		}else
+			activityRequest.setActivityName(ApplicationConstants.COMMENTED);
+		
+		//Comment
+		activityRequest.setActivityObjectGuid(comment.getGuid());
+		activityRequest.setActivityObjectType(ApplicationConstants.OBJECT_TYPE_COMMENT);
+		
+		//Commented on
+		activityRequest.setActivityObjectGuid1(comment.getObjectGuid());
+		activityRequest.setActivityObjectType1(comment.getObjectType());
+		
+		//Commented By
+		activityRequest.setCreatedBy(comment.getCommentorObjectGuid());
+		activityRequest.setCreatedTimeStamp(comment.getCreatedTimeStamp());
+		
+		return activityRequest;
 	}
 
 	private Comment preapreCommentObject(CommentRequest commentRequest) {

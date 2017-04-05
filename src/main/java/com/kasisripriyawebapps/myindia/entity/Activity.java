@@ -49,6 +49,10 @@ public class Activity implements Serializable {
 	/** The activity name. */
 	@Column(name = "ACTIVITY_NAME")
 	private String activityName;
+	
+	/** The activity name. */
+	@Column(name = "ACTIVITY_CONTENT")
+	private String activityContent;
 
 	/** The activity object type. */
 	@Column(name = "ACTIVITY_OBJECT_TYPE")
@@ -85,7 +89,11 @@ public class Activity implements Serializable {
 	/** The created time stamp. */
 	@Column(name = "CREATED_TIMESTAMP")
 	private Timestamp createdTimeStamp;
-
+	
+	/** The created time stamp. */
+	@Column(name = "CREATED_BY")
+	private Long createdBy;
+	
 	/**
 	 * Gets the guid.
 	 *
@@ -332,5 +340,23 @@ public class Activity implements Serializable {
 	public void setCreatedTimeStamp(Timestamp createdTimeStamp) {
 		this.createdTimeStamp = createdTimeStamp;
 	}
+
+	public Long getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(Long createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public String getActivityContent() {
+		return activityContent;
+	}
+
+	public void setActivityContent(String activityContent) {
+		this.activityContent = activityContent;
+	}
+	
+	
 
 }
