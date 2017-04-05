@@ -120,6 +120,9 @@ public class Event implements Serializable {
 
 	@OneToMany(mappedBy = "event", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<EventImage> eventImages = new ArrayList<EventImage>(0);
+	
+	@OneToMany(mappedBy = "event", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<EventRecipients> eventRecipients = new ArrayList<EventRecipients>(0);
 
 	public Long getGuid() {
 		return guid;
@@ -266,6 +269,17 @@ public class Event implements Serializable {
 
 	public void setPhotoURL(String photoURL) {
 		this.photoURL = photoURL;
+	}
+
+	public List<EventRecipients> getEventRecipients() {
+		return eventRecipients;
+	}
+
+	public void setEventRecipients(List<EventRecipients> eventRecipients) {
+		this.eventRecipients.clear();
+		if (eventRecipients != null) {
+			this.eventRecipients.addAll(eventRecipients);
+		}
 	}
 
 }
