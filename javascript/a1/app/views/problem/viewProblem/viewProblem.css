@@ -11,7 +11,8 @@
 }
 
 #problem_main_photo {
-	height: 250px;
+	height: 275px;
+	margin: 10px 10px 0px 10px;
 }
 
 #problem_main_photo img {
@@ -36,12 +37,12 @@
 }
 
 #problem_basic_details_container {
-	background-color: white;
-	margin: 0px !important;
+	background-color: #00a699;
+	margin: 10px 10px 0px 0px !important;
 }
 
 #problem_basic_details_content #problem_name {
-	color: black;
+	color: #ffffff;
 	font-size: 17px;
 	letter-spacing: 1px;
 	font-weight: 600;
@@ -50,15 +51,17 @@
 }
 
 #problem_tabs {
-	background-color: #646464;
+	background-color: #ebebeb;
 	padding: 10px;
 }
 
 #problem_tabs .problem_tab {
 	padding-bottom: 10px;
 	padding-top: 10px;
-	box-shadow: 0px 10px 10px 0 rgb(52, 52, 52);
+	box-shadow: 0px 3px 10px 0 rgb(220, 225, 220);
 	padding-left: 10px;
+	background-color: #00a699;
+	margin-bottom: 10px;
 }
 
 #problem_tabs .problem_tab .problem_tab_icon {
@@ -76,7 +79,7 @@
 }
 
 #problem_highlites {
-	padding: 10px;
+	padding: 10px 10px 0px 10px;
 }
 
 #problem_highlites #problem_category_name {
@@ -85,13 +88,191 @@
 	font-size: 16px;
 }
 
-#problem_highlites #problem_status {
-	
-}
-
 #problem_highlites #problem_popularity span span i {
 	color: #f94c59;
 	font-weight: 900;
 	font-size: 15px;
 	padding-right: 4px;
+}
+
+.margin0 {
+	margin: 0px !important;
+}
+
+.margin10 {
+	margin: 10px 10px 0px 0px !important;
+}
+
+.padding0 {
+	padding: 0px !important;
+}
+
+.btn_lbl {
+	background-color: #ffffff;
+	padding: 5px 15px 5px 15px;
+	letter-spacing: 1px;
+	color: #00a699;
+}
+
+#problem_severity .Critical {
+	background-color: red !important;
+}
+
+#problem_severity .High {
+	background-color: orange !important;
+}
+
+#problem_severity .Medium {
+	background-color: blue !important;
+}
+
+#problem_severity .Low {
+	background-color: green !important;
+}
+
+.color_white {
+	color: white;
+}
+
+#problem_basic_details_people_content {
+	padding: 0px;
+	margin-right: 0px;
+	margin-top: 10px;
+}
+
+#problem_basic_people_details {
+	height: 185px;
+	padding: 0px !important;
+}
+
+#problem_basic_people_details .content {
+	background-color: white;
+	height: 100%;
+	margin-right: 10px;
+}
+
+#problem_basic_details_effected_content {
+	height: 185px;
+	padding: 0px !important;
+}
+
+#problem_basic_details_effected_content .content {
+	background-color: white;
+	height: 100%;
+	margin-right: 10px;
+}
+
+.margintop10 {
+	margin: 0px 10px 0px 0px !important;
+}
+
+#problem_location {
+	margin-top: 4px;
+}
+
+#problem_location i {
+	color: white !important;
+	font-size: 20px !important;
+	margin-right: 7px;
+	vertical-align: text-bottom;
+}
+
+#problem_location label {
+	letter-spacing: 1px;
+	font-size: 15px;
+}
+
+#problem_basic_people_details img, .contributor_photo img {
+	border-radius: 50%;
+	vertical-align: middle;
+	border: 3px solid #00a699;
+}
+
+.ltrspc1 {
+	letter-spacing: 1px;
+}
+
+.paddingtop10 {
+	padding-top: 10px !important;
+}
+
+.logged_currently_with .logged_currently_with_photo {
+	float: left;
+	width: 65px;
+}
+
+.logged_currently_with .logged_currently_with_name {
+	float: left;
+}
+
+.affected_row {
+	border: 1px solid grey;
+}
+
+.affected_row .people_affected_col {
+	font-size: 18px;
+	border-right: 1px solid gray;
+	padding: 10px;
+}
+
+.affected_row .people_affected_col .count {
+	float: left;
+	margin-top: 8px;
+	width: 60px;
+}
+
+.affected_row .people_affected_col .desc {
+	float: left;
+}
+
+.problem_counts {
+	height: 57px;
+	width: 75%;
+	margin: 0 auto !important;
+	margin-bottom: 6px !important;
+	border-bottom: 2px solid #00a699;
+}
+
+.problem_counts .problem_count {
+	padding: 0px !important;
+}
+
+.problem_counts .problem_count .desc {
+	text-align: center;
+	font-size: 15px;
+	font-weight: 600;
+	color: #00a699;
+	letter-spacing: 1px;
+}
+
+.problem_counts .problem_count .count {
+	font-size: 23px;
+	text-align: center;
+	color: #f94c59;
+	font-weight: 900;
+}
+
+.problem_tabs_content {
+	height: auto;
+	background-color: white;
+	width: 99%;
+	margin-top: 10px !important;
+}
+
+.problem_tabs_content_tab {
+	letter-spacing: 1px;
+	font-size: 14px;
+	font-weight: 400;
+	padding: 20px;
+	word-spacing: normal;
+	word-break: break-word;
+}
+
+#problem_top_highlites #problem_status, #problem_top_highlites #problem_severity,
+	#problem_top_highlites #problem_location {
+	padding: 0px !important;
+}
+
+#view_problem_comment_box_container {
+	width: 100%;
 }

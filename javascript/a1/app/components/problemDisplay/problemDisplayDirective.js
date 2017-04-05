@@ -11,7 +11,9 @@
 				problems: '=',
 				columnSplitClass: '='
 			},
-			templateUrl : resource + 'partials/problemDisplay.html'
+			templateUrl : resource + 'partials/problemDisplay.html',
+			controller : 'problemDisplayController',
+			controllerAs : 'problemDisplay'
 		};
 
 		return problemDisplay;
