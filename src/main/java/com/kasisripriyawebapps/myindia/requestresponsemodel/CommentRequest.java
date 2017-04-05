@@ -1,11 +1,11 @@
 package com.kasisripriyawebapps.myindia.requestresponsemodel;
 
-import java.sql.Timestamp;
+import com.kasisripriyawebapps.myindia.constants.ApplicationConstants;
 
 public class CommentRequest {
 
 	/** The commentor object type. */
-	private String commentorObjectType;
+	private String commentorObjectType = ApplicationConstants.VOTER_ACCOUNT_TYPE;
 
 	/** The commentor object guid. */
 	private Long commentorObjectGuid;
@@ -22,17 +22,15 @@ public class CommentRequest {
 	/** The parent comment id. */
 	private Long parentCommentId;
 
-	private String commentType;
+	private String commentType = "Text";
 
 	public CommentRequest() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	
-
-	public CommentRequest(String commentorObjectType, Long commentorObjectGuid, String objectType,
-			Long objectGuid, String commentText, Long parentCommentId, String commentType) {
+	public CommentRequest(String commentorObjectType, Long commentorObjectGuid, String objectType, Long objectGuid,
+			String commentText, Long parentCommentId, String commentType) {
 		super();
 		this.commentorObjectType = commentorObjectType;
 		this.commentorObjectGuid = commentorObjectGuid;
@@ -44,6 +42,9 @@ public class CommentRequest {
 	}
 
 	public String getCommentorObjectType() {
+		if (commentorObjectType == null || commentorObjectType.isEmpty()) {
+			commentorObjectType = ApplicationConstants.VOTER_ACCOUNT_TYPE;
+		}
 		return commentorObjectType;
 	}
 
@@ -92,14 +93,14 @@ public class CommentRequest {
 	}
 
 	public String getCommentType() {
+		if (commentType == null || commentType.isEmpty()) {
+			commentType = "Text";
+		}
 		return commentType;
 	}
 
 	public void setCommentType(String commentType) {
 		this.commentType = commentType;
 	}
-
-	
-	
 
 }

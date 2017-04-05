@@ -11,12 +11,11 @@
 		var services = {};
 
 		var commentBoxService = {
-				sendComment : sendComment
+			sendComment : sendComment
 		};
 
 		// Call and save the data
-		let
-		swaggerPromise = swaggerShareService.getAPIMetaData(setAPIMetaData);
+		swaggerShareService.getAPIMetaData(setAPIMetaData);
 
 		return commentBoxService;
 
@@ -29,18 +28,9 @@
 			let
 			deferred = $q.defer();
 
-			if (swaggerPromise) {
-				swaggerPromise.then(function() {
-					services.comment.getLoggedInUserInfo({},
-							sendCommentSuccess, sendCommentFailure);
-
-					swaggerPromise = undefined;
-				})
-			} else {
-				services.comment.getLoggedInUserInfo({}, sendCommentSuccess,
-						sendCommentFailure);
-
-			}
+			services.comment.postComment({
+				body : JSON.stringify(commentData)
+			}, sendCommentSuccess, sendCommentFailure);
 
 			return deferred.promise;
 

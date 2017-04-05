@@ -11,12 +11,14 @@
 		viewProblem.problemDetails = {};
 		viewProblem.objectType="PROBLEM";
 		viewProblem.selectedProblemGuid = $state.params.selectedProblemGuid;
-
 		viewProblem.similarProblems = {};
 		viewProblem.similarProblems.pageNo = 1;
 		viewProblem.similarProblems.pageLimit =4;
 		viewProblem.similarProblems.problems = [];
-
+		viewProblem.changeTab=changeTab;
+		
+		changeTab('viewProblem.overview');
+		
 		viewProblemService.getProblemDetails(viewProblem.selectedProblemGuid).then(getProblemDetailsSuccess).catch(getProblemDetailsFailure);
 
 		function getProblemDetailsSuccess(data){
@@ -54,14 +56,14 @@
 			function filterEntitiesFailure(error){
 				alert(error);
 			}
-
 		}
-
 		function getProblemDetailsFailure(error){
 			alert(error);
 		}
 		
-	
+		function changeTab(tabURL){
+			$state.go(tabURL);
+		}
 	}
 
 })();

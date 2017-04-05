@@ -80,6 +80,14 @@
 			params : {
 				'selectedProblemGuid' : ''
 			}
+		}).state('viewProblem.overview', {
+			url : '/overview',
+			templateUrl : resource + 'partials/overview.html'
+		}).state('viewProblem.discussions', {
+			url : '/discussions',
+			templateUrl : resource + 'partials/discussions.html',
+			controller : 'discussionsController',
+			controllerAs : 'discussions',
 		});
 	}
 })();

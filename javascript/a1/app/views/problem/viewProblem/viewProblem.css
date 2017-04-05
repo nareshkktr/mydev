@@ -62,6 +62,7 @@
 	padding-left: 10px;
 	background-color: #00a699;
 	margin-bottom: 10px;
+	cursor: pointer;
 }
 
 #problem_tabs .problem_tab .problem_tab_icon {
@@ -206,31 +207,39 @@
 }
 
 .affected_row {
-	border: 1px solid grey;
+	border-bottom: 1px solid grey;
 }
 
 .affected_row .people_affected_col {
 	font-size: 18px;
-	border-right: 1px solid gray;
+	border-right: 1px solid #ccc;
 	padding: 10px;
+	text-align: center;
 }
 
 .affected_row .people_affected_col .count {
 	float: left;
 	margin-top: 8px;
-	width: 60px;
+	width: 76px;
+	font-weight: 900;
+	color: #f94c59;
 }
 
 .affected_row .people_affected_col .desc {
 	float: left;
+	font-size: 14px;
+	color: #00a699;
+	font-weight: 600;
+	letter-spacing: 1px;
 }
 
 .problem_counts {
-	height: 57px;
+	height: 62px;
 	width: 75%;
 	margin: 0 auto !important;
 	margin-bottom: 6px !important;
 	border-bottom: 2px solid #00a699;
+	padding-top: 3px;
 }
 
 .problem_counts .problem_count {

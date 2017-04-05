@@ -13,8 +13,8 @@
 	border-radius: 10px 0px 0px 10px !important;
 	display: block;
 	width: 100%;
-	padding: 0px 0px;
-	font-size: 14px;
+	padding: 5px;
+	font-size: 14px !important;
 	line-height: 1.42857143;
 	color: #555;
 	background-color: #fff;
@@ -29,8 +29,8 @@
 		.15s;
 	transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 	border: 1px solid #ccc;
-    resize: none;
-    border-right: none;
+	resize: none;
+	border-right: none;
 }
 
 .comment_box_container .addons {
@@ -40,7 +40,7 @@
 	border-radius: 0px 10px 10px 0px !important;
 	border: 1px solid #ccc;
 	background-color: white;
-	border-right:none;
+	border-right: none;
 }
 
 .comment_box_container .addons .row {

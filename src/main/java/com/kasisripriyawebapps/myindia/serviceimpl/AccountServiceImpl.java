@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.gson.Gson;
+import com.kasisripriyawebapps.myindia.constants.ApplicationConstants;
 import com.kasisripriyawebapps.myindia.constants.ExceptionConstants;
 import com.kasisripriyawebapps.myindia.dao.AccountDao;
 import com.kasisripriyawebapps.myindia.dao.LocationDao;
@@ -74,7 +75,7 @@ public class AccountServiceImpl implements AccountService {
 		account.setCreatedTimeStamp(CommonUtil.getCurrentGMTTimestamp());
 		account.setUserEmail(createAccountRequest.getEmailAddress());
 		SolrUserMaster solrUser = userMasterRepository.findByUserGuid(createAccountRequest.getUserGuid());
-		account.setType("VOTER");
+		account.setType(ApplicationConstants.VOTER_ACCOUNT_TYPE);
 		UserInfo userInfo = new UserInfo();
 		if (solrUser != null) {
 			String solrUserJsonStr = new Gson().toJson(solrUser);
@@ -105,7 +106,8 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	@Transactional
-	public BaseUserInformation prepareBaseUserInformation(Account account,Boolean obtainTokenInfo) throws InternalServerException, RecordNotFoundException {
+	public BaseUserInformation prepareBaseUserInformation(Account account, Boolean obtainTokenInfo)
+			throws InternalServerException, RecordNotFoundException {
 
 		BaseUserInformation baseUserInfo = new BaseUserInformation();
 		JSONObject authTokenInfo = null;
@@ -128,8 +130,8 @@ public class AccountServiceImpl implements AccountService {
 				throw new InternalServerException(e.getMessage());
 			}
 		}
-		//populateLocationInformation
-		UserLocationDetails userLocationDetails=userService.getLoggedInUserLocation(account.getGuid());
+		// populateLocationInformation
+		UserLocationDetails userLocationDetails = userService.getLoggedInUserLocation(account.getGuid());
 		baseUserInfo.setUserLocation(userLocationDetails);
 
 		return baseUserInfo;
@@ -141,12 +143,13 @@ public class AccountServiceImpl implements AccountService {
 		final Account account = accountDao.getAccountByUserName(userName);
 		return account;
 	}
-	
+
 	@Override
 	@Transactional(readOnly = true)
-	public BaseUserInformation getAccountByGuid(final Long accountId) throws InternalServerException, RecordNotFoundException {
+	public BaseUserInformation getAccountByGuid(final Long accountId)
+			throws InternalServerException, RecordNotFoundException {
 		final Account account = accountDao.getAccountById(accountId);
-		return prepareBaseUserInformation(account,false);
+		return prepareBaseUserInformation(account, false);
 	}
 
 	@Override
@@ -166,7 +169,7 @@ public class AccountServiceImpl implements AccountService {
 				throw new RecordNotFoundException(ExceptionConstants.LOGIN_ACCOUNT_NOT_FOUND_PASSWORD);
 			}
 		}
-		baseUserInfo = prepareBaseUserInformation(account,true);
+		baseUserInfo = prepareBaseUserInformation(account, true);
 		return baseUserInfo;
 	}
 
@@ -174,23 +177,23 @@ public class AccountServiceImpl implements AccountService {
 	@Transactional(readOnly = true)
 	public BaseUserInformation prepareLoggedInUserInfo(String userName)
 			throws InternalServerException, RecordNotFoundException {
-		
+
 		BaseUserInformation baseUserInfo = new BaseUserInformation();
 
 		Account account = getAccountByUserName(userName);
 		if (account == null) {
 			throw new RecordNotFoundException(ExceptionConstants.LOGIN_ACCOUNT_NOT_FOUND_USER_NAME);
 		}
-		baseUserInfo = prepareBaseUserInformation(account,true);
+		baseUserInfo = prepareBaseUserInformation(account, true);
 		return baseUserInfo;
 	}
 
 	@Override
 	public JSONObject refreshAccessToken(String refreshToken) throws InternalServerException {
 		// TODO Auto-generated method stub
-		
+
 		JSONObject tokenInfo = oAuthService.getAccessTokenByRefreshToken(refreshToken);
-		
+
 		return tokenInfo;
 	}
 
@@ -199,11 +202,11 @@ public class AccountServiceImpl implements AccountService {
 	public List<BaseUserInformation> getAccountsByIds(Set<Long> accountIds)
 			throws InternalServerException, RecordNotFoundException {
 		List<Account> accounts = accountDao.getAccountsById(accountIds);
-		
+
 		List<BaseUserInformation> baseUserInfoForAccounts = new ArrayList<BaseUserInformation>();
-		
-		for(Account acc: accounts){
-			baseUserInfoForAccounts.add(prepareBaseUserInformation(acc,false));
+
+		for (Account acc : accounts) {
+			baseUserInfoForAccounts.add(prepareBaseUserInformation(acc, false));
 		}
 		return baseUserInfoForAccounts;
 	}
