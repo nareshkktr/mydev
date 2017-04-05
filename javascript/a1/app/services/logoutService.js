@@ -4,9 +4,9 @@
 	angular.module('myindia-app').factory("logoutService",
 			logoutService);
 
-	logoutService.$inject = [ '$q', 'swaggerShareService' ];
+	logoutService.$inject = [ '$q', 'swaggerShareService','refreshAccessTokenService' ];
 
-	function logoutService($q, swaggerShareService) {
+	function logoutService($q, swaggerShareService,refreshAccessTokenService) {
 
 		var services = {};
 
@@ -39,7 +39,7 @@
 	      		});
 
 				//Stop timer for refresh token
-				refreshAccessTokenService.stopTokenExpiryTimer(expiresIn);
+				refreshAccessTokenService.stopTokenExpiryTimer();
 
 				deferred.resolve(data);
 			}
