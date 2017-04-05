@@ -105,7 +105,7 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	@Transactional
-	public BaseUserInformation prepareBaseUserInformation(Account account,Boolean obtainTokenInfo) throws InternalServerException, RecordNotFoundException {
+	public BaseUserInformation prepareBaseUserInformation(Account account,Boolean obtainTokenInfo,Boolean locationInfo) throws InternalServerException, RecordNotFoundException {
 
 		BaseUserInformation baseUserInfo = new BaseUserInformation();
 		JSONObject authTokenInfo = null;
@@ -117,6 +117,7 @@ public class AccountServiceImpl implements AccountService {
 		baseUserInfo.setGender(userInfo.getGender());
 		baseUserInfo.setUserImage(userInfo.getPhotoURL());
 		baseUserInfo.setUserName(account.getUserName());
+		baseUserInfo.setAccountGuid(account.getGuid());
 
 		if (account != null && obtainTokenInfo) {
 			try {
@@ -128,9 +129,12 @@ public class AccountServiceImpl implements AccountService {
 				throw new InternalServerException(e.getMessage());
 			}
 		}
-		//populateLocationInformation
-		UserLocationDetails userLocationDetails=userService.getLoggedInUserLocation(account.getGuid());
-		baseUserInfo.setUserLocation(userLocationDetails);
+		if(locationInfo){
+			//populateLocationInformation
+			UserLocationDetails userLocationDetails=userService.getLoggedInUserLocation(account.getGuid());
+			baseUserInfo.setUserLocation(userLocationDetails);
+		}
+		
 
 		return baseUserInfo;
 	}
@@ -146,7 +150,7 @@ public class AccountServiceImpl implements AccountService {
 	@Transactional(readOnly = true)
 	public BaseUserInformation getAccountByGuid(final Long accountId) throws InternalServerException, RecordNotFoundException {
 		final Account account = accountDao.getAccountById(accountId);
-		return prepareBaseUserInformation(account,false);
+		return prepareBaseUserInformation(account,false,true);
 	}
 
 	@Override
@@ -166,7 +170,7 @@ public class AccountServiceImpl implements AccountService {
 				throw new RecordNotFoundException(ExceptionConstants.LOGIN_ACCOUNT_NOT_FOUND_PASSWORD);
 			}
 		}
-		baseUserInfo = prepareBaseUserInformation(account,true);
+		baseUserInfo = prepareBaseUserInformation(account,true,true);
 		return baseUserInfo;
 	}
 
@@ -181,7 +185,7 @@ public class AccountServiceImpl implements AccountService {
 		if (account == null) {
 			throw new RecordNotFoundException(ExceptionConstants.LOGIN_ACCOUNT_NOT_FOUND_USER_NAME);
 		}
-		baseUserInfo = prepareBaseUserInformation(account,true);
+		baseUserInfo = prepareBaseUserInformation(account,true,true);
 		return baseUserInfo;
 	}
 
@@ -203,7 +207,7 @@ public class AccountServiceImpl implements AccountService {
 		List<BaseUserInformation> baseUserInfoForAccounts = new ArrayList<BaseUserInformation>();
 		
 		for(Account acc: accounts){
-			baseUserInfoForAccounts.add(prepareBaseUserInformation(acc,false));
+			baseUserInfoForAccounts.add(prepareBaseUserInformation(acc,false,false));
 		}
 		return baseUserInfoForAccounts;
 	}

@@ -62,6 +62,18 @@ public class Comment implements Serializable {
 	/** The created time stamp. */
 	@Column(name = "CREATED_TIMESTAMP")
 	private Timestamp createdTimeStamp;
+	
+	/** The created time stamp. */
+	@Column(name = "UPDATED_TIMESTAMP")
+	private Timestamp updatedTimeStamp;
+	
+	/** The number of replies for the given comment. */
+	@Column(name = "REPLY_COUNT")
+	private Integer replyCount;
+	
+	/** The number of replies for the given comment. */
+	@Column(name = "COMMENT_TYPE")
+	private String commentType;
 
 	@OneToMany(mappedBy = "comment", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<CommentImage> commentImages = new ArrayList<CommentImage>(0);
@@ -229,4 +241,29 @@ public class Comment implements Serializable {
 		}
 	}
 
+	public Integer getReplyCount() {
+		return replyCount;
+	}
+
+	public void setReplyCount(Integer replyCount) {
+		this.replyCount = replyCount;
+	}
+
+	public Timestamp getUpdatedTimeStamp() {
+		return updatedTimeStamp;
+	}
+
+	public void setUpdatedTimeStamp(Timestamp updatedTimeStamp) {
+		this.updatedTimeStamp = updatedTimeStamp;
+	}
+
+	public String getCommentType() {
+		return commentType;
+	}
+
+	public void setCommentType(String commentType) {
+		this.commentType = commentType;
+	}
+
+	
 }

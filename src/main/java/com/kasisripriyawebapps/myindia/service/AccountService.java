@@ -31,9 +31,9 @@ public interface AccountService {
 
 	BaseUserInformation getAccountByGuid(Long accountId) throws InternalServerException, RecordNotFoundException;
 
-	BaseUserInformation prepareBaseUserInformation(Account account, Boolean obtainTokenInfo)
-			throws InternalServerException, RecordNotFoundException;
-
 	List<BaseUserInformation> getAccountsByIds(Set<Long> accountIds) throws InternalServerException, RecordNotFoundException;
+
+	BaseUserInformation prepareBaseUserInformation(Account account, Boolean obtainTokenInfo, Boolean locationInfo)
+			throws InternalServerException, RecordNotFoundException;
 	
 }

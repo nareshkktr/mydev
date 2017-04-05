@@ -1,8 +1,12 @@
 package com.kasisripriyawebapps.myindia.endpoints;
 
+import java.util.List;
+
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -15,8 +19,9 @@ import com.kasisripriyawebapps.myindia.constants.ExceptionConstants;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 import com.kasisripriyawebapps.myindia.exception.PreConditionFailedException;
 import com.kasisripriyawebapps.myindia.exception.PreConditionRequiredException;
+import com.kasisripriyawebapps.myindia.exception.RecordNotFoundException;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.CommentRequest;
-import com.kasisripriyawebapps.myindia.requestresponsemodel.EventRequest;
+import com.kasisripriyawebapps.myindia.requestresponsemodel.CommentResponse;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.SaveOrUpdateDeleteObjectResponse;
 import com.kasisripriyawebapps.myindia.service.CommentService;
 
@@ -44,6 +49,23 @@ public class CommentEndPoint {
 		}
 		SaveOrUpdateDeleteObjectResponse comemntObjResponse = new SaveOrUpdateDeleteObjectResponse(commentGuid);
 		return Response.status(Status.OK).entity(comemntObjResponse).build();
+	}
+	
+	@GET
+	@ApiOperation(value = EndPointConstants.GET_FIRST_LEVEL_COMMENTS_API_VALUE, nickname = EndPointConstants.GET_FIRST_LEVEL_COMMENTS_API_NICKNAME, httpMethod = EndPointConstants.HTTP_GET, notes = EndPointConstants.GET_FIRST_LEVEL_COMMENTS_API_DESCRIPTION)
+	@Path(EndPointConstants.GET_FIRST_LEVEL_COMMENTS_REQUEST_MAPPING)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getFirstLevelComments(@QueryParam("objectGuid") Long objectGuid,@QueryParam("pageNo") Integer pageNo,@QueryParam("limit") Integer limit) throws InternalServerException, PreConditionRequiredException, RecordNotFoundException {
+		
+		List<CommentResponse> commentors = null;
+		
+		if (objectGuid != null) {
+			commentors = commentService.getFirstLevelComemnts(objectGuid,pageNo,limit);
+		}else{
+			throw new PreConditionRequiredException(ExceptionConstants.REQUEST_NOT_NULL);
+		}
+		
+		return Response.status(Status.OK).entity(commentors).build();
 	}
 	
 	private boolean validateCreateUpdateCommentRequest(CommentRequest commentRequest)
