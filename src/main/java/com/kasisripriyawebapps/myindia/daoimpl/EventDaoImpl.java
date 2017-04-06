@@ -14,9 +14,11 @@ import com.kasisripriyawebapps.myindia.constants.ExceptionConstants;
 import com.kasisripriyawebapps.myindia.dao.EventDao;
 import com.kasisripriyawebapps.myindia.entity.Account;
 import com.kasisripriyawebapps.myindia.entity.Event;
+import com.kasisripriyawebapps.myindia.entity.EventInviteeStatus;
 import com.kasisripriyawebapps.myindia.entity.EventRecipients;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 import com.kasisripriyawebapps.myindia.exception.RecordNotFoundException;
+import com.kasisripriyawebapps.myindia.requestresponsemodel.EventInviteeStatusRequest;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.EventRecipientRequest;
 import com.kasisripriyawebapps.myindia.util.CommonUtil;
 
@@ -81,6 +83,49 @@ public class EventDaoImpl extends BaseDaoImpl<Long, Event> implements EventDao {
 		List<Long> eventRecipientList=query.list();
 		if(eventRecipientList == null || eventRecipientList.isEmpty()){
 			throw new RecordNotFoundException(ExceptionConstants.EVENT_RECIPIENT_NOT_FOUND);
+		}
+		return eventRecipientList;
+	}
+
+	@Override
+	public Long addEventInviteeStatus(EventInviteeStatusRequest request, LoggedInUserDetails loggedInUserDetails)
+			throws InternalServerException {
+		Session session = getSession();
+		EventInviteeStatus eventInviteeStatus=new EventInviteeStatus();
+		Account account=new Account();
+		Event event=new Event();
+		account.setGuid(request.getAccountId());
+		event.setGuid(request.getEventId());
+		eventInviteeStatus.setAccount(account);
+		eventInviteeStatus.setEvent(event);
+		eventInviteeStatus.setReason(request.getReason());
+		eventInviteeStatus.setIsInvited(request.getIsInvited());
+		eventInviteeStatus.setCreatedBy(loggedInUserDetails.getGuid());
+		eventInviteeStatus.setCreatedTimeStamp(CommonUtil.getCurrentGMTTimestamp());
+		eventInviteeStatus.setModifiedBy(loggedInUserDetails.getGuid());
+		eventInviteeStatus.setModifiedTimeStamp(CommonUtil.getCurrentGMTTimestamp());
+		
+		return (Long) session.save(eventInviteeStatus);
+	}
+
+	@Override
+	public Long removeEventInviteeStatusById(Long eventStatusGuid) throws InternalServerException, RecordNotFoundException {
+		Session session = getSession();
+		getEventInviteeStatusById(eventStatusGuid);
+		final Query query = session.getNamedQuery("removeEventInviteeStatus");
+		query.setParameter("eventStatusGuid", eventStatusGuid);
+		query.executeUpdate();
+     return eventStatusGuid;
+	}
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Long> getEventInviteeStatusById(Long eventStatusGuid) throws InternalServerException, RecordNotFoundException {
+		Session session = getSession();
+		final Query query = session.getNamedQuery("getEventInviteeStatus");
+		query.setParameter("eventStatusGuid", eventStatusGuid);
+		List<Long> eventRecipientList=query.list();
+		if(eventRecipientList == null || eventRecipientList.isEmpty()){
+			throw new RecordNotFoundException(ExceptionConstants.EVENT_INVITEE_STATUS_NOT_FOUND);
 		}
 		return eventRecipientList;
 	}
