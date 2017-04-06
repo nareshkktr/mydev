@@ -123,4 +123,7 @@ public class ApplicationConstants {
 	public static final String COMMENT_REPLIED = "Replied";
 	public static final String COMMENTED = "Commented";
 
+	public static final Integer PAGE_START = 1;
+	public static final Integer PAGE_LIMIT = 20;
+
 }

@@ -1095,6 +1095,15 @@ public class EndPointConstants {
 	public static final String GET_FIRST_LEVEL_COMMENTS_API_VALUE = "getFirstLevelComments";
 	public static final String GET_FIRST_LEVEL_COMMENTS_API_NICKNAME = "getFirstLevelComments";
 	public static final String GET_FIRST_LEVEL_COMMENTS_API_DESCRIPTION = "Get First Level comments for the given object.";
-
 	
+	public static final String GET_ACTIVITIES_REQUEST_MAPPING = "getActivities";
+	public static final String GET_ACTIVITIES_API_VALUE = "getActivities";
+	public static final String GET_ACTIVITIES_API_NICKNAME = "getActivities";
+	public static final String GET_ACTIVITIES_API_DESCRIPTION = "Get Activities with pagination.";
+	
+	public static final String GET_ACTIVITIES_BY_OBJECT_REQUEST_MAPPING = "getActivitiesByObject";
+	public static final String GET_ACTIVITIES_BY_OBJECT_API_VALUE = "getActivitiesByObject";
+	public static final String GET_ACTIVITIES_BY_OBJECT_API_NICKNAME = "getActivitiesByObject";
+	public static final String GET_ACTIVITIES_BY_OBJECT_API_DESCRIPTION = "Get Activities with pagination for an object.";
+
 }

@@ -21,7 +21,7 @@ public interface ProblemService {
 	Long createProblem(CreateUpdateProblemRequestData createUpdateProblemRequestData,
 			LoggedInUserDetails loggedInUserDetails) throws InternalServerException;
 
-	ProblemResponse retreiveProblem(Long problemGuid, LoggedInUserDetails loggedInUserDetails) throws InternalServerException, RecordNotFoundException;
+	ProblemResponse retreiveProblem(Long problemGuid) throws InternalServerException, RecordNotFoundException;
 
 	List<ProblemResponse> retreiveProblemsByType(Long problemTypeGuid, LoggedInUserDetails loggedInUserDetails) throws InternalServerException, RecordNotFoundException;
 
@@ -31,5 +31,7 @@ public interface ProblemService {
 	List<ProblemResponse> filterProblems(Set<String> tagTokens, Integer pageNo, Integer pageLimit) throws InternalServerException, RecordNotFoundException;
 
 	List<BaseUserInformation> retreiveProblemContributorsByGuid(Long problemGuid) throws InternalServerException, RecordNotFoundException;
+
+	ProblemResponse retreiveProblemBaseInfo(Long problemGuid) throws InternalServerException, RecordNotFoundException;
 
 }

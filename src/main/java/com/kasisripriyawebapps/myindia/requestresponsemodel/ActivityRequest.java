@@ -22,23 +22,17 @@ public class ActivityRequest {
 	/** The activity object guid. */
 	private Long activityObjectGuid;
 
-	/** The activity object type1. */
-	private String activityObjectType1;
+	/** The activity happened on type. */
+	private String onObjectType;
 
-	/** The activity object guid1. */
-	private Long activityObjectGuid1;
+	/** The activity happened on guid. */
+	private Long onObjectGuid;
 
-	/** The activity object type2. */
-	private String activityObjectType2;
+	/** The activity happened on whose object type. */
+	private String ofObjectType;
 
-	/** The activity object guid2. */
-	private Long activityObjectGuid2;
-
-	/** The activity object type3. */
-	private String activityObjectType3;
-
-	/** The activity object guid3. */
-	private Long activityObjectGuid3;
+	/** The activity happened on whose object guid. */
+	private Long ofObjectGuid;
 
 	/** The created time stamp. */
 	private Timestamp createdTimeStamp;
@@ -94,52 +88,36 @@ public class ActivityRequest {
 		this.activityObjectGuid = activityObjectGuid;
 	}
 
-	public String getActivityObjectType1() {
-		return activityObjectType1;
+	public String getOnObjectType() {
+		return onObjectType;
 	}
 
-	public void setActivityObjectType1(String activityObjectType1) {
-		this.activityObjectType1 = activityObjectType1;
+	public void setOnObjectType(String onObjectType) {
+		this.onObjectType = onObjectType;
 	}
 
-	public Long getActivityObjectGuid1() {
-		return activityObjectGuid1;
+	public Long getOnObjectGuid() {
+		return onObjectGuid;
 	}
 
-	public void setActivityObjectGuid1(Long activityObjectGuid1) {
-		this.activityObjectGuid1 = activityObjectGuid1;
+	public void setOnObjectGuid(Long onObjectGuid) {
+		this.onObjectGuid = onObjectGuid;
 	}
 
-	public String getActivityObjectType2() {
-		return activityObjectType2;
+	public String getOfObjectType() {
+		return ofObjectType;
 	}
 
-	public void setActivityObjectType2(String activityObjectType2) {
-		this.activityObjectType2 = activityObjectType2;
+	public void setOfObjectType(String ofObjectType) {
+		this.ofObjectType = ofObjectType;
 	}
 
-	public Long getActivityObjectGuid2() {
-		return activityObjectGuid2;
+	public Long getOfObjectGuid() {
+		return ofObjectGuid;
 	}
 
-	public void setActivityObjectGuid2(Long activityObjectGuid2) {
-		this.activityObjectGuid2 = activityObjectGuid2;
-	}
-
-	public String getActivityObjectType3() {
-		return activityObjectType3;
-	}
-
-	public void setActivityObjectType3(String activityObjectType3) {
-		this.activityObjectType3 = activityObjectType3;
-	}
-
-	public Long getActivityObjectGuid3() {
-		return activityObjectGuid3;
-	}
-
-	public void setActivityObjectGuid3(Long activityObjectGuid3) {
-		this.activityObjectGuid3 = activityObjectGuid3;
+	public void setOfObjectGuid(Long ofObjectGuid) {
+		this.ofObjectGuid = ofObjectGuid;
 	}
 
 	public Timestamp getCreatedTimeStamp() {
@@ -157,7 +135,4 @@ public class ActivityRequest {
 	public void setCreatedBy(Long createdBy) {
 		this.createdBy = createdBy;
 	}
-	
-	
-
 }

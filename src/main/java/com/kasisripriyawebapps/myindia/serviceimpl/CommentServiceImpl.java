@@ -61,8 +61,8 @@ public class CommentServiceImpl implements CommentService {
 		if(comment.getParentCommentId() != null){
 			activityRequest.setActivityName(ApplicationConstants.COMMENT_REPLIED);
 			//Commented upon
-			activityRequest.setActivityObjectGuid1(comment.getParentCommentId());
-			activityRequest.setActivityObjectType1(ApplicationConstants.OBJECT_TYPE_COMMENT);
+			activityRequest.setOfObjectGuid(comment.getParentCommentId());
+			activityRequest.setOfObjectType(ApplicationConstants.OBJECT_TYPE_COMMENT);
 		}else
 			activityRequest.setActivityName(ApplicationConstants.COMMENTED);
 		
@@ -71,8 +71,8 @@ public class CommentServiceImpl implements CommentService {
 		activityRequest.setActivityObjectType(ApplicationConstants.OBJECT_TYPE_COMMENT);
 		
 		//Commented on
-		activityRequest.setActivityObjectGuid1(comment.getObjectGuid());
-		activityRequest.setActivityObjectType1(comment.getObjectType());
+		activityRequest.setOnObjectGuid(comment.getObjectGuid());
+		activityRequest.setOnObjectType(comment.getObjectType());
 		
 		//Commented By
 		activityRequest.setCreatedBy(comment.getCommentorObjectGuid());
