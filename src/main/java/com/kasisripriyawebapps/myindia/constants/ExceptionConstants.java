@@ -137,6 +137,8 @@ public class ExceptionConstants {
 	public static final String EVENT_LOCATIONDETAILS_SHOULD_NOT_BE_EMPTY = "Event Location Details Should Not Be Empty";
 	
 	public static final String GROUP_NOT_FOUND = "Group Not Found";
+	public static final String EVENT_RECIPIENT_NOT_FOUND ="Event Recipient Not Found";
+	public static final String EVENT_INVITEE_STATUS_NOT_FOUND="Event Invitee Stauts Not Found";
 
 	public static final String COMMENT_OBJECT_GUID_REQUIRED = "Identity of object to which comment belongs is Required";
 	public static final String COMMENT_OBJECT_TYPE_REQUIRED = "Type of object to which comment belongs is Required";

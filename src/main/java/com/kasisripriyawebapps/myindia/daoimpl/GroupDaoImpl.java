@@ -1,10 +1,13 @@
 package com.kasisripriyawebapps.myindia.daoimpl;
 
+import java.util.List;
+
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import com.kasisripriyawebapps.myindia.configs.LoggedInUserDetails;
+import com.kasisripriyawebapps.myindia.constants.ExceptionConstants;
 import com.kasisripriyawebapps.myindia.dao.GroupDao;
 import com.kasisripriyawebapps.myindia.entity.Account;
 import com.kasisripriyawebapps.myindia.entity.GroupMembers;
@@ -54,11 +57,24 @@ public class GroupDaoImpl extends BaseDaoImpl<Long, Groups> implements GroupDao 
 	}
 
 	@Override
-	public void deleteGroupMemberById(Long groupMemberId) {
+	public void deleteGroupMemberById(Long groupMemberId) throws InternalServerException, RecordNotFoundException {
+		getGruopById(groupMemberId);
 		Session session = getSession();
 		final Query query = session.getNamedQuery("removeGroupMember");
 		query.setParameter("groupMemberId", groupMemberId);
 		query.executeUpdate();
 	}
-
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Long> getGruopById(Long groupMemberId) throws InternalServerException, RecordNotFoundException {
+		Session session = getSession();
+		final Query query = session.createQuery("getGroupMember");
+		query.setParameter("groupMemberId", groupMemberId);
+		List<Long> eventRecipientList=query.list();
+		if(eventRecipientList == null || eventRecipientList.isEmpty()){
+			throw new RecordNotFoundException(ExceptionConstants.GROUP_NOT_FOUND);
+		}
+		return eventRecipientList;
+	}
 }

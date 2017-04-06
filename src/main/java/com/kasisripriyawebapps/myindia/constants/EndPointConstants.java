@@ -1106,4 +1106,24 @@ public class EndPointConstants {
 	public static final String GET_ACTIVITIES_BY_OBJECT_API_NICKNAME = "getActivitiesByObject";
 	public static final String GET_ACTIVITIES_BY_OBJECT_API_DESCRIPTION = "Get Activities with pagination for an object.";
 
+	public static final String ADD_EVENT_RECIPIENT_REQUEST_MAPPING = "addEventRecipient";
+	public static final String ADD_EVENT_RECIPIENT_API_VALUE = "addEventRecipient";
+	public static final String ADD_EVENT_RECIPIENT_API_NICKNAME = "addEventRecipient";
+	public static final String ADD_EVENT_RECIPIENT_API_DESCRIPTION = "Add Event Recipient";
+	
+	public static final String REMOVE_EVENT_RECIPIENT_REQUEST_MAPPING = "removeEventRecipient/{eventGuid}";
+	public static final String REMOVE_EVENT_RECIPIENT_API_VALUE = "removeEventRecipient";
+	public static final String REMOVE_EVENT_RECIPIENT_API_NICKNAME = "removeEventRecipient";
+	public static final String REMOVE_EVENT_RECIPIENT_API_DESCRIPTION = "Remove Event Recipient ";
+	
+	public static final String ADD_EVENT_INVITEE_STATUS_REQUEST_MAPPING = "addEventInviteeStatus";
+	public static final String ADD_EVENT_INVITEE_STATUS_API_VALUE = "addEventInviteeStatus";
+	public static final String ADD_EVENT_INVITEE_STATUS_API_NICKNAME = "addEventInviteeStatus";
+	public static final String ADD_EVENT_INVITEE_STATUS_API_DESCRIPTION = "Add Event Invitee Status";
+	
+	public static final String REMOVE_EVENT_INVITEE_STATUS_REQUEST_MAPPING = "removeEventInviteeStatus/{eventGuid}";
+	public static final String REMOVE_EVENT_INVITEE_STATUS_API_VALUE = "removeEventInviteeStatus";
+	public static final String REMOVE_EVENT_INVITEE_STATUS_API_NICKNAME = "removeEventInviteeStatus";
+	public static final String REMOVE_EVENT_INVITEE_STATUS_API_DESCRIPTION = "Remove Event Invitee Status";
+
 }

@@ -21,6 +21,7 @@ import com.kasisripriyawebapps.myindia.entity.LocationMaster;
 import com.kasisripriyawebapps.myindia.exception.ConflictException;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 import com.kasisripriyawebapps.myindia.exception.RecordNotFoundException;
+import com.kasisripriyawebapps.myindia.requestresponsemodel.EventInviteeStatusRequest;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.EventRecipientRequest;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.EventRequest;
 import com.kasisripriyawebapps.myindia.service.EventService;
@@ -184,5 +185,35 @@ public class EventServiceImpl implements EventService {
 		eventDao.deleteEventById(event);
 		return eventId;
 
+	}
+
+	@Override
+	@Transactional
+	public Long addEventRecipient(EventRecipientRequest request, LoggedInUserDetails loggedInUserDetails)
+			throws InternalServerException {
+		Long responseId=eventDao.addEventRecipient(request,loggedInUserDetails);
+		return responseId;
+	}
+
+	@Override
+	@Transactional
+	public Long removeEventRecipientById(Long eventRecipientGuid) throws InternalServerException, RecordNotFoundException {
+		eventDao.removeEventRecipientById(eventRecipientGuid);
+		return eventRecipientGuid;
+	}
+
+	@Override
+	@Transactional
+	public Long addEventInviteeStatus(EventInviteeStatusRequest request, LoggedInUserDetails loggedInUserDetails)
+			throws InternalServerException {
+		
+		return eventDao.addEventInviteeStatus(request,loggedInUserDetails);
+	}
+
+	@Override
+	@Transactional
+	public Long removeEventInviteeStatusById(Long eventRecipientId) throws InternalServerException, RecordNotFoundException {
+		eventDao.getEventRecipientById(eventRecipientId);
+		return eventRecipientId;
 	}
 }

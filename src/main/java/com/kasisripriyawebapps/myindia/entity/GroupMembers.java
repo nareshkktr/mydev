@@ -20,7 +20,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "GROUP_MEMBERS")
 @XmlRootElement
 @NamedNativeQueries({
-	@NamedNativeQuery(name = "removeGroupMember", query ="delete from GROUP_MEMBERS where group_guid=:groupMemberId")})
+	@NamedNativeQuery(name = "removeGroupMember", query ="delete from GROUP_MEMBERS where GROUP_MEMBER_GUID=:groupMemberId"),
+	@NamedNativeQuery(name = "getGroupMember", query ="select GROUP_MEMBER_GUID from GROUP_MEMBERS where GROUP_MEMBER_GUID=:groupMemberId")})
 public class GroupMembers {
 	
 	@Id

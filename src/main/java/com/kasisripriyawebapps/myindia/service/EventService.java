@@ -8,6 +8,8 @@ import com.kasisripriyawebapps.myindia.entity.Event;
 import com.kasisripriyawebapps.myindia.exception.ConflictException;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 import com.kasisripriyawebapps.myindia.exception.RecordNotFoundException;
+import com.kasisripriyawebapps.myindia.requestresponsemodel.EventInviteeStatusRequest;
+import com.kasisripriyawebapps.myindia.requestresponsemodel.EventRecipientRequest;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.EventRequest;
 
 /**
@@ -19,5 +21,9 @@ public interface EventService {
 	Long deleteEventById(Long eventGuid)throws InternalServerException,RecordNotFoundException;
 	Event getEventById(Long eventGuid)throws InternalServerException,RecordNotFoundException;
 	EventRequest getEventId(Long eventGuid)throws InternalServerException,RecordNotFoundException;
-
+	Long addEventRecipient(EventRecipientRequest request,LoggedInUserDetails loggedInUserDetails) throws InternalServerException;
+	Long removeEventRecipientById(Long eventGuid)throws InternalServerException,RecordNotFoundException;
+	Long addEventInviteeStatus(EventInviteeStatusRequest request,LoggedInUserDetails loggedInUserDetails) throws InternalServerException;
+	Long removeEventInviteeStatusById(Long eventGuid)throws InternalServerException,RecordNotFoundException;
+	
 }
