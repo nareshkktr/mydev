@@ -13,4 +13,6 @@ public interface CommentService {
 
 	List<CommentResponse> getFirstLevelComemnts(Long objectGuid, Integer pageNo, Integer limit) throws InternalServerException, RecordNotFoundException;
 
+	List<CommentResponse> getSecondLevelComments(Long objectGuid, Long parentCommentId, Integer pageNo, Integer limit) throws InternalServerException, RecordNotFoundException;
+
 }

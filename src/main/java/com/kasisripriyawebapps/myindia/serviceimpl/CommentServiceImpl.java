@@ -157,4 +157,13 @@ public class CommentServiceImpl implements CommentService {
 		return commentorsResponse;
 	}
 
+	@Override
+	public List<CommentResponse> getSecondLevelComments(Long objectGuid, Long parentCommentId, Integer pageNo,
+			Integer limit) throws InternalServerException, RecordNotFoundException {
+		
+		List<Comment> comments = commentDao.getCommentsByObjectGuidAndParentId(objectGuid,parentCommentId,pageNo,limit);
+		List<CommentResponse> commentsResponse = preapreCommentsResponse(comments);
+		return commentsResponse;
+	}
+
 }

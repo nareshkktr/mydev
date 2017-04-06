@@ -64,7 +64,15 @@ body {
 	color: #78787c;
 }
 
-#logged-in-user-icon {
+.user_profile_label{
+	border-radius: 50%;
+	text-align: center;
+	width: 38px;
+	background-color: #f94c59 !important;
+	border: 2px solid #fda68a;
+}
+
+.user_profile_image{
 	border-radius: 50%;
 	width: 38px;
 	border: 2px solid #fda68a;

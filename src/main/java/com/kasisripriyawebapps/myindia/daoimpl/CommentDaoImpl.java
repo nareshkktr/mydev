@@ -36,4 +36,21 @@ public class CommentDaoImpl extends BaseDaoImpl<Long, Comment> implements Commen
 		return getAllByConditionsByPage(criterionList,sortCriteria,pageNo,limit);
 	}
 
+	@Override
+	public List<Comment> getCommentsByObjectGuidAndParentId(Long objectGuid, Long parentCommentId, Integer pageNo,
+			Integer limit) throws InternalServerException {
+		
+		Criterion objectGuidCriterion = Restrictions.eq("objectGuid", objectGuid);
+		Criterion secondLevelCommentCriterion = Restrictions.eq("parentCommentId",parentCommentId);
+		List<Criterion> criterionList =  new ArrayList<Criterion>();
+		
+		criterionList.add(objectGuidCriterion);
+		criterionList.add(secondLevelCommentCriterion);
+		
+		SortCriteriaData sortCriteria = new SortCriteriaData();
+		sortCriteria.setProperty("createdTimeStamp");
+		sortCriteria.setIsAscending(true);
+		return getAllByConditionsByPage(criterionList,sortCriteria,pageNo,limit);
+	}
+
 }

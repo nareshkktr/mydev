@@ -1131,4 +1131,9 @@ public class EndPointConstants {
 	public static final String GET_PROBLEM_TYPES_BY_CATEGORY_API_NICKNAME = "getProblemTypesByCategory";
 	public static final String GET_PROBLEM_TYPES_BY_CATEGORY_API_DESCRIPTION = "Get the problem types related to a particular category.";
 
+	public static final String GET_SECOND_LEVEL_COMMENTS_API_NICKNAME =  "getSecondLevelComments";
+	public static final String GET_SECOND_LEVEL_COMMENTS_API_VALUE = "getSecondLevelComments";
+	public static final String GET_SECOND_LEVEL_COMMENTS_REQUEST_MAPPING = "getSecondLevelComments";
+	public static final String GET_SECOND_LEVEL_COMMENTS_API_DESCRIPTION = "Get replies for the comments for the given comment and for the given object.";
+
 }

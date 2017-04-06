@@ -64,16 +64,43 @@ public class CommentEndPoint extends BaseEndPoint {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getFirstLevelComments(@QueryParam("objectGuid") Long objectGuid,@QueryParam("pageNo") Integer pageNo,@QueryParam("limit") Integer limit) throws InternalServerException, PreConditionRequiredException, RecordNotFoundException {
 		
-		List<CommentResponse> commentors = null;
+		List<CommentResponse> comments = null;
 		
 		if (objectGuid != null) {
-			commentors = commentService.getFirstLevelComemnts(objectGuid,pageNo,limit);
+			comments = commentService.getFirstLevelComemnts(objectGuid,pageNo,limit);
 		}else{
 			throw new PreConditionRequiredException(ExceptionConstants.REQUEST_NOT_NULL);
 		}
 		
-		return Response.status(Status.OK).entity(commentors).build();
+		return Response.status(Status.OK).entity(comments).build();
 	}
+	
+	@GET
+	@ApiOperation(value = EndPointConstants.GET_SECOND_LEVEL_COMMENTS_API_VALUE, nickname = EndPointConstants.GET_SECOND_LEVEL_COMMENTS_API_NICKNAME, httpMethod = EndPointConstants.HTTP_GET, notes = EndPointConstants.GET_SECOND_LEVEL_COMMENTS_API_DESCRIPTION)
+	@Path(EndPointConstants.GET_SECOND_LEVEL_COMMENTS_REQUEST_MAPPING)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getSecondLevelComments(@QueryParam("objectGuid") Long objectGuid,@QueryParam("parentCommentId") Long parentCommentId,@QueryParam("pageNo") Integer pageNo,@QueryParam("limit") Integer limit) throws InternalServerException, PreConditionRequiredException, RecordNotFoundException {
+		
+		List<CommentResponse> comments = null;
+		
+		//Validate input
+		if(pageNo == null){
+			pageNo=ApplicationConstants.PAGE_START;
+		}
+		if(limit == null){
+			limit = ApplicationConstants.PAGE_LIMIT;
+		}
+		
+		if (objectGuid != null && parentCommentId != null) {
+			comments = commentService.getSecondLevelComments(objectGuid,parentCommentId,pageNo,limit);
+		}else{
+			throw new PreConditionRequiredException(ExceptionConstants.REQUEST_NOT_NULL);
+		}
+		
+		return Response.status(Status.OK).entity(comments).build();
+	}
+	
+	
 	
 	private boolean validateCreateUpdateCommentRequest(CommentRequest commentRequest)
 			throws PreConditionFailedException, PreConditionRequiredException {
