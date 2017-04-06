@@ -1126,4 +1126,9 @@ public class EndPointConstants {
 	public static final String REMOVE_EVENT_INVITEE_STATUS_API_NICKNAME = "removeEventInviteeStatus";
 	public static final String REMOVE_EVENT_INVITEE_STATUS_API_DESCRIPTION = "Remove Event Invitee Status";
 
+	public static final String GET_PROBLEM_TYPES_BY_CATEGORY_REQUEST_MAPPING = "getProblemTypesByCategory";
+	public static final String GET_PROBLEM_TYPES_BY_CATEGORY_API_VALUE = "getProblemTypesByCategory";
+	public static final String GET_PROBLEM_TYPES_BY_CATEGORY_API_NICKNAME = "getProblemTypesByCategory";
+	public static final String GET_PROBLEM_TYPES_BY_CATEGORY_API_DESCRIPTION = "Get the problem types related to a particular category.";
+
 }

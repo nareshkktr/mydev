@@ -37,10 +37,7 @@
 			url : '/accountSetup',
 			templateUrl : resource + 'partials/accountSetup.html'
 		}).state('search', {
-			url : '/search',
-			params : {
-				'searchTerm' : ''
-			},
+			url : '/search/:searchTerm',
 			templateUrl : resource + 'partials/globalSearch.html',
 			controller : 'globalSearchController',
 			controllerAs : 'globalSearch'
@@ -55,31 +52,26 @@
 			controller : 'problemTypeSelectionController',
 			controllerAs : 'problemTypeSelection'
 		}).state('createProblem.problemSelection', {
-			url : '/problemSelection',
+			url : '/problemSelection/:selectedProblemCategory',
 			templateUrl : resource + 'partials/problemSelection.html',
 			controller : 'problemSelectionController',
 			controllerAs : 'problemSelection',
 			params : {
-				'selectedProblemCategory' : '',
 				'problemTypes' : ''
 			}
 		}).state('createProblem.logProblem', {
-			url : '/logProblem',
+			url : '/logProblem/:selectedProblemCategory',
 			templateUrl : resource + 'partials/logProblem.html',
 			controller : 'logProblemController',
 			controllerAs : 'logProblem',
 			params : {
-				'selectedProblemCategory' : '',
 				'problemTypes' : ''
 			}
 		}).state('viewProblem', {
-			url : '/viewProblem',
+			url : '/viewProblem/:selectedProblemGuid',
 			templateUrl : resource + 'partials/viewProblem.html',
 			controller : 'viewProblemController',
-			controllerAs : 'viewProblem',
-			params : {
-				'selectedProblemGuid' : ''
-			}
+			controllerAs : 'viewProblem'
 		}).state('viewProblem.overview', {
 			url : '/overview',
 			templateUrl : resource + 'partials/overview.html'

@@ -27,4 +27,6 @@ public interface ProblemTypeService {
 	List<ProblemType> getAllProblemTypes(Integer offset, Integer limit) throws InternalServerException;
 
 	void importAllProblemTypes() throws InternalServerException;
+
+	List<ProblemType> getProblemTypesByCategory(String problemCategory) throws InternalServerException;
 }

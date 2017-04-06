@@ -12,6 +12,7 @@
 
 		var createProblemService = {
 			getAllProblemTypes : getAllProblemTypes,
+			getProblemTypesByCategory: getProblemTypesByCategory,
 			saveProblem:saveProblem
 		};
 
@@ -47,6 +48,34 @@
 			}
 
 			function getAllProblemTypesFailure(error) {
+				deferred.reject(error);
+			}
+
+		}
+
+		function getProblemTypesByCategory(problemCategory) {
+
+			let deferred = $q.defer();
+			
+			if(swaggerPromise){
+				swaggerPromise.then(function(){
+					services.problemType.getProblemTypesByCategory({problemCategory:problemCategory},
+						getProblemTypesByCategorySuccess, getProblemTypesByCategoryFailure);
+					swaggerPromise = undefined;
+				})
+			}else{
+				services.problemType.getProblemTypesByCategory({problemCategory:problemCategory},
+						getProblemTypesByCategorySuccess, getProblemTypesByCategoryFailure);
+			}
+			
+
+			return deferred.promise;
+
+			function getProblemTypesByCategorySuccess(data) {
+				deferred.resolve(data.obj);
+			}
+
+			function getProblemTypesByCategoryFailure(error) {
 				deferred.reject(error);
 			}
 
