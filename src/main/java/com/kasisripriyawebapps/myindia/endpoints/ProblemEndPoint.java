@@ -76,12 +76,11 @@ public class ProblemEndPoint extends BaseEndPoint {
 	public Response getProblemByGuid(@QueryParam("problemGuid") Long problemGuid)
 			throws InternalServerException, PreConditionRequiredException,
 			ConflictException, RecordNotFoundException {
-		
-		LoggedInUserDetails loggedInUserDetails = getLoggedInUserDetails();
+
 		ProblemResponse problem = null;
 		
 		if (problemGuid != null) {	
-			problem = problemService.retreiveProblem(problemGuid, loggedInUserDetails);
+			problem = problemService.retreiveProblem(problemGuid);
 		}else{
 			throw new PreConditionRequiredException(ExceptionConstants.REQUEST_NOT_NULL);
 		}

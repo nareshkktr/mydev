@@ -1,89 +1,59 @@
-/*
- * 
- */
-package com.kasisripriyawebapps.myindia.entity;
+package com.kasisripriyawebapps.myindia.requestresponsemodel;
 
-import java.io.Serializable;
 import java.sql.Timestamp;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+public class ActivityRequest {
+	
+	/** The object type. */
+	private String objectType;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Class ActivityEntity.
- */
-@Entity
-@Table(name = "ACTIVITY_MASTER")
-public class Activity implements Serializable {
-
-	/** The Constant serialVersionUID. */
-	private static final long serialVersionUID = -4137218458848575451L;
-
-	/**
-	 * Instantiates a new activity entity.
-	 */
-	public Activity() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	/** The guid. */
-	@Id
-	@Column(name = "ACTIVITY_GUID")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long guid;
+	/** The object guid. */
+	private Long objectGuid;
 
 	/** The activity name. */
-	@Column(name = "ACTIVITY_NAME")
 	private String activityName;
 	
-	/** The activity name. */
-	@Column(name = "ACTIVITY_CONTENT")
+	/** The activity content. */
 	private String activityContent;
 
 	/** The activity object type. */
-	@Column(name = "ACTIVITY_OBJECT_TYPE")
 	private String activityObjectType;
 
 	/** The activity object guid. */
-	@Column(name = "ACTIVITY_OBJECT_GUID")
 	private Long activityObjectGuid;
 
 	/** The activity happened on type. */
-	@Column(name = "ON_OBJECT_TYPE")
 	private String onObjectType;
 
 	/** The activity happened on guid. */
-	@Column(name = "ON_OBJECT_GUID")
 	private Long onObjectGuid;
 
 	/** The activity happened on whose object type. */
-	@Column(name = "OF_OBJECT_TYPE")
 	private String ofObjectType;
 
 	/** The activity happened on whose object guid. */
-	@Column(name = "OF_OBJECT_GUID")
 	private Long ofObjectGuid;
 
 	/** The created time stamp. */
-	@Column(name = "CREATED_TIMESTAMP")
 	private Timestamp createdTimeStamp;
 	
-	/** The created By. */
-	@Column(name = "CREATED_BY")
+	/** The created time stamp. */
 	private Long createdBy;
 
-	public Long getGuid() {
-		return guid;
+	public String getObjectType() {
+		return objectType;
 	}
 
-	public void setGuid(Long guid) {
-		this.guid = guid;
+	public void setObjectType(String objectType) {
+		this.objectType = objectType;
+	}
+
+	public Long getObjectGuid() {
+		return objectGuid;
+	}
+
+	public void setObjectGuid(Long objectGuid) {
+		this.objectGuid = objectGuid;
 	}
 
 	public String getActivityName() {

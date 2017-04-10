@@ -9,6 +9,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -111,6 +112,16 @@ public class ProblemTypeEndPoint {
 	public Response getAllProblemTypes() throws InternalServerException {
 		List<ProblemType> problemTypes = null;
 		problemTypes = problemTypeService.getAllProblemTypes();
+		return Response.status(Status.OK).entity(problemTypes).build();
+	}
+	
+	@GET
+	@ApiOperation(value = EndPointConstants.GET_PROBLEM_TYPES_BY_CATEGORY_API_VALUE, nickname = EndPointConstants.GET_PROBLEM_TYPES_BY_CATEGORY_API_NICKNAME, httpMethod = EndPointConstants.HTTP_GET, notes = EndPointConstants.GET_PROBLEM_TYPES_BY_CATEGORY_API_DESCRIPTION)
+	@Path(EndPointConstants.GET_PROBLEM_TYPES_BY_CATEGORY_REQUEST_MAPPING)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getProblemTypesByCategory(@QueryParam("problemCategory") final String problemCategory) throws InternalServerException {
+		List<ProblemType> problemTypes = null;
+		problemTypes = problemTypeService.getProblemTypesByCategory(problemCategory);
 		return Response.status(Status.OK).entity(problemTypes).build();
 	}
 

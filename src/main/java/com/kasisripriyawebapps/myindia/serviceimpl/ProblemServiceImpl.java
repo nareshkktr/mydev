@@ -140,7 +140,7 @@ public class ProblemServiceImpl implements ProblemService {
 
 	@Override
 	@Transactional
-	public ProblemResponse retreiveProblem(Long problemGuid, LoggedInUserDetails loggedInUserDetails) throws InternalServerException, RecordNotFoundException {
+	public ProblemResponse retreiveProblem(Long problemGuid) throws InternalServerException, RecordNotFoundException {
 		
 		Problem problem = problemDao.getProblemByGuid(problemGuid);
 		
@@ -273,6 +273,25 @@ public class ProblemServiceImpl implements ProblemService {
 			contributors = accountService.getAccountsByIds(accountIds);
 		
 		return contributors;
+	}
+
+	@Override
+	public ProblemResponse retreiveProblemBaseInfo(Long problemGuid)
+			throws InternalServerException, RecordNotFoundException {
+		
+		Problem problem = problemDao.getProblemByGuid(problemGuid);
+		
+		ProblemResponse problemResponse = null;
+		
+		if(problem != null){
+			problemResponse = new ProblemResponse();
+			problemResponse.setProblemShortDescription(problem.getProblemShortDescription());
+			problemResponse.setProblemLongDescription(problem.getProblemLongDescription());
+			problemResponse.setPhotoURL(problem.getPhotoURL());
+			problemResponse.setGuid(problem.getGuid());
+		}
+		
+		return problemResponse;
 	}
 
 }

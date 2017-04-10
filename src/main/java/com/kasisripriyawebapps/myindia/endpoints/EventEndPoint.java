@@ -24,6 +24,8 @@ import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 import com.kasisripriyawebapps.myindia.exception.PreConditionFailedException;
 import com.kasisripriyawebapps.myindia.exception.PreConditionRequiredException;
 import com.kasisripriyawebapps.myindia.exception.RecordNotFoundException;
+import com.kasisripriyawebapps.myindia.requestresponsemodel.EventInviteeStatusRequest;
+import com.kasisripriyawebapps.myindia.requestresponsemodel.EventRecipientRequest;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.EventRequest;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.SaveOrUpdateDeleteObjectResponse;
 import com.kasisripriyawebapps.myindia.service.EventService;
@@ -102,7 +104,63 @@ public class EventEndPoint extends BaseEndPoint {
 		SaveOrUpdateDeleteObjectResponse saveObjResponse = new SaveOrUpdateDeleteObjectResponse(eventid);
 		return Response.status(Status.OK).entity(saveObjResponse).build();
 	}
+	@POST
+	@ApiOperation(value = EndPointConstants.ADD_EVENT_RECIPIENT_API_VALUE, nickname = EndPointConstants.ADD_EVENT_RECIPIENT_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.ADD_EVENT_RECIPIENT_API_DESCRIPTION)
+	@Path(EndPointConstants.ADD_EVENT_RECIPIENT_REQUEST_MAPPING)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response addEventRecipient(final EventRecipientRequest request) throws InternalServerException, PreConditionFailedException,
+			PreConditionRequiredException, ConflictException {
 
+		LoggedInUserDetails loggedInUserDetails = getLoggedInUserDetails();
+		Long eventId = null;
+		if (validateCreateUpdateEventRecipientRequest(request)) {
+			eventId = eventService.addEventRecipient(request, loggedInUserDetails);
+		}
+		SaveOrUpdateDeleteObjectResponse saveObjResponse = new SaveOrUpdateDeleteObjectResponse(eventId);
+		return Response.status(Status.OK).entity(saveObjResponse).build();
+	}
+	
+	@DELETE
+	@ApiOperation(value = EndPointConstants.REMOVE_EVENT_RECIPIENT_API_VALUE, nickname = EndPointConstants.REMOVE_EVENT_RECIPIENT_API_NICKNAME, httpMethod = EndPointConstants.HTTP_GET, notes = EndPointConstants.REMOVE_EVENT_RECIPIENT_API_DESCRIPTION)
+	@Path(EndPointConstants.REMOVE_EVENT_RECIPIENT_REQUEST_MAPPING)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response removeEventRecipient(@PathParam(value = "eventGuid") Long eventGuid)
+			throws InternalServerException, RecordNotFoundException, PreConditionFailedException {
+		Long eventid = null;
+		if (validateUpdateDeleteProblemTypeRequest(eventGuid)) {
+			eventid = eventService.removeEventRecipientById(eventGuid);
+		}
+		SaveOrUpdateDeleteObjectResponse saveObjResponse = new SaveOrUpdateDeleteObjectResponse(eventid);
+		return Response.status(Status.OK).entity(saveObjResponse).build();
+	}
+	@POST
+	@ApiOperation(value = EndPointConstants.ADD_EVENT_INVITEE_STATUS_API_VALUE, nickname = EndPointConstants.ADD_EVENT_INVITEE_STATUS_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.ADD_EVENT_INVITEE_STATUS_API_DESCRIPTION)
+	@Path(EndPointConstants.ADD_EVENT_INVITEE_STATUS_REQUEST_MAPPING)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response addEventInviteeStatus(final EventInviteeStatusRequest request) throws InternalServerException, PreConditionFailedException,
+			PreConditionRequiredException, ConflictException {
+
+		LoggedInUserDetails loggedInUserDetails = getLoggedInUserDetails();
+		Long eventId = null;
+		if (validateCreateUpdateEventRecipientRequest(request)) {
+			eventId = eventService.addEventInviteeStatus(request, loggedInUserDetails);
+		}
+		SaveOrUpdateDeleteObjectResponse saveObjResponse = new SaveOrUpdateDeleteObjectResponse(eventId);
+		return Response.status(Status.OK).entity(saveObjResponse).build();
+	}
+	@DELETE
+	@ApiOperation(value = EndPointConstants.REMOVE_EVENT_INVITEE_STATUS_API_VALUE, nickname = EndPointConstants.REMOVE_EVENT_INVITEE_STATUS_API_NICKNAME, httpMethod = EndPointConstants.HTTP_GET, notes = EndPointConstants.REMOVE_EVENT_INVITEE_STATUS_API_DESCRIPTION)
+	@Path(EndPointConstants.REMOVE_EVENT_INVITEE_STATUS_REQUEST_MAPPING)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response removeEventInviteeStatus(@PathParam(value = "eventGuid") Long eventGuid)
+			throws InternalServerException, RecordNotFoundException, PreConditionFailedException {
+		Long eventid = null;
+		if (validateUpdateDeleteProblemTypeRequest(eventGuid)) {
+			eventid = eventService.removeEventInviteeStatusById(eventGuid);
+		}
+		SaveOrUpdateDeleteObjectResponse saveObjResponse = new SaveOrUpdateDeleteObjectResponse(eventid);
+		return Response.status(Status.OK).entity(saveObjResponse).build();
+	}
 	private boolean validateCreateUpdateEventRequest(EventRequest eventRequest)
 			throws PreConditionFailedException, PreConditionRequiredException {
 		if (eventRequest == null) {
@@ -128,7 +186,20 @@ public class EventEndPoint extends BaseEndPoint {
 		}
 		return true;
 	}
-
+	private boolean validateCreateUpdateEventRecipientRequest(EventRecipientRequest request)
+			throws PreConditionFailedException, PreConditionRequiredException {
+		if (request == null) {
+			throw new PreConditionFailedException(ExceptionConstants.REQUEST_NOT_NULL);
+		}
+		return true; 
+	}
+	private boolean validateCreateUpdateEventRecipientRequest(EventInviteeStatusRequest request)
+			throws PreConditionFailedException, PreConditionRequiredException {
+		if (request == null) {
+			throw new PreConditionFailedException(ExceptionConstants.REQUEST_NOT_NULL);
+		}
+		return true; 
+	}
 	private boolean validateUpdateDeleteProblemTypeRequest(Long eventGuid) throws PreConditionFailedException {
 		if (eventGuid == null) {
 			throw new PreConditionFailedException(ExceptionConstants.REQUEST_NOT_NULL);

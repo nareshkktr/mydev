@@ -11,4 +11,7 @@ public interface CommentDao {
 
 	List<Comment> getCommentsByObjectGuid(Long objectGuid, Integer pageNo, Integer limit) throws InternalServerException;
 
+	List<Comment> getCommentsByObjectGuidAndParentId(Long objectGuid, Long parentCommentId, Integer pageNo,
+			Integer limit) throws InternalServerException;
+
 }

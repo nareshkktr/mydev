@@ -187,4 +187,11 @@ public class ProblemTypeServiceImpl implements ProblemTypeService {
 		return updatedProblemTypesList;
 
 	}
+
+	@Override
+	@Transactional
+	public List<ProblemType> getProblemTypesByCategory(String problemCategory) throws InternalServerException {
+		final List<ProblemType> problemTypes = problemTypeDao.getProblemTypesByCategory(problemCategory);
+		return problemTypes;
+	}
 }

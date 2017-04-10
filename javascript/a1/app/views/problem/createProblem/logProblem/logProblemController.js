@@ -9,7 +9,23 @@
 		
 		var logProblem=this;
 		logProblem.chosenProblemCategory = $state.params.selectedProblemCategory;
-		logProblem.problemTypesResults = $state.params.problemTypes;
+
+		if($state.params.problemTypes)
+			logProblem.problemTypesResults = $state.params.problemTypes;
+		else{
+			//get problem types by category.
+			createProblemService.getProblemTypesByCategory(logProblem.chosenProblemCategory).then(problemTypesSuccess).catch(problemTypesFailure);
+
+			function problemTypesSuccess(data){
+				logProblem.problemTypesResults = data;
+			}
+
+			function problemTypesFailure(error){
+				alert(error);
+			}
+
+		}
+
 		logProblem.grivienceName="";
 		logProblem.grivienceType;
 		logProblem.grivienceDescription;

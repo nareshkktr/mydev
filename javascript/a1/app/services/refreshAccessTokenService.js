@@ -12,7 +12,8 @@
 
 		var refreshAccessTokenService = {
 			startTokenExpiryTimer: startTokenExpiryTimer,
-			stopTokenExpiryTimer: stopTokenExpiryTimer
+			stopTokenExpiryTimer: stopTokenExpiryTimer,
+			refreshAccessToken: refreshAccessToken
 		};
 
 		// // Call and save the data
@@ -39,8 +40,19 @@
 
 			stopTokenExpiryTimer();
 
-			services.account.refreshAccessToken({body: sessionStorage.getItem("refresh_token")}, refreshAccessTokenSuccess,
+			if (swaggerPromise) {
+				swaggerPromise.then(function() {
+					services.account.refreshAccessToken({body: sessionStorage.getItem("refresh_token")}, refreshAccessTokenSuccess,
 						refreshAccessTokenFailure);
+			
+
+					swaggerPromise = undefined;
+				})
+			} else {
+				services.account.refreshAccessToken({body: sessionStorage.getItem("refresh_token")}, refreshAccessTokenSuccess,
+						refreshAccessTokenFailure);
+			}
+
 			
 			function refreshAccessTokenSuccess(data){
 				swaggerShareService.setAuthorization(data.obj.accessToken,data.obj.refreshToken,data.obj.expirationTimeInSeconds);

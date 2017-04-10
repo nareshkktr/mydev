@@ -1095,6 +1095,45 @@ public class EndPointConstants {
 	public static final String GET_FIRST_LEVEL_COMMENTS_API_VALUE = "getFirstLevelComments";
 	public static final String GET_FIRST_LEVEL_COMMENTS_API_NICKNAME = "getFirstLevelComments";
 	public static final String GET_FIRST_LEVEL_COMMENTS_API_DESCRIPTION = "Get First Level comments for the given object.";
-
 	
+	public static final String GET_ACTIVITIES_REQUEST_MAPPING = "getActivities";
+	public static final String GET_ACTIVITIES_API_VALUE = "getActivities";
+	public static final String GET_ACTIVITIES_API_NICKNAME = "getActivities";
+	public static final String GET_ACTIVITIES_API_DESCRIPTION = "Get Activities with pagination.";
+	
+	public static final String GET_ACTIVITIES_BY_OBJECT_REQUEST_MAPPING = "getActivitiesByObject";
+	public static final String GET_ACTIVITIES_BY_OBJECT_API_VALUE = "getActivitiesByObject";
+	public static final String GET_ACTIVITIES_BY_OBJECT_API_NICKNAME = "getActivitiesByObject";
+	public static final String GET_ACTIVITIES_BY_OBJECT_API_DESCRIPTION = "Get Activities with pagination for an object.";
+
+	public static final String ADD_EVENT_RECIPIENT_REQUEST_MAPPING = "addEventRecipient";
+	public static final String ADD_EVENT_RECIPIENT_API_VALUE = "addEventRecipient";
+	public static final String ADD_EVENT_RECIPIENT_API_NICKNAME = "addEventRecipient";
+	public static final String ADD_EVENT_RECIPIENT_API_DESCRIPTION = "Add Event Recipient";
+	
+	public static final String REMOVE_EVENT_RECIPIENT_REQUEST_MAPPING = "removeEventRecipient/{eventGuid}";
+	public static final String REMOVE_EVENT_RECIPIENT_API_VALUE = "removeEventRecipient";
+	public static final String REMOVE_EVENT_RECIPIENT_API_NICKNAME = "removeEventRecipient";
+	public static final String REMOVE_EVENT_RECIPIENT_API_DESCRIPTION = "Remove Event Recipient ";
+	
+	public static final String ADD_EVENT_INVITEE_STATUS_REQUEST_MAPPING = "addEventInviteeStatus";
+	public static final String ADD_EVENT_INVITEE_STATUS_API_VALUE = "addEventInviteeStatus";
+	public static final String ADD_EVENT_INVITEE_STATUS_API_NICKNAME = "addEventInviteeStatus";
+	public static final String ADD_EVENT_INVITEE_STATUS_API_DESCRIPTION = "Add Event Invitee Status";
+	
+	public static final String REMOVE_EVENT_INVITEE_STATUS_REQUEST_MAPPING = "removeEventInviteeStatus/{eventGuid}";
+	public static final String REMOVE_EVENT_INVITEE_STATUS_API_VALUE = "removeEventInviteeStatus";
+	public static final String REMOVE_EVENT_INVITEE_STATUS_API_NICKNAME = "removeEventInviteeStatus";
+	public static final String REMOVE_EVENT_INVITEE_STATUS_API_DESCRIPTION = "Remove Event Invitee Status";
+
+	public static final String GET_PROBLEM_TYPES_BY_CATEGORY_REQUEST_MAPPING = "getProblemTypesByCategory";
+	public static final String GET_PROBLEM_TYPES_BY_CATEGORY_API_VALUE = "getProblemTypesByCategory";
+	public static final String GET_PROBLEM_TYPES_BY_CATEGORY_API_NICKNAME = "getProblemTypesByCategory";
+	public static final String GET_PROBLEM_TYPES_BY_CATEGORY_API_DESCRIPTION = "Get the problem types related to a particular category.";
+
+	public static final String GET_SECOND_LEVEL_COMMENTS_API_NICKNAME =  "getSecondLevelComments";
+	public static final String GET_SECOND_LEVEL_COMMENTS_API_VALUE = "getSecondLevelComments";
+	public static final String GET_SECOND_LEVEL_COMMENTS_REQUEST_MAPPING = "getSecondLevelComments";
+	public static final String GET_SECOND_LEVEL_COMMENTS_API_DESCRIPTION = "Get replies for the comments for the given comment and for the given object.";
+
 }

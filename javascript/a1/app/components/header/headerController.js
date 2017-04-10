@@ -21,6 +21,9 @@
 		header.modalControllerAlias = "locationChangePopUp";
 		header.logout = logout;
 
+		header.userProfileImageClass = "user_profile_image";
+		header.userProfileLabelClass = "user_profile_label";
+
 		function gotoSearch() {
 			$state.go('search', {
 				searchTerm : header.searchTerm
