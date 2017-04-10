@@ -40,9 +40,10 @@
 
 #comments_list_container .comment .row .commentor_name_date .commentor_date
 	{
-	
+	font-size: 12px;
 }
 
 #comments_list_container .comment .row .comment_text {
-	
+	word-wrap: break-word;
+	margin-top: 10px;
 }

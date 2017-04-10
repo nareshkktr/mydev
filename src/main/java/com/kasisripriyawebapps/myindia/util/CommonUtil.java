@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
@@ -37,6 +38,7 @@ import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -535,27 +537,44 @@ public class CommonUtil {
 	}
 
 	public static Workbook getWorkBookFromFile(String inputFilePath) throws InternalServerException {
+
 		InputStream fs = null;
+
 		try {
-			fs = new FileInputStream(inputFilePath);
-		} catch (FileNotFoundException e1) {
-			throw new InternalServerException(e1.getMessage());
+			fs = new URL(inputFilePath.replace(" ", "%20")).openStream();
+		} catch (IOException e1) {
+			System.out.println(e1.getMessage());
 		}
 		Workbook workbook = null;
-		if (FilenameUtils.getExtension(inputFilePath)
-				.equalsIgnoreCase(ServiceConstants.EXCEL_SHEET_TYPE_XLS_EXTENSION)) {
-			try {
-				workbook = new HSSFWorkbook(fs);
-			} catch (IOException e) {
-				throw new InternalServerException(e.getMessage());
+		if (fs != null) {
+			if (FilenameUtils.getExtension(inputFilePath)
+					.equalsIgnoreCase(ServiceConstants.EXCEL_SHEET_TYPE_XLS_EXTENSION)) {
+				try {
+					workbook = new HSSFWorkbook(fs);
+				} catch (IOException e) {
+					throw new InternalServerException(e.getMessage());
+				}
+			} else if (FilenameUtils.getExtension(inputFilePath)
+					.equalsIgnoreCase(ServiceConstants.EXCEL_SHEET_TYPE_XLSX_EXTENSION)) {
+				try {
+					workbook = new XSSFWorkbook(fs);
+				} catch (IOException e) {
+					throw new InternalServerException(e.getMessage());
+				}
 			}
-		} else if (FilenameUtils.getExtension(inputFilePath)
+		}
+		return workbook;
+	}
+
+	public static Workbook createWorkBook(String fileName) throws InternalServerException {
+
+		Workbook workbook = null;
+		if (FilenameUtils.getExtension(fileName).equalsIgnoreCase(ServiceConstants.EXCEL_SHEET_TYPE_XLS_EXTENSION)) {
+			workbook = new HSSFWorkbook();
+		} else if (FilenameUtils.getExtension(fileName)
 				.equalsIgnoreCase(ServiceConstants.EXCEL_SHEET_TYPE_XLSX_EXTENSION)) {
-			try {
-				workbook = new XSSFWorkbook(fs);
-			} catch (IOException e) {
-				throw new InternalServerException(e.getMessage());
-			}
+			workbook = new XSSFWorkbook();
+
 		}
 		return workbook;
 	}
@@ -682,5 +701,32 @@ public class CommonUtil {
 				break;
 			}
 		}
+	}
+
+	public static byte[] readBytesFromFile(String filePath) {
+
+		FileInputStream fileInputStream = null;
+		byte[] bytesArray = null;
+
+		try {
+			File file = new File(filePath);
+			bytesArray = new byte[(int) file.length()];
+
+			// read file into bytes[]
+			fileInputStream = new FileInputStream(file);
+			fileInputStream.read(bytesArray);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (fileInputStream != null) {
+				try {
+					fileInputStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return bytesArray;
 	}
 }

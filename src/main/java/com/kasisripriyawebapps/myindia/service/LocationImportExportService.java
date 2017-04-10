@@ -23,27 +23,27 @@ public interface LocationImportExportService {
 
 	boolean importVillages(LocationImportRequest locationImportRequest) throws InternalServerException;
 
-	boolean exportCountries(String uploadedFileLocation) throws InternalServerException;
+	boolean exportCountries() throws InternalServerException;
 
-	boolean exportStates(String inputFilePath) throws InternalServerException;
+	boolean exportStates() throws InternalServerException;
 
-	boolean exportDistricts(String inputFilePath) throws InternalServerException;
+	boolean exportDistricts() throws InternalServerException;
 
-	boolean exportSubDistricts(String inputFilePath) throws InternalServerException;
+	boolean exportSubDistricts() throws InternalServerException;
 
-	boolean exportMuncipalCorporations(String inputFilePath) throws InternalServerException;
+	boolean exportMuncipalCorporations() throws InternalServerException;
 
-	boolean exportMuncipalities(String inputFilePath) throws InternalServerException;
+	boolean exportMuncipalities() throws InternalServerException;
 
-	boolean exportTownPanchayathies(String inputFilePath) throws InternalServerException;
+	boolean exportTownPanchayathies() throws InternalServerException;
 
-	boolean exportVillagePanchayathies(String inputFilePath) throws InternalServerException;
+	boolean exportVillagePanchayathies() throws InternalServerException;
 
-	boolean exportVillages(String inputFilePath) throws InternalServerException;
+	boolean exportVillages() throws InternalServerException;
 
-	boolean exportVillageReferenceLocations(String uploadedFileLocation) throws InternalServerException;
+	boolean exportVillageReferenceLocations() throws InternalServerException;
 
-	boolean exportUrbanReferenceLocations(String uploadedFileLocation) throws InternalServerException;
+	boolean exportUrbanReferenceLocations() throws InternalServerException;
 
 	boolean importVillageReferenceLocations(LocationImportRequest locationImportRequest) throws InternalServerException;
 

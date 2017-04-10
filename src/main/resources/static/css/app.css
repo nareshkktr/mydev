@@ -1,3 +1,20 @@
+.comment_actions_container {
+	margin: 0px !important;
+	padding-top: 10px;
+}
+
+.comment_action {
+	padding: 0px !important;
+}
+
+.comment_action i {
+	padding: 0px !important;
+	padding-left: 10px !important;
+}
+
+.comment_action label {
+	padding: 0px !important;
+}
 .comment_box_container {
 	padding: 10px;
 }
@@ -802,6 +819,11 @@ input[type="text"], input[type="password"], select {
 .problem_selection_content {
 	margin: 0px !important;
 }
+.displayLabel{
+	color: white;
+	padding-top: 9px;
+	font-size: 20px;
+}
 .search_container {
 	margin-left: 0px !important;
 	margin-right: 0px !important;
@@ -1187,11 +1209,12 @@ tags-input .tags .tag-item {
 
 #comments_list_container .comment .row .commentor_name_date .commentor_date
 	{
-	
+	font-size: 12px;
 }
 
 #comments_list_container .comment .row .comment_text {
-	
+	word-wrap: break-word;
+	margin-top: 10px;
 }
 .view_problem_container {
 	margin: 0px !important;

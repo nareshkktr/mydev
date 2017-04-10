@@ -35,6 +35,7 @@ import com.kasisripriyawebapps.myindia.entity.LocationMaster;
 import com.kasisripriyawebapps.myindia.entity.UserInfo;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 import com.kasisripriyawebapps.myindia.service.LocationImportExportService;
+import com.kasisripriyawebapps.myindia.util.AmazonS3Util;
 import com.kasisripriyawebapps.myindia.util.CommonUtil;
 
 @Service
@@ -54,6 +55,7 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 
 	static WebDriver driver;
 	static Wait<WebDriver> wait;
+	private static final String SUFFIX = "/";
 
 	static {
 		File file = new File("chromedriver.exe");
@@ -63,36 +65,137 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 	@Override
 	@Transactional
 	public boolean importCountries(LocationImportRequest locationImportRequest) throws InternalServerException {
-		String filePath = env.getProperty("project.locations-files.upload-path")
-				+ env.getProperty("project.countries-locations-file-name");
-		saveUpdateDeleteMasterLocations(filePath, ServiceConstants.LOCATION_COUNTRY_TYPE, locationImportRequest);
+		String fileName = env.getProperty("project.countries-locations-file-name");
+
+		String bucketName = env.getProperty("amazon.s3.locations.bucket.name");
+		String hostName = env.getProperty("amazon.s3.host.name");
+		String uploadedFolderName = env.getProperty("amazon.s3.locations.uploaded.folder.name");
+
+		String globalFolderName = env.getProperty("amazon.s3.locations.global.folder.name");
+		uploadedFolderName = uploadedFolderName + SUFFIX + globalFolderName;
+
+		String inputFilePath = hostName + bucketName + SUFFIX + uploadedFolderName + SUFFIX + fileName;
+
+		Long indiaLocationParentGuid = Long.parseLong(env.getProperty("location.country.india.parent-guid"));
+
+		saveUpdateDeleteMasterLocations(inputFilePath, ServiceConstants.LOCATION_COUNTRY_TYPE, locationImportRequest,
+				indiaLocationParentGuid);
 		return true;
 	}
 
 	@Override
 	@Transactional
 	public boolean importStates(LocationImportRequest locationImportRequest) throws InternalServerException {
-		String filePath = env.getProperty("project.locations-files.upload-path")
-				+ env.getProperty("project.state-locations-file-name");
-		saveUpdateDeleteMasterLocations(filePath, ServiceConstants.LOCATION_STATE_TYPE, locationImportRequest);
+		String fileName = env.getProperty("project.state-locations-file-name");
+
+		String bucketName = env.getProperty("amazon.s3.locations.bucket.name");
+		String hostName = env.getProperty("amazon.s3.host.name");
+		String uploadedFolderName = env.getProperty("amazon.s3.locations.uploaded.folder.name");
+
+		String globalFolderName = env.getProperty("amazon.s3.locations.global.folder.name");
+		String countryFolderName = env.getProperty("amazon.s3.locations.india.folder.name");
+
+		uploadedFolderName = uploadedFolderName + SUFFIX + globalFolderName + SUFFIX + countryFolderName;
+		String inputFilePath = hostName + bucketName + SUFFIX + uploadedFolderName + SUFFIX + fileName;
+
+		List<LocationMaster> countryLocations = locationMasterDao
+				.getAllMasterLocationsByType(ServiceConstants.LOCATION_COUNTRY_TYPE);
+
+		if (countryLocations != null && !countryLocations.isEmpty()) {
+			for (LocationMaster eachCountryLocation : countryLocations) {
+				if (eachCountryLocation != null) {
+					saveUpdateDeleteMasterLocations(inputFilePath, ServiceConstants.LOCATION_STATE_TYPE,
+							locationImportRequest, eachCountryLocation.getGuid());
+				}
+			}
+		}
 		return true;
 	}
 
 	@Override
 	@Transactional
 	public boolean importDistricts(LocationImportRequest locationImportRequest) throws InternalServerException {
-		String filePath = env.getProperty("project.locations-files.upload-path")
-				+ env.getProperty("project.district-locations-file-name");
-		saveUpdateDeleteMasterLocations(filePath, ServiceConstants.LOCATION_DISTRICT_TYPE, locationImportRequest);
+		String fileName = env.getProperty("project.district-locations-file-name");
+
+		List<LocationMaster> stateLocations = new ArrayList<LocationMaster>();
+		List<String> locationTypes = new ArrayList<String>();
+		locationTypes.add(ServiceConstants.LOCATION_STATE_TYPE);
+		locationTypes.add(ServiceConstants.LOCATION_UNION_TERRITORY_TYPE);
+		stateLocations = locationMasterDao.getAllMasterLocationsByTypes(locationTypes);
+
+		if (stateLocations != null && !stateLocations.isEmpty()) {
+			for (LocationMaster eachLocation : stateLocations) {
+				if (eachLocation != null) {
+
+					String bucketName = env.getProperty("amazon.s3.locations.bucket.name");
+					String hostName = env.getProperty("amazon.s3.host.name");
+					String uploadedFolderName = env.getProperty("amazon.s3.locations.uploaded.folder.name");
+
+					String globalFolderName = env.getProperty("amazon.s3.locations.global.folder.name");
+					String countryFolderName = env.getProperty("amazon.s3.locations.india.folder.name");
+					String ruralFolderName = env.getProperty("amazon.s3.locations.rural.folder.name");
+
+					uploadedFolderName = uploadedFolderName + SUFFIX + globalFolderName + SUFFIX + countryFolderName
+							+ SUFFIX + eachLocation.getLocationName() + SUFFIX + ruralFolderName;
+					String inputFilePath = hostName + bucketName + SUFFIX + uploadedFolderName + SUFFIX + fileName;
+
+					saveUpdateDeleteMasterLocations(inputFilePath, ServiceConstants.LOCATION_DISTRICT_TYPE,
+							locationImportRequest, eachLocation.getGuid());
+				}
+			}
+		}
 		return true;
 	}
 
 	@Override
 	@Transactional
 	public boolean importSubDistricts(LocationImportRequest locationImportRequest) throws InternalServerException {
-		String filePath = env.getProperty("project.locations-files.upload-path")
-				+ env.getProperty("project.sub_dsitrict-locations-file-name");
-		saveUpdateDeleteMasterLocations(filePath, ServiceConstants.LOCATION_SUB_DISTRICT_TYPE, locationImportRequest);
+		String fileName = env.getProperty("project.sub_dsitrict-locations-file-name");
+
+		List<LocationMaster> stateLocations = new ArrayList<LocationMaster>();
+		List<String> locationTypes = new ArrayList<String>();
+		locationTypes.add(ServiceConstants.LOCATION_STATE_TYPE);
+		locationTypes.add(ServiceConstants.LOCATION_UNION_TERRITORY_TYPE);
+		stateLocations = locationMasterDao.getAllMasterLocationsByTypes(locationTypes);
+
+		if (stateLocations != null && !stateLocations.isEmpty()) {
+			for (LocationMaster eachLocation : stateLocations) {
+				if (eachLocation != null) {
+
+					String bucketName = env.getProperty("amazon.s3.locations.bucket.name");
+					String hostName = env.getProperty("amazon.s3.host.name");
+
+					String globalFolderName = env.getProperty("amazon.s3.locations.global.folder.name");
+					String countryFolderName = env.getProperty("amazon.s3.locations.india.folder.name");
+					String ruralFolderName = env.getProperty("amazon.s3.locations.rural.folder.name");
+
+					List<LocationMaster> districtLocations = locationMasterDao
+							.getAllMasterLocationsByTypeAndParentLocation(ServiceConstants.LOCATION_DISTRICT_TYPE,
+									eachLocation.getGuid());
+
+					if (CommonUtil.isListNotNullAndNotEmpty(districtLocations)) {
+						for (LocationMaster eachDistrictLocation : districtLocations) {
+							if (eachDistrictLocation != null) {
+
+								String uploadedFolderName = env.getProperty("amazon.s3.locations.uploaded.folder.name")
+										+ SUFFIX + globalFolderName + SUFFIX + countryFolderName + SUFFIX
+										+ eachLocation.getLocationName() + SUFFIX + ruralFolderName + SUFFIX
+										+ eachDistrictLocation.getLocationName();
+
+								String inputFilePath = hostName + bucketName + SUFFIX + uploadedFolderName + SUFFIX
+										+ fileName;
+
+								System.out.println(inputFilePath);
+
+								saveUpdateDeleteMasterLocations(inputFilePath,
+										ServiceConstants.LOCATION_SUB_DISTRICT_TYPE, locationImportRequest,
+										eachDistrictLocation.getGuid());
+							}
+						}
+					}
+				}
+			}
+		}
 		return true;
 	}
 
@@ -101,16 +204,69 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 	public boolean importMuncipalCorporations(LocationImportRequest locationImportRequest)
 			throws InternalServerException {
 
-		processMasterLocationsChildData(ServiceConstants.LOCATION_MUNCIPAL_CORPORATION_TYPE,
-				env.getProperty("project.muncipal_corporation-upload-locations-file-name"), locationImportRequest);
+		String fileName = env.getProperty("project.muncipal_corporation-download-locations-file-name");
+
+		List<LocationMaster> stateLocations = new ArrayList<LocationMaster>();
+		List<String> locationTypes = new ArrayList<String>();
+		locationTypes.add(ServiceConstants.LOCATION_STATE_TYPE);
+		locationTypes.add(ServiceConstants.LOCATION_UNION_TERRITORY_TYPE);
+		stateLocations = locationMasterDao.getAllMasterLocationsByTypes(locationTypes);
+
+		if (stateLocations != null && !stateLocations.isEmpty()) {
+			for (LocationMaster eachLocation : stateLocations) {
+				if (eachLocation != null) {
+
+					String bucketName = env.getProperty("amazon.s3.locations.bucket.name");
+					String hostName = env.getProperty("amazon.s3.host.name");
+					String uploadedFolderName = env.getProperty("amazon.s3.locations.uploaded.folder.name");
+
+					String globalFolderName = env.getProperty("amazon.s3.locations.global.folder.name");
+					String countryFolderName = env.getProperty("amazon.s3.locations.india.folder.name");
+
+					uploadedFolderName = uploadedFolderName + SUFFIX + globalFolderName + SUFFIX + countryFolderName
+							+ SUFFIX + eachLocation.getLocationName();
+					String inputFilePath = hostName + bucketName + SUFFIX + uploadedFolderName + SUFFIX + fileName;
+
+					saveUpdateDeleteMasterLocations(inputFilePath, ServiceConstants.LOCATION_MUNCIPAL_CORPORATION_TYPE,
+							locationImportRequest, eachLocation.getGuid());
+				}
+			}
+		}
 		return true;
 	}
 
 	@Override
 	@Transactional
 	public boolean importMuncipalities(LocationImportRequest locationImportRequest) throws InternalServerException {
-		processMasterLocationsChildData(ServiceConstants.LOCATION_MUNCIPALITY_TYPE,
-				env.getProperty("project.muncipaity-upload-locations-file-name"), locationImportRequest);
+
+		String fileName = env.getProperty("project.muncipaity-upload-locations-file-name");
+
+		List<LocationMaster> stateLocations = new ArrayList<LocationMaster>();
+		List<String> locationTypes = new ArrayList<String>();
+		locationTypes.add(ServiceConstants.LOCATION_STATE_TYPE);
+		locationTypes.add(ServiceConstants.LOCATION_UNION_TERRITORY_TYPE);
+		stateLocations = locationMasterDao.getAllMasterLocationsByTypes(locationTypes);
+
+		if (stateLocations != null && !stateLocations.isEmpty()) {
+			for (LocationMaster eachLocation : stateLocations) {
+				if (eachLocation != null) {
+
+					String bucketName = env.getProperty("amazon.s3.locations.bucket.name");
+					String hostName = env.getProperty("amazon.s3.host.name");
+					String uploadedFolderName = env.getProperty("amazon.s3.locations.uploaded.folder.name");
+
+					String globalFolderName = env.getProperty("amazon.s3.locations.global.folder.name");
+					String countryFolderName = env.getProperty("amazon.s3.locations.india.folder.name");
+
+					uploadedFolderName = uploadedFolderName + SUFFIX + globalFolderName + SUFFIX + countryFolderName
+							+ SUFFIX + eachLocation.getLocationName();
+					String inputFilePath = hostName + bucketName + SUFFIX + uploadedFolderName + SUFFIX + fileName;
+
+					saveUpdateDeleteMasterLocations(inputFilePath, ServiceConstants.LOCATION_MUNCIPAL_CORPORATION_TYPE,
+							locationImportRequest, eachLocation.getGuid());
+				}
+			}
+		}
 		return true;
 	}
 
@@ -264,15 +420,17 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 	}
 
 	private void saveUpdateDeleteMasterLocations(String filePath, String locationType,
-			LocationImportRequest locationImportRequest) throws InternalServerException {
+			LocationImportRequest locationImportRequest, Long parentLocationGuid) throws InternalServerException {
 		List<LocationMaster> existingMasterLocations = new ArrayList<LocationMaster>();
 		if (locationType.equalsIgnoreCase(ServiceConstants.LOCATION_STATE_TYPE)) {
 			List<String> locationTypes = new ArrayList<String>();
 			locationTypes.add(ServiceConstants.LOCATION_STATE_TYPE);
 			locationTypes.add(ServiceConstants.LOCATION_UNION_TERRITORY_TYPE);
-			existingMasterLocations = locationMasterDao.getAllMasterLocationsByTypes(locationTypes);
+			existingMasterLocations = locationMasterDao.getAllMasterLocationsByTypesAndParentLocation(locationTypes,
+					parentLocationGuid);
 		} else {
-			existingMasterLocations = locationMasterDao.getAllMasterLocationsByType(locationType);
+			existingMasterLocations = locationMasterDao.getAllMasterLocationsByTypeAndParentLocation(locationType,
+					parentLocationGuid);
 		}
 
 		List<LocationMaster> excelMasterLocations = new ArrayList<LocationMaster>();
@@ -300,23 +458,26 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 	}
 
 	@Override
-	public boolean exportCountries(String inputFilePath) throws InternalServerException {
-		if (inputFilePath == null || inputFilePath.isEmpty()) {
-			inputFilePath = env.getProperty("project.locations-files.download-path")
-					+ env.getProperty("project.countries-locations-file-name");
-		}
+	public boolean exportCountries() throws InternalServerException {
+
+		String bucketName = env.getProperty("amazon.s3.locations.bucket.name");
+		String hostName = env.getProperty("amazon.s3.host.name");
+		String fileName = env.getProperty("project.countries-locations-file-name");
+		String downloadedFolderName = env.getProperty("amazon.s3.locations.downloaded.folder.name");
+		String uploadedFolderName = env.getProperty("amazon.s3.locations.uploaded.folder.name");
+		String globalFolderName = env.getProperty("amazon.s3.locations.global.folder.name");
+
+		uploadedFolderName = uploadedFolderName + SUFFIX + globalFolderName;
+
+		String inputFilePath = hostName + bucketName + SUFFIX + downloadedFolderName + SUFFIX + globalFolderName
+				+ SUFFIX + fileName;
 
 		Workbook importWorkBook = CommonUtil.getWorkBookFromFile(inputFilePath);
+
 		Sheet importWorkBookSheet = importWorkBook.getSheetAt(0);
 
-		String outPutFilePath = "";
-		String directoryPath = env.getProperty("project.locations-files.upload-path");
-		String fileName = env.getProperty("project.countries-locations-file-name");
+		Workbook exportWorkBook = CommonUtil.createWorkBook(fileName);
 
-		outPutFilePath = directoryPath + fileName;
-		CommonUtil.createExcelFile(directoryPath, fileName);
-
-		Workbook exportWorkBook = CommonUtil.getWorkBookFromFile(outPutFilePath);
 		if (exportWorkBook.getNumberOfSheets() == 1 && exportWorkBook.getSheetAt(0) != null) {
 			exportWorkBook.removeSheetAt(0);
 		}
@@ -343,16 +504,28 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 			}
 		}
 		writeDataIntoSheet(sheetData, exportWorkBookSheet);
-		writeExcelDataIntoFile(outPutFilePath, exportWorkBook);
+		writeExcelDataIntoAmazonS3File(fileName, exportWorkBook, bucketName, uploadedFolderName);
+
 		return true;
 	}
 
 	@Override
-	public boolean exportStates(String inputFilePath) throws InternalServerException {
-		if (inputFilePath == null || inputFilePath.isEmpty()) {
-			inputFilePath = env.getProperty("project.locations-files.download-path")
-					+ env.getProperty("project.state-locations-file-name");
-		}
+	@Transactional
+	public boolean exportStates() throws InternalServerException {
+
+		String bucketName = env.getProperty("amazon.s3.locations.bucket.name");
+		String hostName = env.getProperty("amazon.s3.host.name");
+		String fileName = env.getProperty("project.state-locations-file-name");
+		String downloadedFolderName = env.getProperty("amazon.s3.locations.downloaded.folder.name");
+		String uploadedFolderName = env.getProperty("amazon.s3.locations.uploaded.folder.name");
+
+		String globalFolderName = env.getProperty("amazon.s3.locations.global.folder.name");
+		String countryFolderName = env.getProperty("amazon.s3.locations.india.folder.name");
+		uploadedFolderName = uploadedFolderName + SUFFIX + globalFolderName + SUFFIX + countryFolderName;
+
+		String inputFilePath = hostName + bucketName + SUFFIX + downloadedFolderName + SUFFIX + globalFolderName
+				+ SUFFIX + countryFolderName + SUFFIX + fileName;
+
 		List<LocationMaster> countryLocations = locationMasterDao
 				.getAllMasterLocationsByType(ServiceConstants.LOCATION_COUNTRY_TYPE);
 
@@ -362,14 +535,7 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 					Workbook importWorkBook = CommonUtil.getWorkBookFromFile(inputFilePath);
 					Sheet importWorkBookSheet = importWorkBook.getSheetAt(0);
 
-					String outPutFilePath = "";
-					String directoryPath = env.getProperty("project.locations-files.upload-path");
-					String fileName = env.getProperty("project.state-locations-file-name");
-
-					outPutFilePath = directoryPath + fileName;
-					CommonUtil.createExcelFile(directoryPath, fileName);
-
-					Workbook exportWorkBook = CommonUtil.getWorkBookFromFile(outPutFilePath);
+					Workbook exportWorkBook = CommonUtil.createWorkBook(fileName);
 					if (exportWorkBook.getNumberOfSheets() == 1 && exportWorkBook.getSheetAt(0) != null) {
 						exportWorkBook.removeSheetAt(0);
 					}
@@ -403,7 +569,8 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 						}
 					}
 					writeDataIntoSheet(sheetData, exportWorkBookSheet);
-					writeExcelDataIntoFile(outPutFilePath, exportWorkBook);
+					writeExcelDataIntoAmazonS3File(fileName, exportWorkBook, bucketName, uploadedFolderName);
+
 				}
 			}
 		}
@@ -446,14 +613,19 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 		}
 	}
 
-	private void writeExcelDataIntoFile(String outPutFilePath, Workbook exportWorkBook) throws InternalServerException {
+	private void writeExcelDataIntoAmazonS3File(String fileName, Workbook exportWorkBook, String bucketName,
+			String uploadedFolderName) throws InternalServerException {
 		FileOutputStream os = null;
 		try {
-			os = new FileOutputStream(outPutFilePath);
+			File exportedFile = new File(fileName);
+			os = new FileOutputStream(exportedFile);
 			try {
 				exportWorkBook.write(os);
 				os.close();
 				exportWorkBook.close();
+
+				AmazonS3Util.createFile(bucketName, null, exportedFile, uploadedFolderName + SUFFIX + fileName);
+
 			} catch (IOException e) {
 				throw new InternalServerException(e.getMessage());
 			}
@@ -463,147 +635,211 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 	}
 
 	@Override
-	public boolean exportDistricts(String inputFilePath) throws InternalServerException {
-		if (inputFilePath == null || inputFilePath.isEmpty()) {
-			inputFilePath = env.getProperty("project.locations-files.download-path")
-					+ env.getProperty("project.district-locations-file-name");
-		}
+	@Transactional
+	public boolean exportDistricts() throws InternalServerException {
 
-		List<LocationMaster> stateMasterLocations = new ArrayList<LocationMaster>();
+		String bucketName = env.getProperty("amazon.s3.locations.bucket.name");
+		String hostName = env.getProperty("amazon.s3.host.name");
+		String fileName = env.getProperty("project.district-locations-file-name");
+		String downloadedFolderName = env.getProperty("amazon.s3.locations.downloaded.folder.name");
+		String uploadedFolderName = env.getProperty("amazon.s3.locations.uploaded.folder.name");
+
+		List<LocationMaster> stateLocations = new ArrayList<LocationMaster>();
 		List<String> locationTypes = new ArrayList<String>();
 		locationTypes.add(ServiceConstants.LOCATION_STATE_TYPE);
 		locationTypes.add(ServiceConstants.LOCATION_UNION_TERRITORY_TYPE);
-		stateMasterLocations = locationMasterDao.getAllMasterLocationsByTypes(locationTypes);
-		Map<Long, List<LocationMaster>> stateMasterLocationsCodeMap = stateMasterLocations.stream()
+		stateLocations = locationMasterDao.getAllMasterLocationsByTypes(locationTypes);
+		Map<Long, List<LocationMaster>> stateMasterLocationsCodeMap = stateLocations.stream()
 				.collect(Collectors.groupingBy(locationObject -> locationObject.getLocationCode()));
 
-		Workbook importWorkBook = CommonUtil.getWorkBookFromFile(inputFilePath);
-		Sheet importWorkBookSheet = importWorkBook.getSheetAt(0);
+		String globalFolderName = env.getProperty("amazon.s3.locations.global.folder.name");
+		String countryFolderName = env.getProperty("amazon.s3.locations.india.folder.name");
+		String ruralFolderName = env.getProperty("amazon.s3.locations.rural.folder.name");
 
-		String outPutFilePath = "";
-		String directoryPath = env.getProperty("project.locations-files.upload-path");
-		String fileName = env.getProperty("project.district-locations-file-name");
+		if (stateLocations != null && !stateLocations.isEmpty()) {
+			for (LocationMaster eachLocation : stateLocations) {
+				if (eachLocation != null) {
 
-		outPutFilePath = directoryPath + fileName;
-		CommonUtil.createExcelFile(directoryPath, fileName);
+					String inputFilePath = hostName + bucketName + SUFFIX + downloadedFolderName + SUFFIX
+							+ globalFolderName + SUFFIX + countryFolderName + SUFFIX + eachLocation.getLocationName()
+							+ SUFFIX + ruralFolderName + SUFFIX + fileName;
 
-		Workbook exportWorkBook = CommonUtil.getWorkBookFromFile(outPutFilePath);
-		if (exportWorkBook.getNumberOfSheets() == 1 && exportWorkBook.getSheetAt(0) != null) {
-			exportWorkBook.removeSheetAt(0);
-		}
-		Sheet exportWorkBookSheet = exportWorkBook.createSheet(ServiceConstants.LOCATION_EXCEL_DISTRICT_SHEET_NAME);
-		addHeaderRow(exportWorkBookSheet);
-		int j = 0;
-		int i = 0;
-		Map<Integer, Object[]> sheetData = new HashMap<Integer, Object[]>();
-		for (Row eachRow : importWorkBookSheet) {
-			if (i < 3) {
-				i++;
-				continue;
+					Workbook importWorkBook = CommonUtil.getWorkBookFromFile(inputFilePath);
+					if (importWorkBook != null) {
+						Sheet importWorkBookSheet = importWorkBook.getSheetAt(0);
+
+						Workbook exportWorkBook = CommonUtil.createWorkBook(fileName);
+						if (exportWorkBook.getNumberOfSheets() == 1 && exportWorkBook.getSheetAt(0) != null) {
+							exportWorkBook.removeSheetAt(0);
+						}
+						Sheet exportWorkBookSheet = exportWorkBook
+								.createSheet(ServiceConstants.LOCATION_EXCEL_DISTRICT_SHEET_NAME);
+						addHeaderRow(exportWorkBookSheet);
+						int j = 0;
+						int i = 0;
+						Map<Integer, Object[]> sheetData = new HashMap<Integer, Object[]>();
+						for (Row eachRow : importWorkBookSheet) {
+							if (i < 4) {
+								i++;
+								continue;
+							}
+							String locationName = eachRow.getCell(3).getStringCellValue().trim();
+							String locationType = ServiceConstants.LOCATION_DISTRICT_TYPE;
+							if (locationName != null && !locationName.isEmpty()) {
+								Long locationCode = Long.parseLong(eachRow.getCell(1).getStringCellValue().trim());
+								Long parentLocationCode = Long
+										.parseLong(eachRow.getCell(5).getStringCellValue().trim());
+								Long parentLocationGuid = stateMasterLocationsCodeMap.get(parentLocationCode).get(0)
+										.getGuid();
+								j++;
+								sheetData.put(j,
+										new Object[] { locationCode, locationName, locationType, parentLocationGuid });
+							} else {
+								break;
+							}
+						}
+
+						String eachUploadedFolderName = uploadedFolderName + SUFFIX + globalFolderName + SUFFIX
+								+ countryFolderName + SUFFIX;
+
+						writeDataIntoSheet(sheetData, exportWorkBookSheet);
+						writeExcelDataIntoAmazonS3File(fileName, exportWorkBook, bucketName,
+								eachUploadedFolderName + eachLocation.getLocationName() + SUFFIX + ruralFolderName);
+					}
+				}
 			}
-			String locationName = eachRow.getCell(1).getStringCellValue().trim();
-			String locationType = ServiceConstants.LOCATION_DISTRICT_TYPE;
-			if (locationName != null && !locationName.isEmpty()) {
-				Long locationCode = (long) eachRow.getCell(0).getNumericCellValue();
-				Long parentLocationCode = (long) eachRow.getCell(2).getNumericCellValue();
-				Long parentLocationGuid = stateMasterLocationsCodeMap.get(parentLocationCode).get(0).getGuid();
-				j++;
-				sheetData.put(j, new Object[] { locationCode, locationName, locationType, parentLocationGuid });
-			} else {
-				break;
-			}
 		}
-		writeDataIntoSheet(sheetData, exportWorkBookSheet);
-		writeExcelDataIntoFile(outPutFilePath, exportWorkBook);
-
 		return true;
 	}
 
 	@Override
-	public boolean exportSubDistricts(String inputFilePath) throws InternalServerException {
-		if (inputFilePath == null || inputFilePath.isEmpty()) {
-			inputFilePath = env.getProperty("project.locations-files.download-path")
-					+ env.getProperty("project.sub_dsitrict-locations-file-name");
-		}
+	@Transactional
+	public boolean exportSubDistricts() throws InternalServerException {
 
-		List<LocationMaster> districtLocations = new ArrayList<LocationMaster>();
-		districtLocations = locationMasterDao.getAllMasterLocationsByType(ServiceConstants.LOCATION_DISTRICT_TYPE);
-
-		final Map<Long, List<LocationMaster>> districtLocationsMap = districtLocations.stream()
-				.collect(Collectors.groupingBy(districtLocation -> districtLocation.getLocationCode()));
-
-		Workbook importWorkBook = CommonUtil.getWorkBookFromFile(inputFilePath);
-		Sheet importWorkBookSheet = importWorkBook.getSheetAt(0);
-
-		String outPutFilePath = "";
-		String directoryPath = env.getProperty("project.locations-files.upload-path");
+		String bucketName = env.getProperty("amazon.s3.locations.bucket.name");
+		String hostName = env.getProperty("amazon.s3.host.name");
 		String fileName = env.getProperty("project.sub_dsitrict-locations-file-name");
+		String downloadedFolderName = env.getProperty("amazon.s3.locations.downloaded.folder.name");
+		String uploadedFolderName = env.getProperty("amazon.s3.locations.uploaded.folder.name");
 
-		outPutFilePath = directoryPath + fileName;
-		CommonUtil.createExcelFile(directoryPath, fileName);
-
-		Workbook exportWorkBook = CommonUtil.getWorkBookFromFile(outPutFilePath);
-		if (exportWorkBook.getNumberOfSheets() == 1 && exportWorkBook.getSheetAt(0) != null) {
-			exportWorkBook.removeSheetAt(0);
-		}
-		Sheet exportWorkBookSheet = exportWorkBook.createSheet(ServiceConstants.LOCATION_EXCEL_SUB_DISTRICT_SHEET_NAME);
-		addHeaderRow(exportWorkBookSheet);
-		int j = 0;
-		int i = 0;
-		Map<Integer, Object[]> sheetData = new HashMap<Integer, Object[]>();
-		for (Row eachRow : importWorkBookSheet) {
-			if (i < 3) {
-				i++;
-				continue;
-			}
-
-			String locationName = eachRow.getCell(2).getStringCellValue().trim();
-			String locationType = ServiceConstants.LOCATION_SUB_DISTRICT_TYPE;
-
-			if (locationName != null && !locationName.isEmpty()) {
-				Long locationCode = (long) eachRow.getCell(0).getNumericCellValue();
-				Long parentLocationCode = (long) eachRow.getCell(3).getNumericCellValue();
-				Long parentLocationGuid = districtLocationsMap.get(parentLocationCode).get(0).getGuid();
-				j++;
-				sheetData.put(j, new Object[] { locationCode, locationName, locationType, parentLocationGuid });
-			} else {
-				break;
-			}
-		}
-		writeDataIntoSheet(sheetData, exportWorkBookSheet);
-		writeExcelDataIntoFile(outPutFilePath, exportWorkBook);
-		return true;
-	}
-
-	@Override
-	@Transactional(readOnly = true)
-	public boolean exportMuncipalCorporations(String inputFilePath) throws InternalServerException {
-		if (inputFilePath == null || inputFilePath.isEmpty()) {
-			inputFilePath = env.getProperty("project.locations-files.download-path")
-					+ env.getProperty("project.muncipal_corporation-download-locations-file-name");
-		}
 		List<LocationMaster> stateLocations = new ArrayList<LocationMaster>();
 		List<String> locationTypes = new ArrayList<String>();
 		locationTypes.add(ServiceConstants.LOCATION_STATE_TYPE);
 		locationTypes.add(ServiceConstants.LOCATION_UNION_TERRITORY_TYPE);
 		stateLocations = locationMasterDao.getAllMasterLocationsByTypes(locationTypes);
 
+		String globalFolderName = env.getProperty("amazon.s3.locations.global.folder.name");
+		String countryFolderName = env.getProperty("amazon.s3.locations.india.folder.name");
+		String ruralFolderName = env.getProperty("amazon.s3.locations.rural.folder.name");
+
+		if (CommonUtil.isListNotNullAndNotEmpty(stateLocations)) {
+			for (LocationMaster eachLocation : stateLocations) {
+				if (eachLocation != null) {
+
+					String inputFilePath = hostName + bucketName + SUFFIX + downloadedFolderName + SUFFIX
+							+ globalFolderName + SUFFIX + countryFolderName + SUFFIX + eachLocation.getLocationName()
+							+ SUFFIX + ruralFolderName + SUFFIX + fileName;
+
+					Workbook importWorkBook = CommonUtil.getWorkBookFromFile(inputFilePath);
+					Sheet importWorkBookSheet = importWorkBook.getSheetAt(0);
+
+					List<LocationMaster> districtLocations = locationMasterDao
+							.getAllMasterLocationsByTypeAndParentLocation(ServiceConstants.LOCATION_DISTRICT_TYPE,
+									eachLocation.getGuid());
+
+					final Map<Long, List<LocationMaster>> districtLocationsMap = districtLocations.stream()
+							.collect(Collectors.groupingBy(districtLocation -> districtLocation.getLocationCode()));
+
+					if (CommonUtil.isListNotNullAndNotEmpty(districtLocations)) {
+						for (LocationMaster eachDistrictLocation : districtLocations) {
+							if (eachDistrictLocation != null) {
+
+								Workbook exportWorkBook = CommonUtil.createWorkBook(fileName);
+								if (exportWorkBook.getNumberOfSheets() == 1 && exportWorkBook.getSheetAt(0) != null) {
+									exportWorkBook.removeSheetAt(0);
+								}
+								Sheet exportWorkBookSheet = exportWorkBook
+										.createSheet(ServiceConstants.LOCATION_EXCEL_SUB_DISTRICT_SHEET_NAME);
+								addHeaderRow(exportWorkBookSheet);
+								int j = 0;
+								int i = 0;
+								Map<Integer, Object[]> sheetData = new HashMap<Integer, Object[]>();
+								for (Row eachRow : importWorkBookSheet) {
+									if (i < 4) {
+										i++;
+										continue;
+									}
+
+									String locationName = eachRow.getCell(3).getStringCellValue().trim();
+									String locationType = ServiceConstants.LOCATION_SUB_DISTRICT_TYPE;
+
+									if (locationName != null && !locationName.isEmpty()) {
+										Long locationCode = (long) eachRow.getCell(1).getNumericCellValue();
+										Long parentLocationCode = (long) eachRow.getCell(5).getNumericCellValue();
+										Long parentLocationGuid = districtLocationsMap.get(parentLocationCode).get(0)
+												.getGuid();
+
+										if (eachDistrictLocation.getLocationCode().equals(parentLocationCode)
+												|| eachDistrictLocation.getLocationCode().toString()
+														.equalsIgnoreCase(parentLocationCode.toString())) {
+											j++;
+											sheetData.put(j, new Object[] { locationCode, locationName, locationType,
+													parentLocationGuid });
+										}
+									} else {
+										break;
+									}
+								}
+
+								String eachUploadedFolderName = uploadedFolderName + SUFFIX + globalFolderName + SUFFIX
+										+ countryFolderName + SUFFIX + eachLocation.getLocationName() + SUFFIX
+										+ ruralFolderName + SUFFIX + eachDistrictLocation.getLocationName();
+
+								writeDataIntoSheet(sheetData, exportWorkBookSheet);
+								writeExcelDataIntoAmazonS3File(fileName, exportWorkBook, bucketName,
+										eachUploadedFolderName);
+							}
+						}
+					}
+				}
+			}
+		}
+
+		return true;
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public boolean exportMuncipalCorporations() throws InternalServerException {
+		String fileName = env.getProperty("project.urban.bodies-locations-file-name");
+
+		String bucketName = env.getProperty("amazon.s3.locations.bucket.name");
+		String hostName = env.getProperty("amazon.s3.host.name");
+		String downloadedFolderName = env.getProperty("amazon.s3.locations.downloaded.folder.name");
+		String uploadedFolderName = env.getProperty("amazon.s3.locations.uploaded.folder.name");
+
+		List<LocationMaster> stateLocations = new ArrayList<LocationMaster>();
+		List<String> locationTypes = new ArrayList<String>();
+		locationTypes.add(ServiceConstants.LOCATION_STATE_TYPE);
+		locationTypes.add(ServiceConstants.LOCATION_UNION_TERRITORY_TYPE);
+		stateLocations = locationMasterDao.getAllMasterLocationsByTypes(locationTypes);
+
+		String globalFolderName = env.getProperty("amazon.s3.locations.global.folder.name");
+		String countryFolderName = env.getProperty("amazon.s3.locations.india.folder.name");
+		String urbanFolderName = env.getProperty("amazon.s3.locations.urban.folder.name");
+
 		if (stateLocations != null && !stateLocations.isEmpty()) {
 			for (LocationMaster eachLocation : stateLocations) {
 				if (eachLocation != null) {
-					Workbook importWorkBook = CommonUtil.getWorkBookFromFile(
-							inputFilePath + eachLocation.getLocationName() + ServiceConstants.EXCEL_SHEET_TYPE_XLS);
+
+					String inputFilePath = hostName + bucketName + SUFFIX + downloadedFolderName + SUFFIX
+							+ globalFolderName + SUFFIX + countryFolderName + SUFFIX + eachLocation.getLocationName()
+							+ SUFFIX + fileName;
+
+					Workbook importWorkBook = CommonUtil.getWorkBookFromFile(inputFilePath);
 					Sheet importWorkBookSheet = importWorkBook.getSheetAt(0);
 
-					String outPutFilePath = "";
-					String directoryPath = env.getProperty("project.locations-files.upload-path")
-							+ env.getProperty("project.muncipal_corporation-upload-locations-file-name");
-					String fileName = eachLocation.getLocationName() + ServiceConstants.EXCEL_SHEET_TYPE_XLS;
-
-					outPutFilePath = directoryPath + fileName;
-					CommonUtil.createExcelFile(directoryPath, fileName);
-
-					Workbook exportWorkBook = CommonUtil.getWorkBookFromFile(outPutFilePath);
+					Workbook exportWorkBook = CommonUtil.createWorkBook(fileName);
 					if (exportWorkBook.getNumberOfSheets() == 1 && exportWorkBook.getSheetAt(0) != null) {
 						exportWorkBook.removeSheetAt(0);
 					}
@@ -641,8 +877,12 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 							break;
 						}
 					}
+					String eachUploadedFolderName = uploadedFolderName + SUFFIX + globalFolderName + SUFFIX
+							+ countryFolderName + SUFFIX;
+
 					writeDataIntoSheet(sheetData, exportWorkBookSheet);
-					writeExcelDataIntoFile(outPutFilePath, exportWorkBook);
+					writeExcelDataIntoAmazonS3File(fileName, exportWorkBook, bucketName,
+							eachUploadedFolderName + eachLocation.getLocationName() + SUFFIX + urbanFolderName);
 				}
 			}
 		}
@@ -651,33 +891,34 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 
 	@Override
 	@Transactional(readOnly = true)
-	public boolean exportMuncipalities(String inputFilePath) throws InternalServerException {
-		if (inputFilePath == null || inputFilePath.isEmpty()) {
-			inputFilePath = env.getProperty("project.locations-files.download-path")
-					+ env.getProperty("project.muncipaity-download-locations-file-name");
-		}
+	public boolean exportMuncipalities() throws InternalServerException {
+		String fileName = env.getProperty("project.urban.bodies-locations-file-name");
+		String bucketName = env.getProperty("amazon.s3.locations.bucket.name");
+		String hostName = env.getProperty("amazon.s3.host.name");
+		String downloadedFolderName = env.getProperty("amazon.s3.locations.downloaded.folder.name");
+		String uploadedFolderName = env.getProperty("amazon.s3.locations.uploaded.folder.name");
+
 		List<LocationMaster> stateLocations = new ArrayList<LocationMaster>();
 		List<String> locationTypes = new ArrayList<String>();
 		locationTypes.add(ServiceConstants.LOCATION_STATE_TYPE);
 		locationTypes.add(ServiceConstants.LOCATION_UNION_TERRITORY_TYPE);
 		stateLocations = locationMasterDao.getAllMasterLocationsByTypes(locationTypes);
 
+		String globalFolderName = env.getProperty("amazon.s3.locations.global.folder.name");
+		String countryFolderName = env.getProperty("amazon.s3.locations.india.folder.name");
+
 		if (stateLocations != null && !stateLocations.isEmpty()) {
 			for (LocationMaster eachLocation : stateLocations) {
 				if (eachLocation != null) {
-					Workbook importWorkBook = CommonUtil.getWorkBookFromFile(
-							inputFilePath + eachLocation.getLocationName() + ServiceConstants.EXCEL_SHEET_TYPE_XLS);
+
+					String inputFilePath = hostName + bucketName + SUFFIX + downloadedFolderName + SUFFIX
+							+ globalFolderName + SUFFIX + countryFolderName + SUFFIX + eachLocation.getLocationName()
+							+ SUFFIX + fileName;
+
+					Workbook importWorkBook = CommonUtil.getWorkBookFromFile(inputFilePath);
 					Sheet importWorkBookSheet = importWorkBook.getSheetAt(0);
 
-					String outPutFilePath = "";
-					String directoryPath = env.getProperty("project.locations-files.upload-path")
-							+ env.getProperty("project.muncipaity-upload-locations-file-name");
-					String fileName = eachLocation.getLocationName() + ServiceConstants.EXCEL_SHEET_TYPE_XLS;
-
-					outPutFilePath = directoryPath + fileName;
-					CommonUtil.createExcelFile(directoryPath, fileName);
-
-					Workbook exportWorkBook = CommonUtil.getWorkBookFromFile(outPutFilePath);
+					Workbook exportWorkBook = CommonUtil.createWorkBook(fileName);
 					if (exportWorkBook.getNumberOfSheets() == 1 && exportWorkBook.getSheetAt(0) != null) {
 						exportWorkBook.removeSheetAt(0);
 					}
@@ -708,8 +949,12 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 							break;
 						}
 					}
+					String eachUploadedFolderName = uploadedFolderName + SUFFIX + globalFolderName + SUFFIX
+							+ countryFolderName + SUFFIX;
+
 					writeDataIntoSheet(sheetData, exportWorkBookSheet);
-					writeExcelDataIntoFile(outPutFilePath, exportWorkBook);
+					writeExcelDataIntoAmazonS3File(fileName, exportWorkBook, bucketName,
+							eachUploadedFolderName + eachLocation.getLocationName());
 				}
 			}
 		}
@@ -718,11 +963,13 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 
 	@Override
 	@Transactional(readOnly = true)
-	public boolean exportTownPanchayathies(String inputFilePath) throws InternalServerException {
-		if (inputFilePath == null || inputFilePath.isEmpty()) {
-			inputFilePath = env.getProperty("project.locations-files.download-path")
-					+ env.getProperty("project.town_panchayath-download-locations-file-name");
-		}
+	public boolean exportTownPanchayathies() throws InternalServerException {
+
+		String fileName = env.getProperty("project.urban.bodies-locations-file-name");
+		String bucketName = env.getProperty("amazon.s3.locations.bucket.name");
+		String hostName = env.getProperty("amazon.s3.host.name");
+		String downloadedFolderName = env.getProperty("amazon.s3.locations.downloaded.folder.name");
+		String uploadedFolderName = env.getProperty("amazon.s3.locations.uploaded.folder.name");
 
 		List<LocationMaster> stateLocations = new ArrayList<LocationMaster>();
 		List<String> locationTypes = new ArrayList<String>();
@@ -730,22 +977,21 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 		locationTypes.add(ServiceConstants.LOCATION_UNION_TERRITORY_TYPE);
 		stateLocations = locationMasterDao.getAllMasterLocationsByTypes(locationTypes);
 
+		String globalFolderName = env.getProperty("amazon.s3.locations.global.folder.name");
+		String countryFolderName = env.getProperty("amazon.s3.locations.india.folder.name");
+
 		if (stateLocations != null && !stateLocations.isEmpty()) {
 			for (LocationMaster eachLocation : stateLocations) {
 				if (eachLocation != null) {
-					Workbook importWorkBook = CommonUtil.getWorkBookFromFile(
-							inputFilePath + eachLocation.getLocationName() + ServiceConstants.EXCEL_SHEET_TYPE_XLS);
+
+					String inputFilePath = hostName + bucketName + SUFFIX + downloadedFolderName + SUFFIX
+							+ globalFolderName + SUFFIX + countryFolderName + SUFFIX + eachLocation.getLocationName()
+							+ SUFFIX + fileName;
+
+					Workbook importWorkBook = CommonUtil.getWorkBookFromFile(inputFilePath);
 					Sheet importWorkBookSheet = importWorkBook.getSheetAt(0);
 
-					String outPutFilePath = "";
-					String directoryPath = env.getProperty("project.locations-files.upload-path")
-							+ env.getProperty("project.town_panchayath-upload-locations-file-name");
-					String fileName = eachLocation.getLocationName() + ServiceConstants.EXCEL_SHEET_TYPE_XLS;
-
-					outPutFilePath = directoryPath + fileName;
-					CommonUtil.createExcelFile(directoryPath, fileName);
-
-					Workbook exportWorkBook = CommonUtil.getWorkBookFromFile(outPutFilePath);
+					Workbook exportWorkBook = CommonUtil.createWorkBook(fileName);
 					if (exportWorkBook.getNumberOfSheets() == 1 && exportWorkBook.getSheetAt(0) != null) {
 						exportWorkBook.removeSheetAt(0);
 					}
@@ -781,8 +1027,12 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 							break;
 						}
 					}
+					String eachUploadedFolderName = uploadedFolderName + SUFFIX + globalFolderName + SUFFIX
+							+ countryFolderName + SUFFIX;
+
 					writeDataIntoSheet(sheetData, exportWorkBookSheet);
-					writeExcelDataIntoFile(outPutFilePath, exportWorkBook);
+					writeExcelDataIntoAmazonS3File(fileName, exportWorkBook, bucketName,
+							eachUploadedFolderName + eachLocation.getLocationName());
 				}
 			}
 		}
@@ -791,11 +1041,12 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 
 	@Override
 	@Transactional(readOnly = true)
-	public boolean exportVillagePanchayathies(String inputFilePath) throws InternalServerException {
-		if (inputFilePath == null || inputFilePath.isEmpty()) {
-			inputFilePath = env.getProperty("project.locations-files.download-path")
-					+ env.getProperty("project.village_panchayath-download-locations-file-name");
-		}
+	public boolean exportVillagePanchayathies() throws InternalServerException {
+		String inputFilePath = env.getProperty("project.locations-files.download-path")
+				+ env.getProperty("project.village_panchayath-download-locations-file-name");
+
+		String bucketName = env.getProperty("amazon.s3.locations.bucket.name");
+		String uploadedFolderName = env.getProperty("amazon.s3.locations.uploaded.folder.name");
 		List<LocationMaster> stateLocations = new ArrayList<LocationMaster>();
 		List<String> locationTypes = new ArrayList<String>();
 		locationTypes.add(ServiceConstants.LOCATION_STATE_TYPE);
@@ -862,7 +1113,7 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 
 					}
 					writeDataIntoSheet(sheetData, exportWorkBookSheet);
-					writeExcelDataIntoFile(outPutFilePath, exportWorkBook);
+					writeExcelDataIntoAmazonS3File(fileName, exportWorkBook, bucketName, uploadedFolderName);
 
 				}
 			}
@@ -872,11 +1123,12 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 
 	@Override
 	@Transactional(readOnly = true)
-	public boolean exportVillages(String inputFilePath) throws InternalServerException {
-		if (inputFilePath == null || inputFilePath.isEmpty()) {
-			inputFilePath = env.getProperty("project.locations-files.download-path")
-					+ env.getProperty("project.village-download-locations-file-name");
-		}
+	public boolean exportVillages() throws InternalServerException {
+		String inputFilePath = env.getProperty("project.locations-files.download-path")
+				+ env.getProperty("project.village-download-locations-file-name");
+
+		String bucketName = env.getProperty("amazon.s3.locations.bucket.name");
+		String uploadedFolderName = env.getProperty("amazon.s3.locations.uploaded.folder.name");
 
 		List<LocationMaster> stateLocations = new ArrayList<LocationMaster>();
 		List<String> locationTypes = new ArrayList<String>();
@@ -938,7 +1190,7 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 						}
 					}
 					writeDataIntoSheet(sheetData, exportWorkBookSheet);
-					writeExcelDataIntoFile(outPutFilePath, exportWorkBook);
+					writeExcelDataIntoAmazonS3File(fileName, exportWorkBook, bucketName, uploadedFolderName);
 				}
 			}
 		}
@@ -948,12 +1200,13 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 
 	@Override
 	@Transactional(readOnly = true)
-	public boolean exportVillageReferenceLocations(String inputFilePath) throws InternalServerException {
+	public boolean exportVillageReferenceLocations() throws InternalServerException {
 
-		if (inputFilePath == null || inputFilePath.isEmpty()) {
-			inputFilePath = env.getProperty("project.locations-files.download-path")
-					+ env.getProperty("project.village_panchayath-download-locations-file-name");
-		}
+		String inputFilePath = env.getProperty("project.locations-files.download-path")
+				+ env.getProperty("project.village_panchayath-download-locations-file-name");
+
+		String bucketName = env.getProperty("amazon.s3.locations.bucket.name");
+		String uploadedFolderName = env.getProperty("amazon.s3.locations.uploaded.folder.name");
 
 		List<LocationMaster> countryLocations = locationMasterDao
 				.getAllMasterLocationsByType(ServiceConstants.LOCATION_COUNTRY_TYPE);
@@ -1093,7 +1346,8 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 									}
 								}
 								writeDataIntoSheet(sheetData, exportWorkBookSheet);
-								writeExcelDataIntoFile(outPutFilePath, exportWorkBook);
+								writeExcelDataIntoAmazonS3File(fileName, exportWorkBook, bucketName,
+										uploadedFolderName);
 
 							}
 						}
@@ -1133,12 +1387,13 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 
 	@Override
 	@Transactional(readOnly = true)
-	public boolean exportUrbanReferenceLocations(String inputFilePath) throws InternalServerException {
+	public boolean exportUrbanReferenceLocations() throws InternalServerException {
 
-		if (inputFilePath == null || inputFilePath.isEmpty()) {
-			inputFilePath = env.getProperty("project.locations-files.download-path")
-					+ env.getProperty("project.urban-download-locations-reference-file-name");
-		}
+		String inputFilePath = env.getProperty("project.locations-files.download-path")
+				+ env.getProperty("project.urban-download-locations-reference-file-name");
+
+		String bucketName = env.getProperty("amazon.s3.locations.bucket.name");
+		String uploadedFolderName = env.getProperty("amazon.s3.locations.uploaded.folder.name");
 
 		List<LocationMaster> stateLocations = new ArrayList<LocationMaster>();
 		List<String> locationTypes = new ArrayList<String>();
@@ -1306,7 +1561,8 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 									}
 								}
 								writeDataIntoSheet(sheetData, exportWorkBookSheet);
-								writeExcelDataIntoFile(outPutFilePath, exportWorkBook);
+								writeExcelDataIntoAmazonS3File(fileName, exportWorkBook, bucketName,
+										uploadedFolderName);
 							}
 						}
 					}
@@ -1608,55 +1864,55 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 	@Transactional
 	public boolean importExportAllMasterLocations() throws InternalServerException {
 		System.out.println("Export Countries Start");
-		exportCountries(null);
+		exportCountries();
 		System.out.println("Export Countries End");
 		System.out.println("Import Countries Started");
 		importCountries(null);
 		System.out.println("Import Countries End");
 		System.out.println("Export States Started");
-		exportStates(null);
+		exportStates();
 		System.out.println("Export States Ended");
 		System.out.println("Import States Started");
 		importStates(null);
 		System.out.println("Import Stated End");
 		System.out.println("Export Districts Started");
-		exportDistricts(null);
+		exportDistricts();
 		System.out.println("Export Districts Ended");
 		System.out.println("Import Districts Started");
 		importDistricts(null);
 		System.out.println("Import Districts Ended");
 		System.out.println("Export Sub Districts Started");
-		exportSubDistricts(null);
+		exportSubDistricts();
 		System.out.println("Export Sub Districts Ended");
 		System.out.println("Import Sub Districts Started");
 		importSubDistricts(null);
 		System.out.println("Import Sub Districts Ended");
 		System.out.println("Export Muncipal Corporations Started");
-		exportMuncipalCorporations(null);
+		exportMuncipalCorporations();
 		System.out.println("Export Muncipal Corporations Ended");
 		System.out.println("Import MC Started");
 		importMuncipalCorporations(null);
 		System.out.println("Import MC Ended");
 		System.out.println("Export M Started");
-		exportMuncipalities(null);
+		exportMuncipalities();
 		System.out.println("Export M Ended");
 		System.out.println("Import M Started");
 		importMuncipalities(null);
 		System.out.println("Import M Ended");
 		System.out.println("Export TP Started");
-		exportTownPanchayathies(null);
+		exportTownPanchayathies();
 		System.out.println("Export TP Ended");
 		System.out.println("Import TP Started");
 		importTownPanchayathies(null);
 		System.out.println("Import TP End");
 		System.out.println("Export VP Started");
-		exportVillagePanchayathies(null);
+		exportVillagePanchayathies();
 		System.out.println("Export VP End");
 		System.out.println("Import VP Started");
 		importVillagePanchayathies(null);
 		System.out.println("Import VP End");
 		System.out.println("Export V Started");
-		exportVillages(null);
+		exportVillages();
 		System.out.println("Export V Ended");
 		System.out.println("Import V Started");
 		importVillages(null);
@@ -1668,13 +1924,13 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 	@Transactional
 	public boolean importExportAllReferenceLocations() throws InternalServerException {
 		System.out.println("Export V Ref Start");
-		exportVillageReferenceLocations(null);
+		exportVillageReferenceLocations();
 		System.out.println("Export V Ref End");
 		System.out.println("Import V Ref Start");
 		importVillageReferenceLocations(null);
 		System.out.println("Import V Ref End");
 		System.out.println("Export U Ref Start");
-		exportUrbanReferenceLocations(null);
+		exportUrbanReferenceLocations();
 		System.out.println("Export U Ref End");
 		System.out.println("Import U Ref Start");
 		importUrbanReferenceLocations(null);

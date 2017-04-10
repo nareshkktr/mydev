@@ -71,7 +71,7 @@ public class AmazonS3Util {
 		}
 	}
 
-	protected static void createFile(String bucketName, String folderName, File fileObj, String fileName)
+	public static void createFile(String bucketName, String folderName, File fileObj, String fileName)
 			throws InternalServerException {
 		try {
 			intializeAmazonS3Client();

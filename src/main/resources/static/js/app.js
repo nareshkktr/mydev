@@ -6,6 +6,41 @@
 
 (function() {
 	'use strict';
+
+	angular.module('myindia-app').controller("commentActionsController",
+			commentActionsController);
+	commentActionsController.$inject = [];
+
+	function commentActionsController() {
+		var commentActions = this;
+	}
+
+})();
+
+(function() {
+	'use strict';
+
+	angular.module('myindia-app').directive("commentActions", commentActions);
+
+	function commentActions() {
+
+		var commentActions = {
+			restrict : 'E',
+			scope : {
+				objectType : '=',
+				objectGuid : '='
+			},
+			templateUrl : resource + 'partials/commentActions.html',
+			controller : 'commentActionsController',
+			controllerAs : 'commentActions'
+		};
+		return commentActions;
+	}
+
+})();
+
+(function() {
+	'use strict';
 	angular.module('myindia-app').controller("commentBoxController",
 			commentBoxController);
 
@@ -865,6 +900,44 @@
 }());
 
 (function() {
+	'use strict';
+
+	angular.module('myindia-app').directive("userProfileImageDisplay", userProfileImageDisplay);
+
+	function userProfileImageDisplay() {
+
+		var userProfileImageDisplay = {
+			restrict : 'E',
+			scope: {
+				imageUrl: '=',
+				name: '=',
+				imageClass: '=',
+				labelClass: '='
+			},
+			templateUrl : resource + 'partials/userProfileImageDisplay.html',
+			link : link
+		};
+
+		return userProfileImageDisplay;
+
+		function link(scope, element, attrs) {
+
+			if(!scope.imageUrl){
+				let splitValues = scope.name.split(" ");
+
+				if(splitValues && splitValues.length>1){
+					scope.labelName = splitValues[0].charAt(0)+splitValues[1].charAt(0);
+				}else if(splitValues && splitValues.length>0){
+					scope.labelName = splitValues[0].charAt(0);
+				}
+			}
+			console.log(scope.imageUrl);
+		}
+
+	}
+})();
+
+(function() {
      'use strict';
 	
 	angular.module('myindia-app').run(routeTrack);
@@ -1172,9 +1245,9 @@
 	angular.module('myindia-app').factory("logoutService",
 			logoutService);
 
-	logoutService.$inject = [ '$q', 'swaggerShareService' ];
+	logoutService.$inject = [ '$q', 'swaggerShareService','refreshAccessTokenService' ];
 
-	function logoutService($q, swaggerShareService) {
+	function logoutService($q, swaggerShareService,refreshAccessTokenService) {
 
 		var services = {};
 
@@ -1207,7 +1280,7 @@
 	      		});
 
 				//Stop timer for refresh token
-				refreshAccessTokenService.stopTokenExpiryTimer(expiresIn);
+				refreshAccessTokenService.stopTokenExpiryTimer();
 
 				deferred.resolve(data);
 			}
@@ -2023,25 +2096,74 @@
 
 	angular.module('myindia-app').controller("discussionsController",
 			discussionsController);
-	discussionsController.$inject = [];
+	discussionsController.$inject = ['$scope', 'discussionsService' ];
 
-	function discussionsController() {
+	function discussionsController($scope,discussionsService) {
 		var discussions = this;
-		discussions.comments=[];
-		
-		for(let i=0;i<20;i++){
-			var discussion={};
-			discussion.commentor={};
-			discussion.commentor.name="YESUDASU ADIPI";
-			discussion.commentor.userImage="https://s3.amazonaws.com/myindiaproblems/problems/31/Koala.jpg";
-			discussion.commentText=" For register grievance servi For register grievance servi For register grievance servi For register grievance servi For register grievance servi For register grievance servi For register grievance servi";
-			discussion.createdTimeStamp="2 Hours Ago";
-			discussions.comments.push(discussion);
+		discussions.comments = [];
+		discussions.problemDetails=$scope.$parent.viewProblem.problemDetails;
+		discussions.objectType="PROBLEM";
+		discussionsService.getProblemComments(discussions.problemDetails.guid,1,20).then(getProblemCommentsSuccess).catch(getProblemCommentsFailure);
+
+		function getProblemCommentsSuccess(data){
+			discussions.comments = data;
+		}
+		function getProblemCommentsFailure(error){
+			alert(error);
 		}
 	}
 
 })();
 
+(function() {
+	'use strict';
+
+	angular.module('myindia-app').factory("discussionsService",
+			discussionsService);
+
+	discussionsService.$inject = [ '$q', 'swaggerShareService', '$timeout' ];
+
+	function discussionsService($q, swaggerShareService, $timeout) {
+
+		var services = {};
+
+		var discussionsService = {
+			getProblemComments : getProblemComments
+		};
+
+		// Call and save the data
+		swaggerShareService.getAPIMetaData(setAPIMetaData);
+
+		return discussionsService;
+
+		function setAPIMetaData(metaInfo) {
+			services = metaInfo;
+		}
+
+		function getProblemComments(problemGuid,pageNo,limit) {
+
+			let
+			deferred = $q.defer();
+
+			services.comment.getFirstLevelComments({
+				objectGuid : problemGuid,
+				pageNo:pageNo,
+				limit:limit
+			}, getProblemCommentsSuccess, getProblemCommentsFailure);
+
+			return deferred.promise;
+
+			function getProblemCommentsSuccess(data) {
+				deferred.resolve(data.obj);
+			}
+
+			function getProblemCommentsFailure(error) {
+				deferred.reject(error);
+			}
+
+		}
+	}
+})();
 (function() {
 	'use strict';
 

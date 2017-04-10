@@ -3,20 +3,20 @@
 
 	angular.module('myindia-app').controller("discussionsController",
 			discussionsController);
-	discussionsController.$inject = [];
+	discussionsController.$inject = ['$scope', 'discussionsService' ];
 
-	function discussionsController() {
+	function discussionsController($scope,discussionsService) {
 		var discussions = this;
-		discussions.comments=[];
-		
-		for(let i=0;i<20;i++){
-			var discussion={};
-			discussion.commentor={};
-			discussion.commentor.name="YESUDASU ADIPI";
-			discussion.commentor.userImage="https://s3.amazonaws.com/myindiaproblems/problems/31/Koala.jpg";
-			discussion.commentText=" For register grievance servi For register grievance servi For register grievance servi For register grievance servi For register grievance servi For register grievance servi For register grievance servi";
-			discussion.createdTimeStamp="2 Hours Ago";
-			discussions.comments.push(discussion);
+		discussions.comments = [];
+		discussions.problemDetails=$scope.$parent.viewProblem.problemDetails;
+		discussions.objectType="PROBLEM";
+		discussionsService.getProblemComments(discussions.problemDetails.guid,1,20).then(getProblemCommentsSuccess).catch(getProblemCommentsFailure);
+
+		function getProblemCommentsSuccess(data){
+			discussions.comments = data;
+		}
+		function getProblemCommentsFailure(error){
+			alert(error);
 		}
 	}
 

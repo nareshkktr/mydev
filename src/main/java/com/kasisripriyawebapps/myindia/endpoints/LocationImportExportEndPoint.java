@@ -134,7 +134,7 @@ public class LocationImportExportEndPoint extends BaseEndPoint {
 		locationImportExportService.importMPConstituencyLocations();
 		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
 	}
-	
+
 	@POST
 	@ApiOperation(value = EndPointConstants.IMPORT_MLA_CONSTITUENCY_LOCATIONS_API_VALUE, nickname = EndPointConstants.IMPORT_MLA_CONSTITUENCY_LOCATIONS_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.IMPORT_MLA_CONSTITUENCY_LOCATIONS_API_DESCRIPTION)
 	@Path(EndPointConstants.IMPORT_MLA_CONSTITUENCY_LOCATIONS_REQUEST_MAPPING)
@@ -146,132 +146,88 @@ public class LocationImportExportEndPoint extends BaseEndPoint {
 	@POST
 	@ApiOperation(value = EndPointConstants.EXPORT_COUNTRY_LOCATIONS_API_VALUE, nickname = EndPointConstants.EXPORT_COUNTRY_LOCATIONS_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.EXPORT_COUNTRY_LOCATIONS_API_DESCRIPTION)
 	@Path(EndPointConstants.EXPORT_COUNTRY_LOCATIONS_REQUEST_MAPPING)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public Response exportCountryLocations(@FormDataParam("file") InputStream uploadedInputStream,
-			@FormDataParam("file") FormDataContentDisposition fileDetail)
-			throws InternalServerException, PreConditionRequiredException {
-		String uploadedFileLocation = uploadExcelFileToDisk(uploadedInputStream, fileDetail);
-		locationImportExportService.exportCountries(uploadedFileLocation);
+	public Response exportCountryLocations() throws InternalServerException {
+		locationImportExportService.exportCountries();
 		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
 	}
 
 	@POST
 	@ApiOperation(value = EndPointConstants.EXPORT_STATE_LOCATIONS_API_VALUE, nickname = EndPointConstants.EXPORT_STATE_LOCATIONS_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.EXPORT_STATE_LOCATIONS_API_DESCRIPTION)
 	@Path(EndPointConstants.EXPORT_STATE_LOCATIONS_REQUEST_MAPPING)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public Response exportStateLocations(@FormDataParam("file") InputStream uploadedInputStream,
-			@FormDataParam("file") FormDataContentDisposition fileDetail)
-			throws InternalServerException, PreConditionRequiredException {
-		String uploadedFileLocation = uploadExcelFileToDisk(uploadedInputStream, fileDetail);
-		locationImportExportService.exportStates(uploadedFileLocation);
+	public Response exportStateLocations() throws InternalServerException {
+		locationImportExportService.exportStates();
 		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
 	}
 
 	@POST
 	@ApiOperation(value = EndPointConstants.EXPORT_DISTRICT_LOCATIONS_API_VALUE, nickname = EndPointConstants.EXPORT_DISTRICT_LOCATIONS_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.EXPORT_DISTRICT_LOCATIONS_API_DESCRIPTION)
 	@Path(EndPointConstants.EXPORT_DISTRICT_LOCATIONS_REQUEST_MAPPING)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public Response exportDistrictLocations(@FormDataParam("file") InputStream uploadedInputStream,
-			@FormDataParam("file") FormDataContentDisposition fileDetail)
-			throws InternalServerException, PreConditionRequiredException {
-		String uploadedFileLocation = uploadExcelFileToDisk(uploadedInputStream, fileDetail);
-		locationImportExportService.exportDistricts(uploadedFileLocation);
+	public Response exportDistrictLocations() throws InternalServerException {
+		locationImportExportService.exportDistricts();
 		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
 	}
 
 	@POST
 	@ApiOperation(value = EndPointConstants.EXPORT_SUB_DISTRICT_LOCATIONS_API_VALUE, nickname = EndPointConstants.EXPORT_SUB_DISTRICT_LOCATIONS_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.EXPORT_SUB_DISTRICT_LOCATIONS_API_DESCRIPTION)
 	@Path(EndPointConstants.EXPORT_SUB_DISTRICT_LOCATIONS_REQUEST_MAPPING)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public Response exportSubDistrictLocations(@FormDataParam("file") InputStream uploadedInputStream,
-			@FormDataParam("file") FormDataContentDisposition fileDetail)
-			throws InternalServerException, PreConditionRequiredException {
-		String uploadedFileLocation = uploadExcelFileToDisk(uploadedInputStream, fileDetail);
-		locationImportExportService.exportSubDistricts(uploadedFileLocation);
+	public Response exportSubDistrictLocations() throws InternalServerException {
+		locationImportExportService.exportSubDistricts();
 		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
 	}
 
 	@POST
 	@ApiOperation(value = EndPointConstants.EXPORT_MUNCIPAL_CORPORATION_LOCATIONS_API_VALUE, nickname = EndPointConstants.EXPORT_MUNCIPAL_CORPORATION_LOCATIONS_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.EXPORT_MUNCIPAL_CORPORATION_LOCATIONS_API_DESCRIPTION)
 	@Path(EndPointConstants.EXPORT_MUNCIPAL_CORPORATION_LOCATIONS_REQUEST_MAPPING)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public Response exportMuncipalCorporationLocations(@FormDataParam("file") InputStream uploadedInputStream,
-			@FormDataParam("file") FormDataContentDisposition fileDetail)
-			throws InternalServerException, PreConditionRequiredException {
-		String uploadedFileLocation = uploadExcelFileToDisk(uploadedInputStream, fileDetail);
-		locationImportExportService.exportMuncipalCorporations(uploadedFileLocation);
+	public Response exportMuncipalCorporationLocations() throws InternalServerException {
+		locationImportExportService.exportMuncipalCorporations();
 		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
 	}
 
 	@POST
 	@ApiOperation(value = EndPointConstants.EXPORT_MUNCIPALITY_LOCATIONS_API_VALUE, nickname = EndPointConstants.EXPORT_MUNCIPALITY_LOCATIONS_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.EXPORT_MUNCIPALITY_LOCATIONS_API_DESCRIPTION)
 	@Path(EndPointConstants.EXPORT_MUNCIPALITY_LOCATIONS_REQUEST_MAPPING)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public Response exportMuncipalityLocations(@FormDataParam("file") InputStream uploadedInputStream,
-			@FormDataParam("file") FormDataContentDisposition fileDetail)
-			throws InternalServerException, PreConditionRequiredException {
-		String uploadedFileLocation = uploadExcelFileToDisk(uploadedInputStream, fileDetail);
-		locationImportExportService.exportMuncipalities(uploadedFileLocation);
+	public Response exportMuncipalityLocations() throws InternalServerException {
+		locationImportExportService.exportMuncipalities();
 		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
 	}
 
 	@POST
 	@ApiOperation(value = EndPointConstants.EXPORT_TOWN_PANCHAYATH_LOCATIONS_API_VALUE, nickname = EndPointConstants.EXPORT_TOWN_PANCHAYATH_LOCATIONS_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.EXPORT_TOWN_PANCHAYATH_LOCATIONS_API_DESCRIPTION)
 	@Path(EndPointConstants.EXPORT_TOWN_PANCHAYATH_LOCATIONS_REQUEST_MAPPING)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public Response exportTownPanchayathLocations(@FormDataParam("file") InputStream uploadedInputStream,
-			@FormDataParam("file") FormDataContentDisposition fileDetail)
-			throws InternalServerException, PreConditionRequiredException {
-		String uploadedFileLocation = uploadExcelFileToDisk(uploadedInputStream, fileDetail);
-		locationImportExportService.exportTownPanchayathies(uploadedFileLocation);
+	public Response exportTownPanchayathLocations() throws InternalServerException {
+		locationImportExportService.exportTownPanchayathies();
 		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
 	}
 
 	@POST
 	@ApiOperation(value = EndPointConstants.EXPORT_VILLAGE_PANCHAYATH_LOCATIONS_API_VALUE, nickname = EndPointConstants.EXPORT_VILLAGE_PANCHAYATH_LOCATIONS_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.EXPORT_VILLAGE_PANCHAYATH_LOCATIONS_API_DESCRIPTION)
 	@Path(EndPointConstants.EXPORT_VILLAGE_PANCHAYATH_LOCATIONS_REQUEST_MAPPING)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public Response exportVillagePanchayathLocations(@FormDataParam("file") InputStream uploadedInputStream,
-			@FormDataParam("file") FormDataContentDisposition fileDetail)
-			throws InternalServerException, PreConditionRequiredException {
-		String uploadedFileLocation = uploadExcelFileToDisk(uploadedInputStream, fileDetail);
-		locationImportExportService.exportVillagePanchayathies(uploadedFileLocation);
+	public Response exportVillagePanchayathLocations() throws InternalServerException, PreConditionRequiredException {
+		locationImportExportService.exportVillagePanchayathies();
 		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
 	}
 
 	@POST
 	@ApiOperation(value = EndPointConstants.EXPORT_VILLAGE_LOCATIONS_API_VALUE, nickname = EndPointConstants.EXPORT_VILLAGE_LOCATIONS_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.EXPORT_VILLAGE_LOCATIONS_API_DESCRIPTION)
 	@Path(EndPointConstants.EXPORT_VILLAGE_LOCATIONS_REQUEST_MAPPING)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public Response exportVillageLocations(@FormDataParam("file") InputStream uploadedInputStream,
-			@FormDataParam("file") FormDataContentDisposition fileDetail)
-			throws InternalServerException, PreConditionRequiredException {
-		String uploadedFileLocation = uploadExcelFileToDisk(uploadedInputStream, fileDetail);
-		locationImportExportService.exportVillages(uploadedFileLocation);
+	public Response exportVillageLocations() throws InternalServerException, PreConditionRequiredException {
+		locationImportExportService.exportVillages();
 		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
 	}
 
 	@POST
 	@ApiOperation(value = EndPointConstants.EXPORT_VILLAGE_REFERENCE_LOCATIONS_API_VALUE, nickname = EndPointConstants.EXPORT_VILLAGE_REFERENCE_LOCATIONS_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.EXPORT_VILLAGE_REFERENCE_LOCATIONS_API_DESCRIPTION)
 	@Path(EndPointConstants.EXPORT_VILLAGE_REFERENCE_LOCATIONS_REQUEST_MAPPING)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public Response exportVillageReferenceLocations(@FormDataParam("file") InputStream uploadedInputStream,
-			@FormDataParam("file") FormDataContentDisposition fileDetail)
-			throws InternalServerException, PreConditionRequiredException {
-		String uploadedFileLocation = uploadExcelFileToDisk(uploadedInputStream, fileDetail);
-		locationImportExportService.exportVillageReferenceLocations(uploadedFileLocation);
+	public Response exportVillageReferenceLocations() throws InternalServerException {
+		locationImportExportService.exportVillageReferenceLocations();
 		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
 	}
 
 	@POST
 	@ApiOperation(value = EndPointConstants.EXPORT_URBAN_REFERENCE_LOCATIONS_API_VALUE, nickname = EndPointConstants.EXPORT_URBAN_REFERENCE_LOCATIONS_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.EXPORT_URBAN_REFERENCE_LOCATIONS_API_DESCRIPTION)
 	@Path(EndPointConstants.EXPORT_URBAN_REFERENCE_LOCATIONS_REQUEST_MAPPING)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	public Response exportUrbanReferenceLocations(@FormDataParam("file") InputStream uploadedInputStream,
-			@FormDataParam("file") FormDataContentDisposition fileDetail)
-			throws InternalServerException, PreConditionRequiredException {
-		String uploadedFileLocation = uploadExcelFileToDisk(uploadedInputStream, fileDetail);
-		locationImportExportService.exportUrbanReferenceLocations(uploadedFileLocation);
+	public Response exportUrbanReferenceLocations() throws InternalServerException {
+		locationImportExportService.exportUrbanReferenceLocations();
 		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
 	}
 
