@@ -45,11 +45,11 @@ public interface LocationImportExportService {
 
 	boolean exportUrbanReferenceLocations() throws InternalServerException;
 
-	boolean importVillageReferenceLocations(LocationImportRequest locationImportRequest) throws InternalServerException;
+	boolean importVillageReferenceLocations() throws InternalServerException;
 
 	boolean importMPConstituencyLocations() throws InternalServerException;
 
-	boolean importUrbanReferenceLocations(LocationImportRequest locationImportRequest) throws InternalServerException;
+	boolean importUrbanReferenceLocations() throws InternalServerException;
 
 	boolean importExportAllMasterLocations() throws InternalServerException;
 
