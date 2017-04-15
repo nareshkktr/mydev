@@ -1135,5 +1135,10 @@ public class EndPointConstants {
 	public static final String GET_SECOND_LEVEL_COMMENTS_API_VALUE = "getSecondLevelComments";
 	public static final String GET_SECOND_LEVEL_COMMENTS_REQUEST_MAPPING = "getSecondLevelComments";
 	public static final String GET_SECOND_LEVEL_COMMENTS_API_DESCRIPTION = "Get replies for the comments for the given comment and for the given object.";
+	
+	public static final String THUMBS_UP_DOWN_REQUEST_MAPPING = "createThumbsUpDown";
+	public static final String THUMBS_UP_DOWN_API_VALUE = "createThumbsUpDown";
+	public static final String THUMBS_UP_DOWN_API_NICKNAME = "createThumbsUpDown";
+	public static final String THUMBS_UP_DOWN_API_DESCRIPTION = "Create Thumbs Up Down";
 
 }
