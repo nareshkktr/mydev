@@ -108,7 +108,7 @@ public class LocationImportExportEndPoint extends BaseEndPoint {
 	@Path(EndPointConstants.IMPORT_VILLAGE_REFERENCE_LOCATIONS_REQUEST_MAPPING)
 	public Response importVillageReferenceLocations(LocationImportRequest locationImportRequest)
 			throws InternalServerException, PreConditionRequiredException {
-		locationImportExportService.importVillageReferenceLocations(locationImportRequest);
+		locationImportExportService.importVillageReferenceLocations();
 		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
 	}
 
@@ -117,7 +117,7 @@ public class LocationImportExportEndPoint extends BaseEndPoint {
 	@Path(EndPointConstants.IMPORT_URBAN_REFERENCE_LOCATIONS_REQUEST_MAPPING)
 	public Response importUrbanReferenceLocations(LocationImportRequest locationImportRequest)
 			throws InternalServerException, PreConditionRequiredException {
-		locationImportExportService.importUrbanReferenceLocations(locationImportRequest);
+		locationImportExportService.importUrbanReferenceLocations();
 		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
 	}
 

@@ -501,64 +501,6 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 		return updatedMasterLocations;
 	}
 
-	private void processMasterLocationsChildData(String locationType, String subDirectoryPath,
-			LocationImportRequest locationImportRequest) throws InternalServerException {
-		List<LocationMaster> existingStateMasterLocations = new ArrayList<LocationMaster>();
-		List<String> locationTypes = new ArrayList<String>();
-		locationTypes.add(ServiceConstants.LOCATION_STATE_TYPE);
-		locationTypes.add(ServiceConstants.LOCATION_UNION_TERRITORY_TYPE);
-		existingStateMasterLocations = locationMasterDao.getAllMasterLocationsByTypes(locationTypes);
-
-		List<LocationMaster> existingMasterVillageLocations = locationMasterDao
-				.getAllMasterLocationsByType(locationType);
-
-		List<LocationMaster> newMasterLocations = new ArrayList<LocationMaster>();
-		List<LocationMaster> excelMasterLocations = new ArrayList<LocationMaster>();
-
-		if (existingStateMasterLocations != null && !existingStateMasterLocations.isEmpty()) {
-			for (LocationMaster eachLocation : existingStateMasterLocations) {
-				if (eachLocation != null) {
-					if (locationType.equalsIgnoreCase(ServiceConstants.LOCATION_VILLAGE_PANCHAYATH_TYPE)
-							|| locationType.equalsIgnoreCase(ServiceConstants.LOCATION_VILLAGE_TYPE)) {
-						System.out.println("Import " + locationType + ">>State>>" + eachLocation.getLocationName());
-					}
-					String outPutFilePath = "";
-					String directoryPath = env.getProperty("project.locations-files.upload-path") + subDirectoryPath;
-					String fileName = eachLocation.getLocationName() + ServiceConstants.EXCEL_SHEET_TYPE_XLS;
-					outPutFilePath = directoryPath + fileName;
-
-					List<LocationMaster> eachSheetNewMasterLocations = prepareMasterLocations(outPutFilePath,
-							existingMasterVillageLocations, excelMasterLocations, locationImportRequest);
-					newMasterLocations.addAll(eachSheetNewMasterLocations);
-
-				}
-			}
-
-			if (locationType.equalsIgnoreCase(ServiceConstants.LOCATION_VILLAGE_PANCHAYATH_TYPE)
-					|| locationType.equalsIgnoreCase(ServiceConstants.LOCATION_VILLAGE_TYPE)) {
-				System.out.println("Import " + locationType + ">>State>> Start Save");
-			}
-			locationMasterDao.saveAllMasterLocations(newMasterLocations);
-			if (locationType.equalsIgnoreCase(ServiceConstants.LOCATION_VILLAGE_PANCHAYATH_TYPE)
-					|| locationType.equalsIgnoreCase(ServiceConstants.LOCATION_VILLAGE_TYPE)) {
-				System.out.println("Import " + locationType + ">>State>> End Save");
-			}
-			List<LocationMaster> updatedMasterLocations = findUpdatedMasterLocations(existingMasterVillageLocations,
-					excelMasterLocations);
-			if (updatedMasterLocations != null && !updatedMasterLocations.isEmpty()) {
-				locationMasterDao.updateAllMasterLocations(updatedMasterLocations);
-			}
-			if (existingMasterVillageLocations != null && !existingMasterVillageLocations.isEmpty()) {
-				existingMasterVillageLocations.removeAll(excelMasterLocations);
-				locationMasterDao.deleteMasterLocations(existingMasterVillageLocations);
-			}
-			if (locationType.equalsIgnoreCase(ServiceConstants.LOCATION_VILLAGE_PANCHAYATH_TYPE)
-					|| locationType.equalsIgnoreCase(ServiceConstants.LOCATION_VILLAGE_TYPE)) {
-				System.out.println("Import " + locationType + ">>State>> Final Save");
-			}
-		}
-	}
-
 	private void saveUpdateDeleteMasterLocations(String filePath, String locationType,
 			LocationImportRequest locationImportRequest, Long parentLocationGuid) throws InternalServerException {
 		List<LocationMaster> existingMasterLocations = new ArrayList<LocationMaster>();
@@ -1256,6 +1198,7 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 													continue;
 												}
 												String locationName = eachRow.getCell(13).getStringCellValue().trim();
+												String districtName = eachRow.getCell(1).getStringCellValue().trim();
 												String locationType = ServiceConstants.LOCATION_VILLAGE_PANCHAYATH_TYPE;
 												if (locationName != null && !locationName.isEmpty()) {
 													Long locationCode = (long) eachRow.getCell(12)
@@ -1273,7 +1216,8 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 														sheetData.put(j, new Object[] { locationCode, locationName,
 																locationType, parentLocationGuid });
 													}
-												} else {
+												}
+												if (districtName == null || districtName.isEmpty()) {
 													break;
 												}
 											}
@@ -1415,11 +1359,15 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 	@Transactional(readOnly = true)
 	public boolean exportVillageReferenceLocations() throws InternalServerException {
 
-		String inputFilePath = env.getProperty("project.locations-files.download-path")
-				+ env.getProperty("project.village_panchayath-download-locations-file-name");
-
+		String fileName = env.getProperty("project.village.panchayathies-locations-file-name");
+		String hostName = env.getProperty("amazon.s3.host.name");
 		String bucketName = env.getProperty("amazon.s3.locations.bucket.name");
+		String downloadedFolderName = env.getProperty("amazon.s3.locations.downloaded.folder.name");
 		String uploadedFolderName = env.getProperty("amazon.s3.locations.uploaded.folder.name");
+
+		String globalFolderName = env.getProperty("amazon.s3.locations.global.folder.name");
+		String countryFolderName = env.getProperty("amazon.s3.locations.india.folder.name");
+		String ruralFolderName = env.getProperty("amazon.s3.locations.rural.folder.name");
 
 		List<LocationMaster> countryLocations = locationMasterDao
 				.getAllMasterLocationsByType(ServiceConstants.LOCATION_COUNTRY_TYPE);
@@ -1438,129 +1386,145 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 						for (LocationMaster eachLocation : stateLocations) {
 							if (eachLocation != null) {
 
-								System.out.println("Export V Ref State>" + eachLocation.getLocationName());
-
 								List<LocationMaster> districtLocations = locationMasterDao
 										.getAllMasterLocationsByTypeAndParentLocation(
 												ServiceConstants.LOCATION_DISTRICT_TYPE, eachLocation.getGuid());
 
-								final Map<Long, List<LocationMaster>> districtLocationsMap = districtLocations.stream()
-										.collect(Collectors
-												.groupingBy(districtLocation -> districtLocation.getLocationCode()));
+								if (CommonUtil.isListNotNullAndNotEmpty(districtLocations)) {
+									for (LocationMaster eachDistrictLocation : districtLocations) {
+										if (eachDistrictLocation != null) {
 
-								List<Long> districtGuids = districtLocations.stream().map(LocationMaster::getGuid)
-										.collect(Collectors.toList());
+											List<LocationMaster> subDistrictLocations = new ArrayList<LocationMaster>();
+											subDistrictLocations = locationMasterDao
+													.getAllMasterLocationsByTypeAndParentLocation(
+															ServiceConstants.LOCATION_SUB_DISTRICT_TYPE,
+															eachDistrictLocation.getGuid());
 
-								List<LocationMaster> subDistrictLocations = locationMasterDao
-										.getAllMasterLocationsByTypeAndParentLocations(
-												ServiceConstants.LOCATION_SUB_DISTRICT_TYPE, districtGuids);
+											if (CommonUtil.isListNotNullAndNotEmpty(subDistrictLocations)) {
+												for (LocationMaster eachSubDistrictLocation : subDistrictLocations) {
+													if (eachSubDistrictLocation != null) {
 
-								final Map<Long, List<LocationMaster>> subDistrictLocationsMap = subDistrictLocations
-										.stream().collect(Collectors.groupingBy(
-												subDistrictLocation -> subDistrictLocation.getLocationCode()));
+														List<LocationMaster> villagePanchayathLocations = locationMasterDao
+																.getAllMasterLocationsByTypeAndParentLocation(
+																		ServiceConstants.LOCATION_VILLAGE_PANCHAYATH_TYPE,
+																		eachSubDistrictLocation.getGuid());
 
-								List<Long> subDistrictGuids = subDistrictLocations.stream().map(LocationMaster::getGuid)
-										.collect(Collectors.toList());
+														final Map<Long, List<LocationMaster>> villagePanchayathLocationsMap = villagePanchayathLocations
+																.stream()
+																.collect(Collectors.groupingBy(
+																		villagePanchayathLocation -> villagePanchayathLocation
+																				.getLocationCode()));
 
-								List<LocationMaster> villagePanchayathLocations = locationMasterDao
-										.getAllMasterLocationsByTypeAndParentLocations(
-												ServiceConstants.LOCATION_VILLAGE_PANCHAYATH_TYPE, subDistrictGuids);
+														List<LocationMaster> villageLocations = locationMasterDao
+																.getAllMasterLocationsByTypeAndParentLocation(
+																		ServiceConstants.LOCATION_VILLAGE_TYPE,
+																		eachSubDistrictLocation.getGuid());
 
-								final Map<Long, List<LocationMaster>> villagePanchayathLocationsMap = villagePanchayathLocations
-										.stream()
-										.collect(Collectors
-												.groupingBy(villagePanchayathLocation -> villagePanchayathLocation
-														.getLocationCode()));
+														final Map<Long, List<LocationMaster>> villageLocationsMap = villageLocations
+																.stream()
+																.collect(Collectors
+																		.groupingBy(villageLocation -> villageLocation
+																				.getLocationCode()));
 
-								List<LocationMaster> villageLocations = locationMasterDao
-										.getAllMasterLocationsByTypeAndParentLocations(
-												ServiceConstants.LOCATION_VILLAGE_TYPE, subDistrictGuids);
+														String inputFilePath = hostName + bucketName + SUFFIX
+																+ downloadedFolderName + SUFFIX + globalFolderName
+																+ SUFFIX + countryFolderName + SUFFIX
+																+ eachLocation.getLocationName() + SUFFIX
+																+ ruralFolderName + SUFFIX + fileName;
 
-								final Map<Long, List<LocationMaster>> villageLocationsMap = villageLocations.stream()
-										.collect(Collectors
-												.groupingBy(villageLocation -> villageLocation.getLocationCode()));
+														Workbook importWorkBook = CommonUtil
+																.getWorkBookFromFile(inputFilePath);
+														Sheet importWorkBookSheet = importWorkBook.getSheetAt(0);
 
-								Workbook importWorkBook = CommonUtil.getWorkBookFromFile(inputFilePath
-										+ eachLocation.getLocationName() + ServiceConstants.EXCEL_SHEET_TYPE_XLS);
-								Sheet importWorkBookSheet = importWorkBook.getSheetAt(0);
+														Workbook exportWorkBook = CommonUtil.createWorkBook(fileName);
+														if (exportWorkBook.getNumberOfSheets() == 1
+																&& exportWorkBook.getSheetAt(0) != null) {
+															exportWorkBook.removeSheetAt(0);
+														}
+														Sheet exportWorkBookSheet = exportWorkBook.createSheet(
+																ServiceConstants.LOCATION_VILLAGE_REFERENCE_TYPE);
+														addReferenceHeaderRow(exportWorkBookSheet);
+														int j = 0;
+														int i = 0;
+														Map<Integer, Object[]> sheetData = new HashMap<Integer, Object[]>();
+														for (Row eachRow : importWorkBookSheet) {
+															if (i < 4) {
+																i++;
+																continue;
+															}
+															String villageLocationName = eachRow.getCell(9)
+																	.getStringCellValue().trim();
+															if (villageLocationName != null
+																	&& !villageLocationName.isEmpty()) {
+																Long villageLocationCode = (long) eachRow.getCell(8)
+																		.getNumericCellValue();
+																Long villagePanchathLocationCode = null;
+																if ((Double) eachRow.getCell(12)
+																		.getNumericCellValue() != null) {
+																	villagePanchathLocationCode = (long) eachRow
+																			.getCell(12).getNumericCellValue();
+																}
 
-								String outPutFilePath = "";
-								String directoryPath = env.getProperty("project.locations-files.upload-path")
-										+ env.getProperty("project.village-upload-locations-reference-file-name");
-								String fileName = eachLocation.getLocationName()
-										+ ServiceConstants.EXCEL_SHEET_TYPE_XLS;
+																Long subDistrictLocationCode = (long) eachRow.getCell(4)
+																		.getNumericCellValue();
 
-								outPutFilePath = directoryPath + fileName;
-								CommonUtil.createExcelFile(directoryPath, fileName);
+																Long villageLocationGuid = null;
+																Long villageLocationPanchayathGuid = null;
 
-								Workbook exportWorkBook = CommonUtil.getWorkBookFromFile(outPutFilePath);
-								if (exportWorkBook.getNumberOfSheets() == 1 && exportWorkBook.getSheetAt(0) != null) {
-									exportWorkBook.removeSheetAt(0);
-								}
-								Sheet exportWorkBookSheet = exportWorkBook
-										.createSheet(ServiceConstants.LOCATION_VILLAGE_TYPE);
-								addReferenceHeaderRow(exportWorkBookSheet);
-								int j = 0;
-								int i = 0;
-								Map<Integer, Object[]> sheetData = new HashMap<Integer, Object[]>();
-								for (Row eachRow : importWorkBookSheet) {
-									if (i < 4) {
-										i++;
-										continue;
+																if (eachSubDistrictLocation.getLocationCode()
+																		.equals(subDistrictLocationCode)
+																		|| eachSubDistrictLocation.getLocationCode()
+																				.toString().equalsIgnoreCase(
+																						subDistrictLocationCode
+																								.toString())) {
+
+																	if (villageLocationCode != null
+																			&& !villageLocationCode
+																					.equals(Long.valueOf(0))) {
+																		villageLocationGuid = villageLocationsMap
+																				.get(villageLocationCode).get(0)
+																				.getGuid();
+																	}
+
+																	if (villagePanchathLocationCode != null
+																			&& !villagePanchathLocationCode
+																					.equals(Long.valueOf(0))) {
+																		villageLocationPanchayathGuid = villagePanchayathLocationsMap
+																				.get(villagePanchathLocationCode).get(0)
+																				.getGuid();
+																	}
+
+																	j++;
+																	sheetData.put(j, new Object[] { villageLocationGuid,
+																			villageLocationPanchayathGuid, null, null,
+																			null, eachSubDistrictLocation.getGuid(),
+																			eachDistrictLocation.getGuid(),
+																			eachLocation.getGuid(),
+																			eachCountryLocation.getGuid() });
+																}
+															} else {
+																break;
+															}
+														}
+														writeDataIntoSheet(sheetData, exportWorkBookSheet);
+
+														String eachUploadedFolderName = uploadedFolderName + SUFFIX
+																+ globalFolderName + SUFFIX + countryFolderName + SUFFIX
+																+ eachLocation.getLocationName() + SUFFIX
+																+ ruralFolderName + SUFFIX
+																+ eachDistrictLocation.getLocationName() + SUFFIX
+																+ eachSubDistrictLocation.getLocationName();
+
+														String referenceFileName = env.getProperty(
+																"project.village.references-locations-file-name");
+														writeExcelDataIntoAmazonS3File(referenceFileName,
+																exportWorkBook, bucketName, eachUploadedFolderName);
+													}
+												}
+											}
+										}
 									}
-									String locationName = eachRow.getCell(9).getStringCellValue().trim();
-									if (locationName != null && !locationName.isEmpty()) {
-										Long villageLocationCode = (long) eachRow.getCell(8).getNumericCellValue();
-										Long villagePanchathLocationCode = null;
-										if ((Double) eachRow.getCell(12).getNumericCellValue() != null) {
-											villagePanchathLocationCode = (long) eachRow.getCell(12)
-													.getNumericCellValue();
-										}
-
-										Long subDistrictLocationCode = (long) eachRow.getCell(4).getNumericCellValue();
-										Long districtLocationCode = (long) eachRow.getCell(0).getNumericCellValue();
-
-										Long villageLocationGuid = null;
-										Long villageLocationPanchayathGuid = null;
-										Long subDistrictLocationGuid = null;
-										Long districtLocationGuid = null;
-
-										if (villageLocationCode != null
-												&& !villageLocationCode.equals(Long.valueOf(0))) {
-											villageLocationGuid = villageLocationsMap.get(villageLocationCode).get(0)
-													.getGuid();
-										}
-
-										if (villagePanchathLocationCode != null
-												&& !villagePanchathLocationCode.equals(Long.valueOf(0))) {
-											villageLocationPanchayathGuid = villagePanchayathLocationsMap
-													.get(villagePanchathLocationCode).get(0).getGuid();
-										}
-
-										if (subDistrictLocationCode != null
-												&& !subDistrictLocationCode.equals(Long.valueOf(0))) {
-											subDistrictLocationGuid = subDistrictLocationsMap
-													.get(subDistrictLocationCode).get(0).getGuid();
-										}
-
-										if (districtLocationCode != null
-												&& !districtLocationCode.equals(Long.valueOf(0))) {
-											districtLocationGuid = districtLocationsMap.get(districtLocationCode).get(0)
-													.getGuid();
-										}
-
-										j++;
-										sheetData.put(j,
-												new Object[] { villageLocationGuid, villageLocationPanchayathGuid, null,
-														null, null, subDistrictLocationGuid, districtLocationGuid,
-														eachLocation.getGuid(), eachCountryLocation.getGuid() });
-									} else {
-										break;
-									}
 								}
-								writeDataIntoSheet(sheetData, exportWorkBookSheet);
-								writeExcelDataIntoAmazonS3File(fileName, exportWorkBook, bucketName,
-										uploadedFolderName);
 
 							}
 						}
@@ -1602,39 +1566,21 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 	@Transactional(readOnly = true)
 	public boolean exportUrbanReferenceLocations() throws InternalServerException {
 
-		String inputFilePath = env.getProperty("project.locations-files.download-path")
-				+ env.getProperty("project.urban-download-locations-reference-file-name");
-
+		String fileName = env.getProperty("project.urban.local.bodies-locations-file-name");
+		String hostName = env.getProperty("amazon.s3.host.name");
 		String bucketName = env.getProperty("amazon.s3.locations.bucket.name");
+		String downloadedFolderName = env.getProperty("amazon.s3.locations.downloaded.folder.name");
 		String uploadedFolderName = env.getProperty("amazon.s3.locations.uploaded.folder.name");
+
+		String globalFolderName = env.getProperty("amazon.s3.locations.global.folder.name");
+		String countryFolderName = env.getProperty("amazon.s3.locations.india.folder.name");
+		String urbanFolderName = env.getProperty("amazon.s3.locations.urban.folder.name");
 
 		List<LocationMaster> stateLocations = new ArrayList<LocationMaster>();
 		List<String> locationTypes = new ArrayList<String>();
 		locationTypes.add(ServiceConstants.LOCATION_STATE_TYPE);
 		locationTypes.add(ServiceConstants.LOCATION_UNION_TERRITORY_TYPE);
 		stateLocations = locationMasterDao.getAllMasterLocationsByTypes(locationTypes);
-
-		List<String> urbanLocationTypes = new ArrayList<String>();
-		urbanLocationTypes.add(ServiceConstants.LOCATION_MUNCIPAL_CORPORATION_TYPE);
-		urbanLocationTypes.add(ServiceConstants.LOCATION_MUNCIPALITY_TYPE);
-		urbanLocationTypes.add(ServiceConstants.LOCATION_TOWN_PANCHAYATH_TYPE);
-
-		List<LocationMaster> urbanLocationsList = locationMasterDao.getAllMasterLocationsByTypes(urbanLocationTypes);
-
-		final Map<Long, List<LocationMaster>> urbanLocationsMap = urbanLocationsList.stream()
-				.collect(Collectors.groupingBy(urbanLocation -> urbanLocation.getLocationCode()));
-
-		List<LocationMaster> districtLocations = locationMasterDao
-				.getAllMasterLocationsByType(ServiceConstants.LOCATION_DISTRICT_TYPE);
-
-		final Map<Long, List<LocationMaster>> districtLocationsMap = districtLocations.stream()
-				.collect(Collectors.groupingBy(districtLocation -> districtLocation.getLocationCode()));
-
-		List<LocationMaster> subDistrictLocations = locationMasterDao
-				.getAllMasterLocationsByType(ServiceConstants.LOCATION_SUB_DISTRICT_TYPE);
-
-		final Map<Long, List<LocationMaster>> subDistrictLocationsMap = subDistrictLocations.stream()
-				.collect(Collectors.groupingBy(subDistrictLocation -> subDistrictLocation.getLocationCode()));
 
 		List<LocationMaster> countryLocations = locationMasterDao
 				.getAllMasterLocationsByType(ServiceConstants.LOCATION_COUNTRY_TYPE);
@@ -1645,22 +1591,47 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 						for (LocationMaster eachLocation : stateLocations) {
 							if (eachLocation != null) {
 
-								System.out.println("Export U Ref State>" + eachLocation.getLocationName());
+								List<String> urbanLocationTypes = new ArrayList<String>();
+								urbanLocationTypes.add(ServiceConstants.LOCATION_MUNCIPAL_CORPORATION_TYPE);
+								urbanLocationTypes.add(ServiceConstants.LOCATION_MUNCIPALITY_TYPE);
+								urbanLocationTypes.add(ServiceConstants.LOCATION_TOWN_PANCHAYATH_TYPE);
 
-								Workbook importWorkBook = CommonUtil.getWorkBookFromFile(inputFilePath
-										+ eachLocation.getLocationName() + ServiceConstants.EXCEL_SHEET_TYPE_XLS);
+								List<LocationMaster> urbanLocationsList = locationMasterDao
+										.getAllMasterLocationsByTypesAndParentLocation(urbanLocationTypes,
+												eachLocation.getGuid());
+
+								final Map<Long, List<LocationMaster>> urbanLocationsMap = urbanLocationsList.stream()
+										.collect(Collectors
+												.groupingBy(urbanLocation -> urbanLocation.getLocationCode()));
+
+								List<LocationMaster> districtLocations = locationMasterDao
+										.getAllMasterLocationsByTypeAndParentLocation(
+												ServiceConstants.LOCATION_DISTRICT_TYPE, eachLocation.getGuid());
+
+								final Map<Long, List<LocationMaster>> districtLocationsMap = districtLocations.stream()
+										.collect(Collectors
+												.groupingBy(districtLocation -> districtLocation.getLocationCode()));
+
+								List<Long> districtLocationGuids = districtLocations.stream()
+										.map(LocationMaster::getGuid).collect(Collectors.toList());
+
+								List<LocationMaster> subDistrictLocations = locationMasterDao
+										.getAllMasterLocationsByTypeAndParentLocations(
+												ServiceConstants.LOCATION_SUB_DISTRICT_TYPE, districtLocationGuids);
+
+								final Map<Long, List<LocationMaster>> subDistrictLocationsMap = subDistrictLocations
+										.stream().collect(Collectors.groupingBy(
+												subDistrictLocation -> subDistrictLocation.getLocationCode()));
+
+								String inputFilePath = hostName + bucketName + SUFFIX + downloadedFolderName + SUFFIX
+										+ globalFolderName + SUFFIX + countryFolderName + SUFFIX
+										+ eachLocation.getLocationName() + SUFFIX + urbanFolderName + SUFFIX + fileName;
+
+								Workbook importWorkBook = CommonUtil.getWorkBookFromFile(inputFilePath);
 								Sheet importWorkBookSheet = importWorkBook.getSheetAt(0);
 
-								String outPutFilePath = "";
-								String directoryPath = env.getProperty("project.locations-files.upload-path")
-										+ env.getProperty("project.urban-upload-locations-reference-file-name");
-								String fileName = eachLocation.getLocationName()
-										+ ServiceConstants.EXCEL_SHEET_TYPE_XLS;
+								Workbook exportWorkBook = CommonUtil.createWorkBook(fileName);
 
-								outPutFilePath = directoryPath + fileName;
-								CommonUtil.createExcelFile(directoryPath, fileName);
-
-								Workbook exportWorkBook = CommonUtil.getWorkBookFromFile(outPutFilePath);
 								if (exportWorkBook.getNumberOfSheets() == 1 && exportWorkBook.getSheetAt(0) != null) {
 									exportWorkBook.removeSheetAt(0);
 								}
@@ -1675,60 +1646,18 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 										i++;
 										continue;
 									}
-									String locationCode = eachRow.getCell(0).getStringCellValue();
-									Long locationCodeLong = null;
-									String[] locationCodeArray = locationCode.split(",");
-									String locationCodeFinal = "0";
-									if (locationCodeArray != null) {
-										for (int k = 0; k < locationCodeArray.length; k++) {
-											locationCodeFinal += locationCodeArray[k];
-										}
-									}
-									locationCodeLong = Long.parseLong(locationCodeFinal);
+									Long locationCode = (long) eachRow.getCell(0).getNumericCellValue();
 									String locationName = eachRow.getCell(1).getStringCellValue().trim();
 									if (locationName != null && !locationName.isEmpty()) {
 
-										String districtSubDistrictCode = eachRow.getCell(5).getStringCellValue().trim();
-										Long subDistrictLocationLong = null;
-										Long districtLocationLong = null;
+										Long districtLocationCode = (long) eachRow.getCell(5).getNumericCellValue();
+										Long subDistrictLocationCode = (long) eachRow.getCell(7).getNumericCellValue();
 
-										if (districtSubDistrictCode != null && !districtSubDistrictCode.isEmpty()) {
-											String[] districtSubDistrictCodeArray = districtSubDistrictCode.split("/");
-											if (districtSubDistrictCodeArray != null) {
-												int subDistrictCodeIndex = 0;
-												String subDistrictCode = "";
-												String districtCode = "";
-												if (districtSubDistrictCodeArray.length == 1) {
-													subDistrictCode = "";
-													districtCode = districtSubDistrictCodeArray[0];
-												} else {
-													subDistrictCodeIndex = districtSubDistrictCodeArray.length - 1;
-													subDistrictCode = districtSubDistrictCodeArray[subDistrictCodeIndex
-															- 1];
-													districtCode = districtSubDistrictCodeArray[subDistrictCodeIndex];
-												}
-												if (subDistrictCode != null && !subDistrictCode.isEmpty()) {
-													String[] subDistrictCodeArray = subDistrictCode.split("\\(");
-													String subDistrictCodeArraySecondIndex = subDistrictCodeArray[subDistrictCodeArray.length
-															- 1];
-													subDistrictLocationLong = Long
-															.parseLong(subDistrictCodeArraySecondIndex.substring(0,
-																	subDistrictCodeArraySecondIndex.length() - 1));
-												}
-												if (districtCode != null && !districtCode.isEmpty()) {
-													String[] districtCodeArray = districtCode.split("\\(");
-													String districtCodeArraySecondIndex = districtCodeArray[districtCodeArray.length
-															- 1];
-													districtLocationLong = Long.parseLong(districtCodeArraySecondIndex
-															.substring(0, districtCodeArraySecondIndex.length() - 1));
-												}
-											}
-										}
 										Long urbanLocationGuid = null;
 										String urbanLocationType = "";
 										LocationMaster locationMaster = null;
-										if (urbanLocationsMap.get(locationCodeLong) != null) {
-											locationMaster = urbanLocationsMap.get(locationCodeLong).get(0);
+										if (urbanLocationsMap.get(locationCode) != null) {
+											locationMaster = urbanLocationsMap.get(locationCode).get(0);
 										}
 										if (locationMaster != null) {
 											urbanLocationType = locationMaster.getLocationType();
@@ -1738,18 +1667,19 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 										Long districtLocationGuid = null;
 										Long subDistrictLocationGuid = null;
 
-										if (subDistrictLocationLong != null
-												&& !subDistrictLocationLong.equals(Long.valueOf(0))) {
-											subDistrictLocationGuid = subDistrictLocationsMap
-													.get(subDistrictLocationLong).get(0).getGuid();
-										}
-
-										if (districtLocationLong != null
-												&& !districtLocationLong.equals(Long.valueOf(0))) {
-											districtLocationGuid = districtLocationsMap.get(districtLocationLong).get(0)
+										if (districtLocationCode != null
+												&& !districtLocationCode.equals(Long.valueOf(0))) {
+											districtLocationGuid = districtLocationsMap.get(districtLocationCode).get(0)
 													.getGuid();
 
 										}
+
+										if (subDistrictLocationCode != null
+												&& !subDistrictLocationCode.equals(Long.valueOf(0))) {
+											subDistrictLocationGuid = subDistrictLocationsMap
+													.get(subDistrictLocationCode).get(0).getGuid();
+										}
+
 										Location loc = new Location();
 										if (urbanLocationType != null) {
 											if (urbanLocationType.equalsIgnoreCase(
@@ -1774,8 +1704,13 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 									}
 								}
 								writeDataIntoSheet(sheetData, exportWorkBookSheet);
+
+								String eachUploadedFolderName = uploadedFolderName + SUFFIX + globalFolderName + SUFFIX
+										+ countryFolderName + SUFFIX + eachLocation.getLocationName() + SUFFIX
+										+ urbanFolderName;
+
 								writeExcelDataIntoAmazonS3File(fileName, exportWorkBook, bucketName,
-										uploadedFolderName);
+										eachUploadedFolderName);
 							}
 						}
 					}
@@ -1789,32 +1724,27 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 
 	@Override
 	@Transactional
-	public boolean importVillageReferenceLocations(LocationImportRequest locationImportRequest)
-			throws InternalServerException {
-		// TODO Auto-generated method stub
+	public boolean importVillageReferenceLocations() throws InternalServerException {
 
 		String filePath = env.getProperty("project.village-upload-locations-reference-file-name");
-		processReferenceLocationsData(filePath, locationImportRequest);
+		processReferenceLocationsData(filePath);
 		return true;
 
 	}
 
 	@Override
 	@Transactional
-	public boolean importUrbanReferenceLocations(LocationImportRequest locationImportRequest)
-			throws InternalServerException {
+	public boolean importUrbanReferenceLocations() throws InternalServerException {
 		// TODO Auto-generated method stub
 
 		String filePath = env.getProperty("project.urban-upload-locations-reference-file-name");
-		processReferenceLocationsData(filePath, locationImportRequest);
+		processReferenceLocationsData(filePath);
 		return true;
 
 	}
 
-	private void processReferenceLocationsData(String filePath, LocationImportRequest locationImportRequest)
-			throws InternalServerException {
+	private void processReferenceLocationsData(String filePath) throws InternalServerException {
 
-		System.out.println("Import V/U Ref Save Start Intial>");
 		List<LocationMaster> stateMasterLocations = new ArrayList<LocationMaster>();
 		List<String> locationTypes = new ArrayList<String>();
 		locationTypes.add(ServiceConstants.LOCATION_STATE_TYPE);
@@ -1823,33 +1753,24 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 
 		List<Location> referenceLocations = new ArrayList<Location>();
 		userInfoDao.updateAllUsersLocationReferenceToDefault();
-		// locationDao.deleteAllLocations();
 
 		if (stateMasterLocations != null && !stateMasterLocations.isEmpty()) {
 			for (LocationMaster eachStateLocation : stateMasterLocations) {
 				if (eachStateLocation != null) {
-
-					System.out.println("Import V/U Ref State>" + eachStateLocation.getLocationName());
 
 					String outPutFilePath = "";
 					String directoryPath = env.getProperty("project.locations-files.upload-path") + filePath;
 					String fileName = eachStateLocation.getLocationName() + ServiceConstants.EXCEL_SHEET_TYPE_XLS;
 					outPutFilePath = directoryPath + fileName;
 
-					List<Location> eachSheetNewReferenceLocations = prepareReferenceLocations(outPutFilePath,
-							locationImportRequest);
+					List<Location> eachSheetNewReferenceLocations = prepareReferenceLocations(outPutFilePath);
 					referenceLocations.addAll(eachSheetNewReferenceLocations);
 				}
 			}
-			System.out.println("Import V/U Ref Save Start>");
 			locationDao.saveAllLocations(referenceLocations);
-			System.out.println("Import V/U Ref Save End>");
 
 		}
-		System.out.println("Import V/U Ref Updated Start>");
 		updateAllUsersLocationReferenceToBaseLocation();
-		System.out.println("Import V/U Ref Updated End>");
-		System.out.println("Import V/U Ref Save End Final>");
 
 	}
 
@@ -1869,8 +1790,7 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 		}
 	}
 
-	private List<Location> prepareReferenceLocations(String outPutFilePath, LocationImportRequest locationImportRequest)
-			throws InternalServerException {
+	private List<Location> prepareReferenceLocations(String outPutFilePath) throws InternalServerException {
 
 		List<Location> referenceLocations = new ArrayList<Location>();
 		Workbook myWorkBook = CommonUtil.getWorkBookFromFile(outPutFilePath);
@@ -2140,13 +2060,13 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 		exportVillageReferenceLocations();
 		System.out.println("Export V Ref End");
 		System.out.println("Import V Ref Start");
-		importVillageReferenceLocations(null);
+		importVillageReferenceLocations();
 		System.out.println("Import V Ref End");
 		System.out.println("Export U Ref Start");
 		exportUrbanReferenceLocations();
 		System.out.println("Export U Ref End");
 		System.out.println("Import U Ref Start");
-		importUrbanReferenceLocations(null);
+		importUrbanReferenceLocations();
 		System.out.println("Import U Ref End");
 		return true;
 	}

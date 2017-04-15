@@ -118,7 +118,7 @@ public class ServiceConstants {
 	public static final String LOCATION_TOWN_PANCHAYATH_TYPE = "Town Panchayat";
 	public static final String LOCATION_VILLAGE_PANCHAYATH_TYPE = "Village Panchayat";
 	public static final String LOCATION_VILLAGE_TYPE = "Village";
-
+	public static final String LOCATION_VILLAGE_REFERENCE_TYPE = "Village Reference";
 	public static final String LOCATION_CODE = "Location Code";
 	public static final String LOCATION_NAME = "Location Name";
 	public static final String LOCATION_PARENT_CODE = "Parent Location Code";
@@ -152,7 +152,7 @@ public class ServiceConstants {
 	public static final String CHIEF_MINISTER = "Chief Minister";
 	public static final String GOVERNORS = "Governor";
 
-	public static final String LOCATION_MLA_CONSTITUENCY_NO= "MLA Constituency No";
+	public static final String LOCATION_MLA_CONSTITUENCY_NO = "MLA Constituency No";
 
 	public static final String POLING_STATION_NO = "Poling Station No";
 
