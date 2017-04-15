@@ -125,5 +125,7 @@ public class ApplicationConstants {
 
 	public static final Integer PAGE_START = 1;
 	public static final Integer PAGE_LIMIT = 20;
+	
+	public static final String SUFFIX = "/";
 
 }
