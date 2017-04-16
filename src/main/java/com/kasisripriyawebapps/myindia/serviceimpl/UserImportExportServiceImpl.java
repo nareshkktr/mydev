@@ -68,7 +68,7 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 	@Transactional
 	public void exportStateElectroralRolleUrls(ElectroralRollesURL electroralRollesURL)
 			throws InternalServerException, RecordNotFoundException {
-		
+
 		driver = new ChromeDriver();
 		driver.get(env.getProperty("india-electroral-rolles.url"));
 		WebElement pageMainTable = driver.findElement(By.id("Table_01"));
@@ -203,18 +203,22 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 		driver = new ChromeDriver();
 		driver.get(stateUrl);
 
-//		String outPutFilePath = "";
-//		String directoryPath = env.getProperty("project.electroral.url.data-files.upload-path") + "/"
-//				+ electroralRollesURL.getStateName() + "/" + electroralRollesURL.getDistrictName() + "/";
-//		String fileName = env.getProperty("project.electroral.url.data-file-name");
-//
-//		outPutFilePath = directoryPath + fileName;
-//		CommonUtil.createExcelFile(directoryPath, fileName);
-		
+		// String outPutFilePath = "";
+		// String directoryPath =
+		// env.getProperty("project.electroral.url.data-files.upload-path") +
+		// "/"
+		// + electroralRollesURL.getStateName() + "/" +
+		// electroralRollesURL.getDistrictName() + "/";
+		// String fileName =
+		// env.getProperty("project.electroral.url.data-file-name");
+		//
+		// outPutFilePath = directoryPath + fileName;
+		// CommonUtil.createExcelFile(directoryPath, fileName);
+
 		String bucketName = env.getProperty("amazon.s3.users.bucket.name");
 		String fileName = env.getProperty("project.electroral.url.data-file-name");
 		String uploadedFolderName = env.getProperty("amazon.s3.users.uploaded.folder.name");
-		
+
 		String globalFolderName = env.getProperty("amazon.s3.users.global.folder.name");
 		String countryFolderName = env.getProperty("amazon.s3.users.india.folder.name");
 
@@ -222,10 +226,10 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 
 		Select districtDropDown = new Select(driver.findElement(By.id("ddlDist")));
 		List<WebElement> districtOptions = districtDropDown.getOptions();
-		
-		//Iterate districts
+
+		// Iterate districts
 		for (int i = 0; i < districtOptions.size(); i++) {
-			
+
 			Select refreshedDistrictDropDown = new Select(driver.findElement(By.id("ddlDist")));
 			WebElement districtOption = refreshedDistrictDropDown.getOptions().get(i);
 			if (i == 0) {
@@ -247,9 +251,9 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 			Select mlaConstituencyDropDown = new Select(driver.findElement(By.id("ddlAC")));
 			List<WebElement> mlaConstituencyOptions = mlaConstituencyDropDown.getOptions();
 			for (int j = 0; j < mlaConstituencyOptions.size(); j++) {
-				
+
 				electroralURLDaraMp = new TreeMap<Integer, Object[]>();
-				
+
 				Workbook exportWorkBook = CommonUtil.createWorkBook(fileName);
 				if (exportWorkBook.getNumberOfSheets() == 1 && exportWorkBook.getSheetAt(0) != null) {
 					exportWorkBook.removeSheetAt(0);
@@ -258,14 +262,14 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 						.createSheet(ServiceConstants.USER_EXCEL_BY_CONSTITUENCT_SHEET_NAME);
 
 				addHeaderRow(exportWorkBookSheet);
-				
+
 				Select refreshedMlaConstituencyDropDown = new Select(driver.findElement(By.id("ddlAC")));
 				WebElement mlaConstituencyOption = refreshedMlaConstituencyDropDown.getOptions().get(j);
 				if (j == 0) {
 					continue;
 				}
 				mlaConstituencyOption.click();
-				
+
 				String mlaConstituencyNoName = new Select(driver.findElement(By.id("ddlAC"))).getOptions().get(j)
 						.getText();
 				String mlaConstituencyName = mlaConstituencyNoName.split("-")[1];
@@ -276,7 +280,7 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 						continue;
 					}
 				}
-				
+
 				WebElement getPollingStationButton = driver.findElement(By.id("btnGetPollingStations"));
 				getPollingStationButton.click();
 				try {
@@ -286,22 +290,20 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 				}
 				getPollingStationElectorsUrls(electroralRollesURL, districtName, mlaConstituencyName, mlaConstituencyNo,
 						electroralURLDaraMp);
-				
+
 				writeDataIntoSheet(electroralURLDaraMp, exportWorkBookSheet);
-//				writeExcelDataIntoFile(outPutFilePath, exportWorkBook);
-				
-				String eachUploadedFolderName = uploadedFolderName + ApplicationConstants.SUFFIX + globalFolderName + ApplicationConstants.SUFFIX
-						+ countryFolderName + ApplicationConstants.SUFFIX + electroralRollesURL.getStateName() + ApplicationConstants.SUFFIX +electroralRollesURL.getDistrictName()
-						+ApplicationConstants.SUFFIX + mlaConstituencyName ;
-				
+				// writeExcelDataIntoFile(outPutFilePath, exportWorkBook);
+
+				String eachUploadedFolderName = uploadedFolderName + ApplicationConstants.SUFFIX + globalFolderName
+						+ ApplicationConstants.SUFFIX + countryFolderName + ApplicationConstants.SUFFIX
+						+ electroralRollesURL.getStateName() + ApplicationConstants.SUFFIX
+						+ electroralRollesURL.getDistrictName() + ApplicationConstants.SUFFIX + mlaConstituencyName;
+
 				AmazonS3Util.writeExcelDataIntoAmazonS3File(fileName, exportWorkBook, bucketName,
 						eachUploadedFolderName);
-				
-				
+
 			}
 		}
-
-		
 
 		driver.close();
 		driver.quit();
@@ -667,13 +669,12 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 	@Override
 	@Transactional
 	public void exportElectroralRolleData(ElectroralRollesURL electroralRollesURL) throws InternalServerException {
-		// TODO Auto-generated method stub
+
 		List<ElectroralRollesURL> electroralRollesUrlList = userImportExportDao
 				.getElectroralRollesURLData(electroralRollesURL);
 
 		List<User> users = new ArrayList<User>();
 		if (electroralRollesUrlList != null) {
-
 			for (ElectroralRollesURL eachURLData : electroralRollesUrlList) {
 				List<User> eachPageUsers = parseElectroralData(eachURLData);
 				System.out.println("i>>" + eachURLData.getPdfUrl() + ">>" + eachPageUsers.size());
@@ -688,6 +689,28 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 	@Override
 	@Transactional
 	public void importElectroralRolleData(ElectroralRollesURL electroralRollesURL) throws InternalServerException {
+
+		List<ElectroralRollesURL> electroralRollesUrlList = userImportExportDao
+				.getElectroralRollesURLData(electroralRollesURL);
+
+		List<User> users = new ArrayList<User>();
+		if (electroralRollesUrlList != null) {
+
+			for (ElectroralRollesURL eachURLData : electroralRollesUrlList) {
+				List<User> eachPageUsers =extractDataFromUsersFile(eachURLData);
+				System.out.println("i>>" + eachURLData.getPdfUrl() + ">>" + eachPageUsers.size());
+				users.addAll(eachPageUsers);
+			}
+		}
+		if (users != null && !users.isEmpty()) {
+			userDao.saveUsers(users);
+		}
+
+	}
+
+	private List<User> extractDataFromUsersFile(ElectroralRollesURL eachURLData) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	private static List<User> parseElectroralData(ElectroralRollesURL eachURLData) {
@@ -983,57 +1006,60 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 		String bucketName = env.getProperty("amazon.s3.users.bucket.name");
 		String fileName = env.getProperty("project.electroral.url.data-file-name");
 		String uploadedFolderName = env.getProperty("amazon.s3.users.uploaded.folder.name");
-		
+
 		String globalFolderName = env.getProperty("amazon.s3.users.global.folder.name");
 		String countryFolderName = env.getProperty("amazon.s3.users.india.folder.name");
 
-		uploadedFolderName = uploadedFolderName + ApplicationConstants.SUFFIX + globalFolderName + ApplicationConstants.SUFFIX + countryFolderName;
-		
+		uploadedFolderName = uploadedFolderName + ApplicationConstants.SUFFIX + globalFolderName
+				+ ApplicationConstants.SUFFIX + countryFolderName;
+
 		List<String> stateDirectories = AmazonS3Util.getListOfObjects(bucketName, uploadedFolderName);
-		
+
 		if (stateDirectories != null && stateDirectories.size() > 0) {
 			for (String eachStateDirectoryPath : stateDirectories) {
-				
+
 				String[] pathSplit = eachStateDirectoryPath.split("/");
-				String name = pathSplit[pathSplit.length-1];
-				
+				String name = pathSplit[pathSplit.length - 1];
+
 				if (electroralRollesURL.getStateName() != null && !electroralRollesURL.getStateName().isEmpty()) {
 					if (!name.equalsIgnoreCase(electroralRollesURL.getStateName())) {
 						continue;
 					}
 				}
-				
+
 				List<String> districtDirectories = AmazonS3Util.getListOfObjects(bucketName, eachStateDirectoryPath);
-				
-				
+
 				if (districtDirectories != null && districtDirectories.size() > 0) {
 					for (String eachStateDistrictDirectory : districtDirectories) {
-						
+
 						pathSplit = eachStateDistrictDirectory.split("/");
-						name = pathSplit[pathSplit.length-1];
-						
-						if (electroralRollesURL.getDistrictName() != null && !electroralRollesURL.getDistrictName().isEmpty()) {
+						name = pathSplit[pathSplit.length - 1];
+
+						if (electroralRollesURL.getDistrictName() != null
+								&& !electroralRollesURL.getDistrictName().isEmpty()) {
 							if (!name.equalsIgnoreCase(electroralRollesURL.getDistrictName())) {
 								continue;
 							}
 						}
-						
-						List<String> acDirectories = AmazonS3Util.getListOfObjects(bucketName, eachStateDistrictDirectory);
-						
+
+						List<String> acDirectories = AmazonS3Util.getListOfObjects(bucketName,
+								eachStateDistrictDirectory);
+
 						for (String eachStateDistrictAcDirectory : acDirectories) {
-							
+
 							pathSplit = eachStateDistrictAcDirectory.split("/");
-							name = pathSplit[pathSplit.length-1];
-							
-							if (electroralRollesURL.getMlaConstituencyName() != null && !electroralRollesURL.getMlaConstituencyName().isEmpty()) {
+							name = pathSplit[pathSplit.length - 1];
+
+							if (electroralRollesURL.getMlaConstituencyName() != null
+									&& !electroralRollesURL.getMlaConstituencyName().isEmpty()) {
 								if (!name.equalsIgnoreCase(electroralRollesURL.getMlaConstituencyName())) {
 									continue;
 								}
 							}
-						
-							String filePath = hostName + bucketName + ApplicationConstants.SUFFIX + eachStateDistrictAcDirectory
-									+fileName;
-	
+
+							String filePath = hostName + bucketName + ApplicationConstants.SUFFIX
+									+ eachStateDistrictAcDirectory + fileName;
+
 							System.out.println(filePath);
 							Workbook myWorkBook = CommonUtil.getWorkBookFromFile(filePath);
 
@@ -1072,7 +1098,7 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 									pdfElectroralRollesUrlList.add(electroralRolleURL);
 								}
 							}
-	
+
 						}
 					}
 				}

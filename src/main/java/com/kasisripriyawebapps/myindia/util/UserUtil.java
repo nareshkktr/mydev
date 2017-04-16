@@ -175,8 +175,6 @@ public class UserUtil {
 				int noOfLines = lines.length;
 				if (lines != null && noOfLines != 0) {
 
-					System.out.println(tableContent);
-
 					int processingLineNo = noOfLines - 1;
 					Map<String, String> sexMap = getSex(lines, processingLineNo);
 					sex = sexMap.get("sexValue");
@@ -184,8 +182,10 @@ public class UserUtil {
 					Map<String, String> ageMap = getAge(lines, processingLineNo);
 					age = ageMap.get("ageValue");
 					processingLineNo = Integer.parseInt(ageMap.get("currentLineNo"));
+					Map<String, String> houseNoMap = getHouseNo(lines, processingLineNo);
+					houseNo = houseNoMap.get("houseNoValue");
+					processingLineNo = Integer.parseInt(houseNoMap.get("currentLineNo"));
 
-					System.out.println(">>>>>>>>>>>>>" + sex + ">>" + age);
 
 					/*
 					 * String sexAgeLine = lines[processingLineNo].trim();
@@ -290,6 +290,15 @@ public class UserUtil {
 					user.setParliamentaryConstituencyNo(pdfHeaderData.getMpConstituencyNo());
 					user.setParliamentaryConstituencyName(pdfHeaderData.getMpConstituencyName());
 					eachPageUsers.add(user);
+					
+					//System.out.println(user.getIdCardNo());
+					//System.out.println(user.getElectorName());
+					//System.out.println(user.getReferenceName());
+					//System.out.println(user.getReferenceType());
+					System.out.println(user.getAge());
+					System.out.println(user.getGender());
+					//System.out.println(user.getHouseNo());
+					System.out.println("---------------------------");
 				}
 			}
 
@@ -306,7 +315,6 @@ public class UserUtil {
 
 		String sexValue = "";
 		if (sexAgeLine.equalsIgnoreCase(ServiceConstants.DELETE_USER)) {
-			System.out.println("In Deleted");
 			currentLineNo--;
 			sexAgeLine = boxContent[currentLineNo];
 		}
@@ -320,9 +328,7 @@ public class UserUtil {
 			sexValue = boxContent[currentLineNo];
 			currentLineNo--;
 		} else if (sexAgeLineSpaces.length == 3) {
-			System.out.println("In 3");
 		} else if (sexAgeLineSpaces.length == 4) {
-			System.out.println("In 4");
 			sexValue = sexAgeLineSpaces[3];
 		}
 		sexMap.put("sexValue", sexValue);
@@ -330,6 +336,30 @@ public class UserUtil {
 		return sexMap;
 	}
 
+	private static Map<String, String> getHouseNo(String[] boxContent, int currentLineNo) {
+		Map<String, String> houseNoMap = new HashMap<String, String>();
+		String sexAgeLine = boxContent[currentLineNo];
+		String[] sexAgeLineSpaces = sexAgeLine.split(" ");
+		String ageValue = "";
+
+		if (sexAgeLineSpaces.length == 2) {
+			ageValue = sexAgeLineSpaces[1];
+			currentLineNo--;
+
+		} else if (sexAgeLineSpaces.length == 1) {
+			currentLineNo--;
+			ageValue = boxContent[currentLineNo];
+			currentLineNo--;
+		} else if (sexAgeLineSpaces.length == 4) {
+			ageValue = sexAgeLineSpaces[1];
+			currentLineNo--;
+		}
+		houseNoMap.put("houseNoValue", ageValue);
+		houseNoMap.put("currentLineNo", "" + currentLineNo);
+
+		return houseNoMap;
+	}
+	
 	private static Map<String, String> getAge(String[] boxContent, int currentLineNo) {
 		Map<String, String> ageMap = new HashMap<String, String>();
 		String sexAgeLine = boxContent[currentLineNo];
@@ -345,7 +375,6 @@ public class UserUtil {
 			ageValue = boxContent[currentLineNo];
 			currentLineNo--;
 		} else if (sexAgeLineSpaces.length == 4) {
-			System.out.println("In 4 Age");
 			ageValue = sexAgeLineSpaces[1];
 			currentLineNo--;
 		}
@@ -357,12 +386,13 @@ public class UserUtil {
 
 	public static void main(String args[]) {
 		ElectroralRollesURL eachURLData = new ElectroralRollesURL();
-//		eachURLData.setPdfUrl(
-//				"http://ceoaperms.ap.gov.in/Electoral_Rolls/PDFGeneration.aspx?urlPath=D:\\SSR_2017_Final_Roles\\ANDHRA\\AC_154\\English\\S01A154P080.PDF");
-//		eachURLData.setPdfUrl(
-//				"http://ceoaperms.ap.gov.in/Electoral_Rolls/PDFGeneration.aspx?urlPath=D:\\SSR_2017_Final_Roles\\ANDHRA\\AC_148\\English\\S01A148P001.PDF");
-		eachURLData.setPdfUrl("http://ceoaperms.ap.gov.in/TS_Rolls/PDFGeneration.aspx?urlPath=D:\\SSR2016_Final\\Telangana\\AC_007\\English\\S29A007P002.PDF");
-		//http://ceoaperms.ap.gov.in/Electoral_Rolls/PDFGeneration.aspx?urlPath=D:\\SSR_2017_Final_Roles\\ANDHRA\\AC_148\\English\\S01A148P001.PDF
+		// eachURLData.setPdfUrl(
+		// "http://ceoaperms.ap.gov.in/Electoral_Rolls/PDFGeneration.aspx?urlPath=D:\\SSR_2017_Final_Roles\\ANDHRA\\AC_154\\English\\S01A154P080.PDF");
+		// eachURLData.setPdfUrl(
+		// "http://ceoaperms.ap.gov.in/Electoral_Rolls/PDFGeneration.aspx?urlPath=D:\\SSR_2017_Final_Roles\\ANDHRA\\AC_148\\English\\S01A148P001.PDF");
+		eachURLData.setPdfUrl(
+				"http://ceoaperms.ap.gov.in/TS_Rolls/PDFGeneration.aspx?urlPath=D:\\SSR2016_Final\\Telangana\\AC_007\\English\\S29A007P002.PDF");
+		// http://ceoaperms.ap.gov.in/Electoral_Rolls/PDFGeneration.aspx?urlPath=D:\\SSR_2017_Final_Roles\\ANDHRA\\AC_148\\English\\S01A148P001.PDF
 		List<User> eachPageUsers = new ArrayList<User>();
 		eachPageUsers = parseElectroralData(eachURLData);
 
