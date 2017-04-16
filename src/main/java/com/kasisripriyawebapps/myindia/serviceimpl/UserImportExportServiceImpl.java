@@ -640,7 +640,7 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 
 	@Override
 	@Transactional
-	public void saveStateElectroralRolleData(ElectroralRollesURL electroralRollesURL) throws InternalServerException {
+	public void exportElectroralRolleData(ElectroralRollesURL electroralRollesURL) throws InternalServerException {
 		// TODO Auto-generated method stub
 		List<ElectroralRollesURL> electroralRollesUrlList = userImportExportDao
 				.getElectroralRollesURLData(electroralRollesURL);
@@ -657,6 +657,11 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 		if (users != null && !users.isEmpty()) {
 			userDao.saveUsers(users);
 		}
+	}
+
+	@Override
+	@Transactional
+	public void importElectroralRolleData(ElectroralRollesURL electroralRollesURL) throws InternalServerException {
 	}
 
 	private static List<User> parseElectroralData(ElectroralRollesURL eachURLData) {

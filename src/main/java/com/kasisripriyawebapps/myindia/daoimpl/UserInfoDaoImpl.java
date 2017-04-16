@@ -28,7 +28,7 @@ public class UserInfoDaoImpl extends BaseDaoImpl<Long, UserInfo> implements User
 
 	@Override
 	public List<UserInfo> getAllUsers() throws InternalServerException {
-		SortCriteriaData sortCriteria = new SortCriteriaData("userName", true);
+		SortCriteriaData sortCriteria = new SortCriteriaData("electorName", true);
 		return getAll(sortCriteria);
 	}
 

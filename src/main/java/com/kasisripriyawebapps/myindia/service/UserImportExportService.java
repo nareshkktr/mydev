@@ -9,8 +9,10 @@ public interface UserImportExportService {
 	void exportStateElectroralRolleUrls(ElectroralRollesURL electroralRollesURL)
 			throws InternalServerException, RecordNotFoundException;
 
-	void saveStateElectroralRolleData(ElectroralRollesURL electroralRollesURL) throws InternalServerException;
+	void exportElectroralRolleData(ElectroralRollesURL electroralRollesURL) throws InternalServerException;
 
 	void importStateElectroralRolleUrls(ElectroralRollesURL electroralRollesURL)  throws InternalServerException;
+
+	void importElectroralRolleData(ElectroralRollesURL electroralRollesURL) throws InternalServerException;
 
 }

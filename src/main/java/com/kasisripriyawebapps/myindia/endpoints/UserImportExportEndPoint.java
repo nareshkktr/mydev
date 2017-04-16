@@ -44,11 +44,20 @@ public class UserImportExportEndPoint {
 	}
 
 	@POST
-	@ApiOperation(value = EndPointConstants.SAVE_ELECTRORAL_ROLLES_DATA_API_VALUE, nickname = EndPointConstants.SAVE_ELECTRORAL_ROLLES_DATA_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.SAVE_ELECTRORAL_ROLLES_DATA_API_DESCRIPTION)
-	@Path(EndPointConstants.SAVE_ELECTRORAL_ROLLES_DATA_REQUEST_MAPPING)
-	public Response saveStateElectroralRolleData(ElectroralRollesURL electroralRollesURL)
+	@ApiOperation(value = EndPointConstants.EXPORT_ELECTRORAL_ROLLES_DATA_API_VALUE, nickname = EndPointConstants.EXPORT_ELECTRORAL_ROLLES_DATA_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.EXPORT_ELECTRORAL_ROLLES_DATA_API_DESCRIPTION)
+	@Path(EndPointConstants.EXPORT_ELECTRORAL_ROLLES_DATA_REQUEST_MAPPING)
+	public Response exportElectroralRolleData(ElectroralRollesURL electroralRollesURL)
 			throws InternalServerException, RecordNotFoundException {
-		userImportExportService.saveStateElectroralRolleData(electroralRollesURL);
+		userImportExportService.exportElectroralRolleData(electroralRollesURL);
+		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
+	}
+	
+	@POST
+	@ApiOperation(value = EndPointConstants.IMPORT_ELECTRORAL_ROLLES_DATA_API_VALUE, nickname = EndPointConstants.IMPORT_ELECTRORAL_ROLLES_DATA_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.IMPORT_ELECTRORAL_ROLLES_DATA_API_DESCRIPTION)
+	@Path(EndPointConstants.IMPORT_ELECTRORAL_ROLLES_DATA_REQUEST_MAPPING)
+	public Response importElectroralRolleData(ElectroralRollesURL electroralRollesURL)
+			throws InternalServerException, RecordNotFoundException {
+		userImportExportService.importElectroralRolleData(electroralRollesURL);
 		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
 	}
 }

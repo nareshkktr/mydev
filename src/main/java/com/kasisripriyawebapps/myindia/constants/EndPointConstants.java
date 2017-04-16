@@ -692,16 +692,28 @@ public class EndPointConstants {
 	public static final String IMPORT_ELECTRORAL_ROLLES_URLS_API_DESCRIPTION = "Import States Electroral Rolles URLs";
 
 	/** The Constant UPLOAD_ALL_USERS_REQUEST_MAPPING. */
-	public static final String SAVE_ELECTRORAL_ROLLES_DATA_REQUEST_MAPPING = "saveStateElectroralRolleData";
+	public static final String EXPORT_ELECTRORAL_ROLLES_DATA_REQUEST_MAPPING = "exportElectroralRolleData";
 
 	/** The Constant UPLOAD_ALL_USERS_API_VALUE. */
-	public static final String SAVE_ELECTRORAL_ROLLES_DATA_API_VALUE = "saveStateElectroralRolleData";
+	public static final String EXPORT_ELECTRORAL_ROLLES_DATA_API_VALUE = "exportElectroralRolleData";
 
 	/** The Constant UPLOAD_ALL_USERS_API_NICKNAME. */
-	public static final String SAVE_ELECTRORAL_ROLLES_DATA_API_NICKNAME = "saveStateElectroralRolleData";
+	public static final String EXPORT_ELECTRORAL_ROLLES_DATA_API_NICKNAME = "exportElectroralRolleData";
 
 	/** The Constant UPLOAD_ALL_USERS_API_DESCRIPTION. */
-	public static final String SAVE_ELECTRORAL_ROLLES_DATA_API_DESCRIPTION = "Save States Electroral Rolles Data";
+	public static final String EXPORT_ELECTRORAL_ROLLES_DATA_API_DESCRIPTION = "Save Electroral Rolles Data";
+
+	/** The Constant UPLOAD_ALL_USERS_REQUEST_MAPPING. */
+	public static final String IMPORT_ELECTRORAL_ROLLES_DATA_REQUEST_MAPPING = "importElectroralRolleData";
+
+	/** The Constant UPLOAD_ALL_USERS_API_VALUE. */
+	public static final String IMPORT_ELECTRORAL_ROLLES_DATA_API_VALUE = "importElectroralRolleData";
+
+	/** The Constant UPLOAD_ALL_USERS_API_NICKNAME. */
+	public static final String IMPORT_ELECTRORAL_ROLLES_DATA_API_NICKNAME = "importElectroralRolleData";
+
+	/** The Constant UPLOAD_ALL_USERS_API_DESCRIPTION. */
+	public static final String IMPORT_ELECTRORAL_ROLLES_DATA_API_DESCRIPTION = "Import Electroral Rolles Data";
 
 	/** The Constant CREATE_ACCOUNT_REQUEST_MAPPING. */
 	public static final String IMPORT_PARTIES_REQUEST_MAPPING = "importParties";
@@ -938,7 +950,7 @@ public class EndPointConstants {
 
 	/** The Constant CREATE_ACCOUNT_API_DESCRIPTION. */
 	public static final String CREATE_PROBLEM_API_DESCRIPTION = "Create Problem";
-	
+
 	/** The Constant CREATE_ACCOUNT_REQUEST_MAPPING. */
 	public static final String GET_LOGGED_IN_REQUEST_MAPPING = "getLoggedInUserInfo";
 
@@ -951,7 +963,6 @@ public class EndPointConstants {
 	/** The Constant CREATE_ACCOUNT_API_DESCRIPTION. */
 	public static final String GET_LOGGED_IN_API_DESCRIPTION = "Get Logged In User Details";
 
-	
 	/** The Constant GET_PROBLEMS_BY_TYPE_REQUEST_MAPPING. */
 	public static final String GET_PROBLEMS_BY_TYPE_REQUEST_MAPPING = "getProblemsByType";
 
@@ -963,7 +974,7 @@ public class EndPointConstants {
 
 	/** The Constant GET_PROBLEMS_BY_TYPE_API_DESCRIPTION. */
 	public static final String GET_PROBLEMS_BY_TYPE_API_DESCRIPTION = "Get Problems By Problem Type.";
-	
+
 	/** The Constant GET_PROBLEMS_BY_TYPE_REQUEST_MAPPING. */
 	public static final String GET_PROBLEM_BY_ID_REQUEST_MAPPING = "getProblemByGuid";
 
@@ -975,7 +986,7 @@ public class EndPointConstants {
 
 	/** The Constant GET_PROBLEMS_BY_TYPE_API_DESCRIPTION. */
 	public static final String GET_PROBLEM_BY_ID_API_DESCRIPTION = "Get Problem By Problem Guid.";
-	
+
 	/** The Constant LOGOUT_ACCOUNT_REQUEST_MAPPING. */
 	public static final String LOGOUT_ACCOUNT_REQUEST_MAPPING = "logout";
 
@@ -987,7 +998,7 @@ public class EndPointConstants {
 
 	/** The Constant LOGOUT_ACCOUNT_API_DESCRIPTION. */
 	public static final String LOGOUT_ACCOUNT_API_DESCRIPTION = "Logout the user.";
-	
+
 	/** The Constant GET_PROBLEMS_BY_PROBLEM_CATEGORY_REQUEST_MAPPING. */
 	public static final String GET_PROBLEMS_BY_PROBLEM_CATEGORY_REQUEST_MAPPING = "getProblemsByProblemCategory";
 
@@ -999,7 +1010,7 @@ public class EndPointConstants {
 
 	/** The Constant GET_PROBLEMS_BY_PROBLEM_CATEGORY_API_DESCRIPTION. */
 	public static final String GET_PROBLEMS_BY_PROBLEM_CATEGORY_API_DESCRIPTION = "Get Problem By Problem Type Category.";
-	
+
 	/** The Constant REFRESH_ACCESS_TOKEN_REQUEST_MAPPING. */
 	public static final String REFRESH_ACCESS_TOKEN_REQUEST_MAPPING = "refreshAccessToken";
 
@@ -1011,7 +1022,7 @@ public class EndPointConstants {
 
 	/** The Constant GET_PROBLEMS_BY_PROBLEM_CATEGORY_API_DESCRIPTION. */
 	public static final String REFRESH_ACCESS_TOKEN_API_DESCRIPTION = "Refresh Access Token.";
-	
+
 	/** The Constant FILTER_ENTITY_REQUEST_MAPPING. */
 	public static final String FILTER_ENTITY_REQUEST_MAPPING = "filterEntity";
 
@@ -1023,52 +1034,52 @@ public class EndPointConstants {
 
 	/** The Constant FILTER_ENTITY_API_DESCRIPTION. */
 	public static final String FILTER_ENTITY_API_DESCRIPTION = "Filter Entities";
-	
+
 	public static final String CREATE_EVENT_REQUEST_MAPPING = "createEvent";
 	public static final String CREATE_EVENT_API_VALUE = "createEvent";
 	public static final String CREATE_EVENT_API_NICKNAME = "createEvent";
 	public static final String CREATE_EVENT_API_DESCRIPTION = "Create Event";
-	
+
 	public static final String UPDATE_EVENT_REQUEST_MAPPING = "updateEvent";
 	public static final String UPDATE_EVENT_API_VALUE = "updateEvent";
 	public static final String UPDATE_EVENT_API_NICKNAME = "updateEvent";
 	public static final String UPDATE_EVENT_API_DESCRIPTION = "Update Event";
-	
+
 	public static final String DELETE_EVENT_REQUEST_MAPPING = "deleteEvent/{eventGuid}";
 	public static final String DELETE_EVENT_API_VALUE = "deleteEvent";
 	public static final String DELETE_EVENT_API_NICKNAME = "deleteEvent";
 	public static final String DELETE_EVENT_API_DESCRIPTION = "Delete Event";
-	
+
 	public static final String GROUP_ENDPOINT_REQUEST_MAPPING = "/group";
 	public static final String GROUP_ENDPOINT_API_VALUE = "group";
 	public static final String GROUP_ENDPOINT_API_TAGS = "group";
 	public static final String GROUP_ENDPOINT_API_DESCRIPTION = "Group/GroupMember Management API";
-	
+
 	public static final String CREATE_GROUP_REQUEST_MAPPING = "createGroup";
 	public static final String CREATE_GROUP_API_VALUE = "createGroup";
 	public static final String CREATE_GROUP_API_NICKNAME = "createGroup";
 	public static final String CREATE_GROUP_API_DESCRIPTION = "Create Group";
-	
+
 	public static final String UPDATE_GROUP_REQUEST_MAPPING = "updateGroup";
 	public static final String UPDATE_GROUP_API_VALUE = "updateGroup";
 	public static final String UPDATE_GROUP_API_NICKNAME = "updateGroup";
 	public static final String UPDATE_GROUP_API_DESCRIPTION = "Update Group";
-	
+
 	public static final String DELETE_GROUP_REQUEST_MAPPING = "deleteGroup/{groupGuid}";
 	public static final String DELETE_GROUP_API_VALUE = "deleteGroup";
 	public static final String DELETE_GROUP_API_NICKNAME = "deleteGroup";
 	public static final String DELETE_GROUP_API_DESCRIPTION = "Delete Group";
-	
+
 	public static final String ADD_GROUP_MEMBER_REQUEST_MAPPING = "addGroupMember";
 	public static final String ADD_GROUP_MEMBER_API_VALUE = "addGroupMember";
 	public static final String ADD_GROUP_MEMBER_API_NICKNAME = "addGroupMember";
 	public static final String ADD_GROUP_MEMBER_API_DESCRIPTION = "Add Group Member ";
-	
+
 	public static final String DELETE_GROUP_MEMBER_REQUEST_MAPPING = "deleteGroupMember/{groupGuid}";
 	public static final String DELETE_GROUP_MEMBER_API_VALUE = "deleteGroupMember";
 	public static final String DELETE_GROUP_MEMBER_API_NICKNAME = "deleteGroupMember";
 	public static final String DELETE_GROUP_MEMBER_API_DESCRIPTION = "Delete Group Member ";
-	
+
 	public static final String GET_PROBLEM_CONTRIBUTORS_BY_PROBLEM_ID_REQUEST_MAPPING = "getProblemContributors";
 	public static final String GET_PROBLEM_CONTRIBUTORS_BY_PROBLEM_ID_API_VALUE = "getProblemContributors";
 	public static final String GET_PROBLEM_CONTRIBUTORS_BY_PROBLEM_ID_API_NICKNAME = "getProblemContributors";
@@ -1085,7 +1096,7 @@ public class EndPointConstants {
 
 	/** The Constant COMMENT_ENDPOINT_API_DESCRIPTION. */
 	public static final String COMMENT_ENDPOINT_API_DESCRIPTION = "User Comment Management API";
-	
+
 	public static final String POST_COMMENT_REQUEST_MAPPING = "postComment";
 	public static final String POST_COMMENT_API_VALUE = "postComment";
 	public static final String POST_COMMENT_API_NICKNAME = "postComment";
@@ -1095,12 +1106,12 @@ public class EndPointConstants {
 	public static final String GET_FIRST_LEVEL_COMMENTS_API_VALUE = "getFirstLevelComments";
 	public static final String GET_FIRST_LEVEL_COMMENTS_API_NICKNAME = "getFirstLevelComments";
 	public static final String GET_FIRST_LEVEL_COMMENTS_API_DESCRIPTION = "Get First Level comments for the given object.";
-	
+
 	public static final String GET_ACTIVITIES_REQUEST_MAPPING = "getActivities";
 	public static final String GET_ACTIVITIES_API_VALUE = "getActivities";
 	public static final String GET_ACTIVITIES_API_NICKNAME = "getActivities";
 	public static final String GET_ACTIVITIES_API_DESCRIPTION = "Get Activities with pagination.";
-	
+
 	public static final String GET_ACTIVITIES_BY_OBJECT_REQUEST_MAPPING = "getActivitiesByObject";
 	public static final String GET_ACTIVITIES_BY_OBJECT_API_VALUE = "getActivitiesByObject";
 	public static final String GET_ACTIVITIES_BY_OBJECT_API_NICKNAME = "getActivitiesByObject";
@@ -1110,17 +1121,17 @@ public class EndPointConstants {
 	public static final String ADD_EVENT_RECIPIENT_API_VALUE = "addEventRecipient";
 	public static final String ADD_EVENT_RECIPIENT_API_NICKNAME = "addEventRecipient";
 	public static final String ADD_EVENT_RECIPIENT_API_DESCRIPTION = "Add Event Recipient";
-	
+
 	public static final String REMOVE_EVENT_RECIPIENT_REQUEST_MAPPING = "removeEventRecipient/{eventGuid}";
 	public static final String REMOVE_EVENT_RECIPIENT_API_VALUE = "removeEventRecipient";
 	public static final String REMOVE_EVENT_RECIPIENT_API_NICKNAME = "removeEventRecipient";
 	public static final String REMOVE_EVENT_RECIPIENT_API_DESCRIPTION = "Remove Event Recipient ";
-	
+
 	public static final String ADD_EVENT_INVITEE_STATUS_REQUEST_MAPPING = "addEventInviteeStatus";
 	public static final String ADD_EVENT_INVITEE_STATUS_API_VALUE = "addEventInviteeStatus";
 	public static final String ADD_EVENT_INVITEE_STATUS_API_NICKNAME = "addEventInviteeStatus";
 	public static final String ADD_EVENT_INVITEE_STATUS_API_DESCRIPTION = "Add Event Invitee Status";
-	
+
 	public static final String REMOVE_EVENT_INVITEE_STATUS_REQUEST_MAPPING = "removeEventInviteeStatus/{eventGuid}";
 	public static final String REMOVE_EVENT_INVITEE_STATUS_API_VALUE = "removeEventInviteeStatus";
 	public static final String REMOVE_EVENT_INVITEE_STATUS_API_NICKNAME = "removeEventInviteeStatus";
@@ -1131,11 +1142,11 @@ public class EndPointConstants {
 	public static final String GET_PROBLEM_TYPES_BY_CATEGORY_API_NICKNAME = "getProblemTypesByCategory";
 	public static final String GET_PROBLEM_TYPES_BY_CATEGORY_API_DESCRIPTION = "Get the problem types related to a particular category.";
 
-	public static final String GET_SECOND_LEVEL_COMMENTS_API_NICKNAME =  "getSecondLevelComments";
+	public static final String GET_SECOND_LEVEL_COMMENTS_API_NICKNAME = "getSecondLevelComments";
 	public static final String GET_SECOND_LEVEL_COMMENTS_API_VALUE = "getSecondLevelComments";
 	public static final String GET_SECOND_LEVEL_COMMENTS_REQUEST_MAPPING = "getSecondLevelComments";
 	public static final String GET_SECOND_LEVEL_COMMENTS_API_DESCRIPTION = "Get replies for the comments for the given comment and for the given object.";
-	
+
 	public static final String THUMBS_UP_DOWN_REQUEST_MAPPING = "createThumbsUpDown";
 	public static final String THUMBS_UP_DOWN_API_VALUE = "createThumbsUpDown";
 	public static final String THUMBS_UP_DOWN_API_NICKNAME = "createThumbsUpDown";
