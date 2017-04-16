@@ -3,12 +3,16 @@ package com.kasisripriyawebapps.myindia.util;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 import java.util.List;
 
 import javax.imageio.ImageIO;
+
+import org.apache.poi.ss.usermodel.Workbook;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSCredentials;
@@ -17,8 +21,11 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.Bucket;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.ListObjectsRequest;
+import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.kasisripriyawebapps.myindia.constants.ApplicationConstants;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 
 public class AmazonS3Util {
@@ -182,15 +189,76 @@ public class AmazonS3Util {
 		} // if
 		return image;
 	}
+	
+	public static void writeExcelDataIntoAmazonS3File(String fileName, Workbook exportWorkBook, String bucketName,
+			String uploadedFolderName) throws InternalServerException {
+		FileOutputStream os = null;
+		try {
+			File exportedFile = new File(fileName);
+			os = new FileOutputStream(exportedFile);
+			try {
+				exportWorkBook.write(os);
+				os.close();
+				exportWorkBook.close();
 
-	public static void main(String argv[]) throws Exception {
-		File imageFile = new File("C:\\Users\\Public\\Pictures\\Sample Pictures\\Lighthouse.jpg");
-		String img = imageToBase64String(imageFile);
-		byte[] decodedBytes = Base64.getDecoder().decode(img.getBytes(StandardCharsets.UTF_8));
+				AmazonS3Util.createFile(bucketName, null, exportedFile, uploadedFolderName + SUFFIX + fileName);
+
+			} catch (IOException e) {
+				throw new InternalServerException(e.getMessage());
+			}
+		} catch (FileNotFoundException e) {
+			throw new InternalServerException(e.getMessage());
+		}
+	}
+	
+	public static byte[] readBytesFromFile(String filePath) {
+
+		FileInputStream fileInputStream = null;
+		byte[] bytesArray = null;
+
+		try {
+			File file = new File(filePath);
+			bytesArray = new byte[(int) file.length()];
+
+			// read file into bytes[]
+			fileInputStream = new FileInputStream(file);
+			fileInputStream.read(bytesArray);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (fileInputStream != null) {
+				try {
+					fileInputStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return bytesArray;
+	}
+	
+	public static List<String> getListOfObjects(String bucketName, String prefixPath) throws InternalServerException{
+		intializeAmazonS3Client();
 		
-		System.out.println("Converted String " + decodedBytes.length);
+		if(!prefixPath.endsWith("/")){
+			prefixPath +=ApplicationConstants.SUFFIX;
+		}
 		
-		createFile("myindiaproblems","problems",decodedBytes,"Lighthouse.jpg");
+		ListObjectsRequest lor = new ListObjectsRequest().withBucketName(bucketName)
+                .withPrefix(prefixPath)
+                .withDelimiter("/");
+		
+		ObjectListing fileList = s3Client.listObjects(lor);
+		
+		List<String> files = fileList.getCommonPrefixes();
+		
+		return files;
+	}
+
+	public static void main(String argv[]) throws Exception {		
+		getListOfObjects("myindiausers","Uploaded/Global/India/");
+		
 	}
 
 }

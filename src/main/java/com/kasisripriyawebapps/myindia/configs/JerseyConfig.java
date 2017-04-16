@@ -1,11 +1,14 @@
 package com.kasisripriyawebapps.myindia.configs;
 
 import javax.annotation.PostConstruct;
+import javax.ws.rs.Path;
+import javax.ws.rs.ext.Provider;
 
 import org.glassfish.jersey.filter.LoggingFilter;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.spring.scope.RequestContextFilter;
+import org.reflections.Reflections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
@@ -22,9 +25,28 @@ public class JerseyConfig extends ResourceConfig {
 
 	public JerseyConfig() {
 		register(RequestContextFilter.class);
-		packages("com.kasisripriyawebapps.myindia.endpoints", "com.kasisripriyawebapps.myindia.exception");
+		//packages("com.kasisripriyawebapps.myindia.endpoints", "com.kasisripriyawebapps.myindia.exception");
+		scan(new String[]{"com.kasisripriyawebapps.myindia.endpoints","com.kasisripriyawebapps.myindia.exception"});
+		
 		register(LoggingFilter.class);
 		register(MultiPartFeature.class);
+		
+	}
+	
+	public void scan(String... packages) {
+	    for (String pack : packages) {
+	        Reflections reflections = new Reflections(pack);
+	        reflections.getTypesAnnotatedWith(Provider.class)
+	                .parallelStream()
+	                .forEach((clazz) -> {
+	                    register(clazz);
+	                });
+	        reflections.getTypesAnnotatedWith(Path.class)
+	                .parallelStream()
+	                .forEach((clazz) -> {
+	                    register(clazz);
+	                });
+	    }
 	}
 
 	@PostConstruct
