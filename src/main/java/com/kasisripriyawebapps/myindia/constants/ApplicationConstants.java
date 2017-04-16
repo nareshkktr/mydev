@@ -126,11 +126,13 @@ public class ApplicationConstants {
 	public static final Integer PAGE_START = 1;
 	public static final Integer PAGE_LIMIT = 20;
 	
+	public static final String SUFFIX = "/";
 	public static final String THUMBS_UP_DOWN = "ThumsUpDown";
 	public static final Integer THUMBS_ZERO = 0;
 	public static final Integer THUMBS_ONE = 1;
 	
 	public static final String THUMBS_LIKE = "Like";
 	public static final String THUMBS_UNLIKE = "UnLike";
+
 
 }
