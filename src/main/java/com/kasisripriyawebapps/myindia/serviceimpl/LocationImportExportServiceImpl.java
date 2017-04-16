@@ -1726,8 +1726,64 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 	@Transactional
 	public boolean importVillageReferenceLocations() throws InternalServerException {
 
-		String filePath = env.getProperty("project.village-upload-locations-reference-file-name");
-		processReferenceLocationsData(filePath);
+		locationDao.deleteVillageReferenceLocations();
+
+		String fileName = env.getProperty("project.village.references-locations-file-name");
+
+		List<LocationMaster> stateLocations = new ArrayList<LocationMaster>();
+		List<String> locationTypes = new ArrayList<String>();
+		locationTypes.add(ServiceConstants.LOCATION_STATE_TYPE);
+		locationTypes.add(ServiceConstants.LOCATION_UNION_TERRITORY_TYPE);
+		stateLocations = locationMasterDao.getAllMasterLocationsByTypes(locationTypes);
+
+		if (stateLocations != null && !stateLocations.isEmpty()) {
+			for (LocationMaster eachLocation : stateLocations) {
+				if (eachLocation != null) {
+
+					String bucketName = env.getProperty("amazon.s3.locations.bucket.name");
+					String hostName = env.getProperty("amazon.s3.host.name");
+
+					String globalFolderName = env.getProperty("amazon.s3.locations.global.folder.name");
+					String countryFolderName = env.getProperty("amazon.s3.locations.india.folder.name");
+					String ruralFolderName = env.getProperty("amazon.s3.locations.rural.folder.name");
+
+					List<LocationMaster> districtLocations = locationMasterDao
+							.getAllMasterLocationsByTypeAndParentLocation(ServiceConstants.LOCATION_DISTRICT_TYPE,
+									eachLocation.getGuid());
+
+					if (CommonUtil.isListNotNullAndNotEmpty(districtLocations)) {
+						for (LocationMaster eachDistrictLocation : districtLocations) {
+							if (eachDistrictLocation != null) {
+
+								List<LocationMaster> subDistrictLocations = locationMasterDao
+										.getAllMasterLocationsByTypeAndParentLocation(
+												ServiceConstants.LOCATION_SUB_DISTRICT_TYPE,
+												eachDistrictLocation.getGuid());
+
+								if (CommonUtil.isListNotNullAndNotEmpty(subDistrictLocations)) {
+									for (LocationMaster eachSubDistrictLocation : subDistrictLocations) {
+										if (eachSubDistrictLocation != null) {
+
+											String uploadedFolderName = env
+													.getProperty("amazon.s3.locations.uploaded.folder.name") + SUFFIX
+													+ globalFolderName + SUFFIX + countryFolderName + SUFFIX
+													+ eachLocation.getLocationName() + SUFFIX + ruralFolderName + SUFFIX
+													+ eachDistrictLocation.getLocationName() + SUFFIX
+													+ eachSubDistrictLocation.getLocationName();
+
+											String inputFilePath = hostName + bucketName + SUFFIX + uploadedFolderName
+													+ SUFFIX + fileName;
+
+											processReferenceLocationsData(inputFilePath);
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 		return true;
 
 	}
@@ -1735,41 +1791,45 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 	@Override
 	@Transactional
 	public boolean importUrbanReferenceLocations() throws InternalServerException {
-		// TODO Auto-generated method stub
+		locationDao.deleteUrbanReferenceLocations();
+		String fileName = env.getProperty("project.urban.local.bodies-locations-file-name");
+		String bucketName = env.getProperty("amazon.s3.locations.bucket.name");
+		String hostName = env.getProperty("amazon.s3.host.name");
 
-		String filePath = env.getProperty("project.urban-upload-locations-reference-file-name");
-		processReferenceLocationsData(filePath);
+		String globalFolderName = env.getProperty("amazon.s3.locations.global.folder.name");
+		String countryFolderName = env.getProperty("amazon.s3.locations.india.folder.name");
+		String urbanFolderName = env.getProperty("amazon.s3.locations.urban.folder.name");
+
+		List<LocationMaster> stateLocations = new ArrayList<LocationMaster>();
+		List<String> locationTypes = new ArrayList<String>();
+		locationTypes.add(ServiceConstants.LOCATION_STATE_TYPE);
+		locationTypes.add(ServiceConstants.LOCATION_UNION_TERRITORY_TYPE);
+		stateLocations = locationMasterDao.getAllMasterLocationsByTypes(locationTypes);
+
+		if (stateLocations != null && !stateLocations.isEmpty()) {
+			for (LocationMaster eachLocation : stateLocations) {
+				if (eachLocation != null) {
+
+					String uploadedFolderName = env.getProperty("amazon.s3.locations.uploaded.folder.name") + SUFFIX
+							+ globalFolderName + SUFFIX + countryFolderName + SUFFIX + eachLocation.getLocationName()
+							+ SUFFIX + urbanFolderName;
+
+					String inputFilePath = hostName + bucketName + SUFFIX + uploadedFolderName + SUFFIX + fileName;
+					processReferenceLocationsData(inputFilePath);
+				}
+			}
+		}
+
 		return true;
 
 	}
 
 	private void processReferenceLocationsData(String filePath) throws InternalServerException {
-
-		List<LocationMaster> stateMasterLocations = new ArrayList<LocationMaster>();
-		List<String> locationTypes = new ArrayList<String>();
-		locationTypes.add(ServiceConstants.LOCATION_STATE_TYPE);
-		locationTypes.add(ServiceConstants.LOCATION_UNION_TERRITORY_TYPE);
-		stateMasterLocations = locationMasterDao.getAllMasterLocationsByTypes(locationTypes);
-
 		List<Location> referenceLocations = new ArrayList<Location>();
 		userInfoDao.updateAllUsersLocationReferenceToDefault();
-
-		if (stateMasterLocations != null && !stateMasterLocations.isEmpty()) {
-			for (LocationMaster eachStateLocation : stateMasterLocations) {
-				if (eachStateLocation != null) {
-
-					String outPutFilePath = "";
-					String directoryPath = env.getProperty("project.locations-files.upload-path") + filePath;
-					String fileName = eachStateLocation.getLocationName() + ServiceConstants.EXCEL_SHEET_TYPE_XLS;
-					outPutFilePath = directoryPath + fileName;
-
-					List<Location> eachSheetNewReferenceLocations = prepareReferenceLocations(outPutFilePath);
-					referenceLocations.addAll(eachSheetNewReferenceLocations);
-				}
-			}
-			locationDao.saveAllLocations(referenceLocations);
-
-		}
+		List<Location> eachSheetNewReferenceLocations = prepareReferenceLocations(filePath);
+		referenceLocations.addAll(eachSheetNewReferenceLocations);
+		locationDao.saveAllLocations(referenceLocations);
 		updateAllUsersLocationReferenceToBaseLocation();
 
 	}

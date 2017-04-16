@@ -25,4 +25,8 @@ public interface LocationDao {
 	Location getLocationByGuidAndParentGuid(String childLocationType, Long childLocationGuid, String parentLocationType,
 			Long parentLocationGuid) throws InternalServerException;
 
+	void deleteVillageReferenceLocations() throws InternalServerException;
+	
+	void deleteUrbanReferenceLocations() throws InternalServerException;
+
 }

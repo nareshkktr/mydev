@@ -76,4 +76,17 @@ public class LocationDaoImpl extends BaseDaoImpl<Long, Location> implements Loca
 		return getByConditions(criterions);
 	}
 
+	@Override
+	public void deleteVillageReferenceLocations() throws InternalServerException {
+		String namedQueryName = NamedQueryParameters.DELETE_RURAL_LOCATIONS;
+		executeUpdateNativeNamedQuery(namedQueryName, null);
+
+	}
+
+	@Override
+	public void deleteUrbanReferenceLocations() throws InternalServerException {
+		String namedQueryName = NamedQueryParameters.DELETE_URBAN_LOCATIONS;
+		executeUpdateNativeNamedQuery(namedQueryName, null);
+	}
+
 }

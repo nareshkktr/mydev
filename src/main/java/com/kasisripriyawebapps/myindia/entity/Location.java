@@ -23,7 +23,9 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "LOCATION_REFERENCE")
-@NamedQueries({ @NamedQuery(name = "DELETE_ALL_LOCATIONS", query = "delete from Location") })
+@NamedQueries({ @NamedQuery(name = "DELETE_ALL_LOCATIONS", query = "delete from Location"),
+		@NamedQuery(name = "DELETE_RURAL_LOCATIONS", query = "delete from Location where locationVillage is not null"),
+		@NamedQuery(name = "DELETE_URBAN_LOCATIONS", query = "delete from Location where locationVillage is null")})
 public class Location implements Serializable {
 
 	/** The Constant serialVersionUID. */
