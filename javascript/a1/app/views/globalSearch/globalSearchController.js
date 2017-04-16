@@ -26,8 +26,10 @@
 			
 			function searchSuccess(data){
 				globalSearch.searchResults = data.searchResults;
-				globalSearch.totalCount = data.totalCount;
-				globalSearch.objectsCount = data.objectsCount;
+				if(globalSearch.searchObjectType == 'ALL'){
+					globalSearch.totalCount = data.totalCount;
+					globalSearch.objectsCount = data.objectsCount;
+				}
 			}
 			function searchError(error){
 				alert(error);

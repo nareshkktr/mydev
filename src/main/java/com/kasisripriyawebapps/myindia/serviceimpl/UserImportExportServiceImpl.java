@@ -1,9 +1,7 @@
 package com.kasisripriyawebapps.myindia.serviceimpl;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +44,7 @@ import com.kasisripriyawebapps.myindia.entity.User;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 import com.kasisripriyawebapps.myindia.exception.RecordNotFoundException;
 import com.kasisripriyawebapps.myindia.service.UserImportExportService;
+import com.kasisripriyawebapps.myindia.util.AmazonS3Util;
 import com.kasisripriyawebapps.myindia.util.CommonUtil;
 
 @Service
@@ -63,13 +62,13 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 
 	static {
 		System.setProperty("sun.security.ssl.allowUnsafeRenegotiation", "true");
-
 	}
 
 	@Override
 	@Transactional
 	public void exportStateElectroralRolleUrls(ElectroralRollesURL electroralRollesURL)
 			throws InternalServerException, RecordNotFoundException {
+		
 		driver = new ChromeDriver();
 		driver.get(env.getProperty("india-electroral-rolles.url"));
 		WebElement pageMainTable = driver.findElement(By.id("Table_01"));
@@ -204,27 +203,29 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 		driver = new ChromeDriver();
 		driver.get(stateUrl);
 
-		String outPutFilePath = "";
-		String directoryPath = env.getProperty("project.electroral.url.data-files.upload-path") + "/"
-				+ electroralRollesURL.getStateName() + "/" + electroralRollesURL.getDistrictName() + "/";
+//		String outPutFilePath = "";
+//		String directoryPath = env.getProperty("project.electroral.url.data-files.upload-path") + "/"
+//				+ electroralRollesURL.getStateName() + "/" + electroralRollesURL.getDistrictName() + "/";
+//		String fileName = env.getProperty("project.electroral.url.data-file-name");
+//
+//		outPutFilePath = directoryPath + fileName;
+//		CommonUtil.createExcelFile(directoryPath, fileName);
+		
+		String bucketName = env.getProperty("amazon.s3.users.bucket.name");
 		String fileName = env.getProperty("project.electroral.url.data-file-name");
+		String uploadedFolderName = env.getProperty("amazon.s3.users.uploaded.folder.name");
+		
+		String globalFolderName = env.getProperty("amazon.s3.users.global.folder.name");
+		String countryFolderName = env.getProperty("amazon.s3.users.india.folder.name");
 
-		outPutFilePath = directoryPath + fileName;
-		CommonUtil.createExcelFile(directoryPath, fileName);
-
-		Workbook exportWorkBook = CommonUtil.getWorkBookFromFile(outPutFilePath);
-		if (exportWorkBook.getNumberOfSheets() == 1 && exportWorkBook.getSheetAt(0) != null) {
-			exportWorkBook.removeSheetAt(0);
-		}
-		Sheet exportWorkBookSheet = exportWorkBook
-				.createSheet(env.getProperty("project.electroral.url.data-file-name"));
-
-		addHeaderRow(exportWorkBookSheet);
 		TreeMap<Integer, Object[]> electroralURLDaraMp = new TreeMap<Integer, Object[]>();
 
 		Select districtDropDown = new Select(driver.findElement(By.id("ddlDist")));
 		List<WebElement> districtOptions = districtDropDown.getOptions();
+		
+		//Iterate districts
 		for (int i = 0; i < districtOptions.size(); i++) {
+			
 			Select refreshedDistrictDropDown = new Select(driver.findElement(By.id("ddlDist")));
 			WebElement districtOption = refreshedDistrictDropDown.getOptions().get(i);
 			if (i == 0) {
@@ -246,19 +247,25 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 			Select mlaConstituencyDropDown = new Select(driver.findElement(By.id("ddlAC")));
 			List<WebElement> mlaConstituencyOptions = mlaConstituencyDropDown.getOptions();
 			for (int j = 0; j < mlaConstituencyOptions.size(); j++) {
+				
+				electroralURLDaraMp = new TreeMap<Integer, Object[]>();
+				
+				Workbook exportWorkBook = CommonUtil.createWorkBook(fileName);
+				if (exportWorkBook.getNumberOfSheets() == 1 && exportWorkBook.getSheetAt(0) != null) {
+					exportWorkBook.removeSheetAt(0);
+				}
+				Sheet exportWorkBookSheet = exportWorkBook
+						.createSheet(ServiceConstants.USER_EXCEL_BY_CONSTITUENCT_SHEET_NAME);
+
+				addHeaderRow(exportWorkBookSheet);
+				
 				Select refreshedMlaConstituencyDropDown = new Select(driver.findElement(By.id("ddlAC")));
 				WebElement mlaConstituencyOption = refreshedMlaConstituencyDropDown.getOptions().get(j);
 				if (j == 0) {
 					continue;
 				}
 				mlaConstituencyOption.click();
-				WebElement getPollingStationButton = driver.findElement(By.id("btnGetPollingStations"));
-				getPollingStationButton.click();
-				try {
-					Thread.sleep(3000);
-				} catch (InterruptedException e) {
-					throw new InternalServerException(e.getMessage());
-				}
+				
 				String mlaConstituencyNoName = new Select(driver.findElement(By.id("ddlAC"))).getOptions().get(j)
 						.getText();
 				String mlaConstituencyName = mlaConstituencyNoName.split("-")[1];
@@ -269,13 +276,32 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 						continue;
 					}
 				}
+				
+				WebElement getPollingStationButton = driver.findElement(By.id("btnGetPollingStations"));
+				getPollingStationButton.click();
+				try {
+					Thread.sleep(3000);
+				} catch (InterruptedException e) {
+					throw new InternalServerException(e.getMessage());
+				}
 				getPollingStationElectorsUrls(electroralRollesURL, districtName, mlaConstituencyName, mlaConstituencyNo,
 						electroralURLDaraMp);
+				
+				writeDataIntoSheet(electroralURLDaraMp, exportWorkBookSheet);
+//				writeExcelDataIntoFile(outPutFilePath, exportWorkBook);
+				
+				String eachUploadedFolderName = uploadedFolderName + ApplicationConstants.SUFFIX + globalFolderName + ApplicationConstants.SUFFIX
+						+ countryFolderName + ApplicationConstants.SUFFIX + electroralRollesURL.getStateName() + ApplicationConstants.SUFFIX +electroralRollesURL.getDistrictName()
+						+ApplicationConstants.SUFFIX + mlaConstituencyName ;
+				
+				AmazonS3Util.writeExcelDataIntoAmazonS3File(fileName, exportWorkBook, bucketName,
+						eachUploadedFolderName);
+				
+				
 			}
 		}
 
-		writeDataIntoSheet(electroralURLDaraMp, exportWorkBookSheet);
-		writeExcelDataIntoFile(outPutFilePath, exportWorkBook);
+		
 
 		driver.close();
 		driver.quit();
@@ -953,35 +979,62 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 		List<ElectroralRollesURL> existingElectroralRollesUrlList = userImportExportDao
 				.getElectroralRollesURLData(electroralRollesURL);
 
-		String directoryPath = env.getProperty("project.electroral.url.data-files.upload-path");
+		String hostName = env.getProperty("amazon.s3.host.name");
+		String bucketName = env.getProperty("amazon.s3.users.bucket.name");
+		String fileName = env.getProperty("project.electroral.url.data-file-name");
+		String uploadedFolderName = env.getProperty("amazon.s3.users.uploaded.folder.name");
+		
+		String globalFolderName = env.getProperty("amazon.s3.users.global.folder.name");
+		String countryFolderName = env.getProperty("amazon.s3.users.india.folder.name");
 
-		File file = new File(directoryPath);
-		String[] directories = file.list(new FilenameFilter() {
-			@Override
-			public boolean accept(File current, String name) {
-				return new File(current, name).isDirectory();
-			}
-		});
-
-		if (directories != null && directories.length > 0) {
-			for (String eachDirectoryName : directories) {
-
-				String eachStateDirectoryName = directoryPath + "/" + eachDirectoryName;
-				File eachStateDirectoryFile = new File(eachStateDirectoryName);
-				String[] eachStateDirectories = eachStateDirectoryFile.list(new FilenameFilter() {
-					@Override
-					public boolean accept(File current, String name) {
-						return new File(current, name).isDirectory();
+		uploadedFolderName = uploadedFolderName + ApplicationConstants.SUFFIX + globalFolderName + ApplicationConstants.SUFFIX + countryFolderName;
+		
+		List<String> stateDirectories = AmazonS3Util.getListOfObjects(bucketName, uploadedFolderName);
+		
+		if (stateDirectories != null && stateDirectories.size() > 0) {
+			for (String eachStateDirectoryPath : stateDirectories) {
+				
+				String[] pathSplit = eachStateDirectoryPath.split("/");
+				String name = pathSplit[pathSplit.length-1];
+				
+				if (electroralRollesURL.getStateName() != null && !electroralRollesURL.getStateName().isEmpty()) {
+					if (!name.equalsIgnoreCase(electroralRollesURL.getStateName())) {
+						continue;
 					}
-				});
-				if (eachStateDirectories != null && eachStateDirectories.length > 0) {
-					for (String eachStateDistrictDirectory : eachStateDirectories) {
-						String filePath = eachStateDirectoryName + "/" + eachStateDistrictDirectory + "/"
-								+ env.getProperty("project.electroral.url.data-file-name");
-
-						System.out.println(filePath);
-						File f = new File(filePath);
-						if (f.exists()) {
+				}
+				
+				List<String> districtDirectories = AmazonS3Util.getListOfObjects(bucketName, eachStateDirectoryPath);
+				
+				
+				if (districtDirectories != null && districtDirectories.size() > 0) {
+					for (String eachStateDistrictDirectory : districtDirectories) {
+						
+						pathSplit = eachStateDistrictDirectory.split("/");
+						name = pathSplit[pathSplit.length-1];
+						
+						if (electroralRollesURL.getDistrictName() != null && !electroralRollesURL.getDistrictName().isEmpty()) {
+							if (!name.equalsIgnoreCase(electroralRollesURL.getDistrictName())) {
+								continue;
+							}
+						}
+						
+						List<String> acDirectories = AmazonS3Util.getListOfObjects(bucketName, eachStateDistrictDirectory);
+						
+						for (String eachStateDistrictAcDirectory : acDirectories) {
+							
+							pathSplit = eachStateDistrictAcDirectory.split("/");
+							name = pathSplit[pathSplit.length-1];
+							
+							if (electroralRollesURL.getMlaConstituencyName() != null && !electroralRollesURL.getMlaConstituencyName().isEmpty()) {
+								if (!name.equalsIgnoreCase(electroralRollesURL.getMlaConstituencyName())) {
+									continue;
+								}
+							}
+						
+							String filePath = hostName + bucketName + ApplicationConstants.SUFFIX + eachStateDistrictAcDirectory
+									+fileName;
+	
+							System.out.println(filePath);
 							Workbook myWorkBook = CommonUtil.getWorkBookFromFile(filePath);
 
 							Sheet sheet = myWorkBook.getSheetAt(0);
@@ -1019,8 +1072,8 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 									pdfElectroralRollesUrlList.add(electroralRolleURL);
 								}
 							}
+	
 						}
-
 					}
 				}
 			}

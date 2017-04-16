@@ -16,11 +16,7 @@ public class UploadLocationFilesToAmazonS3 {
 	private static String ruralFolderName = "Rural";
 
 	static {
-		System.setProperty("http.proxyHost", "proxy.cat.com");
-		System.setProperty("http.proxyPort", "80");
-
-		System.setProperty("https.proxyHost", "proxy.cat.com");
-		System.setProperty("https.proxyPort", "80");
+		
 	}
 
 	private static void uploadCountriesToAmazonS3() {

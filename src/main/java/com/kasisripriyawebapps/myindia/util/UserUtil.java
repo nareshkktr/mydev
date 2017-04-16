@@ -357,8 +357,12 @@ public class UserUtil {
 
 	public static void main(String args[]) {
 		ElectroralRollesURL eachURLData = new ElectroralRollesURL();
-		eachURLData.setPdfUrl(
-				"http://ceoaperms.ap.gov.in/Electoral_Rolls/PDFGeneration.aspx?urlPath=D:\\SSR_2017_Final_Roles\\ANDHRA\\AC_154\\English\\S01A154P080.PDF");
+//		eachURLData.setPdfUrl(
+//				"http://ceoaperms.ap.gov.in/Electoral_Rolls/PDFGeneration.aspx?urlPath=D:\\SSR_2017_Final_Roles\\ANDHRA\\AC_154\\English\\S01A154P080.PDF");
+//		eachURLData.setPdfUrl(
+//				"http://ceoaperms.ap.gov.in/Electoral_Rolls/PDFGeneration.aspx?urlPath=D:\\SSR_2017_Final_Roles\\ANDHRA\\AC_148\\English\\S01A148P001.PDF");
+		eachURLData.setPdfUrl("http://ceoaperms.ap.gov.in/TS_Rolls/PDFGeneration.aspx?urlPath=D:\\SSR2016_Final\\Telangana\\AC_007\\English\\S29A007P002.PDF");
+		//http://ceoaperms.ap.gov.in/Electoral_Rolls/PDFGeneration.aspx?urlPath=D:\\SSR_2017_Final_Roles\\ANDHRA\\AC_148\\English\\S01A148P001.PDF
 		List<User> eachPageUsers = new ArrayList<User>();
 		eachPageUsers = parseElectroralData(eachURLData);
 
