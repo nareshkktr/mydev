@@ -159,6 +159,29 @@ public class ServiceConstants {
 	public static final String POLING_STATION_NAME = "Poling Station Name";
 
 	public static final String POLING_STATION_ADDRESS = "Poling Station Address";
-	
+
 	public static final String USER_EXCEL_BY_CONSTITUENCT_SHEET_NAME = "Users";
+
+	public static final String AGE = "Age";
+	public static final String ASSEMBLY_CONSTITUENCY_NAME = "Assembly Constituency Name";
+	public static final String ASSEMBLY_CONSTITUENCY_NO = "Assembly Constituency No";
+	public static final String DISTRICT = "District";
+	public static final String ELECTOR_NAME = "Elector Name";
+	public static final String GENDER = "Gender";
+	public static final String HOUSE_NO = "House No";
+	public static final String ID_CARD_NO = "ID Card No";
+	public static final String REFERENCE_NAME = "Reference Name";
+	public static final String REFERENCE_TYPE = "Reference Type";
+	public static final String STATE = "State";
+	public static final String POLLING_STATION_NAME = "Polling Station Name";
+	public static final String POLLING_STATION_ADDRESS = "Polling Station Address";
+	public static final String PART_NO = "Part No";
+	public static final String MAIN_TOWN = "Main Town";
+	public static final String POLICE_STATION = "Police Station";
+	public static final String MANDAL = "Mandal";
+	public static final String REVENUE_DIVISION = "Revenue Division";
+	public static final String PIN_CODE = "Pin Code";
+	public static final String PARLIAMENT_CONSTITUENCY_NO = "Parliament Constituency No";
+	public static final String PARLIAMENT_CONSTITUENCY_NAME = "Parliament Constituency Name";
+
 }
