@@ -22,6 +22,12 @@ import com.kasisripriyawebapps.myindia.entity.User;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 
 public class UserUtil {
+	static {
+		System.setProperty("http.proxyHost", "proxy.cat.com");
+		System.setProperty("http.proxyPort", "80");
+		System.setProperty("https.proxyHost", "proxy.cat.com");
+		System.setProperty("https.proxyPort", "80");
+	}
 
 	private static List<User> parseElectroralData(ElectroralRollesURL eachURLData) {
 
@@ -40,7 +46,7 @@ public class UserUtil {
 
 				ElectroralRollPDFHeaderData pdfHeaderData = getPDFHeaderData(eachURLData.getPdfUrl());
 
-				for (int i = 1; i <= noOfPages; i++) {
+				for (int i = 1; i <= 0; i++) {
 					if (i < 3) {
 						continue;
 					}
@@ -115,13 +121,11 @@ public class UserUtil {
 			String[] lines = tableContent.split("\n");
 			int noOfLines = lines.length;
 			if (lines != null && noOfLines != 0) {
-				
-				System.out.println(tableContent);
-				
-				String mainTown = "";
-				String policeStation = "";
-				String mandal = "";
-				String revenueDivision = "";
+
+				String mainTown = lines[0].trim();
+				String policeStation = lines[2].trim();
+				String mandal = lines[4].trim();
+				String revenueDivision = lines[6];
 				String pinCode = "";// lines[10];
 				
 				
@@ -248,91 +252,30 @@ public class UserUtil {
 					Map<String, String> sexMap = getSex(lines, processingLineNo);
 					sex = sexMap.get("sexValue");
 					processingLineNo = Integer.parseInt(sexMap.get("currentLineNo"));
+
 					Map<String, String> ageMap = getAge(lines, processingLineNo);
 					age = ageMap.get("ageValue");
 					processingLineNo = Integer.parseInt(ageMap.get("currentLineNo"));
+
 					Map<String, String> houseNoMap = getHouseNo(lines, processingLineNo);
 					houseNo = houseNoMap.get("houseNoValue");
 					processingLineNo = Integer.parseInt(houseNoMap.get("currentLineNo"));
 
+					Map<String, String> referenceTypeMap = getReferenceType(lines, processingLineNo);
+					referenceType = referenceTypeMap.get("referenceTypeValue");
+					processingLineNo = Integer.parseInt(referenceTypeMap.get("currentLineNo"));
 
-					/*
-					 * String sexAgeLine = lines[processingLineNo].trim();
-					 * String[] sexAgeLineSpaces = sexAgeLine.split(" "); if
-					 * (sexAgeLineSpaces.length > 3) { age =
-					 * sexAgeLineSpaces[1]; sex = sexAgeLineSpaces[3]; } else if
-					 * (sexAgeLineSpaces.length == 3) { age =
-					 * sexAgeLineSpaces[1]; processingLineNo--; sex =
-					 * lines[processingLineNo].trim(); } else if
-					 * (sexAgeLineSpaces.length == 2) { sex =
-					 * lines[processingLineNo].trim(); } else {
-					 * processingLineNo--; sexAgeLine =
-					 * lines[processingLineNo].trim(); sexAgeLineSpaces =
-					 * sexAgeLine.split(" "); if (sexAgeLineSpaces.length > 1) {
-					 * age = sexAgeLineSpaces[0].trim(); sex =
-					 * sexAgeLineSpaces[1].trim(); } }
-					 * 
-					 * System.out.println(">>>>>>>>>>>" + sex);
-					 * 
-					 * processingLineNo--; processingLineNo--; houseNo =
-					 * lines[processingLineNo].trim(); processingLineNo--;
-					 * 
-					 * if (lines[processingLineNo].trim().contains(":")) {
-					 * String referenceTypeWithS =
-					 * lines[processingLineNo].trim(); referenceType =
-					 * referenceTypeWithS.split(" ")[0].split("'s")[0];
-					 * processingLineNo--; referenceName =
-					 * lines[processingLineNo].trim(); processingLineNo--; if
-					 * (lines[processingLineNo].trim().contains(":")) {
-					 * processingLineNo--; electorName =
-					 * lines[processingLineNo].trim();
-					 * 
-					 * } else { processingLineNo--; processingLineNo--;
-					 * electorName = lines[processingLineNo].trim() + " " +
-					 * lines[processingLineNo + 2].trim();
-					 * 
-					 * }
-					 * 
-					 * } else { processingLineNo--; String referenceTypeWithS =
-					 * lines[processingLineNo].trim(); referenceType =
-					 * referenceTypeWithS.split(" ")[0].split("'s")[0];
-					 * processingLineNo--; referenceName =
-					 * lines[processingLineNo].trim() + " " +
-					 * lines[processingLineNo + 2].trim(); processingLineNo--;
-					 * if (lines[processingLineNo].trim().contains(":")) {
-					 * processingLineNo--; electorName =
-					 * lines[processingLineNo].trim();
-					 * 
-					 * } else { processingLineNo--; processingLineNo--;
-					 * electorName = lines[processingLineNo].trim() + " " +
-					 * lines[processingLineNo + 2].trim();
-					 * 
-					 * } } processingLineNo--;
-					 * 
-					 * String voterIdLine = lines[processingLineNo].trim();
-					 * String[] voterIdLineSpaces = voterIdLine.split(" "); if
-					 * (voterIdLineSpaces.length > 1) { voterId =
-					 * voterIdLineSpaces[1].trim(); } else { voterId =
-					 * voterIdLine; }
-					 * 
-					 * if (electorName != null && !electorName.isEmpty()) {
-					 * String[] electorNamesArray = electorName.split(" "); if
-					 * (electorNamesArray != null) { electorName = ""; for (int
-					 * m = 0; m < electorNamesArray.length; m++) { String
-					 * eachSpaceElectorName = electorNamesArray[m]; if
-					 * (!eachSpaceElectorName.isEmpty()) { electorName +=
-					 * eachSpaceElectorName.trim() + " "; } } } electorName =
-					 * electorName.toUpperCase().trim(); }
-					 * 
-					 * if (referenceName != null && !referenceName.isEmpty()) {
-					 * String[] referenceNamesArray = referenceName.split(" ");
-					 * if (referenceNamesArray != null) { referenceName = "";
-					 * for (int m = 0; m < referenceNamesArray.length; m++) {
-					 * String eachSpaceReferenceName = referenceNamesArray[m];
-					 * if (!eachSpaceReferenceName.isEmpty()) { referenceName +=
-					 * eachSpaceReferenceName.trim() + " "; } } } referenceName
-					 * = referenceName.toUpperCase().trim(); }
-					 */
+					Map<String, String> referenceNameMap = getReferenceName(lines, processingLineNo);
+					referenceName = referenceNameMap.get("referenceNameValue");
+					processingLineNo = Integer.parseInt(referenceNameMap.get("currentLineNo"));
+
+					Map<String, String> electorNameMap = getElectorName(lines, processingLineNo);
+					electorName = electorNameMap.get("electorNameValue");
+					processingLineNo = Integer.parseInt(electorNameMap.get("currentLineNo"));
+
+					Map<String, String> idCardNoMap = getVoterID(lines, processingLineNo);
+					voterId = idCardNoMap.get("voterIdValue");
+					processingLineNo = Integer.parseInt(idCardNoMap.get("currentLineNo"));
 
 					User user = new User();
 					user.setAge(Integer.parseInt(age.trim()));
@@ -359,15 +302,16 @@ public class UserUtil {
 					user.setParliamentaryConstituencyNo(pdfHeaderData.getMpConstituencyNo());
 					user.setParliamentaryConstituencyName(pdfHeaderData.getMpConstituencyName());
 					eachPageUsers.add(user);
-					
-					//System.out.println(user.getIdCardNo());
-					//System.out.println(user.getElectorName());
-					//System.out.println(user.getReferenceName());
-					//System.out.println(user.getReferenceType());
-//					System.out.println(user.getAge());
-//					System.out.println(user.getGender());
-					//System.out.println(user.getHouseNo());
-					//System.out.println("---------------------------");
+
+					// System.out.println(user.getIdCardNo());
+					// System.out.println(user.getElectorName());
+					// System.out.println(user.getReferenceName());
+					// System.out.println(user.getReferenceType());
+					// System.out.println(user.getAge());
+					// System.out.println(user.getGender());
+					// System.out.println(user.getHouseNo());
+					// System.out.println("---------------------------");
+
 				}
 			}
 
@@ -378,10 +322,27 @@ public class UserUtil {
 		return isProcessed;
 	}
 
+	private static Map<String, String> getVoterID(String[] boxContent, int currentLineNo) {
+		Map<String, String> voterIdMap = new HashMap<String, String>();
+		String votreIdLine = boxContent[currentLineNo];
+		String voterIdValue = "";
+		if (votreIdLine != null && !votreIdLine.isEmpty()) {
+			String votreIdLineSpaces[] = votreIdLine.split(" ");
+			if (votreIdLineSpaces.length == 3) {
+				voterIdValue = votreIdLineSpaces[2];
+			} else {
+				voterIdValue = votreIdLineSpaces[0];
+			}
+		}
+		voterIdMap.put("voterIdValue", voterIdValue.trim());
+		voterIdMap.put("currentLineNo", "" + currentLineNo);
+
+		return voterIdMap;
+	}
+
 	private static Map<String, String> getSex(String[] boxContent, int currentLineNo) {
 		Map<String, String> sexMap = new HashMap<String, String>();
 		String sexAgeLine = boxContent[currentLineNo];
-
 		String sexValue = "";
 		if (sexAgeLine.equalsIgnoreCase(ServiceConstants.DELETE_USER)) {
 			currentLineNo--;
@@ -405,31 +366,112 @@ public class UserUtil {
 		return sexMap;
 	}
 
-	private static Map<String, String> getHouseNo(String[] boxContent, int currentLineNo) {
+	private static Map<String, String> getReferenceType(String[] boxContent, int currentLineNo) {
 		Map<String, String> houseNoMap = new HashMap<String, String>();
-		String sexAgeLine = boxContent[currentLineNo];
-		String[] sexAgeLineSpaces = sexAgeLine.split(" ");
-		String ageValue = "";
-
-		if (sexAgeLineSpaces.length == 2) {
-			ageValue = sexAgeLineSpaces[1];
-			currentLineNo--;
-
-		} else if (sexAgeLineSpaces.length == 1) {
-			currentLineNo--;
-			ageValue = boxContent[currentLineNo];
-			currentLineNo--;
-		} else if (sexAgeLineSpaces.length == 4) {
-			ageValue = sexAgeLineSpaces[1];
-			currentLineNo--;
+		int referenceTypeLineNo = currentLineNo;
+		String referenceTypeLine = boxContent[referenceTypeLineNo];
+		String referenceTypeValue = "";
+		if (referenceTypeLine != null && !referenceTypeLine.isEmpty()) {
+			while (!referenceTypeLine.contains(":")) {
+				referenceTypeLineNo--;
+				referenceTypeLine = boxContent[referenceTypeLineNo];
+			}
+			referenceTypeValue = referenceTypeLine.split(":")[0];
 		}
-		houseNoMap.put("houseNoValue", ageValue);
-		
+		referenceTypeValue = referenceTypeValue.split(" ")[0].split("'s")[0];
+		houseNoMap.put("referenceTypeValue", referenceTypeValue.trim());
 		houseNoMap.put("currentLineNo", "" + currentLineNo);
 
 		return houseNoMap;
 	}
-	
+
+	private static Map<String, String> getElectorName(String[] boxContent, int currentLineNo) {
+		Map<String, String> houseNoMap = new HashMap<String, String>();
+		String electorNameLine = boxContent[currentLineNo];
+		String electorNameValue = "";
+
+		if (electorNameLine != null && !electorNameLine.isEmpty()) {
+			while (!electorNameLine.contains(":")) {
+				String electorMiddleName = boxContent[currentLineNo];
+				currentLineNo--;
+				electorNameValue = electorMiddleName.trim() + " " + electorNameValue.trim();
+				electorNameLine = boxContent[currentLineNo];
+			}
+
+			if (electorNameLine.split(":").length == 2) {
+				String electorMiddleName = electorNameLine.split(":")[1].trim();
+				electorNameValue = electorMiddleName.trim() + " " + electorNameValue.trim();
+			} else if (electorNameLine.split(":").length == 1 && electorNameValue.isEmpty()) {
+				currentLineNo--;
+				String electorMiddleName = boxContent[currentLineNo];
+				electorNameValue = electorMiddleName.trim() + " " + electorNameValue.trim();
+			}
+		}
+
+		currentLineNo--;
+
+		houseNoMap.put("electorNameValue", electorNameValue.trim());
+		houseNoMap.put("currentLineNo", "" + currentLineNo);
+
+		return houseNoMap;
+	}
+
+	private static Map<String, String> getReferenceName(String[] boxContent, int currentLineNo) {
+		Map<String, String> houseNoMap = new HashMap<String, String>();
+		String referenceNameLine = boxContent[currentLineNo];
+		String referenceNameValue = "";
+
+		if (referenceNameLine != null && !referenceNameLine.isEmpty()) {
+			while (!referenceNameLine.contains(":")) {
+				String referenceMiddleName = boxContent[currentLineNo];
+				currentLineNo--;
+				referenceNameValue = referenceMiddleName.trim() + " " + referenceNameValue.trim();
+				referenceNameLine = boxContent[currentLineNo];
+			}
+
+			if (referenceNameLine.split(":").length == 2) {
+				String referenceMiddleName = referenceNameLine.split(":")[1].trim();
+				referenceNameValue = referenceMiddleName.trim() + " " + referenceNameValue.trim();
+
+			}
+		}
+		currentLineNo--;
+		houseNoMap.put("referenceNameValue", referenceNameValue.trim());
+		houseNoMap.put("currentLineNo", "" + currentLineNo);
+
+		return houseNoMap;
+	}
+
+	private static Map<String, String> getHouseNo(String[] boxContent, int currentLineNo) {
+		Map<String, String> houseNoMap = new HashMap<String, String>();
+		String houseNoLine = boxContent[currentLineNo];
+
+		String houseNoValue = "";
+
+		if (houseNoLine != null && !houseNoLine.isEmpty()) {
+			if (houseNoLine.contains(":")) {
+				String[] houseNoLineSpaces = houseNoLine.split(":");
+				if (houseNoLineSpaces.length == 1) {
+					currentLineNo--;
+					houseNoValue = boxContent[currentLineNo];
+					currentLineNo--;
+				} else if (houseNoLineSpaces.length == 2) {
+					houseNoValue = houseNoLineSpaces[1];
+					currentLineNo--;
+				}
+			} else {
+				currentLineNo--;
+				houseNoValue = boxContent[currentLineNo];
+				currentLineNo--;
+			}
+		}
+
+		houseNoMap.put("houseNoValue", houseNoValue.trim());
+		houseNoMap.put("currentLineNo", "" + currentLineNo);
+
+		return houseNoMap;
+	}
+
 	private static Map<String, String> getAge(String[] boxContent, int currentLineNo) {
 		Map<String, String> ageMap = new HashMap<String, String>();
 		String sexAgeLine = boxContent[currentLineNo];
