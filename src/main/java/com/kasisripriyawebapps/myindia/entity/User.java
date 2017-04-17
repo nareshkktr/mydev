@@ -336,4 +336,30 @@ public class User implements Serializable {
 		this.userInfo = userInfo;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((idCardNo == null) ? 0 : idCardNo.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		if (idCardNo == null) {
+			if (other.idCardNo != null)
+				return false;
+		} else if (!idCardNo.equals(other.idCardNo))
+			return false;
+		return true;
+	}
+
+	
 }

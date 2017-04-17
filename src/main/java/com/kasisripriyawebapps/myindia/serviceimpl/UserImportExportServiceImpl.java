@@ -692,25 +692,153 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 
 		List<ElectroralRollesURL> electroralRollesUrlList = userImportExportDao
 				.getElectroralRollesURLData(electroralRollesURL);
+		
+		
+		List<User> pdfElectroralRollesList = new ArrayList<User>();
+		List<User> newElectroralRollesList = new ArrayList<User>();
+		
+		//Load existing user data
+		List<User> existingElectroralRollesList = userDao
+				.getElectroralRollesData(electroralRollesURL);
 
-		List<User> users = new ArrayList<User>();
 		if (electroralRollesUrlList != null) {
 
 			for (ElectroralRollesURL eachURLData : electroralRollesUrlList) {
-				List<User> eachPageUsers =extractDataFromUsersFile(eachURLData);
-				System.out.println("i>>" + eachURLData.getPdfUrl() + ">>" + eachPageUsers.size());
-				users.addAll(eachPageUsers);
+				extractDataFromUsersFile(eachURLData,pdfElectroralRollesList,newElectroralRollesList,existingElectroralRollesList);
 			}
 		}
-		if (users != null && !users.isEmpty()) {
-			userDao.saveUsers(users);
-		}
+		
+//		if (users != null && !users.isEmpty()) {
+////			userDao.saveUsers(users);
+//		}
+		
+		saveElectroralRollesData(electroralRollesURL, pdfElectroralRollesList,
+				existingElectroralRollesList, newElectroralRollesList);
+		
 
 	}
 
-	private List<User> extractDataFromUsersFile(ElectroralRollesURL eachURLData) {
-		// TODO Auto-generated method stub
-		return null;
+	private void saveElectroralRollesData(ElectroralRollesURL electroralRollesURL, List<User> pdfElectroralRollesList,
+			List<User> existingElectroralRollesList, List<User> newElectroralRollesList) throws InternalServerException {
+		
+		System.out.println(newElectroralRollesList.size());
+		userDao.saveUsers(newElectroralRollesList);
+		newElectroralRollesList.clear();
+		List<User> updatedElectroralRollesList = findUpdatedElectroralRollesData(
+				existingElectroralRollesList, pdfElectroralRollesList);
+		userDao.updateUsers(updatedElectroralRollesList);
+		existingElectroralRollesList.removeAll(pdfElectroralRollesList);
+		
+		// Identify list of users and delete those.
+		userDao.deleteUsers(existingElectroralRollesList);
+		
+	}
+
+	private List<User> findUpdatedElectroralRollesData(List<User> existingElectroralRollesList,
+			List<User> pdfElectroralRollesList) throws InternalServerException{
+		
+		List<User> updatedElectroralRollesList = new ArrayList<User>();
+		Map<String, List<User>> existingElectroralRollesMap = existingElectroralRollesList.stream()
+				.collect(Collectors.groupingBy(userObject -> userObject.getIdCardNo()));
+		
+		if (pdfElectroralRollesList != null && !pdfElectroralRollesList.isEmpty()
+				&& existingElectroralRollesList != null && !existingElectroralRollesList.isEmpty()) {
+			for (User eachPDFElectroralRolleData : pdfElectroralRollesList) {
+				if (existingElectroralRollesList.contains(eachPDFElectroralRolleData)
+						&& !updatedElectroralRollesList.contains(eachPDFElectroralRolleData)) {
+					eachPDFElectroralRolleData.setGuid(existingElectroralRollesMap
+							.get(eachPDFElectroralRolleData.getIdCardNo() )
+							.get(0).getGuid());
+					updatedElectroralRollesList.add(eachPDFElectroralRolleData);
+				}
+			}
+		}
+		return updatedElectroralRollesList;
+	}
+
+	private void extractDataFromUsersFile(ElectroralRollesURL eachURLData, List<User> pdfElectroralRollesList,List<User> newElectroralRollesList,List<User> existingElectroralRollesList) throws InternalServerException {
+
+		String hostName = env.getProperty("amazon.s3.host.name");
+		String bucketName = env.getProperty("amazon.s3.users.bucket.name");
+		String uploadedFolderName = env.getProperty("amazon.s3.users.uploaded.folder.name");
+
+		String globalFolderName = env.getProperty("amazon.s3.users.global.folder.name");
+		String countryFolderName = env.getProperty("amazon.s3.users.india.folder.name");
+		
+		String votersFolderName = env.getProperty("amazon.s3.users.voters.folder.name");
+
+		String filePath = hostName + bucketName + ApplicationConstants.SUFFIX + uploadedFolderName +ApplicationConstants.SUFFIX
+							+ globalFolderName + ApplicationConstants.SUFFIX + countryFolderName + ApplicationConstants.SUFFIX + eachURLData.getStateName()
+							+ ApplicationConstants.SUFFIX + eachURLData.getDistrictName() + ApplicationConstants.SUFFIX + eachURLData.getMlaConstituencyName() +
+							ApplicationConstants.SUFFIX + votersFolderName  + ApplicationConstants.SUFFIX + eachURLData.getPollingStationName()+".xls";
+
+		System.out.println(filePath);
+		Workbook myWorkBook = CommonUtil.getWorkBookFromFile(filePath);
+	
+		Sheet sheet = myWorkBook.getSheetAt(0);
+		int i = 0;
+		for (Row eachRow : sheet) {
+			if (i < 1) {
+				i++;
+				continue;
+			}
+			
+			Integer age = (int) eachRow.getCell(0).getNumericCellValue();
+			String acName = eachRow.getCell(1).getStringCellValue();
+			Integer acNo = (int) eachRow.getCell(2).getNumericCellValue();
+			String districtName = eachRow.getCell(3).getStringCellValue();
+			String electorName = eachRow.getCell(4).getStringCellValue();
+			String sex = eachRow.getCell(5).getStringCellValue();
+			String houseNo = eachRow.getCell(6).getStringCellValue();
+			String voterId = eachRow.getCell(7).getStringCellValue();
+			String referenceName = eachRow.getCell(8).getStringCellValue();
+			String referenceType = eachRow.getCell(9).getStringCellValue();
+			String stateName = eachRow.getCell(10).getStringCellValue();
+			String pollingStationName = eachRow.getCell(11).getStringCellValue();
+			String pollingStationAddress = eachRow.getCell(12).getStringCellValue();
+			Integer partNo = (int)eachRow.getCell(13).getNumericCellValue();
+			String mainTown = eachRow.getCell(14).getStringCellValue();
+			String policeStation = eachRow.getCell(15).getStringCellValue();
+			String mandal = eachRow.getCell(16).getStringCellValue();
+			String revenueDivision = eachRow.getCell(17).getStringCellValue();
+			String pinCode = eachRow.getCell(18).getStringCellValue();
+			Integer pcNo = (int) eachRow.getCell(19).getNumericCellValue();
+			String pcName = eachRow.getCell(20).getStringCellValue();
+	
+			User user = new User();
+			user.setAge(age);
+			user.setAssemblyConstituencyName(acName);
+			user.setAssemblyConstituencyNo(acNo);
+			user.setCreatedTimeStamp(CommonUtil.getCurrentGMTTimestamp());
+			user.setDistrict(districtName);
+			user.setElectorName(electorName);
+			user.setGender(sex);
+			user.setHouseNo(houseNo);
+			user.setIdCardNo(voterId);
+			user.setIdCardType(ApplicationConstants.IDENTITY_CARD_TYPE_VOTER_ID);
+			user.setReferenceName(referenceName);
+			user.setReferenceType(referenceType);
+			user.setState(stateName);
+			user.setPollingStation(pollingStationName);
+			user.setPollingStationAddress(pollingStationAddress);
+			user.setPartNo(partNo);
+			user.setMainTwon(mainTown);
+			user.setPoliceStation(policeStation);
+			user.setMandal(mandal);
+			user.setRevenueDivision(revenueDivision);
+			user.setPincode(pinCode);
+			user.setParliamentaryConstituencyNo(pcNo);
+			user.setParliamentaryConstituencyName(pcName);
+			
+	
+			if (!newElectroralRollesList.contains(user)
+					&& !existingElectroralRollesList.contains(user)) {
+				newElectroralRollesList.add(user);
+			}
+			if (!pdfElectroralRollesList.contains(user)) {
+				pdfElectroralRollesList.add(user);
+			}
+		}
 	}
 
 	private static List<User> parseElectroralData(ElectroralRollesURL eachURLData) {

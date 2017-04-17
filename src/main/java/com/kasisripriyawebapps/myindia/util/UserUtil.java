@@ -115,12 +115,81 @@ public class UserUtil {
 			String[] lines = tableContent.split("\n");
 			int noOfLines = lines.length;
 			if (lines != null && noOfLines != 0) {
-
-				String mainTown = lines[0].trim();
-				String policeStation = lines[2].trim();
-				String mandal = lines[4].trim();
-				String revenueDivision = lines[6];
+				
+				System.out.println(tableContent);
+				
+				String mainTown = "";
+				String policeStation = "";
+				String mandal = "";
+				String revenueDivision = "";
 				String pinCode = "";// lines[10];
+				
+				
+				for(int i=0;i<lines.length;i++){
+					if(lines[i].contains("Main Town")){
+						
+						if(lines[i].contains(":")){
+							String[] linesSplit = lines[i].split(":");
+							mainTown = linesSplit[1].trim();
+						}else{
+							String[] linesSplit = lines[i].split("Town");
+							mainTown = linesSplit[1].trim();
+						}
+					}
+					
+					if(lines[i].contains("Police Station")){
+						
+						if(lines[i].contains(":")){
+							String[] linesSplit = lines[i].split(":");
+							policeStation = linesSplit[1].trim();
+						}else{
+							String[] linesSplit = lines[i].split("Station");
+							policeStation = linesSplit[1].trim();
+						}
+					}
+					
+					if(lines[i].contains("Mandal")){
+						
+						if(lines[i].contains(":")){
+							String[] linesSplit = lines[i].split(":");
+							mandal = linesSplit[1].trim();
+						}else{
+							String[] linesSplit = lines[i].split("Mandal");
+							mandal = linesSplit[0].trim();
+						}
+					}
+					
+					if(lines[i].contains("Revenue Division")){
+						
+						if(lines[i].contains(":")){
+							String[] linesSplit = lines[i].split(":");
+							revenueDivision = linesSplit[1].trim();
+						}else{
+							String[] linesSplit = lines[i].split("Division");
+							revenueDivision = linesSplit[1].trim();
+						}
+					}
+					
+					if(lines[i].contains("Pin Code")){
+						
+						if(lines[i].contains(":")){
+							String[] linesSplit = lines[i].split(":");
+							pinCode = linesSplit[1].trim();
+						}else{
+							String[] linesSplit = lines[i].split("Code");
+							pinCode = linesSplit[1].trim();
+						}
+					}
+					
+					
+
+				}
+
+				System.out.println(mainTown);
+				System.out.println(policeStation);
+				System.out.println(mandal);
+				System.out.println(revenueDivision);
+				System.out.println(pinCode);
 
 				pdfHeaderData.setMainTown(mainTown);
 				pdfHeaderData.setPoliceStation(policeStation);
@@ -295,10 +364,10 @@ public class UserUtil {
 					//System.out.println(user.getElectorName());
 					//System.out.println(user.getReferenceName());
 					//System.out.println(user.getReferenceType());
-					System.out.println(user.getAge());
-					System.out.println(user.getGender());
+//					System.out.println(user.getAge());
+//					System.out.println(user.getGender());
 					//System.out.println(user.getHouseNo());
-					System.out.println("---------------------------");
+					//System.out.println("---------------------------");
 				}
 			}
 
@@ -355,6 +424,7 @@ public class UserUtil {
 			currentLineNo--;
 		}
 		houseNoMap.put("houseNoValue", ageValue);
+		
 		houseNoMap.put("currentLineNo", "" + currentLineNo);
 
 		return houseNoMap;
@@ -388,10 +458,10 @@ public class UserUtil {
 		ElectroralRollesURL eachURLData = new ElectroralRollesURL();
 		// eachURLData.setPdfUrl(
 		// "http://ceoaperms.ap.gov.in/Electoral_Rolls/PDFGeneration.aspx?urlPath=D:\\SSR_2017_Final_Roles\\ANDHRA\\AC_154\\English\\S01A154P080.PDF");
-		// eachURLData.setPdfUrl(
-		// "http://ceoaperms.ap.gov.in/Electoral_Rolls/PDFGeneration.aspx?urlPath=D:\\SSR_2017_Final_Roles\\ANDHRA\\AC_148\\English\\S01A148P001.PDF");
-		eachURLData.setPdfUrl(
-				"http://ceoaperms.ap.gov.in/TS_Rolls/PDFGeneration.aspx?urlPath=D:\\SSR2016_Final\\Telangana\\AC_007\\English\\S29A007P002.PDF");
+		 eachURLData.setPdfUrl(
+		 "http://ceoaperms.ap.gov.in/Electoral_Rolls/PDFGeneration.aspx?urlPath=D:\\SSR_2017_Final_Roles\\ANDHRA\\AC_151\\English\\S01A151P106.PDF");
+		//eachURLData.setPdfUrl(
+		//		"http://ceoaperms.ap.gov.in/TS_Rolls/PDFGeneration.aspx?urlPath=D:\\SSR2016_Final\\Telangana\\AC_007\\English\\S29A007P002.PDF");
 		// http://ceoaperms.ap.gov.in/Electoral_Rolls/PDFGeneration.aspx?urlPath=D:\\SSR_2017_Final_Roles\\ANDHRA\\AC_148\\English\\S01A148P001.PDF
 		List<User> eachPageUsers = new ArrayList<User>();
 		eachPageUsers = parseElectroralData(eachURLData);
