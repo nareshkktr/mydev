@@ -41,6 +41,9 @@ import javax.imageio.ImageIO;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -728,5 +731,28 @@ public class CommonUtil {
 			}
 		}
 		return bytesArray;
+	}
+	
+	public static void writeDataIntoSheet(Map<Integer, Object[]> sheetData, Sheet exportWorkBookSheet) {
+
+		Set<Integer> newRows = sheetData.keySet();
+		int rownum = exportWorkBookSheet.getLastRowNum() + 1;
+		for (Integer key : newRows) {
+			Row row = exportWorkBookSheet.createRow(rownum++);
+			Object[] objArr = sheetData.get(key);
+			int cellnum = 0;
+			for (Object obj : objArr) {
+				Cell cell = row.createCell(cellnum++);
+				if (obj instanceof String) {
+					cell.setCellValue((String) obj);
+				} else if (obj instanceof Long) {
+					cell.setCellValue((Long) obj);
+				} else if (obj instanceof Integer) {
+					cell.setCellValue((Integer) obj);
+				} else if (obj == null) {
+					cell.setCellType(Cell.CELL_TYPE_BLANK);
+				}
+			}
+		}
 	}
 }

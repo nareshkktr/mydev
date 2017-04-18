@@ -1,5 +1,6 @@
 package com.kasisripriyawebapps.myindia.serviceimpl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -7,7 +8,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -17,6 +23,17 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.itextpdf.awt.geom.Rectangle;
+import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.parser.FilteredTextRenderListener;
+import com.itextpdf.text.pdf.parser.LocationTextExtractionStrategy;
+import com.itextpdf.text.pdf.parser.PdfTextExtractor;
+import com.itextpdf.text.pdf.parser.RegionTextRenderFilter;
+import com.itextpdf.text.pdf.parser.RenderFilter;
+import com.itextpdf.text.pdf.parser.TextExtractionStrategy;
+import com.kasisripriyawebapps.myindia.constants.ApplicationConstants;
+import com.kasisripriyawebapps.myindia.constants.ExceptionConstants;
+import com.kasisripriyawebapps.myindia.constants.LocationConstants;
 import com.kasisripriyawebapps.myindia.constants.ServiceConstants;
 import com.kasisripriyawebapps.myindia.dao.LocationMasterDao;
 import com.kasisripriyawebapps.myindia.dao.PartyDao;
@@ -26,9 +43,14 @@ import com.kasisripriyawebapps.myindia.entity.LocationMaster;
 import com.kasisripriyawebapps.myindia.entity.Party;
 import com.kasisripriyawebapps.myindia.entity.Politician;
 import com.kasisripriyawebapps.myindia.entity.PoliticianAuthority;
+import com.kasisripriyawebapps.myindia.entity.User;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
+import com.kasisripriyawebapps.myindia.exception.RecordNotFoundException;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.PoliticianExportModel;
+import com.kasisripriyawebapps.myindia.requestresponsemodel.PoliticianImportExportRequest;
 import com.kasisripriyawebapps.myindia.service.PoliticianImportExportService;
+import com.kasisripriyawebapps.myindia.util.AmazonS3Util;
+import com.kasisripriyawebapps.myindia.util.CommonUtil;
 
 @Service
 public class PoliticianImportExportServiceImpl implements PoliticianImportExportService {
@@ -610,6 +632,378 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 	@Transactional
 	public void importVillageSarpanchas() throws InternalServerException {
 		
+		
+	}
+
+	@Override
+	public void exportLoksabhaMPs(PoliticianImportExportRequest politicianImport) throws InternalServerException {
+
+		driver = new ChromeDriver();
+		driver.get(env.getProperty("india-politicians-mp-loksabha.url"));
+		
+		String fileName = env.getProperty("india-politicians-mp-loksabha-export-file-name");
+		
+		String uploadedFolderName = env.getProperty("amazon.s3.politicians.uploaded.folder.name");
+
+		String globalFolderName = env.getProperty("amazon.s3.politicians.global.folder.name");
+		String countryFolderName = env.getProperty("amazon.s3.politicians.india.folder.name");
+		
+		List<PoliticianExportModel> politicianData = new ArrayList<PoliticianExportModel>();
+		
+		Select stateDropDown = new Select(driver.findElement(By.id("ContentPlaceHolder1_ddlstate")));
+		List<WebElement> stateOptions = stateDropDown.getOptions();
+		
+		for (int i = 0; i < stateOptions.size(); i++) {
+			
+			Select refreshedStateDropDown = new Select(driver.findElement(By.id("ContentPlaceHolder1_ddlstate")));
+			WebElement stateOption = refreshedStateDropDown.getOptions().get(i);
+			
+			if (i == 0) {
+				continue;
+			}
+			
+			String stateName = stateOption.getText().split("\\(")[0].trim();
+			
+			if(!politicianImport.getStates().contains(stateName)){
+				continue;
+			}
+			
+			stateOption.click();
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				throw new InternalServerException(e.getMessage());
+			}
+
+			WebElement pageMainTable = driver.findElement(By.className("member_list_table"));
+			WebElement pageMainTableBody = pageMainTable.findElements(By.xpath("tbody")).get(0);
+			List<WebElement> memberRows = pageMainTableBody.findElements(By.xpath("tr"));
+
+			for (WebElement row : memberRows) {
+
+				PoliticianExportModel politicianObj = new PoliticianExportModel();
+				
+				List<WebElement> cells = row.findElements(By.xpath("td"));
+
+				WebElement eachMemberName = cells.get(1);
+				WebElement eachMemberPartyName = cells.get(2);
+				WebElement locationName = cells.get(3);
+				
+				politicianObj.setPoliticianName(eachMemberName.getText());
+				
+				String[] locationSplit = locationName.getText().split("\\("+stateName);
+				String location = locationSplit[0].trim();
+				
+				politicianObj.setLocationName(location);
+				politicianObj.setPartyName(eachMemberPartyName.getText());
+				politicianObj.setDesignation(ServiceConstants.SITTING_LOKSABHA_MP_DESIGNATION);
+				politicianObj.setPoliticianType(ServiceConstants.MP);
+				politicianData.add(politicianObj);	
+
+			}// Politician member by state
+			
+			String folderPath = uploadedFolderName + ApplicationConstants.SUFFIX + globalFolderName + ApplicationConstants.SUFFIX + countryFolderName + ApplicationConstants.SUFFIX
+					+ stateName ;
+			
+			exportPoliticians(politicianData, fileName, folderPath);
+
+		}// end of all states
+		
+
+		driver.close();
+		driver.quit();
+		
+	}
+
+	private void exportPoliticians(List<PoliticianExportModel> politicianData, String fileName, String folderPath) throws InternalServerException {
+		
+		String bucketName = env.getProperty("amazon.s3.politicians.bucket.name");
+		
+		Workbook exportWorkBook = CommonUtil.createWorkBook(fileName);
+
+		if (exportWorkBook.getNumberOfSheets() == 1 && exportWorkBook.getSheetAt(0) != null) {
+			exportWorkBook.removeSheetAt(0);
+		}
+		Sheet exportWorkBookSheet = exportWorkBook.createSheet(ServiceConstants.POLITICIAN_EXCEL);
+		addHeaderRowForPoliticianExport(exportWorkBookSheet);
+
+		//prepare sheet data
+		Map<Integer, Object[]> sheetData = new HashMap<Integer, Object[]>();
+		
+		int j=0;
+		
+		for (PoliticianExportModel eachPolitician : politicianData) {
+			j++;
+			sheetData.put(j, new Object[] { eachPolitician.getPoliticianName(), eachPolitician.getPoliticianType() , eachPolitician.getDesignation() , eachPolitician.getPartyName()
+					,eachPolitician.getLocationName() });
+		}
+		
+		CommonUtil.writeDataIntoSheet(sheetData, exportWorkBookSheet);
+		AmazonS3Util.writeExcelDataIntoAmazonS3File(fileName, exportWorkBook, bucketName, folderPath);
+		
+	}
+
+	private void addHeaderRowForPoliticianExport(Sheet exportWorkBookSheet) {
+		// TODO Auto-generated method stub
+		Row headerRow = exportWorkBookSheet.createRow(0);
+
+		Cell politicianNameHeaderCell = headerRow.createCell(0);
+		Cell politicianTypeHeaderCell = headerRow.createCell(1);
+		Cell designationHeaderCell = headerRow.createCell(2);
+		Cell partyNameHeaderCell = headerRow.createCell(3);
+		Cell locationNameHeaderCell = headerRow.createCell(4);
+
+		politicianNameHeaderCell.setCellValue(ServiceConstants.POLITICIAN_NAME);
+		politicianTypeHeaderCell.setCellValue(ServiceConstants.POLITICIAN_TYPE);
+		designationHeaderCell.setCellValue(ServiceConstants.DESIGNATION);
+		partyNameHeaderCell.setCellValue(ServiceConstants.PARTY_NAME);
+		locationNameHeaderCell.setCellValue(ServiceConstants.LOCATION_NAME);
+
+	}
+
+	@Override
+	public void exportRajyasabhaMPs(PoliticianImportExportRequest politicianImport) throws InternalServerException {
+		
+		driver = new ChromeDriver();
+		driver.get(env.getProperty("india-politicians-mp-rajyasabha.url"));
+		
+		String fileName = env.getProperty("india-politicians-mp-rajyasabha-export-file-name");
+		
+		String uploadedFolderName = env.getProperty("amazon.s3.politicians.uploaded.folder.name");
+
+		String globalFolderName = env.getProperty("amazon.s3.politicians.global.folder.name");
+		String countryFolderName = env.getProperty("amazon.s3.politicians.india.folder.name");
+		
+		List<PoliticianExportModel> politicianData = new ArrayList<PoliticianExportModel>();
+		
+		//State wise export
+		//ContentPlaceHolder1_GridView1
+		WebElement pageMainTable = driver.findElement(By.id("ContentPlaceHolder1_GridView1"));
+		WebElement pageMainTableBody = pageMainTable.findElements(By.xpath("tbody")).get(0);
+		List<WebElement> states = pageMainTableBody
+				.findElements(By.xpath("tr"));
+		
+		for(WebElement state:states){
+			List<WebElement> stateCells = state.findElements(By.xpath("td"));
+			
+			if(stateCells.size() >0){
+				
+				WebElement eachStateName = stateCells.get(1);
+				
+				
+				WebElement stateLink = eachStateName.findElement(By.xpath("a"));
+				
+				String stateName = stateLink.getText();
+				
+				if(!politicianImport.getStates().contains(stateName)){
+					continue;
+				}
+				
+				stateLink.click();
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					throw new InternalServerException(e.getMessage());
+				}
+	
+				//ContentPlaceHolder1_GridView2
+				
+				pageMainTable = driver.findElement(By.id("ContentPlaceHolder1_GridView2"));
+				pageMainTableBody = pageMainTable.findElements(By.xpath("tbody")).get(0);
+				List<WebElement> memberRows = pageMainTableBody
+						.findElements(By.xpath("tr"));
+				
+				for (WebElement row : memberRows) {
+
+					List<WebElement> cells = row.findElements(By.xpath("td"));
+						
+					if(cells.size() >0){
+						
+						PoliticianExportModel politicianObj = new PoliticianExportModel();
+						
+						WebElement eachMemberName = cells.get(1);
+						
+						WebElement eachMemberPartyName = cells.get(2);
+						
+						WebElement locationName = cells.get(3);
+						
+						politicianObj.setPoliticianName(eachMemberName.getText());
+						politicianObj.setLocationName(locationName.getText());
+						politicianObj.setPartyName(eachMemberPartyName.getText());
+						politicianObj.setDesignation(ServiceConstants.SITTING_RAJYASABHA_MP_DESIGNATION);
+						politicianObj.setPoliticianType(ServiceConstants.MP);
+						politicianData.add(politicianObj);
+			
+					}//For td rows
+					
+				}// For each member
+				
+				stateName = stateName.split("\\(")[0].trim();
+				
+				//Export for the state
+				String folderPath = uploadedFolderName + ApplicationConstants.SUFFIX + globalFolderName + ApplicationConstants.SUFFIX + countryFolderName + ApplicationConstants.SUFFIX
+						+ stateName ;
+				
+				exportPoliticians(politicianData, fileName, folderPath);
+				
+				//break the loop as the element wil be stale
+				break;
+			}
+			
+		}
+		
+		driver.close();
+		driver.quit();
+		
+	}
+
+	@Override
+	public void exportGPSarpanch(PoliticianImportExportRequest politicianImport) throws InternalServerException, IOException {
+		driver = new ChromeDriver();
+		driver.get("http://www.apsec.gov.in/EC_LIST.html");
+
+		WebElement pageMainTable = driver.findElement(By.xpath("/html/body/div/table/tbody/tr[3]/td[3]/table"));
+		WebElement pageMainTableBody = pageMainTable.findElements(By.xpath("tbody")).get(0);
+		List<WebElement> memberRows = pageMainTableBody.findElements(By.xpath("tr"));
+
+		Boolean processFromNextRow = false;
+
+		Boolean processed = false;
+
+		for (WebElement memeberRow : memberRows) {
+			List<WebElement> cells = memeberRow.findElements(By.xpath("td"));
+			if (processed) {
+				break;
+			}
+			for (WebElement col : cells) {
+				if (processFromNextRow) {
+					try {
+						// Process the records
+						WebElement findAnchor = col.findElement(By.xpath("div/a"));
+						System.out.println(findAnchor.getAttribute("href"));
+						
+						if(!politicianImport.getDistricts().contains(findAnchor.getText())){
+							continue;
+						}
+						
+						processSarpanchas(findAnchor.getAttribute("href"),findAnchor.getText(),LocationConstants.STATE_ANDHRA_PRADESH);
+						
+					} catch (NoSuchElementException e) {
+						processed = true;
+					}
+				} else {
+					try {
+						WebElement findSpan = col.findElement(By.xpath("div/span"));
+
+						if (findSpan != null && findSpan.getText().contains("SARPANCHAS")) {
+							processFromNextRow = true;
+							break;
+						} else {
+							continue;
+						}
+					} catch (NoSuchElementException e) {
+						continue;
+					}
+				}
+			}
+		}
+	}
+
+	private void processSarpanchas(String fileName,String districtName,String stateName) throws IOException, InternalServerException{
+		
+		switch (districtName.toLowerCase()) {
+		case LocationConstants.DISTRICT_SRIKAKULAM_STATE_AP:
+			parseSrikakulamSarpanchDetails(fileName,districtName,stateName);
+			break;
+		default:
+			break;
+		}	
+	}
+
+	private void parseSrikakulamSarpanchDetails(String fileName,String districtName, String stateName) throws IOException, InternalServerException{
+		
+		String exportfileName = env.getProperty("india-politicians-gp-sarpanch-export-file-name");
+		
+		String uploadedFolderName = env.getProperty("amazon.s3.politicians.uploaded.folder.name");
+
+		String globalFolderName = env.getProperty("amazon.s3.politicians.global.folder.name");
+		String countryFolderName = env.getProperty("amazon.s3.politicians.india.folder.name");
+		
+		List<PoliticianExportModel> politicians = new ArrayList<PoliticianExportModel>();
+
+		PdfReader reader = null;
+		reader = new PdfReader(fileName);
+		if (reader != null) {
+
+			int noOfPages = reader.getNumberOfPages();
+			TextExtractionStrategy strategy;
+			for (int i = 1; i <= noOfPages; i++) {
+				
+				int ly = 25;
+				int lx = 140;
+				int ux = 157;
+				int uy = 800;
+				Rectangle rect = new Rectangle(lx, ly, ux, uy);
+				RenderFilter filter = new RegionTextRenderFilter(rect);
+				strategy = new FilteredTextRenderListener(new LocationTextExtractionStrategy(), filter);
+				String tableContent = null;
+				try {
+					tableContent = PdfTextExtractor.getTextFromPage(reader, i, strategy);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+				String[] contentSplitGP = tableContent.split("\\n");
+
+				ly = 25;
+				lx = 157 + 100;
+				ux = 400;
+				uy = 800;
+				rect = new Rectangle(lx, ly, ux, uy);
+
+				filter = new RegionTextRenderFilter(rect);
+				strategy = new FilteredTextRenderListener(new LocationTextExtractionStrategy(), filter);
+				tableContent = null;
+				try {
+					tableContent = PdfTextExtractor.getTextFromPage(reader, i, strategy);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+				String[] contentSplitCandidate = tableContent.split("\\n");
+
+				int k = 0;
+				for (int j = 0; j < contentSplitGP.length; j++) {
+					
+					PoliticianExportModel politicianObj = new PoliticianExportModel();
+
+					if (contentSplitCandidate[k].trim().equalsIgnoreCase("W/O SATYA RAO")
+							|| contentSplitCandidate[k].equalsIgnoreCase("URAM")) {
+						k++;
+					}
+					System.out.println("--" + contentSplitGP[j] + "----" + contentSplitCandidate[k]);
+					
+					if(!(contentSplitCandidate[k].length()==1 || contentSplitCandidate[k].contains("GRAM PANCHAYAT") || contentSplitCandidate[k].contains("Name of the elected Candidate"))){
+						
+						politicianObj.setPoliticianName(contentSplitCandidate[k]);
+						politicianObj.setLocationName(contentSplitGP[j]);
+						politicianObj.setDesignation(ServiceConstants.SITTING_SARPANCH_GP_DESIGNATION);
+						politicianObj.setPoliticianType(ServiceConstants.SARPANCH);
+						politicians.add(politicianObj);
+					}
+					
+					k++;
+				}
+				
+				//Export for the district
+				String folderPath = uploadedFolderName + ApplicationConstants.SUFFIX + globalFolderName + ApplicationConstants.SUFFIX + countryFolderName + ApplicationConstants.SUFFIX
+						+ stateName + ApplicationConstants.SUFFIX + districtName ;
+				
+				exportPoliticians(politicians, exportfileName, folderPath);
+				
+			}
+			reader.close();
+		}
 		
 	}
 	

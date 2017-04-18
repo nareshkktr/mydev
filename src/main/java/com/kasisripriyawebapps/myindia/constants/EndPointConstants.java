@@ -1152,4 +1152,19 @@ public class EndPointConstants {
 	public static final String THUMBS_UP_DOWN_API_NICKNAME = "createThumbsUpDown";
 	public static final String THUMBS_UP_DOWN_API_DESCRIPTION = "Create Thumbs Up Down";
 
+	public static final String EXPORT_LOKSABHA_MP_REQUEST_MAPPING = "exportLoksabhaMP";
+	public static final String EXPORT_LOKSABHA_MP_API_VALUE = "exportLoksabhaMP";
+	public static final String EXPORT_LOKSABHA_MP_API_NICKNAME = "exportLoksabhaMP";
+	public static final String EXPORT_LOKSABHA_MP_API_DESCRIPTION = "Export the lok sabha MPs.";
+	
+	public static final String EXPORT_RAJYASABHA_MP_REQUEST_MAPPING = "exportRajyasabhaMP";
+	public static final String EXPORT_RAJYASABHA_MP_API_VALUE = "exportRajyasabhaMP";
+	public static final String EXPORT_RAJYASABHA_MP_API_NICKNAME = "exportRajyasabhaMP";
+	public static final String EXPORT_RAJYASABHA_MP_API_DESCRIPTION = "Export the rajya sabha MPs.";
+	
+	public static final String EXPORT_GP_SARPANCH_REQUEST_MAPPING = "exportGPSarpanch";
+	public static final String EXPORT_GP_SARPANCH_API_VALUE = "exportGPSarpanch";
+	public static final String EXPORT_GP_SARPANCH_API_NICKNAME = "exportGPSarpanch";
+	public static final String EXPORT_GP_SARPANCH_API_DESCRIPTION = "Export the gram panchayathi sarpanch.";
+
 }

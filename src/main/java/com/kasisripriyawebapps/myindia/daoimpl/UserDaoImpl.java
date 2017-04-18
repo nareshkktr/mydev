@@ -77,10 +77,4 @@ public class UserDaoImpl extends BaseDaoImpl<Long, User> implements UserDao {
 		mergeBatch(updatedUsers);		
 	}
 
-	@Override
-	public void deleteUsers(List<User> deletedUsers) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

@@ -124,6 +124,9 @@ public class User implements Serializable {
 
 	@Column(name = "POLLING_STATION_ADDRESS")
 	private String pollingStationAddress;
+	
+	@Column(name = "IS_ACTIVE")
+	private Boolean isActive;
 
 	@OneToOne(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
 	private UserInfo userInfo;
@@ -334,6 +337,14 @@ public class User implements Serializable {
 
 	public void setUserInfo(UserInfo userInfo) {
 		this.userInfo = userInfo;
+	}
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
 	}
 
 	@Override

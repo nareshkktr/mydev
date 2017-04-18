@@ -39,4 +39,5 @@ public class PoliticianExportModel {
 		this.politicianType = politicianType;
 	}
 
+	
 }

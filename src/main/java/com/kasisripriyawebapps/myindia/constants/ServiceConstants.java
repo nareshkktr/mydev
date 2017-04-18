@@ -3,6 +3,8 @@
  */
 package com.kasisripriyawebapps.myindia.constants;
 
+import java.util.Date;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class ServiceConstants.
@@ -183,5 +185,16 @@ public class ServiceConstants {
 	public static final String PIN_CODE = "Pin Code";
 	public static final String PARLIAMENT_CONSTITUENCY_NO = "Parliament Constituency No";
 	public static final String PARLIAMENT_CONSTITUENCY_NAME = "Parliament Constituency Name";
+
+	public static final String PARTY_NAME = "Party Name";
+	public static final String DESIGNATION = "Designation";
+	public static final String POLITICIAN_NAME = "Politician Name";
+	public static final String POLITICIAN_TYPE = "Politician Type";
+
+	public static final String POLITICIAN_EXCEL = "Politicians";
+
+	public static final String SITTING_SARPANCH_GP_DESIGNATION = "Gram Panchayat Sarpanch.";
+
+	public static final String SARPANCH = "Sarpanch";
 
 }

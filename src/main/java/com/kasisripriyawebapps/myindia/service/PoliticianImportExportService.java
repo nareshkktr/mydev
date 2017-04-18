@@ -1,6 +1,9 @@
 package com.kasisripriyawebapps.myindia.service;
 
+import java.io.IOException;
+
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
+import com.kasisripriyawebapps.myindia.requestresponsemodel.PoliticianImportExportRequest;
 
 public interface PoliticianImportExportService {
 	
@@ -17,4 +20,11 @@ public interface PoliticianImportExportService {
 	void importExportGoverners() throws InternalServerException;
 	
 	void importVillageSarpanchas()  throws InternalServerException;
+
+	void exportLoksabhaMPs(PoliticianImportExportRequest politicianImport) throws InternalServerException;
+
+	void exportRajyasabhaMPs(PoliticianImportExportRequest politicianImport) throws InternalServerException;
+
+	void exportGPSarpanch(PoliticianImportExportRequest politicianImport) throws InternalServerException, IOException;
+	
 }

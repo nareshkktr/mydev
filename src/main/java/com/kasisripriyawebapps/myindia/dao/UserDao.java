@@ -19,6 +19,4 @@ public interface UserDao {
 
 	void updateUsers(List<User> updatedUsers) throws InternalServerException;
 
-	void deleteUsers(List<User> deletedUsers);
-
 }

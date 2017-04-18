@@ -1,7 +1,6 @@
 package com.kasisripriyawebapps.myindia.serviceimpl;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -661,6 +660,21 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 			throws InternalServerException {
 
 		String fileName = eachURLData.getPartNo() + ".xls";
+		
+		String bucketName = env.getProperty("amazon.s3.users.bucket.name");
+		String uploadedFolderName = env.getProperty("amazon.s3.users.uploaded.folder.name");
+
+		String globalFolderName = env.getProperty("amazon.s3.users.global.folder.name");
+		String countryFolderName = env.getProperty("amazon.s3.users.india.folder.name");
+		
+		String votersFolderName = env.getProperty("amazon.s3.users.voters.folder.name");
+		
+		uploadedFolderName = uploadedFolderName +ApplicationConstants.SUFFIX
+				+ globalFolderName + ApplicationConstants.SUFFIX + countryFolderName + ApplicationConstants.SUFFIX + eachURLData.getStateName()
+				+ ApplicationConstants.SUFFIX + eachURLData.getDistrictName() + ApplicationConstants.SUFFIX + eachURLData.getMlaConstituencyName() +
+				ApplicationConstants.SUFFIX + votersFolderName ;
+		
+		
 		Workbook exportWorkBook = CommonUtil.createWorkBook(fileName);
 
 		if (exportWorkBook.getNumberOfSheets() == 1 && exportWorkBook.getSheetAt(0) != null) {
@@ -669,9 +683,21 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 		Sheet exportWorkBookSheet = exportWorkBook.createSheet(ServiceConstants.USER_EXCEL_BY_CONSTITUENCT_SHEET_NAME);
 		addHeaderRowForUserExport(exportWorkBookSheet);
 
+		//prepare sheet data
+		Map<Integer, Object[]> sheetData = new HashMap<Integer, Object[]>();
+		
+		int j=0;
+		
 		for (User eachPageUser : eachPageUsers) {
-			
+			j++;
+			sheetData.put(j, new Object[] { eachPageUser.getAge(), eachPageUser.getAssemblyConstituencyName(), eachPageUser.getAssemblyConstituencyNo(), eachPageUser.getDistrict(),
+					eachPageUser.getElectorName(), eachPageUser.getGender(), eachPageUser.getHouseNo(), eachPageUser.getIdCardNo(), eachPageUser.getReferenceName(), eachPageUser.getReferenceType(),
+					eachPageUser.getState(), eachPageUser.getPollingStation(), eachPageUser.getPollingStationAddress(), eachPageUser.getPartNo(), eachPageUser.getMainTwon(), eachPageUser.getPoliceStation(),
+					eachPageUser.getMandal(), eachPageUser.getRevenueDivision(), eachPageUser.getPincode(), eachPageUser.getParliamentaryConstituencyNo(), eachPageUser.getParliamentaryConstituencyName()});
 		}
+		
+		writeDataIntoSheet(sheetData, exportWorkBookSheet);
+		AmazonS3Util.writeExcelDataIntoAmazonS3File(fileName, exportWorkBook, bucketName, uploadedFolderName);
 
 	}
 
@@ -686,19 +712,19 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 		Cell genderHeaderCell = headerRow.createCell(5);
 		Cell houseNoHeaderCell = headerRow.createCell(6);
 		Cell idCardNoHeaderCell = headerRow.createCell(7);
-		Cell referenceNameHeaderCell = headerRow.createCell(9);
-		Cell referenceTypeHeaderCell = headerRow.createCell(10);
-		Cell stateHeaderCell = headerRow.createCell(11);
-		Cell pollingStationNameHeaderCell = headerRow.createCell(12);
-		Cell pollingStationAddressHeaderCell = headerRow.createCell(13);
-		Cell partNoHeaderCell = headerRow.createCell(14);
-		Cell mainTownHeaderCell = headerRow.createCell(15);
-		Cell policeStationHeaderCell = headerRow.createCell(16);
-		Cell mandalHeaderCell = headerRow.createCell(17);
-		Cell revenueDivisionHeaderCell = headerRow.createCell(18);
-		Cell pinCodeHeaderCell = headerRow.createCell(19);
-		Cell parliamentConstituencyNoHeaderCell = headerRow.createCell(20);
-		Cell parliamentConstituencyNmaeHeaderCell = headerRow.createCell(21);
+		Cell referenceNameHeaderCell = headerRow.createCell(8);
+		Cell referenceTypeHeaderCell = headerRow.createCell(9);
+		Cell stateHeaderCell = headerRow.createCell(10);
+		Cell pollingStationNameHeaderCell = headerRow.createCell(11);
+		Cell pollingStationAddressHeaderCell = headerRow.createCell(12);
+		Cell partNoHeaderCell = headerRow.createCell(13);
+		Cell mainTownHeaderCell = headerRow.createCell(14);
+		Cell policeStationHeaderCell = headerRow.createCell(15);
+		Cell mandalHeaderCell = headerRow.createCell(16);
+		Cell revenueDivisionHeaderCell = headerRow.createCell(17);
+		Cell pinCodeHeaderCell = headerRow.createCell(18);
+		Cell parliamentConstituencyNoHeaderCell = headerRow.createCell(19);
+		Cell parliamentConstituencyNmaeHeaderCell = headerRow.createCell(20);
 
 		ageHeaderCell.setCellValue(ServiceConstants.AGE);
 		assemblyConstituencyNameHeaderCell.setCellValue(ServiceConstants.ASSEMBLY_CONSTITUENCY_NAME);
@@ -767,8 +793,12 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 		userDao.updateUsers(updatedElectroralRollesList);
 		existingElectroralRollesList.removeAll(pdfElectroralRollesList);
 		
-		// Identify list of users and delete those.
-		userDao.deleteUsers(existingElectroralRollesList);
+		for(User existingElectroralRolle:existingElectroralRollesList){
+			existingElectroralRolle.setIsActive(false);
+		}
+		
+		// Identify list of users and mark those as inactive.
+		userDao.updateUsers(existingElectroralRollesList);
 		
 	}
 
@@ -787,6 +817,9 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 					eachPDFElectroralRolleData.setGuid(existingElectroralRollesMap
 							.get(eachPDFElectroralRolleData.getIdCardNo() )
 							.get(0).getGuid());
+					eachPDFElectroralRolleData.setCreatedTimeStamp(existingElectroralRollesMap
+							.get(eachPDFElectroralRolleData.getIdCardNo() )
+							.get(0).getCreatedTimeStamp());
 					updatedElectroralRollesList.add(eachPDFElectroralRolleData);
 				}
 			}
@@ -848,6 +881,7 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 			user.setAssemblyConstituencyName(acName);
 			user.setAssemblyConstituencyNo(acNo);
 			user.setCreatedTimeStamp(CommonUtil.getCurrentGMTTimestamp());
+			user.setUpdatedTimeStamp(CommonUtil.getCurrentGMTTimestamp());
 			user.setDistrict(districtName);
 			user.setElectorName(electorName);
 			user.setGender(sex);
@@ -867,6 +901,7 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 			user.setPincode(pinCode);
 			user.setParliamentaryConstituencyNo(pcNo);
 			user.setParliamentaryConstituencyName(pcName);
+			user.setIsActive(true);
 			
 	
 			if (!newElectroralRollesList.contains(user)
@@ -977,12 +1012,74 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 				String mandal = lines[4].trim();
 				String revenueDivision = lines[6];
 				String pinCode = "";// lines[10];
+				
+				
+				for(int i=0;i<lines.length;i++){
+					if(lines[i].contains("Main Town")){
+						
+						if(lines[i].contains(":")){
+							String[] linesSplit = lines[i].split(":");
+							mainTown = linesSplit[1].trim();
+						}else{
+							String[] linesSplit = lines[i].split("Town");
+							mainTown = linesSplit[1].trim();
+						}
+					}
+					
+					if(lines[i].contains("Police Station")){
+						
+						if(lines[i].contains(":")){
+							String[] linesSplit = lines[i].split(":");
+							policeStation = linesSplit[1].trim();
+						}else{
+							String[] linesSplit = lines[i].split("Station");
+							policeStation = linesSplit[1].trim();
+						}
+					}
+					
+					if(lines[i].contains("Mandal")){
+						
+						if(lines[i].contains(":")){
+							String[] linesSplit = lines[i].split(":");
+							mandal = linesSplit[1].trim();
+						}else{
+							String[] linesSplit = lines[i].split("Mandal");
+							mandal = linesSplit[0].trim();
+						}
+					}
+					
+					if(lines[i].contains("Revenue Division")){
+						
+						if(lines[i].contains(":")){
+							String[] linesSplit = lines[i].split(":");
+							revenueDivision = linesSplit[1].trim();
+						}else{
+							String[] linesSplit = lines[i].split("Division");
+							revenueDivision = linesSplit[1].trim();
+						}
+					}
+					
+					if(lines[i].contains("Pin Code")){
+						
+						if(lines[i].contains(":")){
+							String[] linesSplit = lines[i].split(":");
+							pinCode = linesSplit[1].trim();
+						}else{
+							String[] linesSplit = lines[i].split("Code");
+							pinCode = linesSplit[1].trim();
+						}
+					}
+					
+					
+
+				}
 
 				pdfHeaderData.setMainTown(mainTown);
 				pdfHeaderData.setPoliceStation(policeStation);
 				pdfHeaderData.setMandal(mandal);
 				pdfHeaderData.setRevenueDivision(revenueDivision);
 				pdfHeaderData.setPinCode(pinCode);
+
 
 			}
 		}
