@@ -32,7 +32,6 @@ import com.itextpdf.text.pdf.parser.RegionTextRenderFilter;
 import com.itextpdf.text.pdf.parser.RenderFilter;
 import com.itextpdf.text.pdf.parser.TextExtractionStrategy;
 import com.kasisripriyawebapps.myindia.constants.ApplicationConstants;
-import com.kasisripriyawebapps.myindia.constants.ExceptionConstants;
 import com.kasisripriyawebapps.myindia.constants.LocationConstants;
 import com.kasisripriyawebapps.myindia.constants.ServiceConstants;
 import com.kasisripriyawebapps.myindia.dao.LocationMasterDao;
@@ -43,9 +42,7 @@ import com.kasisripriyawebapps.myindia.entity.LocationMaster;
 import com.kasisripriyawebapps.myindia.entity.Party;
 import com.kasisripriyawebapps.myindia.entity.Politician;
 import com.kasisripriyawebapps.myindia.entity.PoliticianAuthority;
-import com.kasisripriyawebapps.myindia.entity.User;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
-import com.kasisripriyawebapps.myindia.exception.RecordNotFoundException;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.PoliticianExportModel;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.PoliticianImportExportRequest;
 import com.kasisripriyawebapps.myindia.service.PoliticianImportExportService;
@@ -859,68 +856,83 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 
 	@Override
 	public void exportGPSarpanch(PoliticianImportExportRequest politicianImport) throws InternalServerException, IOException {
-		driver = new ChromeDriver();
-		driver.get("http://www.apsec.gov.in/EC_LIST.html");
+		
+		String hostName = env.getProperty("amazon.s3.host.name");
+		String rawFileName = env.getProperty("india-politicians-gp-sarpanch-raw-file-name");
+		String uploadedFolderName = env.getProperty("amazon.s3.politicians.downloaded.folder.name");
+		String globalFolderName = env.getProperty("amazon.s3.politicians.global.folder.name");
+		String countryFolderName = env.getProperty("amazon.s3.politicians.india.folder.name");	
+		String bucketName = env.getProperty("amazon.s3.politicians.bucket.name");
+		
+		uploadedFolderName = uploadedFolderName + ApplicationConstants.SUFFIX + globalFolderName
+				+ ApplicationConstants.SUFFIX + countryFolderName;
 
-		WebElement pageMainTable = driver.findElement(By.xpath("/html/body/div/table/tbody/tr[3]/td[3]/table"));
-		WebElement pageMainTableBody = pageMainTable.findElements(By.xpath("tbody")).get(0);
-		List<WebElement> memberRows = pageMainTableBody.findElements(By.xpath("tr"));
+		List<String> stateDirectories = AmazonS3Util.getListOfObjects(bucketName, uploadedFolderName);
+		
+		for(String statePath:stateDirectories){
+			
+			String[] pathSplit = statePath.split("/");
+			String stateName = pathSplit[pathSplit.length - 1];
 
-		Boolean processFromNextRow = false;
-
-		Boolean processed = false;
-
-		for (WebElement memeberRow : memberRows) {
-			List<WebElement> cells = memeberRow.findElements(By.xpath("td"));
-			if (processed) {
-				break;
-			}
-			for (WebElement col : cells) {
-				if (processFromNextRow) {
-					try {
-						// Process the records
-						WebElement findAnchor = col.findElement(By.xpath("div/a"));
-						System.out.println(findAnchor.getAttribute("href"));
-						
-						if(!politicianImport.getDistricts().contains(findAnchor.getText())){
-							continue;
-						}
-						
-						processSarpanchas(findAnchor.getAttribute("href"),findAnchor.getText(),LocationConstants.STATE_ANDHRA_PRADESH);
-						
-					} catch (NoSuchElementException e) {
-						processed = true;
-					}
-				} else {
-					try {
-						WebElement findSpan = col.findElement(By.xpath("div/span"));
-
-						if (findSpan != null && findSpan.getText().contains("SARPANCHAS")) {
-							processFromNextRow = true;
-							break;
-						} else {
-							continue;
-						}
-					} catch (NoSuchElementException e) {
-						continue;
-					}
+			if (politicianImport.getStates() != null && !politicianImport.getStates().isEmpty()) {
+				if (!politicianImport.getStates().contains(stateName)) {
+					continue;
 				}
 			}
+			
+			//Process and proceed to districts
+			List<String> districtDirectories = AmazonS3Util.getListOfObjects(bucketName, statePath);
+			
+			if (districtDirectories != null && districtDirectories.size() > 0) {
+				for (String eachStateDistrictDirectory : districtDirectories) {
+
+					pathSplit = eachStateDistrictDirectory.split("/");
+					String districtName = pathSplit[pathSplit.length - 1];
+
+					if (politicianImport.getDistricts() != null && !politicianImport.getDistricts().isEmpty()) {
+						if (!politicianImport.getDistricts().contains(districtName)) {
+							continue;
+						}
+					}
+					
+					//Prepare file name and process sarpanches
+					String filePath = hostName + bucketName + ApplicationConstants.SUFFIX
+							+ eachStateDistrictDirectory + rawFileName;
+					
+					processSarpanchas(filePath,districtName,stateName);
+					
+				}
+			}
+			
 		}
+		
 	}
 
 	private void processSarpanchas(String fileName,String districtName,String stateName) throws IOException, InternalServerException{
 		
-		switch (districtName.toLowerCase()) {
-		case LocationConstants.DISTRICT_SRIKAKULAM_STATE_AP:
-			parseSrikakulamSarpanchDetails(fileName,districtName,stateName);
-			break;
-		default:
-			break;
-		}	
+//		switch (districtName.toLowerCase()) {
+//		case LocationConstants.DISTRICT_ADILABAD_STATE_AP:
+//			parseXLSSarpanchDetails(fileName,districtName,stateName,new String[]{ env.getProperty("adilabad-cols-index"), env.getProperty("adilabad-row-start-index") });
+//		case LocationConstants.DISTRICT_ANANTHAPUR_STATE_AP:
+//			parseXLSSarpanchDetails(fileName,districtName,stateName,new String[]{ env.getProperty("ananthapur-cols-index"), env.getProperty("ananthapur-row-start-index") });
+//		case LocationConstants.DISTRICT_CHITTOOR_STATE_AP:
+//			parseXLSSarpanchDetails(fileName,districtName,stateName,new String[]{ env.getProperty("chittoor-cols-index"), env.getProperty("chittoor-row-start-index") });
+//		case LocationConstants.DISTRICT_EASTGODAVARI_STATE_AP:
+//			parseXLSSarpanchDetails(fileName,districtName,stateName,new String[]{ env.getProperty("eastGodavari-cols-index"), env.getProperty("eastGodavari-row-start-index") });
+//		
+//		default:
+//			break;
+//		}	
+		
+		String districtPropertyName = districtName.toLowerCase().replaceAll(" ", "-");
+		String colIndexProperty =districtPropertyName+"-cols-index";
+		String rowStartIndexProperty = districtPropertyName+"-row-start-index";
+		
+		parseXLSSarpanchDetails(fileName,districtName,stateName,new String[]{ env.getProperty(colIndexProperty), env.getProperty(rowStartIndexProperty) });
+		
 	}
-
-	private void parseSrikakulamSarpanchDetails(String fileName,String districtName, String stateName) throws IOException, InternalServerException{
+	
+	private void parseXLSSarpanchDetails(String fileName,String districtName, String stateName, String[] cellInfo) throws InternalServerException{
 		
 		String exportfileName = env.getProperty("india-politicians-gp-sarpanch-export-file-name");
 		
@@ -929,81 +941,151 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 		String globalFolderName = env.getProperty("amazon.s3.politicians.global.folder.name");
 		String countryFolderName = env.getProperty("amazon.s3.politicians.india.folder.name");
 		
+		List<String> headerList = new ArrayList<String>();
+		headerList.add("Name of the Gram Panchayat");
+		headerList.add("Names of the candidate declared elected");
+		headerList.add("Name of the candidate declared elected");
+		headerList.add("Name of the Grampanchayat");
+		headerList.add("Names of the Candidate declared Elected");
+		headerList.add("4.0");
+		headerList.add("5.0");
+		headerList.add("3.0");
+		
+		Workbook myWorkBook = CommonUtil.getWorkBookFromFile(fileName);
+		
 		List<PoliticianExportModel> politicians = new ArrayList<PoliticianExportModel>();
 
-		PdfReader reader = null;
-		reader = new PdfReader(fileName);
-		if (reader != null) {
-
-			int noOfPages = reader.getNumberOfPages();
-			TextExtractionStrategy strategy;
-			for (int i = 1; i <= noOfPages; i++) {
-				
-				int ly = 25;
-				int lx = 140;
-				int ux = 157;
-				int uy = 800;
-				Rectangle rect = new Rectangle(lx, ly, ux, uy);
-				RenderFilter filter = new RegionTextRenderFilter(rect);
-				strategy = new FilteredTextRenderListener(new LocationTextExtractionStrategy(), filter);
-				String tableContent = null;
-				try {
-					tableContent = PdfTextExtractor.getTextFromPage(reader, i, strategy);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-
-				String[] contentSplitGP = tableContent.split("\\n");
-
-				ly = 25;
-				lx = 157 + 100;
-				ux = 400;
-				uy = 800;
-				rect = new Rectangle(lx, ly, ux, uy);
-
-				filter = new RegionTextRenderFilter(rect);
-				strategy = new FilteredTextRenderListener(new LocationTextExtractionStrategy(), filter);
-				tableContent = null;
-				try {
-					tableContent = PdfTextExtractor.getTextFromPage(reader, i, strategy);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-
-				String[] contentSplitCandidate = tableContent.split("\\n");
-
-				int k = 0;
-				for (int j = 0; j < contentSplitGP.length; j++) {
-					
-					PoliticianExportModel politicianObj = new PoliticianExportModel();
-
-					if (contentSplitCandidate[k].trim().equalsIgnoreCase("W/O SATYA RAO")
-							|| contentSplitCandidate[k].equalsIgnoreCase("URAM")) {
-						k++;
-					}
-					System.out.println("--" + contentSplitGP[j] + "----" + contentSplitCandidate[k]);
-					
-					if(!(contentSplitCandidate[k].length()==1 || contentSplitCandidate[k].contains("GRAM PANCHAYAT") || contentSplitCandidate[k].contains("Name of the elected Candidate"))){
-						
-						politicianObj.setPoliticianName(contentSplitCandidate[k]);
-						politicianObj.setLocationName(contentSplitGP[j]);
-						politicianObj.setDesignation(ServiceConstants.SITTING_SARPANCH_GP_DESIGNATION);
-						politicianObj.setPoliticianType(ServiceConstants.SARPANCH);
-						politicians.add(politicianObj);
-					}
-					
-					k++;
-				}
-				
-				//Export for the district
-				String folderPath = uploadedFolderName + ApplicationConstants.SUFFIX + globalFolderName + ApplicationConstants.SUFFIX + countryFolderName + ApplicationConstants.SUFFIX
-						+ stateName + ApplicationConstants.SUFFIX + districtName ;
-				
-				exportPoliticians(politicians, exportfileName, folderPath);
-				
+		Sheet sheet = myWorkBook.getSheetAt(0);
+		int i = 0;
+		for (Row eachRow : sheet) {
+			
+			PoliticianExportModel politicianObj = new PoliticianExportModel();
+			
+			if(i<Integer.parseInt(cellInfo[1])){
+				i++;
+				continue;
 			}
-			reader.close();
+			
+			String[] columns = cellInfo[0].split(",");
+			
+			System.out.println(eachRow.getCell(2));
+			System.out.println(eachRow.getCell(3));
+			
+			String politicianName = eachRow.getCell(Integer.parseInt(columns[1])).toString().trim().replace("\n", " ");	
+			String locationName = eachRow.getCell(Integer.parseInt(columns[0])).toString().trim();
+			
+			if(!headerList.contains(politicianName) && !(politicianName.isEmpty() || locationName.isEmpty())){
+				politicianObj.setPoliticianName(politicianName);
+				politicianObj.setLocationName(locationName);
+				politicianObj.setDesignation(ServiceConstants.SITTING_SARPANCH_GP_DESIGNATION);
+				politicianObj.setPoliticianType(ServiceConstants.SARPANCH);
+				politicians.add(politicianObj);
+			}
+			
+			i++;
+
 		}
+		
+		//Export for the district
+		String folderPath = uploadedFolderName + ApplicationConstants.SUFFIX + globalFolderName + ApplicationConstants.SUFFIX + countryFolderName + ApplicationConstants.SUFFIX
+				+ stateName + ApplicationConstants.SUFFIX + districtName ;
+		
+		exportPoliticians(politicians, exportfileName, folderPath);
+		
+	}
+
+	@Override
+	public void exportMLA(PoliticianImportExportRequest politicianImport) throws InternalServerException {
+		
+		driver = new ChromeDriver();
+		driver.get(env.getProperty("india-politicians-mla.url"));
+		
+		String fileName = env.getProperty("india-politicians-mla-export-file-name");
+		
+		String uploadedFolderName = env.getProperty("amazon.s3.politicians.uploaded.folder.name");
+
+		String globalFolderName = env.getProperty("amazon.s3.politicians.global.folder.name");
+		String countryFolderName = env.getProperty("amazon.s3.politicians.india.folder.name");
+		
+		
+		List<PoliticianExportModel> politicianData = new ArrayList<PoliticianExportModel>();
+		
+		List<WebElement> allStates = driver.findElements(By.className("sets"));
+		
+		for(WebElement we: allStates){	
+			
+			String stateName = we.getText();
+			
+			if(!politicianImport.getStates().contains(stateName)){
+				continue;
+			}
+			
+			we.click();
+			
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				throw new InternalServerException(e.getMessage());
+			}
+			
+			WebElement activeResultDiv = driver.findElement(By.className("active_result"));
+			
+			WebElement pageMainTable = activeResultDiv.findElement(By.className("tableizer-table"));
+			WebElement pageMainTableBody = pageMainTable.findElements(By.xpath("tbody")).get(0);
+			List<WebElement> memberRows = pageMainTableBody
+					.findElements(By.xpath("tr"));
+			
+			int i =0;
+			
+			for (WebElement row : memberRows) {
+				
+				if(i==0){
+					i++;
+					continue;
+				}
+				List<WebElement> cells = row.findElements(By.xpath("td"));
+				
+				if(cells.size() >0){
+					
+					List<Integer> sequence = new ArrayList<Integer>();
+					sequence.add(new Integer(1));
+					sequence.add(new Integer(5));
+					
+					for(Integer j : sequence){
+						
+						PoliticianExportModel politicianObj = new PoliticianExportModel();
+						
+						// One entry
+						WebElement locationName = cells.get(j);
+						
+						WebElement eachMemberName = cells.get(j+1);
+						
+						WebElement eachMemberPartyName = cells.get(j+2);
+						
+						if(!eachMemberName.getText().trim().isEmpty()){					
+							politicianObj.setPoliticianName(eachMemberName.getText());
+							politicianObj.setLocationName(locationName.getText());
+							politicianObj.setPartyName(eachMemberPartyName.getText());
+							politicianObj.setDesignation(ServiceConstants.SITTING_MLA_DESIGNATION);
+							politicianObj.setPoliticianType(ServiceConstants.MLA);
+							politicianData.add(politicianObj);
+						}
+					}
+				}
+				
+					
+			}// For each row.
+			
+			//Export for the district
+			String folderPath = uploadedFolderName + ApplicationConstants.SUFFIX + globalFolderName + ApplicationConstants.SUFFIX + countryFolderName + ApplicationConstants.SUFFIX
+					+ stateName  ;
+			
+			exportPoliticians(politicianData, fileName, folderPath);
+			
+		}// For all states
+		
+		driver.close();
+		driver.quit();
 		
 	}
 	

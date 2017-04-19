@@ -1,0 +1,36 @@
+#PDF  -- ordering lx,ly,ux,uy
+
+srikakulam-col1-coord=140,25,157,800
+srikakulam-col2-coord=257,25,400,800
+
+prakasam-col1-coord=80,25,157,800
+prakasam-col2-coord=257,25,400,800
+
+ananthapur-col1-coord=166,40,175,675
+ananthapur-col2-coord=345,40,400,675
+
+#XLS -- col1(lcoation name) and col2(politician name)
+
+adilabad-cols-index=2,3
+adilabad-row-start-index=4
+
+ananthapur-cols-index=2,3
+ananthapur-row-start-index=2
+
+chittoor-cols-index=2,3
+chittoor-row-start-index=4
+
+east-godavari-cols-index=3,4
+east-godavari-row-start-index=4
+
+guntur-cols-index=2,3
+guntur-row-start-index=4
+
+karimnagar-cols-index=2,3
+karimnagar-row-start-index=4
+
+khammam-cols-index=2,3
+khammam-row-start-index=4
+
+
+

@@ -1007,71 +1007,78 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 			int noOfLines = lines.length;
 			if (lines != null && noOfLines != 0) {
 
-				String mainTown = lines[0].trim();
-				String policeStation = lines[2].trim();
-				String mandal = lines[4].trim();
-				String revenueDivision = lines[6];
+				String mainTown = "";
+				String policeStation = "";
+				String mandal = "";
+				String revenueDivision = "";
 				String pinCode = "";// lines[10];
 				
 				
 				for(int i=0;i<lines.length;i++){
-					if(lines[i].contains("Main Town")){
+					if(lines[i] != null && lines[i].contains("Main Town")){
 						
 						if(lines[i].contains(":")){
 							String[] linesSplit = lines[i].split(":");
-							mainTown = linesSplit[1].trim();
+							if(linesSplit.length >= 2)
+								mainTown = linesSplit[1].trim();
 						}else{
 							String[] linesSplit = lines[i].split("Town");
-							mainTown = linesSplit[1].trim();
+							if(linesSplit.length >= 2)
+								mainTown = linesSplit[1].trim();
 						}
 					}
 					
-					if(lines[i].contains("Police Station")){
+					if(lines[i] != null && lines[i].contains("Police Station")){
 						
 						if(lines[i].contains(":")){
 							String[] linesSplit = lines[i].split(":");
-							policeStation = linesSplit[1].trim();
+							if(linesSplit.length >= 2)
+								policeStation = linesSplit[1].trim();
 						}else{
 							String[] linesSplit = lines[i].split("Station");
-							policeStation = linesSplit[1].trim();
+							if(linesSplit.length >= 2)
+								policeStation = linesSplit[1].trim();
 						}
 					}
 					
-					if(lines[i].contains("Mandal")){
+					if(lines[i] != null && lines[i].contains("Mandal")){
 						
 						if(lines[i].contains(":")){
 							String[] linesSplit = lines[i].split(":");
-							mandal = linesSplit[1].trim();
+							if(linesSplit.length >= 2)
+								mandal = linesSplit[1].trim();
 						}else{
 							String[] linesSplit = lines[i].split("Mandal");
-							mandal = linesSplit[0].trim();
+							if(linesSplit.length >= 2)
+								mandal = linesSplit[0].trim();
 						}
 					}
 					
-					if(lines[i].contains("Revenue Division")){
+					if(lines[i] != null && lines[i].contains("Revenue Division")){
 						
 						if(lines[i].contains(":")){
 							String[] linesSplit = lines[i].split(":");
-							revenueDivision = linesSplit[1].trim();
+							if(linesSplit.length >= 2)
+								revenueDivision = linesSplit[1].trim();
 						}else{
 							String[] linesSplit = lines[i].split("Division");
-							revenueDivision = linesSplit[1].trim();
+							if(linesSplit.length >= 2)
+								revenueDivision = linesSplit[1].trim();
 						}
 					}
 					
-					if(lines[i].contains("Pin Code")){
+					if(lines[i] != null && lines[i].contains("Pin Code")){
 						
 						if(lines[i].contains(":")){
 							String[] linesSplit = lines[i].split(":");
-							pinCode = linesSplit[1].trim();
+							if(linesSplit.length >= 2)
+								pinCode = linesSplit[1].trim();
 						}else{
 							String[] linesSplit = lines[i].split("Code");
-							pinCode = linesSplit[1].trim();
+							if(linesSplit.length >= 2)
+								pinCode = linesSplit[1].trim();
 						}
 					}
-					
-					
-
 				}
 
 				pdfHeaderData.setMainTown(mainTown);
