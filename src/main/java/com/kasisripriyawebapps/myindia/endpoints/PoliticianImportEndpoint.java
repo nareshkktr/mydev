@@ -81,6 +81,16 @@ public class PoliticianImportEndpoint {
 		politicianImportExportService.importExportMLA();
 		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
 	}
+	
+	@POST
+	@ApiOperation(value = EndPointConstants.EXPORT_MLA_API_VALUE, nickname = EndPointConstants.EXPORT_MLA_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.EXPORT_MLA_API_DESCRIPTION)
+	@Path(EndPointConstants.EXPORT_MLA_REQUEST_MAPPING)
+	public Response exportMLA(PoliticianImportExportRequest politicianImport)
+			throws InternalServerException {
+		politicianImportExportService.exportMLA(politicianImport);
+		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
+	}
+	
 	@POST
 	@ApiOperation(value = EndPointConstants.IMPORT_CHIEF_MINISTER_API_VALUE, nickname = EndPointConstants.IMPORT_CHIEF_MINISTER_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.IMPORT_CHIEF_MINISTER_API_DESCRIPTION)
 	@Path(EndPointConstants.IMPORT_CHIEF_MINISTER_REQUEST_MAPPING)

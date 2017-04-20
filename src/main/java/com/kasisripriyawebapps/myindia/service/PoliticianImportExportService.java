@@ -26,5 +26,7 @@ public interface PoliticianImportExportService {
 	void exportRajyasabhaMPs(PoliticianImportExportRequest politicianImport) throws InternalServerException;
 
 	void exportGPSarpanch(PoliticianImportExportRequest politicianImport) throws InternalServerException, IOException;
+
+	void exportMLA(PoliticianImportExportRequest politicianImport) throws InternalServerException;
 	
 }

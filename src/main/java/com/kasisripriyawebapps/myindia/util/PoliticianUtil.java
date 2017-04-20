@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -18,6 +21,8 @@ import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 import com.itextpdf.text.pdf.parser.RegionTextRenderFilter;
 import com.itextpdf.text.pdf.parser.RenderFilter;
 import com.itextpdf.text.pdf.parser.TextExtractionStrategy;
+import com.kasisripriyawebapps.myindia.entity.LocationMaster;
+import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 
 public class PoliticianUtil {
 
@@ -225,15 +230,43 @@ public class PoliticianUtil {
 //			}
 //		}
 		
-		processSarpanchas("Adilabad_SAR-2013");
+		//processSarpanchas("Adilabad_SAR-2013");
+		
+		try {
+			processSarpanchasXLS();
+		} catch (InternalServerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
+	}
+
+	private static void processSarpanchasXLS() throws InternalServerException {
+		// TODO Auto-generated method stub
+		Workbook myWorkBook = CommonUtil.getWorkBookFromFile("https://s3.amazonaws.com/myindiapoliticians/Downloaded/Global/India/Andhra+Pradesh/Adilabad/Adilabad_SAR-2013.xlsx");
+
+		Sheet sheet = myWorkBook.getSheetAt(0);
+		int i = 0;
+		for (Row eachRow : sheet) {
+			
+			if(i<4){
+				i++;
+				continue;
+			}
+			
+			System.out.println(eachRow.getCell(2));
+			System.out.println(eachRow.getCell(3));
+			
+			i++;
+
+		}
 	}
 
 	private static void processSarpanchas(String fileName) {
 		// TODO Auto-generated method stub
 		
 
-		String pdfFilePath = "C:\\Users\\venkasb\\Desktop\\Prakasam_SAR-2013.pdf";
+		String pdfFilePath = "C:\\Users\\venkasb\\Desktop\\Chittoor _SAR-2013.pdf";
 
 		PdfReader reader = null;
 		try {
@@ -246,14 +279,14 @@ public class PoliticianUtil {
 				// HorizontalTextExtractionStrategy());
 
 				// System.out.println(tableContent);
-				for (int i = 1; i <= 1; i++) {
+				for (int i = 1; i <= noOfPages; i++) {
 
 					// Vertical scannign
 
-					int ly = 25;
-					int lx = 80;
-					int ux = 157;
-					int uy = 800;
+					int ly = 40;
+					int lx = 170;
+					int ux = 180;
+					int uy = 1000;
 
 					Rectangle rect = new Rectangle(lx, ly, ux, uy);
 
@@ -265,15 +298,18 @@ public class PoliticianUtil {
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
+					
+					 System.out.println("-----------------------------------------------");
 
 					 System.out.println(tableContent);
 
+					 System.out.println("-----------------------------------------------");
 					String[] contentSplitGP = tableContent.split("\\n");
 
-					ly = 25;
-					lx = 157 + 100;
+					ly = 40;
+					lx = 345;
 					ux = 400;
-					uy = 800;
+					uy = 1000;
 
 					rect = new Rectangle(lx, ly, ux, uy);
 
@@ -287,18 +323,39 @@ public class PoliticianUtil {
 					}
 
 					System.out.println(tableContent);
+					System.out.println("-----------------------------------------------");
 
 					String[] contentSplitCandidate = tableContent.split("\\n");
 
-//					int k = 0;
-//					 for(int j=0;j<contentSplitGP.length;j++){
-//					
+					int k = 0;
+					 for(int j=0;j<contentSplitGP.length;j++){
+					
 //					 if(contentSplitCandidate[k].trim().equalsIgnoreCase("W/O SATYA RAO") || contentSplitCandidate[k].equalsIgnoreCase("URAM")){
 //						 k++;
 //					 }
-//					 System.out.println("--"+contentSplitGP[j]+"----"+contentSplitCandidate[k]);
-//					 k++;
+					 
+//					 if(contentSplitGP[j].startsWith("VU ")){
+//						 contentSplitGP[j] = contentSplitGP[j].substring(3, contentSplitGP[j].length());
 //					 }
+//					 
+//					 if(contentSplitGP[j].startsWith("mu Rural ")){
+//						 contentSplitGP[j] = contentSplitGP[j].substring(9, contentSplitGP[j].length());
+//					 }
+//					 
+//					 if(contentSplitGP[j].startsWith("I ") || contentSplitGP[j].startsWith("m ")){
+//						 contentSplitGP[j] = contentSplitGP[j].substring(2, contentSplitGP[j].length());
+//					 }
+						 
+						 if(contentSplitGP[j].startsWith("LLU ")){
+							 contentSplitGP[j] = contentSplitGP[j].substring(4, contentSplitGP[j].length());
+							 if(contentSplitGP[j].isEmpty()){
+								 continue;
+							 }
+						 }
+					 
+					 System.out.println("--"+contentSplitGP[j]+"----"+contentSplitCandidate[k]);
+					 k++;
+					 }
 
 					// Horizontal scanning
 
