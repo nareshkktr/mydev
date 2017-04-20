@@ -942,11 +942,10 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 		String countryFolderName = env.getProperty("amazon.s3.politicians.india.folder.name");
 		
 		List<String> headerList = new ArrayList<String>();
-		headerList.add("Name of the Gram Panchayat");
-		headerList.add("Names of the candidate declared elected");
-		headerList.add("Name of the candidate declared elected");
-		headerList.add("Name of the Grampanchayat");
-		headerList.add("Names of the Candidate declared Elected");
+		headerList.add("name of the gram panchayat");
+		headerList.add("names of the candidate declared elected");
+		headerList.add("name of the candidate declared elected");
+		headerList.add("name of the grampanchayat");
 		headerList.add("4.0");
 		headerList.add("5.0");
 		headerList.add("3.0");
@@ -971,24 +970,29 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 			System.out.println(eachRow.getCell(2));
 			System.out.println(eachRow.getCell(3));
 			
-			String politicianName = eachRow.getCell(Integer.parseInt(columns[1])).toString().trim().replace("\n", " ");	
-			String locationName = eachRow.getCell(Integer.parseInt(columns[0])).toString().trim();
+			Cell col1 = eachRow.getCell(Integer.parseInt(columns[1]));	
+			Cell col2 = eachRow.getCell(Integer.parseInt(columns[0]));
 			
-			if(!headerList.contains(politicianName) && !(politicianName.isEmpty() || locationName.isEmpty())){
-				politicianObj.setPoliticianName(politicianName);
-				politicianObj.setLocationName(locationName);
-				politicianObj.setDesignation(ServiceConstants.SITTING_SARPANCH_GP_DESIGNATION);
-				politicianObj.setPoliticianType(ServiceConstants.SARPANCH);
-				politicians.add(politicianObj);
+			if(col1 != null && col2 != null){
+				
+				String politicianName = col1.toString().trim().replace("\n", " ");
+				String locationName = col2.toString().trim();
+				
+				if(!headerList.contains(politicianName.toLowerCase()) && !(politicianName.isEmpty() || locationName.isEmpty())){
+					politicianObj.setPoliticianName(politicianName);
+					politicianObj.setLocationName(locationName);
+					politicianObj.setDesignation(ServiceConstants.SITTING_SARPANCH_GP_DESIGNATION);
+					politicianObj.setPoliticianType(ServiceConstants.SARPANCH);
+					politicians.add(politicianObj);
+				}
 			}
-			
 			i++;
 
 		}
 		
 		//Export for the district
 		String folderPath = uploadedFolderName + ApplicationConstants.SUFFIX + globalFolderName + ApplicationConstants.SUFFIX + countryFolderName + ApplicationConstants.SUFFIX
-				+ stateName + ApplicationConstants.SUFFIX + districtName ;
+				+ stateName + ApplicationConstants.SUFFIX + districtName.toUpperCase() ;
 		
 		exportPoliticians(politicians, exportfileName, folderPath);
 		
