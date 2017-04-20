@@ -965,6 +965,7 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 		headerList.add("names of the candidate declared elected");
 		headerList.add("name of the candidate declared elected");
 		headerList.add("name of the grampanchayat");
+		headerList.add("name of the sarpanch");
 		headerList.add("4.0");
 		headerList.add("5.0");
 		headerList.add("3.0");
