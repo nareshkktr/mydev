@@ -7,9 +7,9 @@ import com.kasisripriyawebapps.myindia.requestresponsemodel.PoliticianImportExpo
 
 public interface PoliticianImportExportService {
 	
-	void importExportLoksabhaMPs() throws InternalServerException;
+	void importLoksabhaMPs() throws InternalServerException;
 
-	void importExportRajyasabhaMPs() throws InternalServerException;
+	void importRajyasabhaMPs() throws InternalServerException;
 
 	void importExportMLA() throws InternalServerException; 
 	

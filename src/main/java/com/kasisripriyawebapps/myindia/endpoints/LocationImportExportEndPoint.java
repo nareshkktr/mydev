@@ -138,6 +138,22 @@ public class LocationImportExportEndPoint extends BaseEndPoint {
 	}
 
 	@POST
+	@ApiOperation(value = EndPointConstants.EXPORT_MP_CONSTITUENCY_LOCATIONS_API_VALUE, nickname = EndPointConstants.EXPORT_MP_CONSTITUENCY_LOCATIONS_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.EXPORT_MP_CONSTITUENCY_LOCATIONS_API_DESCRIPTION)
+	@Path(EndPointConstants.EXPORT_MP_CONSTITUENCY_LOCATIONS_REQUEST_MAPPING)
+	public Response exportMPConstituencyLocations() throws InternalServerException {
+		locationImportExportService.exportMPConstituencyLocations();
+		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
+	}
+
+	@POST
+	@ApiOperation(value = EndPointConstants.EXPORT_MLA_CONSTITUENCY_LOCATIONS_API_VALUE, nickname = EndPointConstants.EXPORT_MLA_CONSTITUENCY_LOCATIONS_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.EXPORT_MLA_CONSTITUENCY_LOCATIONS_API_DESCRIPTION)
+	@Path(EndPointConstants.EXPORT_MLA_CONSTITUENCY_LOCATIONS_REQUEST_MAPPING)
+	public Response exportMLAConstituencyLocations() throws InternalServerException {
+		locationImportExportService.exportMLAConstituencyLocations();
+		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
+	}
+
+	@POST
 	@ApiOperation(value = EndPointConstants.EXPORT_COUNTRY_LOCATIONS_API_VALUE, nickname = EndPointConstants.EXPORT_COUNTRY_LOCATIONS_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.EXPORT_COUNTRY_LOCATIONS_API_DESCRIPTION)
 	@Path(EndPointConstants.EXPORT_COUNTRY_LOCATIONS_REQUEST_MAPPING)
 	public Response exportCountryLocations() throws InternalServerException {
@@ -222,22 +238,6 @@ public class LocationImportExportEndPoint extends BaseEndPoint {
 	@Path(EndPointConstants.EXPORT_URBAN_REFERENCE_LOCATIONS_REQUEST_MAPPING)
 	public Response exportUrbanReferenceLocations() throws InternalServerException {
 		locationImportExportService.exportUrbanReferenceLocations();
-		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
-	}
-
-	@POST
-	@ApiOperation(value = EndPointConstants.IMPORT_EXPORT_ALL_MASTER_LOCATIONS_API_VALUE, nickname = EndPointConstants.IMPORT_EXPORT_ALL_MASTER_LOCATIONS_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.IMPORT_EXPORT_ALL_MASTER_LOCATIONS_API_DESCRIPTION)
-	@Path(EndPointConstants.IMPORT_EXPORT_ALL_MASTER_LOCATIONS_REQUEST_MAPPING)
-	public Response importExportAllMasterLocations() throws InternalServerException {
-		locationImportExportService.importExportAllMasterLocations();
-		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
-	}
-
-	@POST
-	@ApiOperation(value = EndPointConstants.IMPORT_EXPORT_ALL_REFERENCE_LOCATIONS_API_VALUE, nickname = EndPointConstants.IMPORT_EXPORT_ALL_REFERENCE_LOCATIONS_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.IMPORT_EXPORT_ALL_REFERENCE_LOCATIONS_API_DESCRIPTION)
-	@Path(EndPointConstants.IMPORT_EXPORT_ALL_REFERENCE_LOCATIONS_REQUEST_MAPPING)
-	public Response importExportAllReferenceLocations() throws InternalServerException {
-		locationImportExportService.importExportAllReferenceLocations();
 		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
 	}
 
