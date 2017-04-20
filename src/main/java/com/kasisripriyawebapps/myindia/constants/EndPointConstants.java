@@ -737,6 +737,16 @@ public class EndPointConstants {
 	public static final String IMPORT_MLA_CONSTITUENCY_LOCATIONS_API_NICKNAME = "importMLAConstituencyLocations";
 	public static final String IMPORT_MLA_CONSTITUENCY_LOCATIONS_API_DESCRIPTION = "Import MLA Constituency Locations";
 
+	public static final String EXPORT_MP_CONSTITUENCY_LOCATIONS_REQUEST_MAPPING = "exportMPConstituencyLocations";
+	public static final String EXPORT_MP_CONSTITUENCY_LOCATIONS_API_VALUE = "exportMPConstituencyLocations";
+	public static final String EXPORT_MP_CONSTITUENCY_LOCATIONS_API_NICKNAME = "exportMPConstituencyLocations";
+	public static final String EXPORT_MP_CONSTITUENCY_LOCATIONS_API_DESCRIPTION = "Export MP Constituency Locations";
+
+	public static final String EXPORT_MLA_CONSTITUENCY_LOCATIONS_REQUEST_MAPPING = "exportMLAConstituencyLocations";
+	public static final String EXPORT_MLA_CONSTITUENCY_LOCATIONS_API_VALUE = "exportMLAConstituencyLocations";
+	public static final String EXPORT_MLA_CONSTITUENCY_LOCATIONS_API_NICKNAME = "exportMLAConstituencyLocations";
+	public static final String EXPORT_MLA_CONSTITUENCY_LOCATIONS_API_DESCRIPTION = "Export MLA Constituency Locations";
+
 	public static final String IMPORT_URBAN_REFERENCE_LOCATIONS_REQUEST_MAPPING = "importUrbanReferenceLocations";
 	public static final String IMPORT_URBAN_REFERENCE_LOCATIONS_API_VALUE = "importUrbanReferenceLocations";
 	public static final String IMPORT_URBAN_REFERENCE_LOCATIONS_API_NICKNAME = "importUrbanReferenceLocations";
@@ -751,16 +761,6 @@ public class EndPointConstants {
 	public static final String EXPORT_ALL_LOCATIONS_API_VALUE = "exportAllLocations";
 	public static final String EXPORT_ALL_LOCATIONS_API_NICKNAME = "exportAllLocations";
 	public static final String EXPORT_ALL_LOCATIONS_API_DESCRIPTION = "Export All Locations";
-
-	public static final String IMPORT_EXPORT_ALL_MASTER_LOCATIONS_REQUEST_MAPPING = "importExportAllMasterLocations";
-	public static final String IMPORT_EXPORT_ALL_MASTER_LOCATIONS_API_VALUE = "importExportAllMasterLocations";
-	public static final String IMPORT_EXPORT_ALL_MASTER_LOCATIONS_API_NICKNAME = "importExportAllMasterLocations";
-	public static final String IMPORT_EXPORT_ALL_MASTER_LOCATIONS_API_DESCRIPTION = "Import Export All Master Locations";
-
-	public static final String IMPORT_EXPORT_ALL_REFERENCE_LOCATIONS_REQUEST_MAPPING = "importExportAllReferenceLocations";
-	public static final String IMPORT_EXPORT_ALL_REFERENCE_LOCATIONS_API_VALUE = "importExportAllReferenceLocations";
-	public static final String IMPORT_EXPORT_ALL_REFERENCE_LOCATIONS_API_NICKNAME = "importExportAllReferenceLocations";
-	public static final String IMPORT_EXPORT_ALL_REFERENCE_LOCATIONS_API_DESCRIPTION = "Import Export All Reference Locations";
 
 	public static final String IMPORT_ALL_POLITICIANS_REQUEST_MAPPING = "importAllPoliticians";
 	public static final String IMPORT_ALL_POLITICIANS_API_VALUE = "importAllPoliticians";
@@ -1156,12 +1156,12 @@ public class EndPointConstants {
 	public static final String EXPORT_LOKSABHA_MP_API_VALUE = "exportLoksabhaMP";
 	public static final String EXPORT_LOKSABHA_MP_API_NICKNAME = "exportLoksabhaMP";
 	public static final String EXPORT_LOKSABHA_MP_API_DESCRIPTION = "Export the lok sabha MPs.";
-	
+
 	public static final String EXPORT_RAJYASABHA_MP_REQUEST_MAPPING = "exportRajyasabhaMP";
 	public static final String EXPORT_RAJYASABHA_MP_API_VALUE = "exportRajyasabhaMP";
 	public static final String EXPORT_RAJYASABHA_MP_API_NICKNAME = "exportRajyasabhaMP";
 	public static final String EXPORT_RAJYASABHA_MP_API_DESCRIPTION = "Export the rajya sabha MPs.";
-	
+
 	public static final String EXPORT_GP_SARPANCH_REQUEST_MAPPING = "exportGPSarpanch";
 	public static final String EXPORT_GP_SARPANCH_API_VALUE = "exportGPSarpanch";
 	public static final String EXPORT_GP_SARPANCH_API_NICKNAME = "exportGPSarpanch";

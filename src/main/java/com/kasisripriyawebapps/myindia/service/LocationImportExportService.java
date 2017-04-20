@@ -51,10 +51,10 @@ public interface LocationImportExportService {
 
 	boolean importUrbanReferenceLocations() throws InternalServerException;
 
-	boolean importExportAllMasterLocations() throws InternalServerException;
-
-	boolean importExportAllReferenceLocations() throws InternalServerException;
-
 	boolean importMLAConstituencyLocations() throws InternalServerException;
+
+	void exportMPConstituencyLocations() throws InternalServerException;
+
+	void exportMLAConstituencyLocations() throws InternalServerException;
 
 }

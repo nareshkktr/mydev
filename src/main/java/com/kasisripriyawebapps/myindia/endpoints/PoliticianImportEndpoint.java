@@ -32,7 +32,7 @@ public class PoliticianImportEndpoint {
 	@Path(EndPointConstants.IMPORT_LOKSABHA_MP_REQUEST_MAPPING)
 	public Response importAllLoksabhaMP()
 			throws InternalServerException {
-		politicianImportExportService.importExportLoksabhaMPs();
+		politicianImportExportService.importLoksabhaMPs();
 		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
 	}
 	
@@ -50,7 +50,7 @@ public class PoliticianImportEndpoint {
 	@Path(EndPointConstants.IMPORT_RAJYASABHA_MP_REQUEST_MAPPING)
 	public Response importAllRajyasabhaMP()
 			throws InternalServerException {
-		politicianImportExportService.importExportRajyasabhaMPs();
+		politicianImportExportService.importRajyasabhaMPs();
 		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
 	}
 	

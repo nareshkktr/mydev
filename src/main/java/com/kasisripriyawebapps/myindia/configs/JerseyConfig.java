@@ -25,28 +25,25 @@ public class JerseyConfig extends ResourceConfig {
 
 	public JerseyConfig() {
 		register(RequestContextFilter.class);
-		//packages("com.kasisripriyawebapps.myindia.endpoints", "com.kasisripriyawebapps.myindia.exception");
-		scan(new String[]{"com.kasisripriyawebapps.myindia.endpoints","com.kasisripriyawebapps.myindia.exception"});
-		
+		packages("com.kasisripriyawebapps.myindia.endpoints", "com.kasisripriyawebapps.myindia.exception");
+		// scan(new
+		// String[]{"com.kasisripriyawebapps.myindia.endpoints","com.kasisripriyawebapps.myindia.exception"});
+
 		register(LoggingFilter.class);
 		register(MultiPartFeature.class);
-		
+
 	}
-	
+
 	public void scan(String... packages) {
-	    for (String pack : packages) {
-	        Reflections reflections = new Reflections(pack);
-	        reflections.getTypesAnnotatedWith(Provider.class)
-	                .parallelStream()
-	                .forEach((clazz) -> {
-	                    register(clazz);
-	                });
-	        reflections.getTypesAnnotatedWith(Path.class)
-	                .parallelStream()
-	                .forEach((clazz) -> {
-	                    register(clazz);
-	                });
-	    }
+		for (String pack : packages) {
+			Reflections reflections = new Reflections(pack);
+			reflections.getTypesAnnotatedWith(Provider.class).parallelStream().forEach((clazz) -> {
+				register(clazz);
+			});
+			reflections.getTypesAnnotatedWith(Path.class).parallelStream().forEach((clazz) -> {
+				register(clazz);
+			});
+		}
 	}
 
 	@PostConstruct
