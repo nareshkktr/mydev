@@ -72,6 +72,15 @@ public class PoliticianImportEndpoint {
 		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
 	}
 	
+	@POST
+	@ApiOperation(value = EndPointConstants.IMPORT_GP_SARPANCH_API_VALUE, nickname = EndPointConstants.IMPORT_GP_SARPANCH_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.IMPORT_GP_SARPANCH_API_DESCRIPTION)
+	@Path(EndPointConstants.IMPORT_GP_SARPANCH_REQUEST_MAPPING)
+	public Response importGPSarpanch(PoliticianImportExportRequest politicianImport)
+			throws InternalServerException, IOException {
+		politicianImportExportService.importGPSarpanch(politicianImport);
+		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
+	}
+	
 	
 	@POST
 	@ApiOperation(value = EndPointConstants.IMPORT_MLA_API_VALUE, nickname = EndPointConstants.IMPORT_MLA_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.IMPORT_MLA_API_DESCRIPTION)

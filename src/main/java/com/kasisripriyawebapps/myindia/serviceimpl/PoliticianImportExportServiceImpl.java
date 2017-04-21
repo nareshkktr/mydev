@@ -1040,7 +1040,7 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 			
 			String stateName = we.getText();
 			
-			if(!politicianImport.getStates().contains(stateName)){
+			if(!politicianImport.getStates().contains(stateName.toUpperCase())){
 				continue;
 			}
 			
@@ -1102,7 +1102,7 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 			
 			//Export for the district
 			String folderPath = uploadedFolderName + ApplicationConstants.SUFFIX + globalFolderName + ApplicationConstants.SUFFIX + countryFolderName + ApplicationConstants.SUFFIX
-					+ stateName  ;
+					+ stateName.toUpperCase()  ;
 			
 			exportPoliticians(politicianData, fileName, folderPath);
 			
@@ -1110,6 +1110,12 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 		
 		driver.close();
 		driver.quit();
+		
+	}
+
+	@Override
+	public void importGPSarpanch(PoliticianImportExportRequest politicianImport) throws InternalServerException {
+		// TODO Auto-generated method stub
 		
 	}
 	

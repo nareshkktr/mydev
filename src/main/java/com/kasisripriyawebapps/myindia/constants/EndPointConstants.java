@@ -1172,4 +1172,9 @@ public class EndPointConstants {
 	public static final String EXPORT_MLA_API_NICKNAME = "exportMLA";
 	public static final String EXPORT_MLA_API_DESCRIPTION = "Export MLAs bby district.";
 
+	public static final String IMPORT_GP_SARPANCH_REQUEST_MAPPING = "importGPSarpanch";
+	public static final String IMPORT_GP_SARPANCH_API_VALUE = "importGPSarpanch";
+	public static final String IMPORT_GP_SARPANCH_API_NICKNAME = "importGPSarpanch";
+	public static final String IMPORT_GP_SARPANCH_API_DESCRIPTION = "Import the gram panchayathi sarpanch.";
+
 }

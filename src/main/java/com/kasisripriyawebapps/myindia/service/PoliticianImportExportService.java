@@ -28,5 +28,7 @@ public interface PoliticianImportExportService {
 	void exportGPSarpanch(PoliticianImportExportRequest politicianImport) throws InternalServerException, IOException;
 
 	void exportMLA(PoliticianImportExportRequest politicianImport) throws InternalServerException;
+
+	void importGPSarpanch(PoliticianImportExportRequest politicianImport) throws InternalServerException;
 	
 }
