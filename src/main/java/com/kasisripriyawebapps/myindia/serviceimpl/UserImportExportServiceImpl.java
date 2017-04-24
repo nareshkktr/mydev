@@ -841,7 +841,7 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 		String filePath = hostName + bucketName + ApplicationConstants.SUFFIX + uploadedFolderName +ApplicationConstants.SUFFIX
 							+ globalFolderName + ApplicationConstants.SUFFIX + countryFolderName + ApplicationConstants.SUFFIX + eachURLData.getStateName()
 							+ ApplicationConstants.SUFFIX + eachURLData.getDistrictName() + ApplicationConstants.SUFFIX + eachURLData.getMlaConstituencyName() +
-							ApplicationConstants.SUFFIX + votersFolderName  + ApplicationConstants.SUFFIX + eachURLData.getPollingStationName()+".xls";
+							ApplicationConstants.SUFFIX + votersFolderName  + ApplicationConstants.SUFFIX + eachURLData.getPartNo()+".xls";
 
 		System.out.println(filePath);
 		Workbook myWorkBook = CommonUtil.getWorkBookFromFile(filePath);
