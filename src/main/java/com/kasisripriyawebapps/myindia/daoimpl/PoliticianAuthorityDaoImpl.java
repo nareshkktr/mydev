@@ -1,5 +1,6 @@
 package com.kasisripriyawebapps.myindia.daoimpl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.criterion.Criterion;
@@ -28,6 +29,22 @@ public class PoliticianAuthorityDaoImpl extends BaseDaoImpl<Long, PoliticianAuth
 	public void saveOrUpdatePolitician(List<PoliticianAuthority> activePoliticianAuthorities)
 			throws InternalServerException {
 		saveOrUpdateBatch(activePoliticianAuthorities);
+	}
+
+	@Override
+	public List<PoliticianAuthority> getActivePoliticianAuthhoritiesByDesignationAndLocations(String politicianType,
+			List<Long> applicableLocationGuids) throws InternalServerException {
+		Criterion criterionObj = Restrictions.eq("designation", politicianType);
+		Criterion criterionForLocations = Restrictions.in("electedLocation.guid", applicableLocationGuids);
+		
+		List<Criterion> criterions = new ArrayList<Criterion>();
+		criterions.add(criterionForLocations);
+		criterions.add(criterionObj);
+		
+		SortCriteriaData sortCriteria = new SortCriteriaData();
+		sortCriteria.setProperty("designation");
+		sortCriteria.setIsAscending(true);
+		return getAllByConditions(criterions,sortCriteria);
 	}
 
 }
