@@ -2027,146 +2027,6 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 		return true;
 	}
 
-	private void processMLAConstituencyLocations(Map<String, List<LocationMaster>> mPMasterLocationsCodeMap,
-			List<LocationMaster> existingMasterLocations, List<LocationMaster> exportMasterLocations,
-			List<LocationMaster> newMasterLocations) {
-
-		driver = new ChromeDriver();
-		driver.manage().window().maximize();
-		driver.get(env.getProperty("india-mla-constituency.url"));
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			new InternalServerException(e.getMessage());
-		}
-
-		List<WebElement> mpConstiencyTables = driver.findElements(By.cssSelector("table.wikitable"));
-		if (mpConstiencyTables != null && !mpConstiencyTables.isEmpty()) {
-
-			int tableIndex = 0;
-			for (WebElement eachMpConstiencyTable : mpConstiencyTables) {
-				if (tableIndex == 0) {
-					tableIndex++;
-					continue;
-				}
-				Long validStateMLAConstituencyId = (long) 0;
-				if (eachMpConstiencyTable != null) {
-					WebElement eachMpConstiencyTableTbody = eachMpConstiencyTable.findElements(By.xpath("tbody"))
-							.get(0);
-					List<WebElement> eachMpConstiencyTableTbodyTrList = eachMpConstiencyTableTbody
-							.findElements(By.xpath("tr"));
-					if (eachMpConstiencyTableTbodyTrList != null && !eachMpConstiencyTableTbodyTrList.isEmpty()) {
-						for (WebElement row : eachMpConstiencyTableTbodyTrList) {
-
-							List<WebElement> cells = row.findElements(By.xpath("td"));
-							WebElement mpConstituencyNameCell = cells.get(1);
-							String mpConstituencyName = mpConstituencyNameCell.getText();
-							WebElement mlaConstituencyNamesCell = cells.get(3);
-							System.out.println(mlaConstituencyNamesCell.getText());
-							System.out.println(">>>>>>>>>>>>>>");
-
-							if (mpConstituencyNameCell != null && mpConstituencyNameCell.getText() != null
-									&& !mpConstituencyNameCell.getText().isEmpty() && mlaConstituencyNamesCell != null
-									&& mlaConstituencyNamesCell.getText() != null
-									&& !mlaConstituencyNamesCell.getText().isEmpty()) {
-
-								Long parentLocationGuid = mPMasterLocationsCodeMap.get(mpConstituencyName).get(0)
-										.getGuid();
-
-								String[] mlaConstituencyNamesArray = mlaConstituencyNamesCell.getText().trim()
-										.split("(?<=\\D)(?=\\d)");
-
-								boolean isHavingHyphon = false;
-								boolean isHavingDot = false;
-
-								if (mlaConstituencyNamesCell.getText().trim().charAt(1) == '-') {
-									isHavingHyphon = true;
-								}
-
-								if (mlaConstituencyNamesCell.getText().trim().charAt(1) == '.') {
-									isHavingDot = true;
-								}
-
-								for (int i = 0; i < mlaConstituencyNamesArray.length; i++) {
-									String eachStr = mlaConstituencyNamesArray[i].trim();
-									Long locationCode = null;
-									String locationName = "";
-
-									if (eachStr.matches(".*\\d+.*") && isHavingDot) {
-										locationCode = Long.parseLong(eachStr.split("\\.")[0]);
-										locationName = eachStr.split("\\.")[1].trim();
-										validStateMLAConstituencyId = prepareLocationMasterData(locationCode,
-												locationName, parentLocationGuid, existingMasterLocations,
-												exportMasterLocations, newMasterLocations, validStateMLAConstituencyId);
-									} else if (eachStr.matches(".*\\d+.*") && isHavingHyphon) {
-										locationCode = Long.parseLong(eachStr.split("-")[0]);
-										locationName = eachStr.split("-")[1].trim();
-										validStateMLAConstituencyId = prepareLocationMasterData(locationCode,
-												locationName, parentLocationGuid, existingMasterLocations,
-												exportMasterLocations, newMasterLocations, validStateMLAConstituencyId);
-									} else {
-										String[] locationNamesArray = eachStr.split("\\,");
-										for (int j = 0; j < locationNamesArray.length; j++) {
-											locationName = locationNamesArray[j];
-											validStateMLAConstituencyId = prepareLocationMasterData(locationCode,
-													locationName, parentLocationGuid, existingMasterLocations,
-													exportMasterLocations, newMasterLocations,
-													validStateMLAConstituencyId);
-										}
-									}
-
-								}
-							}
-						}
-					}
-				}
-
-				tableIndex++;
-			}
-		}
-		driver.close();
-		driver.quit();
-	}
-
-	private Long prepareLocationMasterData(Long locationCode, String locationName, Long parentLocationGuid,
-			List<LocationMaster> existingMasterLocations, List<LocationMaster> exportMasterLocations,
-			List<LocationMaster> newMasterLocations, Long validStateMLAConstituencyId) {
-		if (locationName.contains("(")) {
-			String[] subDistrictCodeArray = locationName.split("\\(");
-			if (subDistrictCodeArray.length > 2) {
-				locationName = subDistrictCodeArray[0] + "(" + subDistrictCodeArray[1];
-			} else {
-				locationName = subDistrictCodeArray[subDistrictCodeArray.length - 2];
-			}
-		}
-		if (locationName.endsWith(".") || locationName.endsWith(",")) {
-			locationName = locationName.substring(0, locationName.length() - 1);
-		}
-		locationName = locationName.trim();
-
-		if (locationCode != null) {
-			validStateMLAConstituencyId = locationCode;
-		} else {
-			locationCode = validStateMLAConstituencyId + 1;
-			validStateMLAConstituencyId++;
-		}
-		LocationMaster locationMaster = new LocationMaster();
-		locationMaster.setLocationCode(locationCode);
-		locationMaster.setLocationName(locationName);
-		locationMaster.setLocationType(ServiceConstants.LOCATION_MLA_CONSTITUENCT_TYPE);
-		locationMaster.setParentLocationGuid(parentLocationGuid);
-
-		if (!newMasterLocations.contains(locationMaster) && !existingMasterLocations.contains(locationMaster)) {
-			newMasterLocations.add(locationMaster);
-		}
-
-		if (!exportMasterLocations.contains(locationMaster)) {
-			exportMasterLocations.add(locationMaster);
-		}
-
-		return validStateMLAConstituencyId;
-	}
-
 	@Override
 	@Transactional
 	public void exportMPConstituencyLocations() throws InternalServerException {
@@ -2275,6 +2135,116 @@ public class LocationImportExportServiceImpl implements LocationImportExportServ
 	@Override
 	@Transactional
 	public void exportMLAConstituencyLocations() throws InternalServerException {
+		String bucketName = env.getProperty("amazon.s3.locations.bucket.name");
+		String uploadedFolderName = env.getProperty("amazon.s3.locations.uploaded.folder.name");
 
+		String globalFolderName = env.getProperty("amazon.s3.locations.global.folder.name");
+		String countryFolderName = env.getProperty("amazon.s3.locations.india.folder.name");
+
+		ChromeOptions op = new ChromeOptions();
+		op.addExtensions(new File("Block-image_v1.0.crx"));
+		driver = new ChromeDriver(op);
+
+		driver.manage().window().maximize();
+		driver.get(env.getProperty("india-politicians-mla.url"));
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			new InternalServerException(e.getMessage());
+		}
+
+		List<LocationMaster> stateMasterLocations = new ArrayList<LocationMaster>();
+		List<String> locationTypes = new ArrayList<String>();
+		locationTypes.add(ServiceConstants.LOCATION_STATE_TYPE);
+		locationTypes.add(ServiceConstants.LOCATION_UNION_TERRITORY_TYPE);
+		stateMasterLocations = locationMasterDao.getAllMasterLocationsByTypes(locationTypes);
+		Map<String, List<LocationMaster>> stateMasterLocationsCodeMap = stateMasterLocations.stream()
+				.collect(Collectors.groupingBy(locationObject -> locationObject.getLocationName().toUpperCase()));
+
+		List<WebElement> allStates = driver.findElements(By.className("sets"));
+
+		for (WebElement we : allStates) {
+
+			String stateName = we.getText().trim();
+
+			if (!stateMasterLocationsCodeMap.containsKey(stateName.toUpperCase())) {
+				continue;
+			}
+
+			we.click();
+
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				throw new InternalServerException(e.getMessage());
+			}
+
+			WebElement activeResultDiv = driver.findElement(By.className("active_result"));
+
+			WebElement pageMainTable = activeResultDiv.findElement(By.className("tableizer-table"));
+			WebElement pageMainTableBody = pageMainTable.findElements(By.xpath("tbody")).get(0);
+			List<WebElement> memberRows = pageMainTableBody.findElements(By.xpath("tr"));
+
+			int i = 0;
+
+			String fileName = env.getProperty("project.mla.constituency-locations-file-name");
+			Workbook exportWorkBook = CommonUtil.createWorkBook(fileName);
+			if (exportWorkBook.getNumberOfSheets() == 1 && exportWorkBook.getSheetAt(0) != null) {
+				exportWorkBook.removeSheetAt(0);
+			}
+			Sheet exportWorkBookSheet = exportWorkBook.createSheet(ServiceConstants.LOCATION_MLA_CONSTITUENCT_TYPE);
+			addHeaderRow(exportWorkBookSheet);
+			Map<Integer, Object[]> sheetData = new HashMap<Integer, Object[]>();
+			Integer k = 0;
+
+			for (WebElement row : memberRows) {
+
+				if (i == 0) {
+					i++;
+					continue;
+				}
+				List<WebElement> cells = row.findElements(By.xpath("td"));
+
+				if (cells.size() > 0) {
+
+					List<Integer> sequence = new ArrayList<Integer>();
+					sequence.add(new Integer(1));
+					sequence.add(new Integer(5));
+
+					for (Integer j : sequence) {
+
+						WebElement locationName = cells.get(j);
+						String locationNameStr = locationName.getText().toUpperCase();
+						locationNameStr = locationNameStr.split("-")[0].toUpperCase().trim();
+
+						WebElement eachMemberName = cells.get(j + 1);
+
+						if (!eachMemberName.getText().trim().isEmpty()) {
+							LocationMaster stateLocation = stateMasterLocationsCodeMap.get(stateName.toUpperCase())
+									.get(0);
+							Long mlaConstituencyNo = (long) 0;
+							String stateLocationCode = stateLocation.getLocationCode().toString();
+							stateLocationCode = stateLocationCode + "" + j.toString();
+							mlaConstituencyNo = Long.valueOf(stateLocationCode);
+							k++;
+							sheetData.put(k, new Object[] { mlaConstituencyNo, locationNameStr,
+									ServiceConstants.LOCATION_MLA_CONSTITUENCT_TYPE, stateLocation.getGuid() });
+
+						}
+					}
+				}
+
+			} // For each row.
+
+			String eachUploadedFolderName = uploadedFolderName + SUFFIX + globalFolderName + SUFFIX + countryFolderName
+					+ SUFFIX;
+			writeDataIntoSheet(sheetData, exportWorkBookSheet);
+			writeExcelDataIntoAmazonS3File(fileName, exportWorkBook, bucketName,
+					eachUploadedFolderName + stateName.toUpperCase());
+
+		} // For all states
+
+		driver.close();
+		driver.quit();
 	}
 }

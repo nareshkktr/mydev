@@ -32,11 +32,11 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("/api/account/login").antMatchers("/api/account/createAccount").antMatchers("/api/account/refreshAccessToken")
-				.antMatchers("/api/swagger.json").antMatchers("/api/locationImportExport/*")
-				.antMatchers("/api/userImportExport/*").antMatchers("/api/importAllPoliticians/*")
-				.antMatchers("/api/location/*").antMatchers("/api/user/*")
-				.antMatchers("/api/search/*");
+		web.ignoring().antMatchers("/api/account/login").antMatchers("/api/account/createAccount")
+				.antMatchers("/api/account/refreshAccessToken").antMatchers("/api/swagger.json")
+				.antMatchers("/api/locationImportExport/*").antMatchers("/api/userImportExport/*")
+				.antMatchers("/api/politicianImportExport/*").antMatchers("/api/location/*").antMatchers("/api/user/*")
+				.antMatchers("/api/search/*").antMatchers("/api/party/*");
 	}
 
 	@Override

@@ -1,0 +1,187 @@
+<div id="home_container">
+	<div id="home_content">
+		<div class="row" id="home_content_grid_activity_data">
+			<div class="col-lg-9 col-md-9 col-sm-8 col-xs-12"
+				id="app_objects_grid_container">
+				<div id="app_objects_grid_tabs_content">
+					<div class="col-lg-1 col-md-1 col-sm-2 xs-4"
+						id="app_objects_grid_tabs">
+
+						<div class="app_object_grid_tab">
+							<i class="fa fa-user-o" aria-hidden="true"></i>
+						</div>
+						<div class="app_object_grid_tab">
+							<i class="fa fa-user-o" aria-hidden="true"></i>
+						</div>
+						<div class="app_object_grid_tab">
+							<i class="fa fa-user-o" aria-hidden="true"></i>
+						</div>
+						<div class="app_object_grid_tab">
+							<i class="fa fa-user-o" aria-hidden="true"></i>
+						</div>
+					</div>
+
+					<div class="col-lg-11 col-md-11 col-sm-10 xs-8"
+						id="app_objects_grid_data">
+						<div class="row" id="app_objects_grid_chart_content">
+							<div class="col-lg-5 col-md-5 col-sm-6 col-xs-12"
+								id="app_objects_grid_chart">
+								<div class="row" id="app_objects_grid_chart_data_legends">
+									<div class="col-lg-9 col-md-9 col-sm-6 col-xs-12"
+										id="app_objects_grid_chart_data">
+										<nvd3-pie-chart data="home.problemChartData" showLabels="true"
+											x="home.xFunction()" y="home.yFunction()" donut="true"
+											donutRatio=".40" color="home.color" tooltips="true"
+											interactive="true" showXAxis="true" showYAxis="true"
+											showValues="true" showLegend="true"
+											labelType="value"> <svg></svg> </nvd3-pie-chart>
+									</div>
+									<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12"
+										id="app_objects_grid_chart_legends"></div>
+								</div>
+							</div>
+							<div class="col-lg-8 col-md-8 col-sm-6 col-xs-12"
+								id="app_objects_chart"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-3 col-md-3 col-sm-4 col-xs-12"
+				id="app_activity_container">
+				<div id="actiivty_feed_title">Activity Feed</div>
+				<div class="row" id="app_activity_tabs">
+					<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 app_activity_tab">
+						<i class="fa fa-user-o" aria-hidden="true"></i>
+					</div>
+					<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 app_activity_tab">
+						<i class="fa fa-user-o" aria-hidden="true"></i>
+					</div>
+					<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 app_activity_tab">
+						<i class="fa fa-user-o" aria-hidden="true"></i>
+					</div>
+					<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 app_activity_tab">
+						<i class="fa fa-user-o" aria-hidden="true"></i>
+					</div>
+					<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 app_activity_tab">
+						<i class="fa fa-user-o" aria-hidden="true"></i>
+					</div>
+					<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 app_activity_tab">
+						<i class="fa fa-user-o" aria-hidden="true"></i>
+					</div>
+				</div>
+				<div id="app_activity_content">
+					<div class="row activity_feed">
+						<div class="col-lg-1 col-md-2 col-sm-2 col-xs-2 activity_icon">
+							<i class="fa fa-comments" aria-hidden="true"></i>
+						</div>
+						<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 activity_text">
+							<p>XXX Commented on YYY Problem</p>
+						</div>
+						<div class="col-lg-1 col-md-2 col-sm-2 col-xs-2 activity_icon">
+							<p class="activity_time">4h</p>
+						</div>
+					</div>
+					<div class="row activity_feed">
+						<div class="col-lg-1 col-md-2 col-sm-2 col-xs-2 activity_icon">
+							<i class="fa fa-thumbs-down" aria-hidden="true"></i>
+						</div>
+						<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 activity_text">
+							<p>XXX Liked YYY Problem</p>
+						</div>
+						<div class="col-lg-1 col-md-2 col-sm-2 col-xs-2 activity_icon">
+							<p class="activity_time">4h</p>
+						</div>
+					</div>
+					<div class="row activity_feed">
+						<div class="col-lg-1 col-md-2 col-sm-2 col-xs-2 activity_icon">
+							<i class="fa fa-thumbs-up" aria-hidden="true"></i>
+						</div>
+						<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 activity_text">
+							<p>XXX Unliked on YYY Problem</p>
+						</div>
+						<div class="col-lg-1 col-md-2 col-sm-2 col-xs-2 activity_icon">
+							<p class="activity_time">4h</p>
+						</div>
+					</div>
+					<div class="row activity_feed">
+						<div class="col-lg-1 col-md-2 col-sm-2 col-xs-2 activity_icon">
+							<i class="fa fa-share" aria-hidden="true"></i>
+						</div>
+						<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 activity_text">
+							<p>XXX Shared YYY Problem</p>
+						</div>
+						<div class="col-lg-1 col-md-2 col-sm-2 col-xs-2 activity_icon">
+							<p class="activity_time">4h</p>
+						</div>
+					</div>
+					<div class="row activity_feed">
+						<div class="col-lg-1 col-md-2 col-sm-2 col-xs-2 activity_icon">
+							<i class="fa fa-reply" aria-hidden="true"></i>
+						</div>
+						<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 activity_text">
+							<p>XXX Replied To Comment on YYY Problem</p>
+						</div>
+						<div class="col-lg-1 col-md-2 col-sm-2 col-xs-2 activity_icon">
+							<p class="activity_time">4h</p>
+						</div>
+					</div>
+					<div class="row activity_feed">
+						<div class="col-lg-1 col-md-2 col-sm-2 col-xs-2 activity_icon">
+							<i class="fa fa-comments" aria-hidden="true"></i>
+						</div>
+						<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 activity_text">
+							<p>XXX Commented on YYY Problem</p>
+						</div>
+						<div class="col-lg-1 col-md-2 col-sm-2 col-xs-2 activity_icon">
+							<p class="activity_time">4h</p>
+						</div>
+					</div>
+					<div class="row activity_feed">
+						<div class="col-lg-1 col-md-2 col-sm-2 col-xs-2 activity_icon">
+							<i class="fa fa-thumbs-down" aria-hidden="true"></i>
+						</div>
+						<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 activity_text">
+							<p>XXX Liked YYY Problem</p>
+						</div>
+						<div class="col-lg-1 col-md-2 col-sm-2 col-xs-2 activity_icon">
+							<p class="activity_time">4h</p>
+						</div>
+					</div>
+					<div class="row activity_feed">
+						<div class="col-lg-1 col-md-2 col-sm-2 col-xs-2 activity_icon">
+							<i class="fa fa-comments" aria-hidden="true"></i>
+						</div>
+						<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 activity_text">
+							<p>XXX Commented on YYY Problem</p>
+						</div>
+						<div class="col-lg-1 col-md-2 col-sm-2 col-xs-2 activity_icon">
+							<p class="activity_time">4h</p>
+						</div>
+					</div>
+					<div class="row activity_feed">
+						<div class="col-lg-1 col-md-2 col-sm-2 col-xs-2 activity_icon">
+							<i class="fa fa-thumbs-down" aria-hidden="true"></i>
+						</div>
+						<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 activity_text">
+							<p>XXX Liked YYY Problem</p>
+						</div>
+						<div class="col-lg-1 col-md-2 col-sm-2 col-xs-2 activity_icon">
+							<p class="activity_time">4h</p>
+						</div>
+					</div>
+					<div class="row activity_feed">
+						<div class="col-lg-1 col-md-2 col-sm-2 col-xs-2 activity_icon">
+							<i class="fa fa-thumbs-down" aria-hidden="true"></i>
+						</div>
+						<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 activity_text">
+							<p>XXX Liked YYY Problem</p>
+						</div>
+						<div class="col-lg-1 col-md-2 col-sm-2 col-xs-2 activity_icon">
+							<p class="activity_time">4h</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -6,27 +6,31 @@ import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.PoliticianImportExportRequest;
 
 public interface PoliticianImportExportService {
-	
+
 	void importLoksabhaMPs() throws InternalServerException;
 
 	void importRajyasabhaMPs() throws InternalServerException;
 
-	void importExportMLA() throws InternalServerException; 
-	
-	void importExportChiefMinistors() throws InternalServerException;
+	void importMLAs() throws InternalServerException;
+
+	void importChiefMinisters() throws InternalServerException;
 
 	void importMinistries() throws InternalServerException;
 
-	void importExportGoverners() throws InternalServerException;
-	
-	void importVillageSarpanchas()  throws InternalServerException;
+	void importGovernors() throws InternalServerException;
 
-	void exportLoksabhaMPs(PoliticianImportExportRequest politicianImport) throws InternalServerException;
+	void importVillageSarpanchas() throws InternalServerException;
 
-	void exportRajyasabhaMPs(PoliticianImportExportRequest politicianImport) throws InternalServerException;
+	void exportLoksabhaMPs() throws InternalServerException;
+
+	void exportRajyasabhaMPs() throws InternalServerException;
 
 	void exportGPSarpanch(PoliticianImportExportRequest politicianImport) throws InternalServerException, IOException;
 
-	void exportMLA(PoliticianImportExportRequest politicianImport) throws InternalServerException;
-	
+	void exportMLAs() throws InternalServerException;
+
+	void exportChiefMinisters() throws InternalServerException;
+
+	void exportGovernors() throws InternalServerException;
+
 }

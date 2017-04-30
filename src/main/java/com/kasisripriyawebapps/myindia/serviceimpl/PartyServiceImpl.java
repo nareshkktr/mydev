@@ -138,10 +138,10 @@ public class PartyServiceImpl implements PartyService {
 								partyLocatedInCell = cells.get(5);
 
 							} else if (tableIndex == 2) {
-								partyNameCell = cells.get(0);
-								partyAbbrevationCell = cells.get(1);
-								partyFoundedOnCell = cells.get(2);
-								partyLocatedInCell = cells.get(4);
+								partyNameCell = cells.get(1);
+								partyAbbrevationCell = cells.get(2);
+								partyFoundedOnCell = cells.get(3);
+								partyLocatedInCell = cells.get(5);
 							}
 
 							String partyName = partyNameCell.getText();
@@ -173,7 +173,7 @@ public class PartyServiceImpl implements PartyService {
 										stateName = CommonUtil.getResolvedConflictedLocationName(stateName);
 										stateName = stateName.toUpperCase();
 										System.out.println(stateName);
-										partyLocations.addAll(stateMasterLocationsCodeMap.get(stateName));
+										// partyLocations.addAll(stateMasterLocationsCodeMap.get(stateName));
 									}
 								}
 							}

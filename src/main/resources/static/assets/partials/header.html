@@ -50,8 +50,8 @@
 				<div class="input-group">
 					<ul class="nav pull-left">
 						<li uib-dropdown class="dropdown pull-right"><a href
-							id="user-profile-dropdown" uib-dropdown-toggle> <img
-								id="logged-in-user-icon" ng-src="{{header.userInfo.userImage}}">
+							id="user-profile-dropdown" uib-dropdown-toggle>
+								<user-profile-image-display ng-if="header.userInfo" image-url="header.userInfo.userImage" name="header.userInfo.name" label-class="header.userProfileLabelClass" image-class="header.userProfileImageClass"></user-profile-image-display>
 								<b class="caret"></b>
 						</a>
 							<ul class="dropdown-menu" uib-dropdown-menu role="menu"

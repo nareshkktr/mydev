@@ -18,51 +18,47 @@ import com.kasisripriyawebapps.myindia.service.PoliticianImportExportService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
-@Path(value = EndPointConstants.IMPORT_ALL_POLITICIANS_REQUEST_MAPPING)
-@Api(value = EndPointConstants.IMPORT_ALL_POLITICIANS_API_VALUE, tags = {
-		EndPointConstants.IMPORT_ALL_POLITICIANS_API_TAGS }, description = EndPointConstants.IMPORT_ALL_POLITICIANS_API_DESCRIPTION)
+@Path(value = EndPointConstants.POLITICIN_IMPORT_EXPORT_ENDPOINT_REQUEST_MAPPING)
+@Api(value = EndPointConstants.POLITICIN_IMPORT_EXPORT_ENDPOINT_API_VALUE, tags = {
+		EndPointConstants.POLITICIN_IMPORT_EXPORT_ENDPOINT_API_TAGS }, description = EndPointConstants.POLITICIN_IMPORT_EXPORT_ENDPOINT_API_DESCRIPTION)
 
 public class PoliticianImportEndpoint {
-	
+
 	@Autowired
 	PoliticianImportExportService politicianImportExportService;
-	
+
 	@POST
 	@ApiOperation(value = EndPointConstants.IMPORT_LOKSABHA_MP_API_VALUE, nickname = EndPointConstants.IMPORT_LOKSABHA_MP_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.IMPORT_LOKSABHA_MP_API_DESCRIPTION)
 	@Path(EndPointConstants.IMPORT_LOKSABHA_MP_REQUEST_MAPPING)
-	public Response importAllLoksabhaMP()
-			throws InternalServerException {
+	public Response importLoksabhaMP() throws InternalServerException {
 		politicianImportExportService.importLoksabhaMPs();
 		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
 	}
-	
+
 	@POST
 	@ApiOperation(value = EndPointConstants.EXPORT_LOKSABHA_MP_API_VALUE, nickname = EndPointConstants.EXPORT_LOKSABHA_MP_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.EXPORT_LOKSABHA_MP_API_DESCRIPTION)
 	@Path(EndPointConstants.EXPORT_LOKSABHA_MP_REQUEST_MAPPING)
-	public Response exportLoksabhaMP(PoliticianImportExportRequest politicianImport)
-			throws InternalServerException {
-		politicianImportExportService.exportLoksabhaMPs(politicianImport);
+	public Response exportLoksabhaMP() throws InternalServerException {
+		politicianImportExportService.exportLoksabhaMPs();
 		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
 	}
-	
+
 	@POST
 	@ApiOperation(value = EndPointConstants.IMPORT_RAJYASABHA_MP_API_VALUE, nickname = EndPointConstants.IMPORT_RAJYASABHA_MP_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.IMPORT_RAJYASABHA_MP_API_DESCRIPTION)
 	@Path(EndPointConstants.IMPORT_RAJYASABHA_MP_REQUEST_MAPPING)
-	public Response importAllRajyasabhaMP()
-			throws InternalServerException {
+	public Response importRajyasabhaMP() throws InternalServerException {
 		politicianImportExportService.importRajyasabhaMPs();
 		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
 	}
-	
+
 	@POST
 	@ApiOperation(value = EndPointConstants.EXPORT_RAJYASABHA_MP_API_VALUE, nickname = EndPointConstants.EXPORT_RAJYASABHA_MP_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.EXPORT_RAJYASABHA_MP_API_DESCRIPTION)
 	@Path(EndPointConstants.EXPORT_RAJYASABHA_MP_REQUEST_MAPPING)
-	public Response exportRajyasabhaMP(PoliticianImportExportRequest politicianImport)
-			throws InternalServerException {
-		politicianImportExportService.exportRajyasabhaMPs(politicianImport);
+	public Response exportRajyasabhaMP() throws InternalServerException {
+		politicianImportExportService.exportRajyasabhaMPs();
 		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
 	}
-	
+
 	@POST
 	@ApiOperation(value = EndPointConstants.EXPORT_GP_SARPANCH_API_VALUE, nickname = EndPointConstants.EXPORT_GP_SARPANCH_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.EXPORT_GP_SARPANCH_API_DESCRIPTION)
 	@Path(EndPointConstants.EXPORT_GP_SARPANCH_REQUEST_MAPPING)
@@ -71,41 +67,53 @@ public class PoliticianImportEndpoint {
 		politicianImportExportService.exportGPSarpanch(politicianImport);
 		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
 	}
-	
-	
+
 	@POST
 	@ApiOperation(value = EndPointConstants.IMPORT_MLA_API_VALUE, nickname = EndPointConstants.IMPORT_MLA_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.IMPORT_MLA_API_DESCRIPTION)
 	@Path(EndPointConstants.IMPORT_MLA_REQUEST_MAPPING)
-	public Response importAllMLA()
-			throws InternalServerException {
-		politicianImportExportService.importExportMLA();
+	public Response importMLA() throws InternalServerException {
+		politicianImportExportService.importMLAs();
 		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
 	}
-	
+
 	@POST
 	@ApiOperation(value = EndPointConstants.EXPORT_MLA_API_VALUE, nickname = EndPointConstants.EXPORT_MLA_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.EXPORT_MLA_API_DESCRIPTION)
 	@Path(EndPointConstants.EXPORT_MLA_REQUEST_MAPPING)
-	public Response exportMLA(PoliticianImportExportRequest politicianImport)
-			throws InternalServerException {
-		politicianImportExportService.exportMLA(politicianImport);
+	public Response exportMLA() throws InternalServerException {
+		politicianImportExportService.exportMLAs();
 		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
 	}
-	
+
 	@POST
 	@ApiOperation(value = EndPointConstants.IMPORT_CHIEF_MINISTER_API_VALUE, nickname = EndPointConstants.IMPORT_CHIEF_MINISTER_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.IMPORT_CHIEF_MINISTER_API_DESCRIPTION)
 	@Path(EndPointConstants.IMPORT_CHIEF_MINISTER_REQUEST_MAPPING)
-	public Response importAllStateChiefMinisters()
-			throws InternalServerException {
-		politicianImportExportService.importExportChiefMinistors();
+	public Response importChiefMinisters() throws InternalServerException {
+		politicianImportExportService.importChiefMinisters();
 		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
-}
+	}
+
 	@POST
 	@ApiOperation(value = EndPointConstants.IMPORT_GOVERNOR_API_VALUE, nickname = EndPointConstants.IMPORT_GOVERNOR_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.IMPORT_GOVERNOR_API_DESCRIPTION)
 	@Path(EndPointConstants.IMPORT_GOVERNOR_REQUEST_MAPPING)
-	public Response importAllStateGoverners()
-			throws InternalServerException {
-		politicianImportExportService.importExportGoverners();
+	public Response importGovernors() throws InternalServerException {
+		politicianImportExportService.importGovernors();
 		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
-}
-	
+	}
+
+	@POST
+	@ApiOperation(value = EndPointConstants.EXPORT_CHIEF_MINISTER_API_VALUE, nickname = EndPointConstants.EXPORT_CHIEF_MINISTER_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.EXPORT_CHIEF_MINISTER_API_DESCRIPTION)
+	@Path(EndPointConstants.EXPORT_CHIEF_MINISTER_REQUEST_MAPPING)
+	public Response exportChiefMinisters() throws InternalServerException {
+		politicianImportExportService.exportChiefMinisters();
+		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
+	}
+
+	@POST
+	@ApiOperation(value = EndPointConstants.EXPORT_GOVERNOR_API_VALUE, nickname = EndPointConstants.EXPORT_GOVERNOR_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.EXPORT_GOVERNOR_API_DESCRIPTION)
+	@Path(EndPointConstants.EXPORT_GOVERNOR_REQUEST_MAPPING)
+	public Response exportGovernors() throws InternalServerException {
+		politicianImportExportService.exportGovernors();
+		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
+	}
+
 }

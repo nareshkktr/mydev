@@ -1,0 +1,180 @@
+#home_container {
+	height: 684px;
+	background-color: #ebebeb;
+}
+
+#home_container #home_content {
+	height: 100%;
+	width: 100%;
+}
+
+#home_container #home_content_grid_activity_data {
+	margin: 0px !important;
+	height: 100%;
+}
+
+#home_container #app_objects_grid_container {
+	height: 50%;
+	padding: 0px !important;
+}
+
+#home_container #app_activity_container {
+	padding: 0px !important;
+}
+
+#home_container #app_activity_tabs, #app_activity_content {
+	margin: 0px !important;
+	padding: 0px !important;
+	border: 1px solid #d5d4d4;
+	background-color: white;
+	width: 97%;
+}
+
+#home_container .app_activity_tab {
+	padding: 13px;
+	text-align: center;
+}
+
+#home_container .app_activity_tab i {
+	color: #00a699;
+	font-weight: 900;
+	font-size: 17px;
+}
+
+#home_container #app_objects_grid_tabs {
+	height: 100%;
+	padding: 0px !important;
+	background-color: #00a699;
+}
+
+#home_container #app_objects_grid_data {
+	height: 100%;
+	padding: 0px !important;
+}
+
+#home_container .app_object_grid_tab {
+	padding: 28px;
+}
+
+#home_container .app_object_grid_tab i {
+	color: white;
+	font-size: 28px;
+	font-weight: 900;
+}
+
+#home_container #app_objects_grid_data #app_objects_grid_chart_content {
+	height: 100%;
+	margin: 0px !important;
+}
+
+#home_container #app_objects_grid_data #app_objects_grid_chart,
+	#home_container #app_objects_grid_data #app_objects_grid_chart #app_objects_grid_chart_data_legends
+	{
+	height: 100%;
+	padding: 0px !important;
+	margin: 0px !important;
+}
+
+#home_container #app_objects_grid_data svg {
+	height: 342px;
+}
+
+#home_container #app_activity_container #actiivty_feed_title {
+	font-size: 20px;
+	letter-spacing: 1px;
+	padding: 10px;
+	background-color: #00a699;
+	color: white;
+	width: 97%;
+	margin-top: 10px;
+}
+
+#app_activity_content .activity_feed {
+	margin: 0px !important;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+	box-shadow: inset 0 1px 1px rgba(187, 181, 181, 0.075);
+	-webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow
+		ease-in-out .15s;
+	-o-transition: border-color ease-in-out .15s, box-shadow ease-in-out
+		.15s;
+	transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+	box-shadow: 1px 5px 0px 1px rgba(0, 0, 0, .075);
+	display: block;
+	padding: 2px 5px 2px 5px;
+	background-image: none;
+	border: 1px solid #ccc;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+	-webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow
+		ease-in-out .15s;
+	-o-transition: border-color ease-in-out .15s, box-shadow ease-in-out
+		.15s;
+	transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+	border-right: none;
+	margin: 10px !important;
+	width: 94%;
+	border-radius: 10px;
+	background-color: #00a699;
+	color: white;
+	border: 1px solid white;
+}
+
+#app_activity_content .activity_feed .activity_icon {
+	padding: 15px 5px 10px 3px;
+}
+
+#app_activity_content .activity_feed .activity_icon i {
+	vertical-align: middle;
+	border: 1px solid white;
+	border-radius: 50%;
+	padding: 5px;
+	background-color: white;
+	color: #00a699;
+}
+
+#app_activity_content .activity_feed .activity_text {
+	letter-spacing: 1px;
+	padding: 17px 5px 4px 15px;
+}
+
+#app_activity_content .activity_feed .activity_time {
+	letter-spacing: 1px;
+	padding: 5px 5px 5px 0px;
+	margin: 0px !important;
+	font-size: 12px;
+	color: white;
+	text-align: left;
+	font-weight:400;
+}
+
+#app_objects_grid_tabs_content {
+	margin: 10px !important;
+	height: 100%;
+	box-shadow: 1px 5px 0px 1px rgba(0, 0, 0, .075);
+	border-radius: 10px 0px 0px 10px !important;
+	display: block;
+	padding: 5px;
+	font-size: 14px !important;
+	line-height: 1.42857143;
+	color: #555;
+	background-color: #fff;
+	background-image: none;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+	-webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow
+		ease-in-out .15s;
+	-o-transition: border-color ease-in-out .15s, box-shadow ease-in-out
+		.15s;
+	transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+	border: 1px solid #ccc;
+}
+
+#app_objects_grid_chart_data {
+	
+}
+
+#app_objects_grid_chart_legends {
+	
+}

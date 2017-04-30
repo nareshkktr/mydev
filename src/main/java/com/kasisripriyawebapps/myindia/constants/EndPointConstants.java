@@ -803,9 +803,9 @@ public class EndPointConstants {
 	/** The Constant CREATE_ACCOUNT_API_VALUE. */
 	public static final String SHARE_OBJECT_API_VALUE = "shareObject";
 
-	public static final String IMPORT_CHIEF_MINISTER_API_NICKNAME = "importChiefMinister";
-	public static final String IMPORT_CHIEF_MINISTER_API_VALUE = "importChiefMinister";
-	public static final String IMPORT_CHIEF_MINISTER_REQUEST_MAPPING = "importChiefMinister";
+	public static final String IMPORT_CHIEF_MINISTER_API_NICKNAME = "importChiefMinisters";
+	public static final String IMPORT_CHIEF_MINISTER_API_VALUE = "importChiefMinisters";
+	public static final String IMPORT_CHIEF_MINISTER_REQUEST_MAPPING = "importChiefMinisters";
 	public static final String IMPORT_CHIEF_MINISTER_API_DESCRIPTION = "Import Chief Ministers";
 
 	public static final String IMPORT_GOVERNOR_API_NICKNAME = "importGovernors";
@@ -1166,10 +1166,31 @@ public class EndPointConstants {
 	public static final String EXPORT_GP_SARPANCH_API_VALUE = "exportGPSarpanch";
 	public static final String EXPORT_GP_SARPANCH_API_NICKNAME = "exportGPSarpanch";
 	public static final String EXPORT_GP_SARPANCH_API_DESCRIPTION = "Export the gram panchayathi sarpanch.";
-	
+
 	public static final String EXPORT_MLA_REQUEST_MAPPING = "exportMLA";
 	public static final String EXPORT_MLA_API_VALUE = "exportMLA";
 	public static final String EXPORT_MLA_API_NICKNAME = "exportMLA";
 	public static final String EXPORT_MLA_API_DESCRIPTION = "Export MLAs bby district.";
 
+	/** The Constant ACCOUNT_ENDPOINT_REQUEST_MAPPING. */
+	public static final String POLITICIN_IMPORT_EXPORT_ENDPOINT_REQUEST_MAPPING = "/politicianImportExport";
+
+	/** The Constant ACCOUNT_ENDPOINT_API_VALUE. */
+	public static final String POLITICIN_IMPORT_EXPORT_ENDPOINT_API_VALUE = "politicianImportExport";
+
+	/** The Constant ACCOUNT_ENDPOINT_API_TAGS. */
+	public static final String POLITICIN_IMPORT_EXPORT_ENDPOINT_API_TAGS = "politicianImportExport";
+
+	/** The Constant ACCOUNT_ENDPOINT_API_DESCRIPTION. */
+	public static final String POLITICIN_IMPORT_EXPORT_ENDPOINT_API_DESCRIPTION = "Politicians Import And Export Management API";
+
+	public static final String EXPORT_CHIEF_MINISTER_API_NICKNAME = "exportChiefMinisters";
+	public static final String EXPORT_CHIEF_MINISTER_API_VALUE = "exportChiefMinisters";
+	public static final String EXPORT_CHIEF_MINISTER_REQUEST_MAPPING = "exportChiefMinisters";
+	public static final String EXPORT_CHIEF_MINISTER_API_DESCRIPTION = "Export Chief Ministers";
+
+	public static final String EXPORT_GOVERNOR_API_NICKNAME = "exportGovernors";
+	public static final String EXPORT_GOVERNOR_API_VALUE = "exportGovernors";
+	public static final String EXPORT_GOVERNOR_REQUEST_MAPPING = "exportGovernors";
+	public static final String EXPORT_GOVERNOR_API_DESCRIPTION = "Export Governors";
 }

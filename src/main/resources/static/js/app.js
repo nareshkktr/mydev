@@ -1,6 +1,6 @@
 (function() {
      'use strict';
-	var myIndiaApp=angular.module('myindia-app', ['ui.router','ui.bootstrap','ngAnimate','ngMessages','angularTrix','ngTagsInput']);
+	var myIndiaApp=angular.module('myindia-app', ['ui.router','ui.bootstrap','ngAnimate','ngMessages','angularTrix','ngTagsInput','nvd3ChartDirectives']);
 	
 })();
 
@@ -434,6 +434,9 @@
 		header.modalControllerName = "locationChangePopUpController";
 		header.modalControllerAlias = "locationChangePopUp";
 		header.logout = logout;
+
+		header.userProfileImageClass = "user_profile_image";
+		header.userProfileLabelClass = "user_profile_label";
 
 		function gotoSearch() {
 			$state.go('search', {
@@ -940,6 +943,22 @@
 (function() {
      'use strict';
 	
+	angular.module('myindia-app').run(refreshToken);
+
+	refreshToken.$inject = ['refreshAccessTokenService'];
+
+	function refreshToken(refreshAccessTokenService){
+
+		//on page reload if session exists refresh it
+		if(sessionStorage.getItem("access_token"))
+			refreshAccessTokenService.refreshAccessToken();
+	}
+
+
+})();
+(function() {
+     'use strict';
+	
 	angular.module('myindia-app').run(routeTrack);
 
 	routeTrack.$inject = ['$rootScope','$state'];
@@ -949,12 +968,12 @@
 
 		$rootScope.$on("$stateChangeStart",function(event, toState, toParams, fromState, fromParams){
 
-			if(toState.name != "signIn" && toState.name.indexOf('signUp') == -1){
+			/*if(toState.name != "signIn" && toState.name.indexOf('signUp') == -1){
 				if(!sessionStorage.getItem("access_token")){
 					event.preventDefault();
 					$state.go('signIn');
 				}
-			}
+			}*/
 
 		});
 	}
@@ -1000,10 +1019,7 @@
 			url : '/accountSetup',
 			templateUrl : resource + 'partials/accountSetup.html'
 		}).state('search', {
-			url : '/search',
-			params : {
-				'searchTerm' : ''
-			},
+			url : '/search/:searchTerm',
 			templateUrl : resource + 'partials/globalSearch.html',
 			controller : 'globalSearchController',
 			controllerAs : 'globalSearch'
@@ -1018,31 +1034,26 @@
 			controller : 'problemTypeSelectionController',
 			controllerAs : 'problemTypeSelection'
 		}).state('createProblem.problemSelection', {
-			url : '/problemSelection',
+			url : '/problemSelection/:selectedProblemCategory',
 			templateUrl : resource + 'partials/problemSelection.html',
 			controller : 'problemSelectionController',
 			controllerAs : 'problemSelection',
 			params : {
-				'selectedProblemCategory' : '',
 				'problemTypes' : ''
 			}
 		}).state('createProblem.logProblem', {
-			url : '/logProblem',
+			url : '/logProblem/:selectedProblemCategory',
 			templateUrl : resource + 'partials/logProblem.html',
 			controller : 'logProblemController',
 			controllerAs : 'logProblem',
 			params : {
-				'selectedProblemCategory' : '',
 				'problemTypes' : ''
 			}
 		}).state('viewProblem', {
-			url : '/viewProblem',
+			url : '/viewProblem/:selectedProblemGuid',
 			templateUrl : resource + 'partials/viewProblem.html',
 			controller : 'viewProblemController',
-			controllerAs : 'viewProblem',
-			params : {
-				'selectedProblemGuid' : ''
-			}
+			controllerAs : 'viewProblem'
 		}).state('viewProblem.overview', {
 			url : '/overview',
 			templateUrl : resource + 'partials/overview.html'
@@ -1309,7 +1320,8 @@
 
 		var refreshAccessTokenService = {
 			startTokenExpiryTimer: startTokenExpiryTimer,
-			stopTokenExpiryTimer: stopTokenExpiryTimer
+			stopTokenExpiryTimer: stopTokenExpiryTimer,
+			refreshAccessToken: refreshAccessToken
 		};
 
 		// // Call and save the data
@@ -1336,8 +1348,19 @@
 
 			stopTokenExpiryTimer();
 
-			services.account.refreshAccessToken({body: sessionStorage.getItem("refresh_token")}, refreshAccessTokenSuccess,
+			if (swaggerPromise) {
+				swaggerPromise.then(function() {
+					services.account.refreshAccessToken({body: sessionStorage.getItem("refresh_token")}, refreshAccessTokenSuccess,
 						refreshAccessTokenFailure);
+			
+
+					swaggerPromise = undefined;
+				})
+			} else {
+				services.account.refreshAccessToken({body: sessionStorage.getItem("refresh_token")}, refreshAccessTokenSuccess,
+						refreshAccessTokenFailure);
+			}
+
 			
 			function refreshAccessTokenSuccess(data){
 				swaggerShareService.setAuthorization(data.obj.accessToken,data.obj.refreshToken,data.obj.expirationTimeInSeconds);
@@ -1520,8 +1543,10 @@
 			
 			function searchSuccess(data){
 				globalSearch.searchResults = data.searchResults;
-				globalSearch.totalCount = data.totalCount;
-				globalSearch.objectsCount = data.objectsCount;
+				if(globalSearch.searchObjectType == 'ALL'){
+					globalSearch.totalCount = data.totalCount;
+					globalSearch.objectsCount = data.objectsCount;
+				}
 			}
 			function searchError(error){
 				alert(error);
@@ -1584,8 +1609,37 @@
 	'use strict';
 
 	angular.module('myindia-app').controller("homeController", homeController);
+	homeController.$inject = [ '$scope' ];
 
-	function homeController() {
+	function homeController($scope) {
+		var home = this;
+		home.xFunction = xFunction;
+		home.yFunction = yFunction;
+		home.color = [ "#ED1C24", "#EB7422", "#FFDF16", "#0AA24B" ];
+		home.problemChartData = [ {
+			key : "Critical",
+			y : 500
+		}, {
+			key : "High",
+			y : 200
+		}, {
+			key : "Medium",
+			y : 900
+		}, {
+			key : "Low",
+			y : 700
+		} ];
+
+		function xFunction() {
+			return function(d) {
+				return d.key;
+			};
+		}
+		function yFunction() {
+			return function(d) {
+				return d.y;
+			};
+		}
 	}
 
 })();
@@ -1619,6 +1673,7 @@
 
 		var createProblemService = {
 			getAllProblemTypes : getAllProblemTypes,
+			getProblemTypesByCategory: getProblemTypesByCategory,
 			saveProblem:saveProblem
 		};
 
@@ -1654,6 +1709,34 @@
 			}
 
 			function getAllProblemTypesFailure(error) {
+				deferred.reject(error);
+			}
+
+		}
+
+		function getProblemTypesByCategory(problemCategory) {
+
+			let deferred = $q.defer();
+			
+			if(swaggerPromise){
+				swaggerPromise.then(function(){
+					services.problemType.getProblemTypesByCategory({problemCategory:problemCategory},
+						getProblemTypesByCategorySuccess, getProblemTypesByCategoryFailure);
+					swaggerPromise = undefined;
+				})
+			}else{
+				services.problemType.getProblemTypesByCategory({problemCategory:problemCategory},
+						getProblemTypesByCategorySuccess, getProblemTypesByCategoryFailure);
+			}
+			
+
+			return deferred.promise;
+
+			function getProblemTypesByCategorySuccess(data) {
+				deferred.resolve(data.obj);
+			}
+
+			function getProblemTypesByCategoryFailure(error) {
 				deferred.reject(error);
 			}
 
@@ -1702,7 +1785,23 @@
 		
 		var logProblem=this;
 		logProblem.chosenProblemCategory = $state.params.selectedProblemCategory;
-		logProblem.problemTypesResults = $state.params.problemTypes;
+
+		if($state.params.problemTypes)
+			logProblem.problemTypesResults = $state.params.problemTypes;
+		else{
+			//get problem types by category.
+			createProblemService.getProblemTypesByCategory(logProblem.chosenProblemCategory).then(problemTypesSuccess).catch(problemTypesFailure);
+
+			function problemTypesSuccess(data){
+				logProblem.problemTypesResults = data;
+			}
+
+			function problemTypesFailure(error){
+				alert(error);
+			}
+
+		}
+
 		logProblem.grivienceName="";
 		logProblem.grivienceType;
 		logProblem.grivienceDescription;
