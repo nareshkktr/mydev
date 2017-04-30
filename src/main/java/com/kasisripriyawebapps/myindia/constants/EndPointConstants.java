@@ -1193,4 +1193,10 @@ public class EndPointConstants {
 	public static final String EXPORT_GOVERNOR_API_VALUE = "exportGovernors";
 	public static final String EXPORT_GOVERNOR_REQUEST_MAPPING = "exportGovernors";
 	public static final String EXPORT_GOVERNOR_API_DESCRIPTION = "Export Governors";
+	
+	public static final String IMPORT_GP_SARPANCH_REQUEST_MAPPING = "importGPSarpanch";
+	public static final String IMPORT_GP_SARPANCH_API_VALUE = "importGPSarpanch";
+	public static final String IMPORT_GP_SARPANCH_API_NICKNAME = "importGPSarpanch";
+	public static final String IMPORT_GP_SARPANCH_API_DESCRIPTION = "Import the gram panchayathi sarpanch.";
+
 }

@@ -198,7 +198,7 @@ public class Politician implements Serializable {
 		if (fullName == null) {
 			if (other.fullName != null)
 				return false;
-		} else if (!fullName.equals(other.fullName))
+		} else if (!fullName.equalsIgnoreCase(other.fullName))
 			return false;
 		return true;
 	}

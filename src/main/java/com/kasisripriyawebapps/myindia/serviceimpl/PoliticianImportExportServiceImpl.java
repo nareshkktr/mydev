@@ -7,8 +7,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -115,7 +117,7 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 
 		List<String> politicianLocationTypes = new ArrayList<String>();
 		politicianLocationTypes.add(ServiceConstants.LOCATION_MP_CONSTITUENCT_TYPE);
-		processPoliticians(ServiceConstants.SITTING_LOKSABHA_MP_DESIGNATION, politicianLocationTypes, politicianData);
+		processPoliticians(ServiceConstants.SITTING_LOKSABHA_MP_DESIGNATION, politicianLocationTypes, politicianData,null);
 	}
 
 	private void preparePoliticanDataFromExcel(String filePath, List<PoliticianExportModel> politicianData)
@@ -184,7 +186,7 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 			}
 		}
 
-		processPoliticians(ServiceConstants.SITTING_RAJYASABHA_MP_DESIGNATION, locationTypes, politicianData);
+		processPoliticians(ServiceConstants.SITTING_RAJYASABHA_MP_DESIGNATION, locationTypes, politicianData,null);
 
 	}
 
@@ -315,7 +317,7 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 
 	@Transactional
 	private void processPoliticians(String politicianType, List<String> locationTypes,
-			List<PoliticianExportModel> politicianData) throws InternalServerException {
+			List<PoliticianExportModel> politicianData, List<Long> applicableLocationGuids) throws InternalServerException {
 
 		Politician politicianMember = null;
 
@@ -342,8 +344,11 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 		// on politicianType
 		List<PoliticianAuthority> activePoliticianAuthorities = new ArrayList<PoliticianAuthority>();
 
-		activePoliticianAuthorities = politicianAuthorityDao
-				.getActivePoliticianAuthhoritiesByDesignation(politicianType);
+		if(applicableLocationGuids != null && !applicableLocationGuids.isEmpty())
+			activePoliticianAuthorities = politicianAuthorityDao
+				.getActivePoliticianAuthhoritiesByDesignationAndLocations(politicianType,applicableLocationGuids);
+		else
+			activePoliticianAuthorities = politicianAuthorityDao.getActivePoliticianAuthhoritiesByDesignation(politicianType);
 
 		// Load all party information
 		List<Party> allParties = partyDao.getAllParties();
@@ -358,7 +363,7 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 		List<LocationMaster> allMpLocations = locationMasterDao.getAllMasterLocationsByTypes(locationTypes);
 
 		Map<String, List<LocationMaster>> mapAllMpLocations = allMpLocations.stream()
-				.collect(Collectors.groupingBy(locationMasterObject -> locationMasterObject.getLocationName().trim()));
+				.collect(Collectors.groupingBy(locationMasterObject -> locationMasterObject.getLocationName().trim().replaceAll(" ","").replaceAll("\\.", "").replaceAll("/","").replaceAll("-", "").replaceAll("\\(", "").replaceAll("\\)", "")));
 
 		for (PoliticianExportModel row : politicianData) {
 
@@ -387,11 +392,23 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 					politicianAuthority.setParty(memberParty);
 				}
 			}
+			
+			//Clean location information
+			eachMemberLocation = eachMemberLocation.toUpperCase().replaceAll(" ", "").replaceAll("\\.", "").replaceAll("/","").replaceAll("-", "").replaceAll("\\(", "").replaceAll("\\)", "");
 
 			if (eachMemberLocation != null && mapAllMpLocations.get(eachMemberLocation) != null
 					&& mapAllMpLocations.get(eachMemberLocation).size() > 0) {
 				LocationMaster electedLocation = mapAllMpLocations.get(eachMemberLocation).get(0);
 				politicianAuthority.setElectedLocation(electedLocation);
+			}else{
+				String location = computeDistance(eachMemberLocation,mapAllMpLocations.keySet());
+				if(location == ""){
+					System.out.println(eachMemberLocation);
+				}else{
+					//System.out.println("Matchh found--"+location+"--"+eachMemberLocation);
+					LocationMaster electedLocation = mapAllMpLocations.get(location).get(0);
+					politicianAuthority.setElectedLocation(electedLocation);
+				}
 			}
 
 			politicianMember.setFullName(eachMemberName);
@@ -476,7 +493,8 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 		} // End of all politicians
 
 		// Now find the difference of current active ones and the ones that came
-		// new.. those are to be marked as in active and end date
+		// new.. those are to be marked as in active and end date	
+		
 		if (activePoliticianAuthorities != null) {
 			activePoliticianAuthorities.removeAll(newUpdatedPoliticians);
 
@@ -865,11 +883,11 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 		String countryFolderName = env.getProperty("amazon.s3.politicians.india.folder.name");
 
 		List<String> headerList = new ArrayList<String>();
-		headerList.add("Name of the Gram Panchayat");
-		headerList.add("Names of the candidate declared elected");
-		headerList.add("Name of the candidate declared elected");
-		headerList.add("Name of the Grampanchayat");
-		headerList.add("Names of the Candidate declared Elected");
+		headerList.add("name of the gram panchayat");
+		headerList.add("names of the candidate declared elected");
+		headerList.add("name of the candidate declared elected");
+		headerList.add("name of the grampanchayat");
+		headerList.add("name of the sarpanch");
 		headerList.add("4.0");
 		headerList.add("5.0");
 		headerList.add("3.0");
@@ -893,27 +911,31 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 
 			System.out.println(eachRow.getCell(2));
 			System.out.println(eachRow.getCell(3));
-
-			String politicianName = eachRow.getCell(Integer.parseInt(columns[1])).toString().trim().replace("\n", " ");
-			String locationName = eachRow.getCell(Integer.parseInt(columns[0])).toString().trim();
-
-			if (!headerList.contains(politicianName) && !(politicianName.isEmpty() || locationName.isEmpty())) {
-				politicianObj.setPoliticianName(politicianName);
-				politicianObj.setLocationName(locationName);
-				politicianObj.setDesignation(ServiceConstants.SITTING_SARPANCH_GP_DESIGNATION);
-				politicianObj.setPoliticianType(ServiceConstants.SARPANCH);
-				politicians.add(politicianObj);
+			
+			Cell col1 = eachRow.getCell(Integer.parseInt(columns[1]));	
+			Cell col2 = eachRow.getCell(Integer.parseInt(columns[0]));
+			
+			if(col1 != null && col2 != null){
+				
+				String politicianName = col1.toString().trim().replace("\n", " ");
+				String locationName = col2.toString().trim();
+				
+				if(!headerList.contains(politicianName.toLowerCase()) && !(politicianName.isEmpty() || locationName.isEmpty())){
+					politicianObj.setPoliticianName(politicianName);
+					politicianObj.setLocationName(locationName);
+					politicianObj.setDesignation(ServiceConstants.SITTING_SARPANCH_GP_DESIGNATION);
+					politicianObj.setPoliticianType(ServiceConstants.SARPANCH);
+					politicians.add(politicianObj);
+				}
 			}
-
 			i++;
 
 		}
-
-		// Export for the district
-		String folderPath = uploadedFolderName + ApplicationConstants.SUFFIX + globalFolderName
-				+ ApplicationConstants.SUFFIX + countryFolderName + ApplicationConstants.SUFFIX + stateName
-				+ ApplicationConstants.SUFFIX + districtName;
-
+		
+		//Export for the district
+		String folderPath = uploadedFolderName + ApplicationConstants.SUFFIX + globalFolderName + ApplicationConstants.SUFFIX + countryFolderName + ApplicationConstants.SUFFIX
+				+ stateName + ApplicationConstants.SUFFIX + districtName.toUpperCase() ;
+		
 		exportPoliticians(politicians, exportfileName, folderPath);
 
 	}
@@ -1189,5 +1211,137 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 		}
 		driver.close();
 		driver.quit();
+	}
+
+@Override
+	@Transactional
+	public void importGPSarpanch(PoliticianImportExportRequest politicianImport) throws InternalServerException {
+		
+		List<PoliticianExportModel> politicianData = new ArrayList<PoliticianExportModel>();
+		String fileName = env.getProperty("india-politicians-gp-sarpanch-export-file-name");
+		
+		String bucketName = env.getProperty("amazon.s3.politicians.bucket.name");
+		String hostName = env.getProperty("amazon.s3.host.name");
+
+		String globalFolderName = env.getProperty("amazon.s3.politicians.global.folder.name");
+		String countryFolderName = env.getProperty("amazon.s3.politicians.india.folder.name");
+		
+		String uploadedFolderName = env.getProperty("amazon.s3.politicians.uploaded.folder.name");
+		
+		List<Long> applicableLocationGuids = new ArrayList<Long>();
+
+		List<LocationMaster> stateLocations = new ArrayList<LocationMaster>();
+		List<String> locationTypes = new ArrayList<String>();
+		locationTypes.add(ServiceConstants.LOCATION_STATE_TYPE);
+		locationTypes.add(ServiceConstants.LOCATION_UNION_TERRITORY_TYPE);
+		stateLocations = locationMasterDao.getAllMasterLocationsByTypes(locationTypes);
+
+		if (stateLocations != null && !stateLocations.isEmpty()) {
+			for (LocationMaster eachLocation : stateLocations) {
+				if (eachLocation != null) {
+					
+					if(politicianImport.getStates() != null && !politicianImport.getStates().isEmpty()){
+						if(!politicianImport.getStates().contains(eachLocation.getLocationName())){
+							continue;
+						}
+					}
+					
+					locationTypes = new ArrayList<String>();
+					locationTypes.add(ServiceConstants.DISTRICT);
+					
+					List<LocationMaster> districtLocations = locationMasterDao.getAllMasterLocationsByTypes(locationTypes);
+					
+					if(districtLocations !=null && !districtLocations.isEmpty()){	
+						
+						for(LocationMaster districtLcoation: districtLocations){
+							
+							if(politicianImport.getDistricts() != null && !politicianImport.getDistricts().isEmpty()){
+								if(!politicianImport.getDistricts().contains(districtLcoation.getLocationName())){
+									continue;
+								}
+							}
+							
+							
+							List<LocationMaster> subDistricts = locationMasterDao.getAllMasterLocationsByTypeAndParentLocation(ServiceConstants.LOCATION_SUB_DISTRICT_TYPE, districtLcoation.getGuid());
+							
+							if(subDistricts != null){
+								Map<Long,List<LocationMaster>> subDistrictGuidsMap = subDistricts.stream().collect(Collectors.groupingBy(locationObject -> locationObject.getGuid()));
+								
+								List<Long> subDistrictGuids = subDistrictGuidsMap.entrySet().stream()
+						                .map(x -> x.getKey())
+						                .collect(Collectors.toList());
+								
+								List<LocationMaster> villagePanchayathies = locationMasterDao.getAllMasterLocationsByTypeAndParentLocations(ServiceConstants.LOCATION_VILLAGE_PANCHAYATH_TYPE, subDistrictGuids);
+								
+								if(villagePanchayathies != null){
+									
+									Map<Long,List<LocationMaster>> villagePanchayathiesGuidsMap = villagePanchayathies.stream().collect(Collectors.groupingBy(locationObject -> locationObject.getGuid()));
+							                
+									List<Long> villagePanchayathiesGuids = villagePanchayathiesGuidsMap.entrySet().stream()
+							                .map(x -> x.getKey())
+							                .collect(Collectors.toList());
+									
+									applicableLocationGuids.addAll(villagePanchayathiesGuids);
+									
+								}
+
+							}
+
+							uploadedFolderName+= ApplicationConstants.SUFFIX + globalFolderName + ApplicationConstants.SUFFIX
+									+ countryFolderName + ApplicationConstants.SUFFIX + eachLocation.getLocationName() + ApplicationConstants.SUFFIX +
+									districtLcoation.getLocationName();
+							String inputFilePath = hostName + bucketName + ApplicationConstants.SUFFIX + uploadedFolderName
+									+ ApplicationConstants.SUFFIX + fileName;
+
+							preparePoliticanDataFromExcel(inputFilePath, politicianData);
+							
+						}						
+					}
+				}
+			}
+		}
+
+		List<String> politicianLocationTypes = new ArrayList<String>();
+		politicianLocationTypes.add(ServiceConstants.LOCATION_VILLAGE_PANCHAYATH_TYPE);
+		processPoliticians(ServiceConstants.SARPANCH, politicianLocationTypes, politicianData, applicableLocationGuids);
+		
+		// Load all location information by location type
+//				List<LocationMaster> allMpLocations = locationMasterDao.getAllMasterLocationsByTypes(politicianLocationTypes);
+//
+//				Map<String, List<LocationMaster>> mapAllMpLocations = allMpLocations.stream()
+// 						.collect(Collectors.groupingBy(locationMasterObject -> locationMasterObject.getLocationName().trim().replaceAll(" ","").replaceAll("\\.", "").replaceAll("/","").replaceAll("-", "").replaceAll("\\(", "").replaceAll("\\)", "")));
+//		
+//				for(PoliticianExportModel pd:politicianData){
+//					String locationName = pd.getLocationName().toUpperCase().replaceAll(" ", "").replaceAll("\\.", "").replaceAll("/","").replaceAll("-", "").replaceAll("\\(", "").replaceAll("\\)", "");
+//					if(!mapAllMpLocations.containsKey(locationName)){
+//						
+//						String location = computeDistance(locationName,mapAllMpLocations.keySet());
+//						if(location == ""){
+//							System.out.println(locationName);
+//						}else{
+//							System.out.println("Matchh found--"+location+"--"+locationName);
+//						}
+//						
+//						//System.out.println(locationName);
+//						//System.out.println("");
+//					}
+//				}
+		
+	}
+	
+	private String computeDistance(String locationName, Set<String> locations) {
+
+		double min =9999;
+		String locationIdentified="";
+		for(String lm:locations){
+			double minDistance = StringUtils.getLevenshteinDistance(lm, locationName);
+			if(minDistance<=3 && minDistance <min ){
+				min = minDistance;
+				locationIdentified = lm;
+			}
+		}
+		
+		return locationIdentified;
+		
 	}
 }

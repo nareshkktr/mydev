@@ -33,4 +33,6 @@ public interface PoliticianImportExportService {
 
 	void exportGovernors() throws InternalServerException;
 
+	void importGPSarpanch(PoliticianImportExportRequest politicianImport) throws InternalServerException;
+	
 }
