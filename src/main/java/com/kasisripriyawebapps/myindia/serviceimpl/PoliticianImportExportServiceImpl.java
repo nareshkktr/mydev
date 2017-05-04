@@ -117,7 +117,7 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 
 		List<String> politicianLocationTypes = new ArrayList<String>();
 		politicianLocationTypes.add(ServiceConstants.LOCATION_MP_CONSTITUENCT_TYPE);
-		processPoliticians(ServiceConstants.SITTING_LOKSABHA_MP_DESIGNATION, politicianLocationTypes, politicianData,null);
+		processPoliticians(ServiceConstants.SITTING_LOKSABHA_MP_DESIGNATION, politicianLocationTypes, politicianData);
 	}
 
 	private void preparePoliticanDataFromExcel(String filePath, List<PoliticianExportModel> politicianData)
@@ -186,7 +186,7 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 			}
 		}
 
-		processPoliticians(ServiceConstants.SITTING_RAJYASABHA_MP_DESIGNATION, locationTypes, politicianData,null);
+		processPoliticians(ServiceConstants.SITTING_RAJYASABHA_MP_DESIGNATION, locationTypes, politicianData);
 
 	}
 
@@ -227,7 +227,7 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 
 		List<String> politicianLocationTypes = new ArrayList<String>();
 		politicianLocationTypes.add(ServiceConstants.LOCATION_MLA_CONSTITUENCT_TYPE);
-		processPoliticians(ServiceConstants.SITTING_MLA_DESIGNATION, politicianLocationTypes, politicianData,null);
+		processPoliticians(ServiceConstants.SITTING_MLA_DESIGNATION, politicianLocationTypes, politicianData);
 
 	}
 
@@ -266,7 +266,7 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 			}
 		}
 
-		processPoliticians(ServiceConstants.CHIEF_MINISTER, locationTypes, politicianData,null);
+		processPoliticians(ServiceConstants.CHIEF_MINISTER, locationTypes, politicianData);
 
 	}
 
@@ -305,7 +305,7 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 			}
 		}
 
-		processPoliticians(ServiceConstants.GOVERNORS, locationTypes, politicianData,null);
+		processPoliticians(ServiceConstants.GOVERNORS, locationTypes, politicianData);
 
 	}
 
@@ -317,7 +317,7 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 
 	@Transactional
 	private void processPoliticians(String politicianType, List<String> locationTypes,
-			List<PoliticianExportModel> politicianData, List<Long> applicableLocationGuids) throws InternalServerException {
+			List<PoliticianExportModel> politicianData) throws InternalServerException {
 
 		Politician politicianMember = null;
 
@@ -329,16 +329,19 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 
 		List<PoliticianAuthority> newUpdatedPoliticians = new ArrayList<PoliticianAuthority>();
 
+		/**** Commenting out validating for existing politicians
 		// Load all existing list of politicians
 		List<Politician> allPoliticians = new ArrayList<Politician>();
 
 		allPoliticians = politicianDao.getAllPoliticians();
+		
 
 		// Create a map of politicians for easy retreival
 		Map<String, List<Politician>> mapAllPoliticians = new HashMap<String, List<Politician>>();
 
 		mapAllPoliticians = allPoliticians.stream()
 				.collect(Collectors.groupingBy(politicianObject -> politicianObject.getFullName()));
+		
 
 		// Load existing current active Members from Politician Authority based
 		// on politicianType
@@ -349,7 +352,9 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 				.getActivePoliticianAuthhoritiesByDesignationAndLocations(politicianType,applicableLocationGuids);
 		else
 			activePoliticianAuthorities = politicianAuthorityDao.getActivePoliticianAuthhoritiesByDesignation(politicianType);
-
+		 
+		 ***/
+		
 		// Load all party information
 		List<Party> allParties = partyDao.getAllParties();
 
@@ -425,13 +430,16 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 			newUpdatedPoliticians.add(politicianAuthority);
 
 			// New members
-			if (!allPoliticians.contains(politicianMember)) {
+			//if (!allPoliticians.contains(politicianMember)) {
 				politicianAuthorities = new ArrayList<PoliticianAuthority>();
 				politicianAuthority.setPolitician(politicianMember);
 				politicianAuthorities.add(politicianAuthority);
 				politicianMember.setPoliticianAuthorities(politicianAuthorities);
 				newPoliticians.add(politicianMember);
-			} else {
+				
+		/** Commenting validating existing politicians as all are treated as new politicians
+		
+		} else {
 				// get the existing politician and get its authorities and
 				// decide on update/add/delete
 				Politician currentPolitician = mapAllPoliticians.get(politicianMember.getFullName()).get(0);// Need
@@ -488,9 +496,12 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 						newPoliticians.add(currentPolitician);
 					}
 				}
-			}
+			} 
+			**/
 
 		} // End of all politicians
+		
+		/**
 
 		// Now find the difference of current active ones and the ones that came
 		// new.. those are to be marked as in active and end date	
@@ -504,16 +515,22 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 				pa.setEndDate(new Date());
 			}
 		}
+		
+		**/
 
 		// DB OPS
 
 		// Politician to be saved/updated -- newPolitician
 		if (newPoliticians != null && newPoliticians.size() > 0)
 			politicianDao.saveOrUpdatePolitician(newPoliticians);
+		
+		/**
 
 		// Politician Authorities to be updated - activePoliticianAuthorities
 		if (activePoliticianAuthorities != null && activePoliticianAuthorities.size() > 0)
 			politicianAuthorityDao.saveOrUpdatePolitician(activePoliticianAuthorities);
+			
+		**/
 
 	}
 
@@ -1260,32 +1277,6 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 									continue;
 								}
 							}
-							
-							
-							List<LocationMaster> subDistricts = locationMasterDao.getAllMasterLocationsByTypeAndParentLocation(ServiceConstants.LOCATION_SUB_DISTRICT_TYPE, districtLcoation.getGuid());
-							
-							if(subDistricts != null){
-								Map<Long,List<LocationMaster>> subDistrictGuidsMap = subDistricts.stream().collect(Collectors.groupingBy(locationObject -> locationObject.getGuid()));
-								
-								List<Long> subDistrictGuids = subDistrictGuidsMap.entrySet().stream()
-						                .map(x -> x.getKey())
-						                .collect(Collectors.toList());
-								
-								List<LocationMaster> villagePanchayathies = locationMasterDao.getAllMasterLocationsByTypeAndParentLocations(ServiceConstants.LOCATION_VILLAGE_PANCHAYATH_TYPE, subDistrictGuids);
-								
-								if(villagePanchayathies != null){
-									
-									Map<Long,List<LocationMaster>> villagePanchayathiesGuidsMap = villagePanchayathies.stream().collect(Collectors.groupingBy(locationObject -> locationObject.getGuid()));
-							                
-									List<Long> villagePanchayathiesGuids = villagePanchayathiesGuidsMap.entrySet().stream()
-							                .map(x -> x.getKey())
-							                .collect(Collectors.toList());
-									
-									applicableLocationGuids.addAll(villagePanchayathiesGuids);
-									
-								}
-
-							}
 
 							uploadedFolderName+= ApplicationConstants.SUFFIX + globalFolderName + ApplicationConstants.SUFFIX
 									+ countryFolderName + ApplicationConstants.SUFFIX + eachLocation.getLocationName() + ApplicationConstants.SUFFIX +
@@ -1303,7 +1294,7 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 
 		List<String> politicianLocationTypes = new ArrayList<String>();
 		politicianLocationTypes.add(ServiceConstants.LOCATION_VILLAGE_PANCHAYATH_TYPE);
-		processPoliticians(ServiceConstants.SARPANCH, politicianLocationTypes, politicianData, applicableLocationGuids);
+		processPoliticians(ServiceConstants.SARPANCH, politicianLocationTypes, politicianData);
 		
 		// Load all location information by location type
 //				List<LocationMaster> allMpLocations = locationMasterDao.getAllMasterLocationsByTypes(politicianLocationTypes);
