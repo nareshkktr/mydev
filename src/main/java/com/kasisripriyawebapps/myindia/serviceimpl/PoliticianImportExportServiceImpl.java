@@ -227,7 +227,7 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 
 		List<String> politicianLocationTypes = new ArrayList<String>();
 		politicianLocationTypes.add(ServiceConstants.LOCATION_MLA_CONSTITUENCT_TYPE);
-		processPoliticians(ServiceConstants.SITTING_MLA_DESIGNATION, politicianLocationTypes, politicianData);
+		processPoliticians(ServiceConstants.SITTING_MLA_DESIGNATION, politicianLocationTypes, politicianData,null);
 
 	}
 
@@ -266,7 +266,7 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 			}
 		}
 
-		processPoliticians(ServiceConstants.CHIEF_MINISTER, locationTypes, politicianData);
+		processPoliticians(ServiceConstants.CHIEF_MINISTER, locationTypes, politicianData,null);
 
 	}
 
@@ -305,7 +305,7 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 			}
 		}
 
-		processPoliticians(ServiceConstants.GOVERNORS, locationTypes, politicianData);
+		processPoliticians(ServiceConstants.GOVERNORS, locationTypes, politicianData,null);
 
 	}
 
