@@ -80,6 +80,9 @@ public class Politician implements Serializable {
 	
 	@Column(name = "CURRENT_DESIGNATION")
 	private String currentDesignation;
+	
+	@Column(name = "IS_ACTIVE")
+	private Boolean isActive;
 
 	@OneToMany(mappedBy = "politician", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<PoliticianImage> politicianImages = new ArrayList<PoliticianImage>(0);
@@ -176,6 +179,14 @@ public class Politician implements Serializable {
 
 	public void setCurrentDesignation(String currentDesignation) {
 		this.currentDesignation = currentDesignation;
+	}
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
 	}
 
 	@Override

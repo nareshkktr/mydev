@@ -1199,4 +1199,9 @@ public class EndPointConstants {
 	public static final String IMPORT_GP_SARPANCH_API_NICKNAME = "importGPSarpanch";
 	public static final String IMPORT_GP_SARPANCH_API_DESCRIPTION = "Import the gram panchayathi sarpanch.";
 
+	public static final String DEACTIVATE_ALL_POLITICIANS_REQUEST_MAPPING = "deactivateAllPoliticians";
+	public static final String DEACTIVATE_ALL_POLITICIANS_API_VALUE = "deactivateAllPoliticians";
+	public static final String DEACTIVATE_ALL_POLITICIANS_API_NICKNAME = "deactivateAllPoliticians";
+	public static final String DEACTIVATE_ALL_POLITICIANS_API_DESCRIPTION = "Deactivate all politician records for new upload.";
+
 }
