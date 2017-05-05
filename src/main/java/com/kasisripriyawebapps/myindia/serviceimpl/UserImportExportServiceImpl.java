@@ -1107,9 +1107,15 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 		} catch (IOException e) {
 			new InternalServerException(e.getMessage());
 		}
+		
+		String mpConstituencyNo = tableContent1.trim().replaceAll("\\D+", "");
+		String mpConstituencyName = tableContent1.trim().replaceAll("[^a-zA-Z]", "");
 
-		pdfHeaderData.setMpConstituencyNo(Integer.parseInt(tableContent1.trim().replaceAll("\\D+", "")));
-		pdfHeaderData.setMpConstituencyName(tableContent1.trim().replaceAll("[^a-zA-Z]", ""));
+		if(mpConstituencyNo != null && !mpConstituencyNo.isEmpty())
+			pdfHeaderData.setMpConstituencyNo(Integer.parseInt(mpConstituencyNo));
+		
+		if(mpConstituencyName != null && !mpConstituencyName.isEmpty())
+			pdfHeaderData.setMpConstituencyName(mpConstituencyName);
 
 		return pdfHeaderData;
 
