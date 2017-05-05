@@ -1174,7 +1174,10 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 					processingLineNo = Integer.parseInt(idCardNoMap.get("currentLineNo"));
 
 					User user = new User();
-					user.setAge(Integer.parseInt(age.trim()));
+					
+					if(age!= null && !age.trim().isEmpty())
+						user.setAge(Integer.parseInt(age.trim()));
+					
 					user.setAssemblyConstituencyName(eachURLData.getMlaConstituencyName());
 					user.setAssemblyConstituencyNo(eachURLData.getMlaConstituencyNo());
 					user.setCreatedTimeStamp(CommonUtil.getCurrentGMTTimestamp());
