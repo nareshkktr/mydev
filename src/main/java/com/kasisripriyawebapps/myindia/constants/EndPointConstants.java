@@ -1198,5 +1198,15 @@ public class EndPointConstants {
 	public static final String IMPORT_GP_SARPANCH_API_VALUE = "importGPSarpanch";
 	public static final String IMPORT_GP_SARPANCH_API_NICKNAME = "importGPSarpanch";
 	public static final String IMPORT_GP_SARPANCH_API_DESCRIPTION = "Import the gram panchayathi sarpanch.";
+	
+	public static final String FORGOT_PASSWORD_USER_VALIDATION_REQUEST_MAPPING = "forgotPasswordUserValidation";
+	public static final String FORGOT_PASSWORD_USER_VALIDATION_API_VALUE = "forgotPasswordUserValidation";
+	public static final String FORGOT_PASSWORD_USER_VALIDATION_API_NICKNAME = "forgotPasswordUserValidation";
+	public static final String FORGOT_PASSWORD_USER_VALIDATION_API_DESCRIPTION = "User Validation For Forgot Password Event";
+
+	public static final String RESET_PASSWORD_REQUEST_MAPPING = "resetPassword";
+	public static final String RESET_PASSWORD_API_VALUE = "resetPassword";
+	public static final String RESET_PASSWORD_API_NICKNAME = "resetPassword";
+	public static final String RESET_PASSWORD_API_DESCRIPTION = "To Reset The Password";
 
 }

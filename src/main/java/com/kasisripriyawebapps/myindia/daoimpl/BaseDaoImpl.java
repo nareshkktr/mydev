@@ -7,12 +7,14 @@ import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 import java.util.Map;
+
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -23,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.kasisripriyawebapps.myindia.dao.BaseDao;
 import com.kasisripriyawebapps.myindia.dto.SortCriteriaData;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
+import com.kasisripriyawebapps.myindia.util.CommonUtil;
 
 /**
  * The Class BaseDaoImpl.
@@ -102,8 +105,9 @@ public class BaseDaoImpl<PK extends Serializable, T> implements BaseDao<PK, T> {
 		addSortCriteria(criteria, sortCriteria);
 		return criteria;
 	}
-	
-	public Criteria getCriteria(SortCriteriaData sortCriteria,List<Criterion> criterions) throws InternalServerException {
+
+	public Criteria getCriteria(SortCriteriaData sortCriteria, List<Criterion> criterions)
+			throws InternalServerException {
 		Criteria criteria = getSession().createCriteria(persistentClass);
 		addSortCriteria(criteria, sortCriteria);
 		if (criterions != null) {
@@ -113,12 +117,12 @@ public class BaseDaoImpl<PK extends Serializable, T> implements BaseDao<PK, T> {
 		}
 		return criteria;
 	}
-	
-	public Criteria getCriteria(SortCriteriaData sortCriteria,Criterion criterion) throws InternalServerException {
+
+	public Criteria getCriteria(SortCriteriaData sortCriteria, Criterion criterion) throws InternalServerException {
 		Criteria criteria = getSession().createCriteria(persistentClass);
 		addSortCriteria(criteria, sortCriteria);
 		if (criterion != null) {
-				criteria.add(criterion);
+			criteria.add(criterion);
 		}
 		return criteria;
 	}
@@ -196,7 +200,7 @@ public class BaseDaoImpl<PK extends Serializable, T> implements BaseDao<PK, T> {
 		}
 		return objects;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<T> getAllByCondition(Criterion criterion, SortCriteriaData sortCriteria)
@@ -207,7 +211,7 @@ public class BaseDaoImpl<PK extends Serializable, T> implements BaseDao<PK, T> {
 			criteria.add(criterion);
 		}
 		objects = criteria.list();
-		if (objects != null && !objects.isEmpty()) {
+		if (CommonUtil.isListNotNullAndNotEmpty(objects)) {
 			return objects;
 		}
 		return null;
@@ -222,7 +226,7 @@ public class BaseDaoImpl<PK extends Serializable, T> implements BaseDao<PK, T> {
 			criteria.add(criterion);
 		}
 		objects = criteria.list();
-		if (objects != null && !objects.isEmpty()) {
+		if (CommonUtil.isListNotNullAndNotEmpty(objects)) {
 			return (T) objects.get(0);
 		}
 		return null;
@@ -231,7 +235,7 @@ public class BaseDaoImpl<PK extends Serializable, T> implements BaseDao<PK, T> {
 	@Override
 	public T getByConditions(List<Criterion> criterions) throws InternalServerException {
 		List<T> objects = getAllByConditions(criterions, null);
-		if (objects != null && !objects.isEmpty()) {
+		if (CommonUtil.isListNotNullAndNotEmpty(objects)) {
 			return (T) objects.get(0);
 		}
 		return null;
@@ -349,24 +353,24 @@ public class BaseDaoImpl<PK extends Serializable, T> implements BaseDao<PK, T> {
 		criteria.setMaxResults(pageLimit);
 		return criteria.list();
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<T> getAllByConditionsByPage(List<Criterion> criterions,SortCriteriaData sortCriteria, Integer pageNo, Integer pageLimit)
-			throws InternalServerException {
-		
-		Criteria criteria = getCriteria(sortCriteria,criterions);
+	public List<T> getAllByConditionsByPage(List<Criterion> criterions, SortCriteriaData sortCriteria, Integer pageNo,
+			Integer pageLimit) throws InternalServerException {
+
+		Criteria criteria = getCriteria(sortCriteria, criterions);
 		criteria.setFirstResult((pageNo - 1) * pageLimit);
 		criteria.setMaxResults(pageLimit);
 		return criteria.list();
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<T> getAllByConditionsByPage(Criterion criterion,SortCriteriaData sortCriteria, Integer pageNo, Integer pageLimit)
-			throws InternalServerException {
-		
-		Criteria criteria = getCriteria(sortCriteria,criterion);
+	public List<T> getAllByConditionsByPage(Criterion criterion, SortCriteriaData sortCriteria, Integer pageNo,
+			Integer pageLimit) throws InternalServerException {
+
+		Criteria criteria = getCriteria(sortCriteria, criterion);
 		criteria.setFirstResult((pageNo - 1) * pageLimit);
 		criteria.setMaxResults(pageLimit);
 		return criteria.list();
@@ -429,5 +433,50 @@ public class BaseDaoImpl<PK extends Serializable, T> implements BaseDao<PK, T> {
 		} catch (Exception e) {
 			throw new InternalServerException(e.getMessage());
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<T> getAllByORConditions(List<Criterion> criterions, SortCriteriaData sortCriteria)
+			throws InternalServerException {
+		List<T> objects = null;
+		try {
+			Criteria criteria = getCriteria(sortCriteria);
+			if (criterions != null) {
+				Disjunction or = Restrictions.disjunction();
+				for (Criterion criterion : criterions) {
+					or.add(criterion);
+				}
+				criteria.add(or);
+			}
+			objects = criteria.list();
+		} catch (Exception e) {
+			throw new InternalServerException(e.getMessage());
+		}
+		return objects;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public T getByORConditions(List<Criterion> criterions, SortCriteriaData sortCriteria)
+			throws InternalServerException {
+		List<T> objects = null;
+		try {
+			Criteria criteria = getCriteria(sortCriteria);
+			if (criterions != null) {
+				Disjunction or = Restrictions.disjunction();
+				for (Criterion criterion : criterions) {
+					or.add(criterion);
+				}
+				criteria.add(or);
+			}
+			objects = criteria.list();
+		} catch (Exception e) {
+			throw new InternalServerException(e.getMessage());
+		}
+		if (CommonUtil.isListNotNullAndNotEmpty(objects)) {
+			return (T) objects.get(0);
+		}
+		return null;
 	}
 }

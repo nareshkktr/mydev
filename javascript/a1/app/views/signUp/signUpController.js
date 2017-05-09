@@ -18,6 +18,7 @@
 		signUp.gender = 'Male';
 		signUp.passwordRegex = "^.*(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[~!@#$%^&*(),./?]).*$";
 		signUp.gotoSignIn = gotoSignIn;
+		signUp.occupations=["Engineering","Computer Professional","Farming","Fishing and Forestry","Education","Training and Library","Arts", "Media and Sports","Financial Services","Business","Military","Legal","Politician","Others"];
 		
 		populateYears();
 		
@@ -69,7 +70,7 @@
 
 		function createAccount(){
 
-			createAccountService.create(signUp.elector.location.userGuid,signUp.userName,signUp.userPassword,signUp.leafLocation,signUp.parentLocation)
+			createAccountService.create(signUp.elector.location.userGuid,signUp.userName,signUp.userPassword,signUp.leafLocation,signUp.parentLocation,signUp.emailAddress,signUp.occupation)
 								.then(createAccountSuccess).catch(createAccountFailure);
 
 			function createAccountSuccess(data){

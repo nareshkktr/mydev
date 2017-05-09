@@ -22,14 +22,16 @@
             services = metaInfo;
         }
 
-    	function create(userGuid,userName,password,childLocation,parentLocation){
+    	function create(userGuid,userName,password,childLocation,parentLocation,emailAddress,occupation){
 
             let requestBody = {
                 loginUserName: userName,
                 password: password,
                 userGuid: userGuid,
                 childLocation: childLocation,
-                parentLocation: parentLocation
+                parentLocation: parentLocation,
+                emailAddress: emailAddress,
+                occupation: occupation
             };
 
             let deferred = $q.defer();

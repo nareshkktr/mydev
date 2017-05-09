@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.gson.Gson;
-import com.kasisripriyawebapps.myindia.constants.ApplicationConstants;
 import com.kasisripriyawebapps.myindia.constants.ExceptionConstants;
 import com.kasisripriyawebapps.myindia.dao.AccountDao;
 import com.kasisripriyawebapps.myindia.dao.LocationDao;
@@ -25,10 +24,12 @@ import com.kasisripriyawebapps.myindia.entity.Location;
 import com.kasisripriyawebapps.myindia.entity.LocationMaster;
 import com.kasisripriyawebapps.myindia.entity.User;
 import com.kasisripriyawebapps.myindia.entity.UserInfo;
+import com.kasisripriyawebapps.myindia.exception.ConflictException;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 import com.kasisripriyawebapps.myindia.exception.RecordNotFoundException;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.BaseUserInformation;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.CreateAccountRequest;
+import com.kasisripriyawebapps.myindia.requestresponsemodel.ForgotPasswordRequest;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.LoginRequest;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.UserLocationDetails;
 import com.kasisripriyawebapps.myindia.service.AccountService;
@@ -65,39 +66,50 @@ public class AccountServiceImpl implements AccountService {
 	@Override
 	@Transactional
 	public Account createAccount(final CreateAccountRequest createAccountRequest)
-			throws InternalServerException, RecordNotFoundException {
+			throws InternalServerException, RecordNotFoundException, ConflictException {
 
-		Account account = new Account();
-		account.setUserName(createAccountRequest.getLoginUserName());
-		account.setSalt(CommonUtil.generateSalt(32));
-		account.setPassword(CommonUtil
-				.hashPassword(CommonUtil.saltPassword(createAccountRequest.getPassword(), account.getSalt())));
-		account.setCreatedTimeStamp(CommonUtil.getCurrentGMTTimestamp());
-		account.setUserEmail(createAccountRequest.getEmailAddress());
-		SolrUserMaster solrUser = userMasterRepository.findByUserGuid(createAccountRequest.getUserGuid());
-		account.setType(ApplicationConstants.VOTER_ACCOUNT_TYPE);
-		UserInfo userInfo = new UserInfo();
-		if (solrUser != null) {
-			String solrUserJsonStr = new Gson().toJson(solrUser);
-			userInfo = new Gson().fromJson(solrUserJsonStr, UserInfo.class);
-			userInfo.setCreatedTimeStamp(CommonUtil.getCurrentGMTTimestamp());
-			userInfo.setAccount(account);
-			User user = userDao.getUserByGuid(createAccountRequest.getUserGuid());
-			Location nativeLocation = locationDao.getLocationByGuidAndParentGuid(
-					createAccountRequest.getChildLocation().getLocationType(),
-					createAccountRequest.getChildLocation().getLocationGuid(),
-					createAccountRequest.getParentLocation().getLocationType(),
-					createAccountRequest.getParentLocation().getLocationGuid());
-			userInfo.setUser(user);
-			userInfo.setNativeLocation(nativeLocation);
-			LocationMaster masterLocation = locationMasterDao
-					.getLocationByGuid(createAccountRequest.getChildLocation().getLocationGuid());
-			userInfo.setMasterLocation(masterLocation);
-			account.setUserInfo(userInfo);
-			accountDao.createAccount(account);
+		Account account = accountDao.getAccountByUserName(createAccountRequest.getLoginUserName());
+		if (account == null) {
+			account = accountDao.getAccountByUserName(createAccountRequest.getLoginUserName());
+			if (account == null) {
+				account = new Account();
+				account.setUserName(createAccountRequest.getLoginUserName());
+				account.setSalt(CommonUtil.generateSalt(32));
+				account.setPassword(CommonUtil
+						.hashPassword(CommonUtil.saltPassword(createAccountRequest.getPassword(), account.getSalt())));
+				account.setCreatedTimeStamp(CommonUtil.getCurrentGMTTimestamp());
+				account.setUserEmail(createAccountRequest.getEmailAddress());
+				SolrUserMaster solrUser = userMasterRepository.findByUserGuid(createAccountRequest.getUserGuid());
+				account.setType(createAccountRequest.getOccupation());
+				UserInfo userInfo = new UserInfo();
+				if (solrUser != null) {
+					String solrUserJsonStr = new Gson().toJson(solrUser);
+					userInfo = new Gson().fromJson(solrUserJsonStr, UserInfo.class);
+					userInfo.setCreatedTimeStamp(CommonUtil.getCurrentGMTTimestamp());
+					userInfo.setAccount(account);
+					userInfo.setOccupation(createAccountRequest.getOccupation());
+					User user = userDao.getUserByGuid(createAccountRequest.getUserGuid());
+					Location nativeLocation = locationDao.getLocationByGuidAndParentGuid(
+							createAccountRequest.getChildLocation().getLocationType(),
+							createAccountRequest.getChildLocation().getLocationGuid(),
+							createAccountRequest.getParentLocation().getLocationType(),
+							createAccountRequest.getParentLocation().getLocationGuid());
+					userInfo.setUser(user);
+					userInfo.setNativeLocation(nativeLocation);
+					LocationMaster masterLocation = locationMasterDao
+							.getLocationByGuid(createAccountRequest.getChildLocation().getLocationGuid());
+					userInfo.setMasterLocation(masterLocation);
+					account.setUserInfo(userInfo);
+					accountDao.createAccount(account);
 
+				} else {
+					throw new RecordNotFoundException(ExceptionConstants.USER_NOT_FOUND);
+				}
+			} else {
+				throw new ConflictException(ExceptionConstants.USER_EXISTS_WITH_USER_EMAIL);
+			}
 		} else {
-			throw new RecordNotFoundException(ExceptionConstants.USER_NOT_FOUND);
+			throw new ConflictException(ExceptionConstants.USER_EXISTS_WITH_USER_NAME);
 		}
 
 		return account;
@@ -106,7 +118,8 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	@Transactional
-	public BaseUserInformation prepareBaseUserInformation(Account account) throws InternalServerException, RecordNotFoundException {
+	public BaseUserInformation prepareBaseUserInformation(Account account)
+			throws InternalServerException, RecordNotFoundException {
 
 		BaseUserInformation baseUserInfo = new BaseUserInformation();
 		JSONObject authTokenInfo = null;
@@ -120,7 +133,7 @@ public class AccountServiceImpl implements AccountService {
 		baseUserInfo.setUserName(account.getUserName());
 		baseUserInfo.setAccountGuid(account.getGuid());
 
-		if (account != null ) {
+		if (account != null) {
 			try {
 				authTokenInfo = oAuthService.getAuthTokenInfo(account.getUserName(), account.getPassword());
 				baseUserInfo.setAccessToken(authTokenInfo.getString("access_token"));
@@ -130,16 +143,17 @@ public class AccountServiceImpl implements AccountService {
 				throw new InternalServerException(e.getMessage());
 			}
 		}
-		//populateLocationInformation
-		UserLocationDetails userLocationDetails=userService.getLoggedInUserLocation(account.getGuid());
+		// populateLocationInformation
+		UserLocationDetails userLocationDetails = userService.getLoggedInUserLocation(account.getGuid());
 		baseUserInfo.setUserLocation(userLocationDetails);
 
 		return baseUserInfo;
 	}
-	
+
 	@Override
 	@Transactional
-	public BaseUserInformation prepareBasicPrimaryBaseUserInformation(Account account) throws InternalServerException, RecordNotFoundException {
+	public BaseUserInformation prepareBasicPrimaryBaseUserInformation(Account account)
+			throws InternalServerException, RecordNotFoundException {
 
 		BaseUserInformation baseUserInfo = new BaseUserInformation();
 
@@ -151,13 +165,14 @@ public class AccountServiceImpl implements AccountService {
 		baseUserInfo.setUserImage(userInfo.getPhotoURL());
 		baseUserInfo.setUserName(account.getUserName());
 		baseUserInfo.setAccountGuid(account.getGuid());
-		
+
 		return baseUserInfo;
 	}
-	
+
 	@Override
 	@Transactional
-	public BaseUserInformation prepareBasicSecondaryBaseUserInformation(Account account) throws InternalServerException, RecordNotFoundException {
+	public BaseUserInformation prepareBasicSecondaryBaseUserInformation(Account account)
+			throws InternalServerException, RecordNotFoundException {
 
 		BaseUserInformation baseUserInfo = new BaseUserInformation();
 
@@ -170,8 +185,8 @@ public class AccountServiceImpl implements AccountService {
 		baseUserInfo.setUserName(account.getUserName());
 		baseUserInfo.setAccountGuid(account.getGuid());
 
-		//populateLocationInformation
-		UserLocationDetails userLocationDetails=userService.getLoggedInUserLocation(account.getGuid());
+		// populateLocationInformation
+		UserLocationDetails userLocationDetails = userService.getLoggedInUserLocation(account.getGuid());
 		baseUserInfo.setUserLocation(userLocationDetails);
 
 		return baseUserInfo;
@@ -199,11 +214,11 @@ public class AccountServiceImpl implements AccountService {
 
 		BaseUserInformation baseUserInfo = new BaseUserInformation();
 
-		Account account = getAccountByUserName(loginRequest.getLoginUserName());
+		Account account = accountDao.getAccountByUserNameOrEmail(loginRequest.getLoginUserName());
 		if (account == null) {
 			throw new RecordNotFoundException(ExceptionConstants.LOGIN_ACCOUNT_NOT_FOUND_USER_NAME);
 		} else {
-			account = accountDao.getAccountByUserNameAndPassword(account.getUserName(), account.getSalt(),
+			account = accountDao.getAccountByIdAndPassword(account.getGuid(), account.getSalt(),
 					loginRequest.getPassword());
 			if (account == null) {
 				throw new RecordNotFoundException(ExceptionConstants.LOGIN_ACCOUNT_NOT_FOUND_PASSWORD);
@@ -244,10 +259,46 @@ public class AccountServiceImpl implements AccountService {
 		List<Account> accounts = accountDao.getAccountsById(accountIds);
 
 		List<BaseUserInformation> baseUserInfoForAccounts = new ArrayList<BaseUserInformation>();
-		
-		for(Account acc: accounts){
+
+		for (Account acc : accounts) {
 			baseUserInfoForAccounts.add(prepareBasicPrimaryBaseUserInformation(acc));
 		}
 		return baseUserInfoForAccounts;
+	}
+
+	@Override
+	@Transactional
+	public BaseUserInformation forgotPasswordUserValidation(ForgotPasswordRequest forgotPasswordRequest)
+			throws InternalServerException, RecordNotFoundException {
+		BaseUserInformation baseUserInfo = null;
+		Account account = accountDao.getAccountByUserNameOrEmail(forgotPasswordRequest.getLoginUserName());
+		if (account == null) {
+			throw new RecordNotFoundException(ExceptionConstants.LOGIN_ACCOUNT_NOT_FOUND_USER_NAME);
+		} else {
+			UserInfo userInfo = account.getUserInfo();
+			if (userInfo.getReferenceName() != null
+					&& userInfo.getReferenceName().equalsIgnoreCase(forgotPasswordRequest.getReferenceName())) {
+				baseUserInfo = prepareBaseUserInformation(account);
+			} else {
+				throw new RecordNotFoundException(ExceptionConstants.REFERENCE_NAME_WRONG);
+			}
+		}
+		return baseUserInfo;
+	}
+
+	@Override
+	@Transactional
+	public void resetPassword(ForgotPasswordRequest resetPasswordRequest)
+			throws InternalServerException, RecordNotFoundException {
+		BaseUserInformation baseUserInfo = null;
+		Account account = accountDao.getAccountById(resetPasswordRequest.getAccountGuid());
+		if (account == null) {
+			throw new RecordNotFoundException(ExceptionConstants.LOGIN_ACCOUNT_NOT_FOUND_USER_NAME);
+		} else {
+			account.setSalt(CommonUtil.generateSalt(32));
+			account.setPassword(CommonUtil
+					.hashPassword(CommonUtil.saltPassword(resetPasswordRequest.getPassword(), account.getSalt())));
+			accountDao.updateAccount(account);
+		}
 	}
 }

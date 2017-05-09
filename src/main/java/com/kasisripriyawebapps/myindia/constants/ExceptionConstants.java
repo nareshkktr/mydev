@@ -124,7 +124,7 @@ public class ExceptionConstants {
 
 	public static final String PROBLEM_LOCATION_REQUIRED = "Problem Location Required";
 	public static final String PROBLEM_LOCATION_SHOULD_NOT_BE_EMPTY = "Problem Location Should Not Be Empty";
-	
+
 	public static final String EVENT_NOT_FOUND = "Event Not Found";
 	public static final String EVENT_NAME_REQUIRED = "Event Name Required";
 	public static final String EVENT_CREATEDLOCATIONGUID_REQUIRED = "Event created Location GuId Required";
@@ -135,10 +135,10 @@ public class ExceptionConstants {
 	public static final String EVENT_NAME_SHOULD_NOT_BE_EMPTY = "Event Name Should Not Be Empty";
 	public static final String EVENT_DESCRIPTION_SHOULD_NOT_BE_EMPTY = "Event Description Should Not Be Empty";
 	public static final String EVENT_LOCATIONDETAILS_SHOULD_NOT_BE_EMPTY = "Event Location Details Should Not Be Empty";
-	
+
 	public static final String GROUP_NOT_FOUND = "Group Not Found";
-	public static final String EVENT_RECIPIENT_NOT_FOUND ="Event Recipient Not Found";
-	public static final String EVENT_INVITEE_STATUS_NOT_FOUND="Event Invitee Stauts Not Found";
+	public static final String EVENT_RECIPIENT_NOT_FOUND = "Event Recipient Not Found";
+	public static final String EVENT_INVITEE_STATUS_NOT_FOUND = "Event Invitee Stauts Not Found";
 
 	public static final String COMMENT_OBJECT_GUID_REQUIRED = "Identity of object to which comment belongs is Required";
 	public static final String COMMENT_OBJECT_TYPE_REQUIRED = "Type of object to which comment belongs is Required";
@@ -147,5 +147,10 @@ public class ExceptionConstants {
 	public static final String COMMENT_TYPE_REQUIRED = "Type of comment is Required";
 	public static final String COMMENT_TEXT_REQUIRED = "Comment text is Required";
 	public static final String COMMENT_TEXT_SHOULD_NOT_BE_EMPTY = "Comment Text should not be empty.";
+	public static final String USER_EXISTS_WITH_USER_NAME = "User Exists With The Same User Name Already.Please try another";
+	public static final String USER_EXISTS_WITH_USER_EMAIL = "User Exists With The Same Email Address Already.Please try another";
+	public static final String LOGIN_REFERENCE_NAME_REQUIRED = "Reference Name Required";
+	public static final String REFERENCE_NAME_WRONG = "Invalid Reference Name";
+	public static final String ACCOUNT_GUID_REQUIRED = "Account Guid Required";
 	
 }

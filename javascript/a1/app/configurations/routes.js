@@ -80,6 +80,22 @@
 			templateUrl : resource + 'partials/discussions.html',
 			controller : 'discussionsController',
 			controllerAs : 'discussions',
+		}).state('forgotPassword', {
+			url : '/forgotPassword',
+			templateUrl : resource + 'partials/forgotPassword.html',
+			controller : 'forgotPasswordController',
+			controllerAs : 'forgotPassword',
+		}).state('forgotPassword.validUser', {
+			url : '/forgotPasswordValidUser',
+			templateUrl : resource + 'partials/forgotPasswordValidUser.html'
+		}).state('forgotPassword.changePassword', {
+			url : '/changePassword',
+			templateUrl : resource + 'partials/changePassword.html',
+			controller : 'changePasswordController',
+			controllerAs : 'changePassword',
+			params : {
+				'baseUserInfo' : ''
+			}
 		});
 	}
 })();

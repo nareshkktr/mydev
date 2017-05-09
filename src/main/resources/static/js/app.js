@@ -158,11 +158,13 @@
 
         function link(scope, element, attrs, ngModel) {
           /* */
-
+        	 var userPassword=attrs["compareEqualValidator"];
+             console.log(userPassword);
+             
           ngModel.$parsers.unshift(function (value) {
             console.log(value);
-            if(scope.signUp.userPassword)
-              ngModel.$setValidity('compareEqualValidator', scope.signUp.userPassword === value);
+            if(userPassword)
+              ngModel.$setValidity('compareEqualValidator', userPassword === value);
              return value;
           });
 
@@ -1062,6 +1064,22 @@
 			templateUrl : resource + 'partials/discussions.html',
 			controller : 'discussionsController',
 			controllerAs : 'discussions',
+		}).state('forgotPassword', {
+			url : '/forgotPassword',
+			templateUrl : resource + 'partials/forgotPassword.html',
+			controller : 'forgotPasswordController',
+			controllerAs : 'forgotPassword',
+		}).state('forgotPassword.validUser', {
+			url : '/forgotPasswordValidUser',
+			templateUrl : resource + 'partials/forgotPasswordValidUser.html'
+		}).state('forgotPassword.changePassword', {
+			url : '/changePassword',
+			templateUrl : resource + 'partials/changePassword.html',
+			controller : 'changePasswordController',
+			controllerAs : 'changePassword',
+			params : {
+				'baseUserInfo' : ''
+			}
 		});
 	}
 })();
@@ -1514,6 +1532,131 @@
 
 	}
 
+})();
+/**
+ * 
+ */
+(function() {
+	'use strict';
+
+	angular.module('myindia-app').controller("changePasswordController",
+			changePasswordController);
+
+	changePasswordController.$inject = [ '$state','forgotPasswordService' ];
+
+	function changePasswordController($state,forgotPasswordService) {
+		var changePassword = this;
+		changePassword.passwordRegex = "^.*(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[~!@#$%^&*(),./?]).*$";
+		changePassword.baseUserInfo = $state.params.baseUserInfo;
+		changePassword.resetPassword=resetPassword;
+		
+		function resetPassword(){
+			forgotPasswordService.resetPassword(changePassword.baseUserInfo.accountGuid,changePassword.confirmPassword)
+			.then(resetPasswordSuccess).catch(resetPasswordFailure);
+
+			function resetPasswordSuccess(data){	
+				$state.go('signIn');
+            }
+            function resetPasswordFailure(error){
+            	 console.log(error);
+            }
+		}
+	
+	}
+})();
+
+(function() {
+	'use strict';
+
+	angular.module('myindia-app').controller("forgotPasswordController",
+			forgotPasswordController);
+
+	forgotPasswordController.$inject = [ '$state','forgotPasswordService' ];
+
+	function forgotPasswordController($state,forgotPasswordService) {
+		var forgotPassword = this;
+		forgotPassword.validUser = validUser;
+		forgotPassword.passwordRegex = "^.*(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[~!@#$%^&*(),./?]).*$";
+		forgotPassword.baseUserInfo = $state.params.baseUserInfo;
+	
+		function validUser(){
+			forgotPasswordService.validUser(forgotPassword.userName,forgotPassword.referenceName)
+			.then(validUserSuccess).catch(validUserFailure);
+
+			function validUserSuccess(data){	
+				$state.go('forgotPassword.changePassword',{baseUserInfo:data});
+            }
+            function validUserFailure(error){
+            	 console.log(error);
+            }
+		}
+	}
+})();
+
+(function() {
+    'use strict';
+
+    angular.module('myindia-app').factory("forgotPasswordService", forgotPasswordService);
+
+    forgotPasswordService.$inject = ['$q','swaggerShareService'];
+
+    function forgotPasswordService($q,swaggerShareService) {
+
+        var services = {};
+
+    	var forgotPasswordService = {
+    			validUser : validUser,
+    			resetPassword:resetPassword
+    	};
+
+        // Call and save the data
+        swaggerShareService.getAPIMetaData(setAPIMetaData);
+
+        return forgotPasswordService;
+
+        function setAPIMetaData(metaInfo){
+            services = metaInfo;
+        }
+
+    	function validUser(userName,referenceName){
+
+            let requestBody = {
+            		loginUserName: userName,
+            		referenceName: referenceName
+            }
+            let deferred = $q.defer();
+
+            services.account.forgotPasswordUserValidation({body:JSON.stringify(requestBody)},validUserSuccess,validUserFailure);
+        
+            return deferred.promise;
+
+            function validUserSuccess(data){
+                deferred.resolve(data.obj);
+            }
+            function validUserFailure(error){
+                deferred.reject(error);
+            }
+    	}
+    	function resetPassword(accountGuid,password){
+
+            let requestBody = {
+            		accountGuid: accountGuid,
+            		password: password
+            }
+            let deferred = $q.defer();
+
+            services.account.resetPassword({body:JSON.stringify(requestBody)},validUserSuccess,validUserFailure);
+        
+            return deferred.promise;
+
+            function validUserSuccess(data){
+                deferred.resolve(data.obj);
+            }
+            function validUserFailure(error){
+                deferred.reject(error);
+            }
+    	}
+    }
 })();
 (function() {
 	'use strict';
@@ -2131,26 +2274,6 @@
 
 		getAllProblemTypes();
 
-		// for (var i = 0; i < 20; i++) {
-		// 	var imageName = "";
-
-		// 	if (i % 2 == 0) {
-		// 		imageName = "power_problem.jpg";
-		// 	} else if (i % 3 == 0) {
-		// 		imageName = "agriculture_problem.jpg";
-		// 	} else if (i % 5 == 0) {
-		// 		imageName = "water_problem.jpg";
-		// 	} else {
-		// 		imageName = "road_problem.jpg";
-		// 	}
-		// 	var problemType = {
-		// 		"problemTypeName" : "Problem Type " + i,
-		// 		"problemTypeImage" : resource + "problem/" + imageName,
-		// 		"guid": 417
-		// 	};
-		// 	problemTypeSelection.problemTypes.push(problemType);
-		// }
-
 		function chooseExistingProblem(problemCategory) {
 
 			let problemTypes = problemTypeSelection.problemTypes.filter(function( obj ) {
@@ -2165,12 +2288,8 @@
 			createProblemService.getAllProblemTypes().then(getAllProblemTypesSuccess).catch(getAllProblemTypesFailure);
 			
 			function getAllProblemTypesSuccess(data){
-				// let tempResults = data.map(function(a) {return a.problemCategory;});
+				
 				problemTypeSelection.problemTypes = data;
-				// problemTypeSelection.problemTypeCategories = tempResults.filter((v, i, a) => a.indexOf(v) === i); 
-
-				// array.map(item => item.problemCategory)
-  				// 				.filter((value, index, self) => self.indexOf(value) === index)
   				let categories = [];
   				angular.forEach(data,function(problemType){
   					if(categories.indexOf(problemType.problemCategory) == -1){
@@ -2402,8 +2521,9 @@
     	var signIn = this;
  		signIn.login = login;
  		signIn.gotoSignUp = gotoSignUp;
+ 		signIn.gotoForgotPassword = gotoForgotPassword;
 
-        //If user has session storage values redirect to home page
+        // If user has session storage values redirect to home page
         if(sessionStorage.getItem("access_token")){
             $state.go('home');
         }
@@ -2425,7 +2545,9 @@
     		$state.go('signUp.validate');
     	}
     	
-    	
+    	function gotoForgotPassword(){
+    		$state.go('forgotPassword.validUser');
+    	}
     }
 
 })();
@@ -2509,14 +2631,16 @@
             services = metaInfo;
         }
 
-    	function create(userGuid,userName,password,childLocation,parentLocation){
+    	function create(userGuid,userName,password,childLocation,parentLocation,emailAddress,occupation){
 
             let requestBody = {
                 loginUserName: userName,
                 password: password,
                 userGuid: userGuid,
                 childLocation: childLocation,
-                parentLocation: parentLocation
+                parentLocation: parentLocation,
+                emailAddress: emailAddress,
+                occupation: occupation
             };
 
             let deferred = $q.defer();
@@ -2609,6 +2733,7 @@
 		signUp.gender = 'Male';
 		signUp.passwordRegex = "^.*(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[~!@#$%^&*(),./?]).*$";
 		signUp.gotoSignIn = gotoSignIn;
+		signUp.occupations=["Engineering","Computer Professional","Farming","Fishing and Forestry","Education","Training and Library","Arts", "Media and Sports","Financial Services","Business","Military","Legal","Politician","Others"];
 		
 		populateYears();
 		
@@ -2660,7 +2785,7 @@
 
 		function createAccount(){
 
-			createAccountService.create(signUp.elector.location.userGuid,signUp.userName,signUp.userPassword,signUp.leafLocation,signUp.parentLocation)
+			createAccountService.create(signUp.elector.location.userGuid,signUp.userName,signUp.userPassword,signUp.leafLocation,signUp.parentLocation,signUp.emailAddress,signUp.occupation)
 								.then(createAccountSuccess).catch(createAccountFailure);
 
 			function createAccountSuccess(data){

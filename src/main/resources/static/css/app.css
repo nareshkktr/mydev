@@ -832,6 +832,20 @@ input[type="text"], input[type="password"], select {
 	padding-top: 9px;
 	font-size: 20px;
 }
+@CHARSET "ISO-8859-1";
+.forgot_password_form .form-group{
+	margin-bottom: 15px !important;
+}
+.forgot_password_form .already_connected_wanna_connected_row{
+	padding-top: 15px;
+}
+.forgot_password_form .connected_row{
+	padding-top: 0px !important;
+}
+.forgot_password_form .bottom_border{
+	border:none !important;
+	border-bottom: 1px groove white !important;
+}
 .search_container {
 	margin-left: 0px !important;
 	margin-right: 0px !important;
@@ -1308,7 +1322,7 @@ tags-input .tags .tag-item {
 .problem_type img {
 	width: 100%;
 	border-radius: 5px;
-	height: 150px;
+	height: 165px;
 }
 
 #problem_type_selection_container {
@@ -1316,7 +1330,7 @@ tags-input .tags .tag-item {
 }
 
 .problem_type_img {
-	padding: 15px;
+	padding: 5px;
 }
 
 .problem_type_name {

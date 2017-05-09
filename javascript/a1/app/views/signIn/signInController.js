@@ -10,8 +10,9 @@
     	var signIn = this;
  		signIn.login = login;
  		signIn.gotoSignUp = gotoSignUp;
+ 		signIn.gotoForgotPassword = gotoForgotPassword;
 
-        //If user has session storage values redirect to home page
+        // If user has session storage values redirect to home page
         if(sessionStorage.getItem("access_token")){
             $state.go('home');
         }
@@ -33,7 +34,9 @@
     		$state.go('signUp.validate');
     	}
     	
-    	
+    	function gotoForgotPassword(){
+    		$state.go('forgotPassword.validUser');
+    	}
     }
 
 })();

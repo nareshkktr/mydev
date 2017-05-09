@@ -120,6 +120,9 @@ public class UserInfo implements Serializable {
 	@Column(name = "PHOTO_URL")
 	private String photoURL;
 
+	@Column(name = "OCCUPATION")
+	private String occupation;
+
 	public Long getGuid() {
 		return guid;
 	}
@@ -300,6 +303,14 @@ public class UserInfo implements Serializable {
 
 	public void setMasterLocation(LocationMaster masterLocation) {
 		this.masterLocation = masterLocation;
+	}
+
+	public String getOccupation() {
+		return occupation;
+	}
+
+	public void setOccupation(String occupation) {
+		this.occupation = occupation;
 	}
 
 }

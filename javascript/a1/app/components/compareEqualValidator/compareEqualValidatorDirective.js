@@ -14,11 +14,13 @@
 
         function link(scope, element, attrs, ngModel) {
           /* */
-
+        	 var userPassword=attrs["compareEqualValidator"];
+             console.log(userPassword);
+             
           ngModel.$parsers.unshift(function (value) {
             console.log(value);
-            if(scope.signUp.userPassword)
-              ngModel.$setValidity('compareEqualValidator', scope.signUp.userPassword === value);
+            if(userPassword)
+              ngModel.$setValidity('compareEqualValidator', userPassword === value);
              return value;
           });
 

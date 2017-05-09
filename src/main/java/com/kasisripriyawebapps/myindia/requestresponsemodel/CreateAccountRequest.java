@@ -19,6 +19,7 @@ public class CreateAccountRequest {
 	private Long userGuid;
 	private SolrLocationMaster childLocation;
 	private SolrLocationMaster parentLocation;
+	private String occupation;
 
 	public String getLoginUserName() {
 		return loginUserName;
@@ -68,4 +69,13 @@ public class CreateAccountRequest {
 		this.parentLocation = parentLocation;
 	}
 
+	public String getOccupation() {
+		return occupation;
+	}
+
+	public void setOccupation(String occupation) {
+		this.occupation = occupation;
+	}
+
+	
 }

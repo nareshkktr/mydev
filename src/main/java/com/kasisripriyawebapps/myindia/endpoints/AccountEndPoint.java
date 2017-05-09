@@ -33,6 +33,7 @@ import com.kasisripriyawebapps.myindia.exception.PreConditionRequiredException;
 import com.kasisripriyawebapps.myindia.exception.RecordNotFoundException;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.BaseUserInformation;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.CreateAccountRequest;
+import com.kasisripriyawebapps.myindia.requestresponsemodel.ForgotPasswordRequest;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.LoginRequest;
 import com.kasisripriyawebapps.myindia.service.AccountService;
 import com.kasisripriyawebapps.myindia.util.CommonUtil;
@@ -43,15 +44,15 @@ import io.swagger.annotations.ApiOperation;
 @Path(EndPointConstants.ACCOUNT_ENDPOINT_REQUEST_MAPPING)
 @Api(value = EndPointConstants.ACCOUNT_ENDPOINT_API_VALUE, tags = {
 		EndPointConstants.ACCOUNT_ENDPOINT_API_TAGS }, description = EndPointConstants.ACCOUNT_ENDPOINT_API_DESCRIPTION)
-public class AccountEndPoint extends BaseEndPoint{
+public class AccountEndPoint extends BaseEndPoint {
 
 	@Autowired
 	AccountService accountService;
-	
+
 	private @Autowired HttpServletRequest servletRequest;
-	
+
 	private @Autowired HttpServletResponse servletResponse;
-	
+
 	@Autowired
 	private ConsumerTokenServices defaultTokenServices;
 
@@ -70,7 +71,8 @@ public class AccountEndPoint extends BaseEndPoint{
 		NewCookie accessTokenCookie = new NewCookie("access_token", baseUserInfo.getAccessToken());
 		NewCookie refreshTokenCookie = new NewCookie("refresh_token", baseUserInfo.getRefreshToken());
 
-		return Response.status(Status.OK).entity(baseUserInfo).cookie(accessTokenCookie).cookie(refreshTokenCookie).build();
+		return Response.status(Status.OK).entity(baseUserInfo).cookie(accessTokenCookie).cookie(refreshTokenCookie)
+				.build();
 	}
 
 	@POST
@@ -96,8 +98,7 @@ public class AccountEndPoint extends BaseEndPoint{
 			RecordNotFoundException, PreConditionFailedException, PreConditionRequiredException {
 		BaseUserInformation baseUserInfo = null;
 		LoggedInUserDetails loggedInUserDetails = getLoggedInUserDetails();
-		//Account account = accountService.getAccountByUserName(loggedInUserDetails.getUserName());
-		baseUserInfo = accountService.prepareLoggedInUserInfo(loggedInUserDetails.getUserName());      ;//prepareBaseUserInformation(account);
+		baseUserInfo = accountService.prepareLoggedInUserInfo(loggedInUserDetails.getUserName());
 		return Response.status(Status.OK).entity(baseUserInfo).build();
 	}
 
@@ -106,37 +107,87 @@ public class AccountEndPoint extends BaseEndPoint{
 	@Path(EndPointConstants.LOGOUT_ACCOUNT_REQUEST_MAPPING)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response logout() {
-		
+
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		if (auth != null){    
+		if (auth != null) {
 			new SecurityContextLogoutHandler().logout(servletRequest, servletResponse, auth);
 		}
-		SecurityContextHolder.getContext().setAuthentication(null);	
+		SecurityContextHolder.getContext().setAuthentication(null);
 		auth.setAuthenticated(false);
 		defaultTokenServices.revokeToken(servletRequest.getHeader("Authorization").split(" ")[1]);
-		
+
 		return Response.status(Status.OK).build();
 	}
-	
+
 	@POST
 	@ApiOperation(value = EndPointConstants.REFRESH_ACCESS_TOKEN_API_VALUE, nickname = EndPointConstants.REFRESH_ACCESS_TOKEN_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.REFRESH_ACCESS_TOKEN_API_DESCRIPTION)
 	@Path(EndPointConstants.REFRESH_ACCESS_TOKEN_REQUEST_MAPPING)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response refreshAccessToken(String refreshToken) throws InternalServerException, PreConditionFailedException {
-		
+	public Response refreshAccessToken(String refreshToken)
+			throws InternalServerException, PreConditionFailedException {
+
 		JSONObject tokenInfo = null;
-		
-		if(validateRefreshAccessTokenRequest(refreshToken))
+
+		if (validateRefreshAccessTokenRequest(refreshToken))
 			tokenInfo = accountService.refreshAccessToken(refreshToken);
-		
+
 		return Response.status(Status.OK).entity(tokenInfo.toString()).build();
 	}
-	
-	
+
+	@POST
+	@ApiOperation(value = EndPointConstants.FORGOT_PASSWORD_USER_VALIDATION_API_VALUE, nickname = EndPointConstants.FORGOT_PASSWORD_USER_VALIDATION_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.FORGOT_PASSWORD_USER_VALIDATION_API_DESCRIPTION)
+	@Path(EndPointConstants.FORGOT_PASSWORD_USER_VALIDATION_REQUEST_MAPPING)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response forgotPasswordUserValidation(ForgotPasswordRequest forgotPasswordRequest)
+			throws InternalServerException, PreConditionFailedException, PreConditionRequiredException,
+			RecordNotFoundException {
+		BaseUserInformation baseUserInformation = null;
+		if (validateForgotPasswordRequest(forgotPasswordRequest)) {
+			baseUserInformation = accountService.forgotPasswordUserValidation(forgotPasswordRequest);
+		}
+		return Response.status(Status.OK).entity(baseUserInformation).build();
+	}
+
+	@POST
+	@ApiOperation(value = EndPointConstants.RESET_PASSWORD_API_VALUE, nickname = EndPointConstants.RESET_PASSWORD_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.RESET_PASSWORD_API_DESCRIPTION)
+	@Path(EndPointConstants.RESET_PASSWORD_REQUEST_MAPPING)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response resetPassword(ForgotPasswordRequest resetPasswordRequest) throws InternalServerException,
+			PreConditionFailedException, PreConditionRequiredException, RecordNotFoundException {
+		if (validateResetPasswordRequest(resetPasswordRequest)) {
+			accountService.resetPassword(resetPasswordRequest);
+		}
+		return Response.status(Status.OK).build();
+	}
+
 	private boolean validateRefreshAccessTokenRequest(String refreshToken) throws PreConditionFailedException {
-		
-		if(refreshToken == null){
+
+		if (refreshToken == null) {
 			throw new PreConditionFailedException(ExceptionConstants.REQUEST_NOT_NULL);
+		}
+		return true;
+	}
+
+	private Boolean validateResetPasswordRequest(ForgotPasswordRequest resetPasswordRequest)
+			throws PreConditionFailedException, PreConditionRequiredException {
+		if (resetPasswordRequest == null) {
+			throw new PreConditionFailedException(ExceptionConstants.REQUEST_NOT_NULL);
+		} else if (resetPasswordRequest.getAccountGuid() == null) {
+			throw new PreConditionRequiredException(ExceptionConstants.ACCOUNT_GUID_REQUIRED);
+		} else if (resetPasswordRequest.getPassword() == null) {
+			throw new PreConditionRequiredException(ExceptionConstants.PASSWORD_REQUIRED);
+		}
+		return true;
+	}
+
+	private Boolean validateForgotPasswordRequest(ForgotPasswordRequest forgotPasswordRequest)
+			throws PreConditionFailedException, PreConditionRequiredException {
+		if (forgotPasswordRequest == null) {
+			throw new PreConditionFailedException(ExceptionConstants.REQUEST_NOT_NULL);
+		} else if (forgotPasswordRequest.getLoginUserName() == null) {
+			throw new PreConditionRequiredException(ExceptionConstants.LOGIN_USER_NAME_REQUIRED);
+		} else if (forgotPasswordRequest.getReferenceName() == null) {
+			throw new PreConditionRequiredException(ExceptionConstants.LOGIN_REFERENCE_NAME_REQUIRED);
 		}
 		return true;
 	}

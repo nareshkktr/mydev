@@ -257,7 +257,8 @@ public class AmazonS3Util {
 	}
 
 	public static void main(String argv[]) throws Exception {		
-		getListOfObjects("myindiausers","Uploaded/Global/India/");
+		File exportedFile = new File("C:\\Users\\kanduk\\Documents\\My Work\\Documents\\My Web Sites\\My India\\MyIndia\\ProblemTypes.xls");
+		createFile("myindiaproblems",null,exportedFile,"problemtypes/ProblemTypes.xls");
 		
 	}
 

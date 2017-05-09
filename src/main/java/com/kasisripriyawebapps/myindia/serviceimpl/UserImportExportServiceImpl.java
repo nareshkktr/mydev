@@ -1,6 +1,5 @@
 package com.kasisripriyawebapps.myindia.serviceimpl;
 
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -660,21 +659,21 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 			throws InternalServerException {
 
 		String fileName = eachURLData.getPartNo() + ".xls";
-		
+
 		String bucketName = env.getProperty("amazon.s3.users.bucket.name");
 		String uploadedFolderName = env.getProperty("amazon.s3.users.uploaded.folder.name");
 
 		String globalFolderName = env.getProperty("amazon.s3.users.global.folder.name");
 		String countryFolderName = env.getProperty("amazon.s3.users.india.folder.name");
-		
+
 		String votersFolderName = env.getProperty("amazon.s3.users.voters.folder.name");
-		
-		uploadedFolderName = uploadedFolderName +ApplicationConstants.SUFFIX
-				+ globalFolderName + ApplicationConstants.SUFFIX + countryFolderName + ApplicationConstants.SUFFIX + eachURLData.getStateName()
-				+ ApplicationConstants.SUFFIX + eachURLData.getDistrictName() + ApplicationConstants.SUFFIX + eachURLData.getMlaConstituencyName() +
-				ApplicationConstants.SUFFIX + votersFolderName ;
-		
-		
+
+		uploadedFolderName = uploadedFolderName + ApplicationConstants.SUFFIX + globalFolderName
+				+ ApplicationConstants.SUFFIX + countryFolderName + ApplicationConstants.SUFFIX
+				+ eachURLData.getStateName() + ApplicationConstants.SUFFIX + eachURLData.getDistrictName()
+				+ ApplicationConstants.SUFFIX + eachURLData.getMlaConstituencyName() + ApplicationConstants.SUFFIX
+				+ votersFolderName;
+
 		Workbook exportWorkBook = CommonUtil.createWorkBook(fileName);
 
 		if (exportWorkBook.getNumberOfSheets() == 1 && exportWorkBook.getSheetAt(0) != null) {
@@ -683,19 +682,23 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 		Sheet exportWorkBookSheet = exportWorkBook.createSheet(ServiceConstants.USER_EXCEL_BY_CONSTITUENCT_SHEET_NAME);
 		addHeaderRowForUserExport(exportWorkBookSheet);
 
-		//prepare sheet data
+		// prepare sheet data
 		Map<Integer, Object[]> sheetData = new HashMap<Integer, Object[]>();
-		
-		int j=0;
-		
+
+		int j = 0;
+
 		for (User eachPageUser : eachPageUsers) {
 			j++;
-			sheetData.put(j, new Object[] { eachPageUser.getAge(), eachPageUser.getAssemblyConstituencyName(), eachPageUser.getAssemblyConstituencyNo(), eachPageUser.getDistrict(),
-					eachPageUser.getElectorName(), eachPageUser.getGender(), eachPageUser.getHouseNo(), eachPageUser.getIdCardNo(), eachPageUser.getReferenceName(), eachPageUser.getReferenceType(),
-					eachPageUser.getState(), eachPageUser.getPollingStation(), eachPageUser.getPollingStationAddress(), eachPageUser.getPartNo(), eachPageUser.getMainTwon(), eachPageUser.getPoliceStation(),
-					eachPageUser.getMandal(), eachPageUser.getRevenueDivision(), eachPageUser.getPincode(), eachPageUser.getParliamentaryConstituencyNo(), eachPageUser.getParliamentaryConstituencyName()});
+			sheetData.put(j, new Object[] { eachPageUser.getAge(), eachPageUser.getAssemblyConstituencyName(),
+					eachPageUser.getAssemblyConstituencyNo(), eachPageUser.getDistrict(), eachPageUser.getElectorName(),
+					eachPageUser.getGender(), eachPageUser.getHouseNo(), eachPageUser.getIdCardNo(),
+					eachPageUser.getReferenceName(), eachPageUser.getReferenceType(), eachPageUser.getState(),
+					eachPageUser.getPollingStation(), eachPageUser.getPollingStationAddress(), eachPageUser.getPartNo(),
+					eachPageUser.getMainTwon(), eachPageUser.getPoliceStation(), eachPageUser.getMandal(),
+					eachPageUser.getRevenueDivision(), eachPageUser.getPincode(),
+					eachPageUser.getParliamentaryConstituencyNo(), eachPageUser.getParliamentaryConstituencyName() });
 		}
-		
+
 		writeDataIntoSheet(sheetData, exportWorkBookSheet);
 		AmazonS3Util.writeExcelDataIntoAmazonS3File(fileName, exportWorkBook, bucketName, uploadedFolderName);
 
@@ -756,70 +759,64 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 
 		List<ElectroralRollesURL> electroralRollesUrlList = userImportExportDao
 				.getElectroralRollesURLData(electroralRollesURL);
-		
-		
+
 		List<User> pdfElectroralRollesList = new ArrayList<User>();
 		List<User> newElectroralRollesList = new ArrayList<User>();
-		
-		//Load existing user data
-		List<User> existingElectroralRollesList = userDao
-				.getElectroralRollesData(electroralRollesURL);
+
+		// Load existing user data
+		List<User> existingElectroralRollesList = userDao.getElectroralRollesData(electroralRollesURL);
 
 		if (electroralRollesUrlList != null) {
 
 			for (ElectroralRollesURL eachURLData : electroralRollesUrlList) {
-				extractDataFromUsersFile(eachURLData,pdfElectroralRollesList,newElectroralRollesList,existingElectroralRollesList);
+				extractDataFromUsersFile(eachURLData, pdfElectroralRollesList, newElectroralRollesList,
+						existingElectroralRollesList);
 			}
 		}
-		
-//		if (users != null && !users.isEmpty()) {
-////			userDao.saveUsers(users);
-//		}
-		
-		saveElectroralRollesData(electroralRollesURL, pdfElectroralRollesList,
-				existingElectroralRollesList, newElectroralRollesList);
-		
+
+		saveElectroralRollesData(electroralRollesURL, pdfElectroralRollesList, existingElectroralRollesList,
+				newElectroralRollesList);
 
 	}
 
+	@Transactional
 	private void saveElectroralRollesData(ElectroralRollesURL electroralRollesURL, List<User> pdfElectroralRollesList,
-			List<User> existingElectroralRollesList, List<User> newElectroralRollesList) throws InternalServerException {
-		
+			List<User> existingElectroralRollesList, List<User> newElectroralRollesList)
+			throws InternalServerException {
+
 		System.out.println(newElectroralRollesList.size());
 		userDao.saveUsers(newElectroralRollesList);
 		newElectroralRollesList.clear();
-		List<User> updatedElectroralRollesList = findUpdatedElectroralRollesData(
-				existingElectroralRollesList, pdfElectroralRollesList);
+		List<User> updatedElectroralRollesList = findUpdatedElectroralRollesData(existingElectroralRollesList,
+				pdfElectroralRollesList);
 		userDao.updateUsers(updatedElectroralRollesList);
 		existingElectroralRollesList.removeAll(pdfElectroralRollesList);
-		
-		for(User existingElectroralRolle:existingElectroralRollesList){
+
+		for (User existingElectroralRolle : existingElectroralRollesList) {
 			existingElectroralRolle.setIsActive(false);
 		}
-		
+
 		// Identify list of users and mark those as inactive.
 		userDao.updateUsers(existingElectroralRollesList);
-		
+
 	}
 
 	private List<User> findUpdatedElectroralRollesData(List<User> existingElectroralRollesList,
-			List<User> pdfElectroralRollesList) throws InternalServerException{
-		
+			List<User> pdfElectroralRollesList) throws InternalServerException {
+
 		List<User> updatedElectroralRollesList = new ArrayList<User>();
 		Map<String, List<User>> existingElectroralRollesMap = existingElectroralRollesList.stream()
 				.collect(Collectors.groupingBy(userObject -> userObject.getIdCardNo()));
-		
+
 		if (pdfElectroralRollesList != null && !pdfElectroralRollesList.isEmpty()
 				&& existingElectroralRollesList != null && !existingElectroralRollesList.isEmpty()) {
 			for (User eachPDFElectroralRolleData : pdfElectroralRollesList) {
 				if (existingElectroralRollesList.contains(eachPDFElectroralRolleData)
 						&& !updatedElectroralRollesList.contains(eachPDFElectroralRolleData)) {
-					eachPDFElectroralRolleData.setGuid(existingElectroralRollesMap
-							.get(eachPDFElectroralRolleData.getIdCardNo() )
-							.get(0).getGuid());
+					eachPDFElectroralRolleData.setGuid(
+							existingElectroralRollesMap.get(eachPDFElectroralRolleData.getIdCardNo()).get(0).getGuid());
 					eachPDFElectroralRolleData.setCreatedTimeStamp(existingElectroralRollesMap
-							.get(eachPDFElectroralRolleData.getIdCardNo() )
-							.get(0).getCreatedTimeStamp());
+							.get(eachPDFElectroralRolleData.getIdCardNo()).get(0).getCreatedTimeStamp());
 					updatedElectroralRollesList.add(eachPDFElectroralRolleData);
 				}
 			}
@@ -827,7 +824,9 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 		return updatedElectroralRollesList;
 	}
 
-	private void extractDataFromUsersFile(ElectroralRollesURL eachURLData, List<User> pdfElectroralRollesList,List<User> newElectroralRollesList,List<User> existingElectroralRollesList) throws InternalServerException {
+	private void extractDataFromUsersFile(ElectroralRollesURL eachURLData, List<User> pdfElectroralRollesList,
+			List<User> newElectroralRollesList, List<User> existingElectroralRollesList)
+			throws InternalServerException {
 
 		String hostName = env.getProperty("amazon.s3.host.name");
 		String bucketName = env.getProperty("amazon.s3.users.bucket.name");
@@ -835,17 +834,19 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 
 		String globalFolderName = env.getProperty("amazon.s3.users.global.folder.name");
 		String countryFolderName = env.getProperty("amazon.s3.users.india.folder.name");
-		
+
 		String votersFolderName = env.getProperty("amazon.s3.users.voters.folder.name");
 
-		String filePath = hostName + bucketName + ApplicationConstants.SUFFIX + uploadedFolderName +ApplicationConstants.SUFFIX
-							+ globalFolderName + ApplicationConstants.SUFFIX + countryFolderName + ApplicationConstants.SUFFIX + eachURLData.getStateName()
-							+ ApplicationConstants.SUFFIX + eachURLData.getDistrictName() + ApplicationConstants.SUFFIX + eachURLData.getMlaConstituencyName() +
-							ApplicationConstants.SUFFIX + votersFolderName  + ApplicationConstants.SUFFIX + eachURLData.getPartNo()+".xls";
+		String filePath = hostName + bucketName + ApplicationConstants.SUFFIX + uploadedFolderName
+				+ ApplicationConstants.SUFFIX + globalFolderName + ApplicationConstants.SUFFIX + countryFolderName
+				+ ApplicationConstants.SUFFIX + eachURLData.getStateName() + ApplicationConstants.SUFFIX
+				+ eachURLData.getDistrictName() + ApplicationConstants.SUFFIX + eachURLData.getMlaConstituencyName()
+				+ ApplicationConstants.SUFFIX + votersFolderName + ApplicationConstants.SUFFIX + eachURLData.getPartNo()
+				+ ".xls";
 
 		System.out.println(filePath);
 		Workbook myWorkBook = CommonUtil.getWorkBookFromFile(filePath);
-	
+
 		Sheet sheet = myWorkBook.getSheetAt(0);
 		int i = 0;
 		for (Row eachRow : sheet) {
@@ -853,7 +854,7 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 				i++;
 				continue;
 			}
-			
+
 			Integer age = (int) eachRow.getCell(0).getNumericCellValue();
 			String acName = eachRow.getCell(1).getStringCellValue();
 			Integer acNo = (int) eachRow.getCell(2).getNumericCellValue();
@@ -867,7 +868,7 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 			String stateName = eachRow.getCell(10).getStringCellValue();
 			String pollingStationName = eachRow.getCell(11).getStringCellValue();
 			String pollingStationAddress = eachRow.getCell(12).getStringCellValue();
-			Integer partNo = (int)eachRow.getCell(13).getNumericCellValue();
+			Integer partNo = (int) eachRow.getCell(13).getNumericCellValue();
 			String mainTown = eachRow.getCell(14).getStringCellValue();
 			String policeStation = eachRow.getCell(15).getStringCellValue();
 			String mandal = eachRow.getCell(16).getStringCellValue();
@@ -875,7 +876,7 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 			String pinCode = eachRow.getCell(18).getStringCellValue();
 			Integer pcNo = (int) eachRow.getCell(19).getNumericCellValue();
 			String pcName = eachRow.getCell(20).getStringCellValue();
-	
+
 			User user = new User();
 			user.setAge(age);
 			user.setAssemblyConstituencyName(acName);
@@ -902,10 +903,8 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 			user.setParliamentaryConstituencyNo(pcNo);
 			user.setParliamentaryConstituencyName(pcName);
 			user.setIsActive(true);
-			
-	
-			if (!newElectroralRollesList.contains(user)
-					&& !existingElectroralRollesList.contains(user)) {
+
+			if (!newElectroralRollesList.contains(user) && !existingElectroralRollesList.contains(user)) {
 				newElectroralRollesList.add(user);
 			}
 			if (!pdfElectroralRollesList.contains(user)) {
@@ -1012,70 +1011,69 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 				String mandal = "";
 				String revenueDivision = "";
 				String pinCode = "";// lines[10];
-				
-				
-				for(int i=0;i<lines.length;i++){
-					if(lines[i] != null && lines[i].contains("Main Town")){
-						
-						if(lines[i].contains(":")){
+
+				for (int i = 0; i < lines.length; i++) {
+					if (lines[i] != null && lines[i].contains("Main Town")) {
+
+						if (lines[i].contains(":")) {
 							String[] linesSplit = lines[i].split(":");
-							if(linesSplit.length >= 2)
+							if (linesSplit.length >= 2)
 								mainTown = linesSplit[1].trim();
-						}else{
+						} else {
 							String[] linesSplit = lines[i].split("Town");
-							if(linesSplit.length >= 2)
+							if (linesSplit.length >= 2)
 								mainTown = linesSplit[1].trim();
 						}
 					}
-					
-					if(lines[i] != null && lines[i].contains("Police Station")){
-						
-						if(lines[i].contains(":")){
+
+					if (lines[i] != null && lines[i].contains("Police Station")) {
+
+						if (lines[i].contains(":")) {
 							String[] linesSplit = lines[i].split(":");
-							if(linesSplit.length >= 2)
+							if (linesSplit.length >= 2)
 								policeStation = linesSplit[1].trim();
-						}else{
+						} else {
 							String[] linesSplit = lines[i].split("Station");
-							if(linesSplit.length >= 2)
+							if (linesSplit.length >= 2)
 								policeStation = linesSplit[1].trim();
 						}
 					}
-					
-					if(lines[i] != null && lines[i].contains("Mandal")){
-						
-						if(lines[i].contains(":")){
+
+					if (lines[i] != null && lines[i].contains("Mandal")) {
+
+						if (lines[i].contains(":")) {
 							String[] linesSplit = lines[i].split(":");
-							if(linesSplit.length >= 2)
+							if (linesSplit.length >= 2)
 								mandal = linesSplit[1].trim();
-						}else{
+						} else {
 							String[] linesSplit = lines[i].split("Mandal");
-							if(linesSplit.length >= 2)
+							if (linesSplit.length >= 2)
 								mandal = linesSplit[0].trim();
 						}
 					}
-					
-					if(lines[i] != null && lines[i].contains("Revenue Division")){
-						
-						if(lines[i].contains(":")){
+
+					if (lines[i] != null && lines[i].contains("Revenue Division")) {
+
+						if (lines[i].contains(":")) {
 							String[] linesSplit = lines[i].split(":");
-							if(linesSplit.length >= 2)
+							if (linesSplit.length >= 2)
 								revenueDivision = linesSplit[1].trim();
-						}else{
+						} else {
 							String[] linesSplit = lines[i].split("Division");
-							if(linesSplit.length >= 2)
+							if (linesSplit.length >= 2)
 								revenueDivision = linesSplit[1].trim();
 						}
 					}
-					
-					if(lines[i] != null && lines[i].contains("Pin Code")){
-						
-						if(lines[i].contains(":")){
+
+					if (lines[i] != null && lines[i].contains("Pin Code")) {
+
+						if (lines[i].contains(":")) {
 							String[] linesSplit = lines[i].split(":");
-							if(linesSplit.length >= 2)
+							if (linesSplit.length >= 2)
 								pinCode = linesSplit[1].trim();
-						}else{
+						} else {
 							String[] linesSplit = lines[i].split("Code");
-							if(linesSplit.length >= 2)
+							if (linesSplit.length >= 2)
 								pinCode = linesSplit[1].trim();
 						}
 					}
@@ -1086,7 +1084,6 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 				pdfHeaderData.setMandal(mandal);
 				pdfHeaderData.setRevenueDivision(revenueDivision);
 				pdfHeaderData.setPinCode(pinCode);
-
 
 			}
 		}
@@ -1491,4 +1488,5 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 				existingElectroralRollesUrlList, newElectroralRollesUrlList);
 
 	}
+
 }

@@ -10,16 +10,18 @@ import java.util.Set;
 import org.codehaus.jettison.json.JSONObject;
 
 import com.kasisripriyawebapps.myindia.entity.Account;
+import com.kasisripriyawebapps.myindia.exception.ConflictException;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 import com.kasisripriyawebapps.myindia.exception.RecordNotFoundException;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.BaseUserInformation;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.CreateAccountRequest;
+import com.kasisripriyawebapps.myindia.requestresponsemodel.ForgotPasswordRequest;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.LoginRequest;
 
 public interface AccountService {
 
 	Account createAccount(CreateAccountRequest createAccountRequest)
-			throws InternalServerException, RecordNotFoundException;
+			throws InternalServerException, RecordNotFoundException, ConflictException;
 
 	Account getAccountByUserName(String userName) throws InternalServerException;
 
@@ -41,5 +43,9 @@ public interface AccountService {
 
 	BaseUserInformation prepareBaseUserInformation(Account account)
 			throws InternalServerException, RecordNotFoundException;
+
+	BaseUserInformation forgotPasswordUserValidation(ForgotPasswordRequest forgotPasswordRequest) throws InternalServerException, RecordNotFoundException;
+
+	void resetPassword(ForgotPasswordRequest resetPasswordRequest) throws InternalServerException, RecordNotFoundException;
 	
 }

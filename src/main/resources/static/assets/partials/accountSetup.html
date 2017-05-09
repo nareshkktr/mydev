@@ -1,11 +1,43 @@
 <div class="form-group">
+	<label for="user_email">Email</label>
+	<i class="fa fa-envelope login_icon" aria-hidden="true"></i>
+	<input
+		type="text" name="form_email" ng-model="signUp.emailAddress"
+		placeholder="Email" class="form-control"
+		id="form_email" ng-required="true">
+
+	<div ng-messages="signup_form.form_email.$error"
+		ng-if="signup_form.form_email.$touched">
+		<p ng-message="required" class="help-block">
+			<i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+			&nbsp;Email is required.
+		</p>
+	</div>
+</div>
+<div class="form-group">
+	<label for="user_occupation">Occupation &nbsp;</label>
+	 <select class="form-control" name="user_occupation" ng-model="signUp.occupation" ng-options="occupation for occupation in signUp.occupations" ng-required="true">
+		<option value=''>Select Occupation</option>
+	</select> 
+	
+	<div ng-messages="signup_form.user_occupation.$error" ng-if="signup_form.user_occupation.$touched">
+	    <p ng-message="required" class="help-block"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> &nbsp;Occupation Required.</p>
+	</div>
+
+</div>
+<div class="form-group">
 	<label for="search_college">User name</label> <i
 		class="fa fa-user login_icon" aria-hidden="true"></i> <input
 		type="text" name="form_username" placeholder="Username"
-		class="form-control" id="form_username" ng-model="signUp.userName" ng-required="true">
-	
-	<div ng-messages="signup_form.form_username.$error" ng-if="signup_form.form_username.$touched">
-	    <p ng-message="required" class="help-block"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> &nbsp;User Name is required.</p>
+		class="form-control" id="form_username" ng-model="signUp.userName"
+		ng-required="true">
+
+	<div ng-messages="signup_form.form_username.$error"
+		ng-if="signup_form.form_username.$touched">
+		<p ng-message="required" class="help-block">
+			<i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+			&nbsp;User Name is required.
+		</p>
 	</div>
 
 </div>
@@ -14,30 +46,49 @@
 	<label for="search_college">Password</label> <i
 		class="fa fa-lock login_icon" aria-hidden="true"></i> <input
 		type="password" name="form_password" placeholder="Password"
-		class="form-control" id="form_password" ng-model="signUp.userPassword" ng-required="true" ng-minLength="8" ng-pattern="signUp.passwordRegex">
-	
-	<div ng-messages="signup_form.form_password.$error" ng-if="signup_form.form_password.$touched">
-		 <p ng-message="required" class="help-block"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> &nbsp;Password is required.</p>
-		 <p ng-message="minlength" class="help-block"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> &nbsp;Password should have minimum length of 8.</p>
-		 <p ng-message="pattern" class="help-block"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> &nbsp;Password should have atleast one lower case character,upper case character, special character and a number.</p>
+		class="form-control" id="form_password" ng-model="signUp.userPassword"
+		ng-required="true" ng-minLength="8" ng-pattern="signUp.passwordRegex">
+
+	<div ng-messages="signup_form.form_password.$error"
+		ng-if="signup_form.form_password.$touched">
+		<p ng-message="required" class="help-block">
+			<i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+			&nbsp;Password is required.
+		</p>
+		<p ng-message="minlength" class="help-block">
+			<i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+			&nbsp;Password should have minimum length of 8.
+		</p>
+		<p ng-message="pattern" class="help-block">
+			<i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+			&nbsp;Password should have atleast one lower case character,upper
+			case character, special character and a number.
+		</p>
 	</div>
 
 </div>
+
 
 <div class="form-group password_row">
 	<label for="search_college">Confirm Password</label> <i
 		class="fa fa-lock login_icon" aria-hidden="true"></i> <input
 		type="password" name="form_confirm_password" placeholder="Password"
 		class="form-password form-control" id="form_confirm_password"
-		ng-model="signUp.confirmPassword" ng-required="true" compare-equal-validator>
+		ng-model="signUp.confirmPassword" ng-required="true"
+		compare-equal-validator>
 
-	<div ng-messages="signup_form.form_confirm_password.$error" ng-if="signup_form.form_confirm_password.$touched">
-		 <p ng-message="compareEqualValidator" class="help-block"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> &nbsp;Passwords don't match.</p>
+	<div ng-messages="signup_form.form_confirm_password.$error"
+		ng-if="signup_form.form_confirm_password.$touched">
+		<p ng-message="compareEqualValidator" class="help-block">
+			<i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+			&nbsp;Passwords don't match.
+		</p>
 	</div>
 </div>
 
 <div class="form-group">
 	&nbsp;
 	<button type="button" class="btn app_btn"
-		ng-click="signUp.createAccount()" ng-disabled="signup_form.$invalid" id="connect-btn">Connect</button>
+		ng-click="signUp.createAccount()" ng-disabled="signup_form.$invalid"
+		id="connect-btn">Connect</button>
 </div>

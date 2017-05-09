@@ -122,4 +122,10 @@ public interface BaseDao<PK, T> {
 	List<T> getAllByConditionsByPage(Criterion criterion, SortCriteriaData sortCriteria, Integer pageNo,
 			Integer pageLimit) throws InternalServerException;
 
+	List<T> getAllByORConditions(List<Criterion> criterions, SortCriteriaData sortCriteria)
+			throws InternalServerException;
+	
+	T getByORConditions(List<Criterion> criterions, SortCriteriaData sortCriteria)
+			throws InternalServerException;
+
 }

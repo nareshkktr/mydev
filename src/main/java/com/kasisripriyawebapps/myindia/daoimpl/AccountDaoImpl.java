@@ -23,7 +23,10 @@ public class AccountDaoImpl extends BaseDaoImpl<Long, Account> implements Accoun
 	public Long createAccount(Account account) throws InternalServerException {
 		return save(account);
 	}
-
+	@Override
+	public void updateAccount(Account account) throws InternalServerException {
+		update(account);
+	}
 	@Override
 	public Account getAccountByUserName(String userName) throws InternalServerException {
 		Criterion criterionObj = Restrictions.eq("userName", userName);
@@ -41,7 +44,7 @@ public class AccountDaoImpl extends BaseDaoImpl<Long, Account> implements Accoun
 		criterions.add(criterionObjOne);
 		return getByConditions(criterions);
 	}
-	
+
 	@Override
 	public Account getAccountById(Long accountGuid) throws InternalServerException {
 		return getById(accountGuid);
@@ -53,6 +56,34 @@ public class AccountDaoImpl extends BaseDaoImpl<Long, Account> implements Accoun
 		sortCriteria.setProperty("createdTimeStamp");
 		sortCriteria.setIsAscending(true);
 		Long[] accountGuidsArray = accountGuids.toArray(new Long[accountGuids.size()]);
-		return getAllByPrimaryKeys(sortCriteria,accountGuidsArray);
+		return getAllByPrimaryKeys(sortCriteria, accountGuidsArray);
 	}
+
+	@Override
+	public Account getAccountByUserEmail(String emailAddress) throws InternalServerException {
+		Criterion criterionObj = Restrictions.eq("userEmail", emailAddress);
+		return getByCondition(criterionObj);
+	}
+
+	@Override
+	public Account getAccountByUserNameOrEmail(String loginUserName) throws InternalServerException {
+		Criterion criterionObj = Restrictions.eq("userName", loginUserName);
+		Criterion criterionObjOne = Restrictions.eq("userEmail", loginUserName);
+		List<Criterion> criterions = new ArrayList<Criterion>();
+		criterions.add(criterionObj);
+		criterions.add(criterionObjOne);
+		return getByORConditions(criterions, null);
+	}
+
+	@Override
+	public Account getAccountByIdAndPassword(Long guid, String salt, String password) throws InternalServerException {
+		Criterion criterionObj = Restrictions.eq("guid", guid);
+		Criterion criterionObjOne = Restrictions.eq("password",
+				CommonUtil.hashPassword(CommonUtil.saltPassword(password, salt)));
+		List<Criterion> criterions = new ArrayList<Criterion>();
+		criterions.add(criterionObj);
+		criterions.add(criterionObjOne);
+		return getByConditions(criterions);
+	}
+
 }
