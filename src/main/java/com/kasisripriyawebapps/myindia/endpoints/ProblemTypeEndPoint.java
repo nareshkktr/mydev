@@ -1,5 +1,7 @@
 package com.kasisripriyawebapps.myindia.endpoints;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.List;
 
 import javax.ws.rs.DELETE;
@@ -16,6 +18,7 @@ import javax.ws.rs.core.Response.Status;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.kasisripriyawebapps.myindia.constants.ApplicationConstants;
 import com.kasisripriyawebapps.myindia.constants.EndPointConstants;
 import com.kasisripriyawebapps.myindia.constants.ExceptionConstants;
 import com.kasisripriyawebapps.myindia.entity.ProblemType;
@@ -123,6 +126,15 @@ public class ProblemTypeEndPoint {
 		List<ProblemType> problemTypes = null;
 		problemTypes = problemTypeService.getProblemTypesByCategory(problemCategory);
 		return Response.status(Status.OK).entity(problemTypes).build();
+	}
+	
+	@POST
+	@ApiOperation(value = EndPointConstants.IMPORT_AND_EXPORT_PROBLEMTYPE_IMAGES_API_VALUE, nickname = EndPointConstants.IMPORT_AND_EXPORT_PROBLEMTYPE_IMAGES_API_NICKNAME, httpMethod = EndPointConstants.HTTP_GET, notes = EndPointConstants.IMPORT_AND_EXPORT_PROBLEMTYPE_IMAGES_API_DESCRIPTION)
+	@Path(EndPointConstants.IMPORT_AND_EXPORT_PROBLEMTYPE_IMAGES_REQUEST_MAPPING)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response importAndExportProblemTypeImages() throws InternalServerException, FileNotFoundException {
+			 problemTypeService.importAndExportProblemTypeImages();
+		return Response.status(Status.OK).entity(ApplicationConstants.SUCCESS_MESSAGE).build();
 	}
 
 	private boolean validateCreateUpdateProblemTypeRequest(

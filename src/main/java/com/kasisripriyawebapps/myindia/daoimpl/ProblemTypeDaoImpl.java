@@ -59,8 +59,8 @@ public class ProblemTypeDaoImpl extends BaseDaoImpl<Long, ProblemType> implement
 	}
 
 	@Override
-	public void updateProblemTypes(List<ProblemType> updatedProblemTypesList) {
-		// TODO Auto-generated method stub
+	public void updateProblemTypes(List<ProblemType> updatedProblemTypesList) throws InternalServerException {
+		saveOrUpdateBatch(updatedProblemTypesList);
 
 	}
 

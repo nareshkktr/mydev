@@ -1104,9 +1104,15 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 		} catch (IOException e) {
 			new InternalServerException(e.getMessage());
 		}
+		
+		String mpConstituencyNo = tableContent1.trim().replaceAll("\\D+", "");
+		String mpConstituencyName = tableContent1.trim().replaceAll("[^a-zA-Z]", "");
 
-		pdfHeaderData.setMpConstituencyNo(Integer.parseInt(tableContent1.trim().replaceAll("\\D+", "")));
-		pdfHeaderData.setMpConstituencyName(tableContent1.trim().replaceAll("[^a-zA-Z]", ""));
+		if(mpConstituencyNo != null && !mpConstituencyNo.isEmpty())
+			pdfHeaderData.setMpConstituencyNo(Integer.parseInt(mpConstituencyNo));
+		
+		if(mpConstituencyName != null && !mpConstituencyName.isEmpty())
+			pdfHeaderData.setMpConstituencyName(mpConstituencyName);
 
 		return pdfHeaderData;
 
@@ -1165,7 +1171,10 @@ public class UserImportExportServiceImpl implements UserImportExportService {
 					processingLineNo = Integer.parseInt(idCardNoMap.get("currentLineNo"));
 
 					User user = new User();
-					user.setAge(Integer.parseInt(age.trim()));
+					
+					if(age!= null && !age.trim().isEmpty())
+						user.setAge(Integer.parseInt(age.trim()));
+					
 					user.setAssemblyConstituencyName(eachURLData.getMlaConstituencyName());
 					user.setAssemblyConstituencyNo(eachURLData.getMlaConstituencyNo());
 					user.setCreatedTimeStamp(CommonUtil.getCurrentGMTTimestamp());

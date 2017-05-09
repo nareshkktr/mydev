@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.kasisripriyawebapps.myindia.configs.LoggedInUserDetails;
+import com.kasisripriyawebapps.myindia.constants.ApplicationConstants;
 import com.kasisripriyawebapps.myindia.constants.ProblemStatusParameters;
 import com.kasisripriyawebapps.myindia.dao.LocationMasterDao;
 import com.kasisripriyawebapps.myindia.dao.ProblemDao;
@@ -25,11 +26,13 @@ import com.kasisripriyawebapps.myindia.entity.ProblemHistory;
 import com.kasisripriyawebapps.myindia.entity.ProblemType;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 import com.kasisripriyawebapps.myindia.exception.RecordNotFoundException;
+import com.kasisripriyawebapps.myindia.requestresponsemodel.ActivityRequest;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.BaseUserInformation;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.CreateUpdateProblemRequestData;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.ProblemResponse;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.ProblemTypeResponse;
 import com.kasisripriyawebapps.myindia.service.AccountService;
+import com.kasisripriyawebapps.myindia.service.ActivityService;
 import com.kasisripriyawebapps.myindia.service.ImageService;
 import com.kasisripriyawebapps.myindia.service.ProblemService;
 import com.kasisripriyawebapps.myindia.solr.entity.SolrLocationMaster;
@@ -57,6 +60,9 @@ public class ProblemServiceImpl implements ProblemService {
 
 	@Autowired
 	ImageService imageService;
+	
+	@Autowired
+	ActivityService activityService;
 	
 	@Resource
     private GlobalSearchMasterService solrGlobalSearchService;
@@ -100,10 +106,35 @@ public class ProblemServiceImpl implements ProblemService {
 		problemGuid = problemDao.saveProblem(problem);
 		
 		problem.setGuid(problemGuid);
+		
 		//Save into solr repository for global search
 		solrGlobalSearchService.addToIndex(problem);
 		
+		ActivityRequest activityReq = preapreActivityRequest(problem);
+		
+		//Save For Activity Feed
+		activityService.saveActivity(activityReq);
+		
 		return problemGuid;
+	}
+
+	private ActivityRequest preapreActivityRequest(Problem problem) {
+		
+		ActivityRequest activityRequest = new ActivityRequest();
+		
+		activityRequest.setActivityContent(problem.getProblemShortDescription());
+		
+		activityRequest.setActivityName(ApplicationConstants.CREATED_PROBLEM);
+		
+		//Problem
+		activityRequest.setActivityObjectGuid(problem.getGuid());
+		activityRequest.setActivityObjectType(ApplicationConstants.OBJECT_TYPE_PROBLEM);
+		
+		//Commented By
+		activityRequest.setCreatedBy(problem.getCreatedBy());
+		activityRequest.setCreatedTimeStamp(problem.getCreatedTimeStamp());
+		
+		return activityRequest;
 	}
 
 	private String calculateProblemSeverity(CreateUpdateProblemRequestData createUpdateProblemRequestData) {

@@ -1209,4 +1209,15 @@ public class EndPointConstants {
 	public static final String RESET_PASSWORD_API_NICKNAME = "resetPassword";
 	public static final String RESET_PASSWORD_API_DESCRIPTION = "To Reset The Password";
 
+	public static final String DEACTIVATE_ALL_POLITICIANS_REQUEST_MAPPING = "deactivateAllPoliticians";
+	public static final String DEACTIVATE_ALL_POLITICIANS_API_VALUE = "deactivateAllPoliticians";
+	public static final String DEACTIVATE_ALL_POLITICIANS_API_NICKNAME = "deactivateAllPoliticians";
+	public static final String DEACTIVATE_ALL_POLITICIANS_API_DESCRIPTION = "Deactivate all politician records for new upload.";
+	
+	public static final String IMPORT_AND_EXPORT_PROBLEMTYPE_IMAGES_REQUEST_MAPPING = "importAndExportProblemTypeImages";
+	public static final String IMPORT_AND_EXPORT_PROBLEMTYPE_IMAGES_API_VALUE = "importAndExportProblemTypeImages";
+	public static final String IMPORT_AND_EXPORT_PROBLEMTYPE_IMAGES_API_NICKNAME = "importAndExportProblemTypeImages";
+	public static final String IMPORT_AND_EXPORT_PROBLEMTYPE_IMAGES_API_DESCRIPTION = "Import And Export ProblemType Images.";
+
+
 }

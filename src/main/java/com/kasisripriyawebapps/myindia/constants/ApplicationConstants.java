@@ -134,5 +134,7 @@ public class ApplicationConstants {
 	public static final String THUMBS_LIKE = "Like";
 	public static final String THUMBS_UNLIKE = "UnLike";
 
+	public static final String CREATED_PROBLEM = "Created Problem";
+
 
 }

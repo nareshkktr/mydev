@@ -331,16 +331,19 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 
 		List<PoliticianAuthority> newUpdatedPoliticians = new ArrayList<PoliticianAuthority>();
 
+		/**** Commenting out validating for existing politicians
 		// Load all existing list of politicians
 		List<Politician> allPoliticians = new ArrayList<Politician>();
 
 		allPoliticians = politicianDao.getAllPoliticians();
+		
 
 		// Create a map of politicians for easy retreival
 		Map<String, List<Politician>> mapAllPoliticians = new HashMap<String, List<Politician>>();
 
 		mapAllPoliticians = allPoliticians.stream()
 				.collect(Collectors.groupingBy(politicianObject -> politicianObject.getFullName()));
+		
 
 		// Load existing current active Members from Politician Authority based
 		// on politicianType
@@ -350,9 +353,10 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 			activePoliticianAuthorities = politicianAuthorityDao
 					.getActivePoliticianAuthhoritiesByDesignationAndLocations(politicianType, applicableLocationGuids);
 		else
-			activePoliticianAuthorities = politicianAuthorityDao
-					.getActivePoliticianAuthhoritiesByDesignation(politicianType);
-
+			activePoliticianAuthorities = politicianAuthorityDao.getActivePoliticianAuthhoritiesByDesignation(politicianType);
+		 
+		 ***/
+		
 		// Load all party information
 		List<Party> allParties = partyDao.getAllParties();
 
@@ -432,13 +436,16 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 			newUpdatedPoliticians.add(politicianAuthority);
 
 			// New members
-			if (!allPoliticians.contains(politicianMember)) {
+			//if (!allPoliticians.contains(politicianMember)) {
 				politicianAuthorities = new ArrayList<PoliticianAuthority>();
 				politicianAuthority.setPolitician(politicianMember);
 				politicianAuthorities.add(politicianAuthority);
 				politicianMember.setPoliticianAuthorities(politicianAuthorities);
 				newPoliticians.add(politicianMember);
-			} else {
+				
+		/** Commenting validating existing politicians as all are treated as new politicians
+		
+		} else {
 				// get the existing politician and get its authorities and
 				// decide on update/add/delete
 				Politician currentPolitician = mapAllPoliticians.get(politicianMember.getFullName()).get(0);// Need
@@ -495,9 +502,12 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 						newPoliticians.add(currentPolitician);
 					}
 				}
-			}
+			} 
+			**/
 
 		} // End of all politicians
+		
+		/**
 
 		// Now find the difference of current active ones and the ones that came
 		// new.. those are to be marked as in active and end date
@@ -511,16 +521,22 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 				pa.setEndDate(new Date());
 			}
 		}
+		
+		**/
 
 		// DB OPS
 
 		// Politician to be saved/updated -- newPolitician
 		if (newPoliticians != null && newPoliticians.size() > 0)
 			politicianDao.saveOrUpdatePolitician(newPoliticians);
+		
+		/**
 
 		// Politician Authorities to be updated - activePoliticianAuthorities
 		if (activePoliticianAuthorities != null && activePoliticianAuthorities.size() > 0)
 			politicianAuthorityDao.saveOrUpdatePolitician(activePoliticianAuthorities);
+			
+		**/
 
 	}
 
@@ -1271,42 +1287,11 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 								}
 							}
 
-							List<LocationMaster> subDistricts = locationMasterDao
-									.getAllMasterLocationsByTypeAndParentLocation(
-											ServiceConstants.LOCATION_SUB_DISTRICT_TYPE, districtLcoation.getGuid());
-
-							if (subDistricts != null) {
-								Map<Long, List<LocationMaster>> subDistrictGuidsMap = subDistricts.stream()
-										.collect(Collectors.groupingBy(locationObject -> locationObject.getGuid()));
-
-								List<Long> subDistrictGuids = subDistrictGuidsMap.entrySet().stream()
-										.map(x -> x.getKey()).collect(Collectors.toList());
-
-								List<LocationMaster> villagePanchayathies = locationMasterDao
-										.getAllMasterLocationsByTypeAndParentLocations(
-												ServiceConstants.LOCATION_VILLAGE_PANCHAYATH_TYPE, subDistrictGuids);
-
-								if (villagePanchayathies != null) {
-
-									Map<Long, List<LocationMaster>> villagePanchayathiesGuidsMap = villagePanchayathies
-											.stream()
-											.collect(Collectors.groupingBy(locationObject -> locationObject.getGuid()));
-
-									List<Long> villagePanchayathiesGuids = villagePanchayathiesGuidsMap.entrySet()
-											.stream().map(x -> x.getKey()).collect(Collectors.toList());
-
-									applicableLocationGuids.addAll(villagePanchayathiesGuids);
-
-								}
-
-							}
-
-							uploadedFolderName += ApplicationConstants.SUFFIX + globalFolderName
-									+ ApplicationConstants.SUFFIX + countryFolderName + ApplicationConstants.SUFFIX
-									+ eachLocation.getLocationName() + ApplicationConstants.SUFFIX
-									+ districtLcoation.getLocationName();
-							String inputFilePath = hostName + bucketName + ApplicationConstants.SUFFIX
-									+ uploadedFolderName + ApplicationConstants.SUFFIX + fileName;
+							uploadedFolderName+= ApplicationConstants.SUFFIX + globalFolderName + ApplicationConstants.SUFFIX
+									+ countryFolderName + ApplicationConstants.SUFFIX + eachLocation.getLocationName() + ApplicationConstants.SUFFIX +
+									districtLcoation.getLocationName();
+							String inputFilePath = hostName + bucketName + ApplicationConstants.SUFFIX + uploadedFolderName
+									+ ApplicationConstants.SUFFIX + fileName;
 
 							preparePoliticanDataFromExcel(inputFilePath, politicianData);
 
@@ -1321,35 +1306,27 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 		processPoliticians(ServiceConstants.SARPANCH, politicianLocationTypes, politicianData, applicableLocationGuids);
 
 		// Load all location information by location type
-		// List<LocationMaster> allMpLocations =
-		// locationMasterDao.getAllMasterLocationsByTypes(politicianLocationTypes);
-		//
-		// Map<String, List<LocationMaster>> mapAllMpLocations =
-		// allMpLocations.stream()
-		// .collect(Collectors.groupingBy(locationMasterObject ->
-		// locationMasterObject.getLocationName().trim().replaceAll("
-		// ","").replaceAll("\\.", "").replaceAll("/","").replaceAll("-",
-		// "").replaceAll("\\(", "").replaceAll("\\)", "")));
-		//
-		// for(PoliticianExportModel pd:politicianData){
-		// String locationName = pd.getLocationName().toUpperCase().replaceAll("
-		// ", "").replaceAll("\\.", "").replaceAll("/","").replaceAll("-",
-		// "").replaceAll("\\(", "").replaceAll("\\)", "");
-		// if(!mapAllMpLocations.containsKey(locationName)){
-		//
-		// String location =
-		// computeDistance(locationName,mapAllMpLocations.keySet());
-		// if(location == ""){
-		// System.out.println(locationName);
-		// }else{
-		// System.out.println("Matchh found--"+location+"--"+locationName);
-		// }
-		//
-		// //System.out.println(locationName);
-		// //System.out.println("");
-		// }
-		// }
-
+//				List<LocationMaster> allMpLocations = locationMasterDao.getAllMasterLocationsByTypes(politicianLocationTypes);
+//
+//				Map<String, List<LocationMaster>> mapAllMpLocations = allMpLocations.stream()
+// 						.collect(Collectors.groupingBy(locationMasterObject -> locationMasterObject.getLocationName().trim().replaceAll(" ","").replaceAll("\\.", "").replaceAll("/","").replaceAll("-", "").replaceAll("\\(", "").replaceAll("\\)", "")));
+//		
+//				for(PoliticianExportModel pd:politicianData){
+//					String locationName = pd.getLocationName().toUpperCase().replaceAll(" ", "").replaceAll("\\.", "").replaceAll("/","").replaceAll("-", "").replaceAll("\\(", "").replaceAll("\\)", "");
+//					if(!mapAllMpLocations.containsKey(locationName)){
+//						
+//						String location = computeDistance(locationName,mapAllMpLocations.keySet());
+//						if(location == ""){
+//							System.out.println(locationName);
+//						}else{
+//							System.out.println("Matchh found--"+location+"--"+locationName);
+//						}
+//						
+//						//System.out.println(locationName);
+//						//System.out.println("");
+//					}
+//				}
+		
 	}
 
 	private String computeDistance(String locationName, Set<String> locations) {

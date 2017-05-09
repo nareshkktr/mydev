@@ -1,5 +1,6 @@
 package com.kasisripriyawebapps.myindia.service;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
 import com.kasisripriyawebapps.myindia.entity.ProblemType;
@@ -29,4 +30,6 @@ public interface ProblemTypeService {
 	void importAllProblemTypes() throws InternalServerException;
 
 	List<ProblemType> getProblemTypesByCategory(String problemCategory) throws InternalServerException;
+
+	void importAndExportProblemTypeImages() throws InternalServerException, FileNotFoundException;
 }
