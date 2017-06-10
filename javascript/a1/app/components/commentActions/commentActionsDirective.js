@@ -9,7 +9,8 @@
 			restrict : 'E',
 			scope : {
 				objectType : '=',
-				objectGuid : '='
+				objectGuid : '=',
+				objectData:'='
 			},
 			templateUrl : resource + 'partials/commentActions.html',
 			controller : 'commentActionsController',

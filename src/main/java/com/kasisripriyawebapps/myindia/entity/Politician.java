@@ -38,9 +38,8 @@ public class Politician implements Serializable {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Politician(Long guid, String fullName, String bannerPhotoURL, String photoURL,
-			 Long supportingCount, Long followingCount,
-			Long shareCount) {
+	public Politician(Long guid, String fullName, String bannerPhotoURL, String photoURL, Long supportingCount,
+			Long followingCount, Long shareCount) {
 		super();
 		this.guid = guid;
 		this.fullName = fullName;
@@ -77,10 +76,10 @@ public class Politician implements Serializable {
 
 	@Column(name = "SHARE_COUNT")
 	private Long shareCount;
-	
+
 	@Column(name = "CURRENT_DESIGNATION")
 	private String currentDesignation;
-	
+
 	@Column(name = "IS_ACTIVE")
 	private Boolean isActive;
 
@@ -89,6 +88,9 @@ public class Politician implements Serializable {
 
 	@OneToMany(mappedBy = "politician", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<PoliticianAuthority> politicianAuthorities = new ArrayList<PoliticianAuthority>(0);
+
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "politician", cascade = CascadeType.ALL)
+	private PoliticianAccount politicianAccount;
 
 	public Long getGuid() {
 		return guid;
@@ -164,13 +166,13 @@ public class Politician implements Serializable {
 	public void setNativeLocation(Location nativeLocation) {
 		this.nativeLocation = nativeLocation;
 	}
-	
+
 	public List<PoliticianAuthority> getPoliticianAuthorities() {
 		return politicianAuthorities;
 	}
 
 	public void setPoliticianAuthorities(List<PoliticianAuthority> politicianAuthorities) {
-			this.politicianAuthorities.addAll(politicianAuthorities);
+		this.politicianAuthorities.addAll(politicianAuthorities);
 	}
 
 	public String getCurrentDesignation() {
@@ -187,6 +189,14 @@ public class Politician implements Serializable {
 
 	public void setIsActive(Boolean isActive) {
 		this.isActive = isActive;
+	}
+
+	public PoliticianAccount getPoliticianAccount() {
+		return politicianAccount;
+	}
+
+	public void setPoliticianAccount(PoliticianAccount politicianAccount) {
+		this.politicianAccount = politicianAccount;
 	}
 
 	@Override
@@ -214,6 +224,4 @@ public class Politician implements Serializable {
 		return true;
 	}
 
-	
-	
 }

@@ -9,6 +9,32 @@ package com.kasisripriyawebapps.myindia.constants;
  */
 public class EndPointConstants {
 
+	// SignUp Page Constants
+
+	public static final String SIGNUP_ENDPOINT_REQUEST_MAPPING = "/signUp";
+
+	public static final String SIGNUP_ENDPOINT_API_VALUE = "signUp";
+
+	public static final String SIGNUP_ENDPOINT_API_TAGS = "signUp";
+
+	public static final String SIGNUP_ENDPOINT_API_DESCRIPTION = "Create Account API";
+
+	public static final String VALIDATE_ELECTOR_DETAILS_REQUEST_MAPPING = "validateElectorDetails";
+
+	public static final String VALIDATE_ELECTOR_DETAILS_API_VALUE = "validateElectorDetails";
+
+	public static final String VALIDATE_ELECTOR_DETAILS_NICKNAME = "validateElectorDetails";
+
+	public static final String VALIDATE_ELECTOR_DETAILS_API_DESCRIPTION = "Validate Elector Details";
+
+	public static final String VALIDATE_LOCATION_FOR_CONFLICT_REQUEST_MAPPING = "validateLocationForConflict";
+
+	public static final String VALIDATE_LOCATION_FOR_CONFLICT_API_VALUE = "validateLocationForConflict";
+
+	public static final String VALIDATE_LOCATION_FOR_CONFLICT_API_NICKNAME = "validateLocationForConflict";
+
+	public static final String VALIDATE_LOCATION_FOR_CONFLICT_API_DESCRIPTION = "Validate Location For Conflict";
+
 	// Http Methods
 
 	/** The Constant HTTP_GET. */
@@ -784,16 +810,16 @@ public class EndPointConstants {
 	public static final String IMPORT_MLA_API_DESCRIPTION = "Import MLA";
 
 	/** The Constant UPLOAD_ALL_USERS_REQUEST_MAPPING. */
-	public static final String GET_REFERENCE_LOCATIONS_REQUEST_MAPPING = "getReferenceLocationForMaster";
+	public static final String GET_REFERENCE_LOCATIONS_REQUEST_MAPPING = "validationLocationForConflict";
 
 	/** The Constant UPLOAD_ALL_USERS_API_VALUE. */
-	public static final String GET_REFERENCE_LOCATIONS_API_VALUE = "getReferenceLocationForMaster";
+	public static final String GET_REFERENCE_LOCATIONS_API_VALUE = "validationLocationForConflict";
 
 	/** The Constant UPLOAD_ALL_USERS_API_NICKNAME. */
-	public static final String GET_REFERENCE_LOCATIONS_API_NICKNAME = "getReferenceLocationForMaster";
+	public static final String GET_REFERENCE_LOCATIONS_API_NICKNAME = "validationLocationForConflict";
 
 	/** The Constant UPLOAD_ALL_USERS_API_DESCRIPTION. */
-	public static final String GET_REFERENCE_LOCATIONS_API_DESCRIPTION = "Get Location References For A Master Location";
+	public static final String GET_REFERENCE_LOCATIONS_API_DESCRIPTION = "Validate Location For Conflict";
 
 	/** The Constant ACCOUNT_ENDPOINT_REQUEST_MAPPING. */
 
@@ -1193,12 +1219,12 @@ public class EndPointConstants {
 	public static final String EXPORT_GOVERNOR_API_VALUE = "exportGovernors";
 	public static final String EXPORT_GOVERNOR_REQUEST_MAPPING = "exportGovernors";
 	public static final String EXPORT_GOVERNOR_API_DESCRIPTION = "Export Governors";
-	
+
 	public static final String IMPORT_GP_SARPANCH_REQUEST_MAPPING = "importGPSarpanch";
 	public static final String IMPORT_GP_SARPANCH_API_VALUE = "importGPSarpanch";
 	public static final String IMPORT_GP_SARPANCH_API_NICKNAME = "importGPSarpanch";
 	public static final String IMPORT_GP_SARPANCH_API_DESCRIPTION = "Import the gram panchayathi sarpanch.";
-	
+
 	public static final String FORGOT_PASSWORD_USER_VALIDATION_REQUEST_MAPPING = "forgotPasswordUserValidation";
 	public static final String FORGOT_PASSWORD_USER_VALIDATION_API_VALUE = "forgotPasswordUserValidation";
 	public static final String FORGOT_PASSWORD_USER_VALIDATION_API_NICKNAME = "forgotPasswordUserValidation";
@@ -1213,11 +1239,64 @@ public class EndPointConstants {
 	public static final String DEACTIVATE_ALL_POLITICIANS_API_VALUE = "deactivateAllPoliticians";
 	public static final String DEACTIVATE_ALL_POLITICIANS_API_NICKNAME = "deactivateAllPoliticians";
 	public static final String DEACTIVATE_ALL_POLITICIANS_API_DESCRIPTION = "Deactivate all politician records for new upload.";
-	
+
 	public static final String IMPORT_AND_EXPORT_PROBLEMTYPE_IMAGES_REQUEST_MAPPING = "importAndExportProblemTypeImages";
 	public static final String IMPORT_AND_EXPORT_PROBLEMTYPE_IMAGES_API_VALUE = "importAndExportProblemTypeImages";
 	public static final String IMPORT_AND_EXPORT_PROBLEMTYPE_IMAGES_API_NICKNAME = "importAndExportProblemTypeImages";
 	public static final String IMPORT_AND_EXPORT_PROBLEMTYPE_IMAGES_API_DESCRIPTION = "Import And Export ProblemType Images.";
 
+	public static final String GET_ALBUMS_BY_OBJECT_REQUEST_MAPPING = "getAlbumsByObject";
+	public static final String GET_ALBUMS_BY_OBJECT_API_VALUE = "getAlbumsByObject";
+	public static final String GET_ALBUMS_BY_OBJECT_API_NICKNAME = "getAlbumsByObject";
+	public static final String GET_ALBUMS_BY_OBJECT_API_DESCRIPTION = "Get Albums with pagination for an object.";
+
+	public static final String CREATE_UPDATE_ALBUM_REQIEST_MAPPING = "createUpdateAlbum";
+	public static final String CREATE_UPDATE_ALBUM_API_VALUE = "createUpdateAlbum";
+	public static final String CREATE_UPDATE_ALBUM_API_NICKNAME = "createUpdateAlbum";
+	public static final String CREATE_UPDATE_ALBUM_API_DESCRIPTION = "To Create Update Album";
+
+	public static final String ADD_PHOTOS_TO_ALBUM_REQIEST_MAPPING = "addPhotosToAlbum";
+	public static final String ADD_PHOTOS_TO_ALBUM_API_VALUE = "addPhotosToAlbum";
+	public static final String ADD_PHOTOS_TO_ALBUM_API_NICKNAME = "addPhotosToAlbum";
+	public static final String ADD_PHOTOS_TO_ALBUM_API_DESCRIPTION = "Add Photos To Album";
+
+	public static final String GET_PHOTOS_BY_OBJECT_REQUEST_MAPPING = "getPhotosByObject";
+	public static final String GET_PHOTOS_BY_OBJECT_API_VALUE = "getPhotosByObject";
+	public static final String GET_PHOTOS_BY_OBJECT_API_NICKNAME = "getPhotosByObject";
+	public static final String GET_PHOTOS_BY_OBJECT_API_DESCRIPTION = "Get Photos with pagination for an object.";
+
+	public static final String ADD_PHOTOS_REQIEST_MAPPING = "addPhotos";
+	public static final String ADD_PHOTOS_API_VALUE = "addPhotos";
+	public static final String ADD_PHOTOS_API_NICKNAME = "addPhotos";
+	public static final String ADD_PHOTOS_API_DESCRIPTION = "Add Photos";
+
+	public static final String GET_ALBUM_PHOTOS_BY_OBJECT_REQUEST_MAPPING = "getAlbumPhotosByObject";
+	public static final String GET_ALBUM_PHOTOS_BY_OBJECT_API_VALUE = "getAlbumPhotosByObject";
+	public static final String GET_ALBUM_PHOTOS_BY_OBJECT_API_NICKNAME = "getAlbumPhotosByObject";
+	public static final String GET_ALBUM_PHOTOS_BY_OBJECT_API_DESCRIPTION = "Get Album Photos with pagination for an object.";
+
+	public static final String FILE_UPLOAD_ENDPOINT_REQUEST_MAPPING = "/fileUpload";
+	public static final String FILE_UPLOAD_ENDPOINT_API_VALUE = "fileUpload";
+	public static final String FILE_UPLOAD_ENDPOINT_API_TAGS = "fileUpload";
+	public static final String FILE_UPLOAD_ENDPOINT_API_DESCRIPTION = "File Upload Management API";
+
+	/** The Constant CREATE_ACCOUNT_REQUEST_MAPPING. */
+	public static final String ADD_FILES_REQUEST_MAPPING = "addFiles";
+	/** The Constant CREATE_ACCOUNT_API_VALUE. */
+	public static final String ADD_FILES_API_VALUE = "addFiles";
+	/** The Constant CREATE_ACCOUNT_API_NICKNAME. */
+	public static final String ADD_FILES_API_NICKNAME = "addFiles";
+	/** The Constant CREATE_ACCOUNT_API_DESCRIPTION. */
+	public static final String ADD_FILES_API_DESCRIPTION = "Add Files";
+
+	public static final String GET_POLITICIANS_BY_NAME_REQUEST_MAPPING = "getPoliticiansByName";
+	public static final String GET_POLITICIANS_BY_NAME_API_VALUE = "getPoliticiansByName";
+	public static final String GET_POLITICIANS_BY_NAME_API_NICKNAME = "getPoliticiansByName";
+	public static final String GET_POLITICIANS_BY_NAME_API_DESCRIPTION = "Get Politicians By Name";
+
+	public static final String VALIDATE_POLITICIAN_BY_LOCATION_PARTY_REQUEST_MAPPING = "validatePoliticianSelectionByLocationParty";
+	public static final String VALIDATE_POLITICIAN_BY_LOCATION_PARTY_API_VALUE = "validatePoliticianSelectionByLocationParty";
+	public static final String VALIDATE_POLITICIAN_BY_LOCATION_PARTY_API_NICKNAME = "validatePoliticianSelectionByLocationParty";
+	public static final String VALIDATE_POLITICIAN_BY_LOCATION_PARTY_API_DESCRIPTION = "Validate Politician By Location And Party";
 
 }

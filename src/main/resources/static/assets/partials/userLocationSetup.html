@@ -39,6 +39,18 @@
 </div>
 
 <div class="form-group">
+	<label for="user_occupation">Occupation &nbsp;</label>
+	 <select class="form-control" name="user_occupation" ng-model="signUp.occupation" ng-options="occupation for occupation in signUp.occupations" ng-required="true">
+		<option value=''>Select Occupation</option>
+	</select> 
+	
+	<div ng-messages="signup_form.user_occupation.$error" ng-if="signup_form.user_occupation.$touched">
+	    <p ng-message="required" class="help-block"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> &nbsp;Occupation Required.</p>
+	</div>
+
+</div>
+
+<div class="form-group">
 	&nbsp;
 	<button type="button" class="btn app_btn" ng-click="signUp.validationLocationForConflict()"
 		id="connect-btn" ng-disabled="signup_form.$invalid">Pin It!</button>

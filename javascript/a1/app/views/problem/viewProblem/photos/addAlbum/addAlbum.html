@@ -1,0 +1,95 @@
+<div class="modal-header">
+	<h3 class="modal-title" id="modal-title" ng-if="!addAlbum.albumGuid">Add
+		Album</h3>
+	<h3 class="modal-title" id="modal-title" ng-if="addAlbum.albumGuid">Upload
+		Photo to {{addAlbum.albumName}}</h3>
+</div>
+<div class="modal-body add_album_modal_body_container" id="modal-body">
+	<div id="add_album_modal_body_content">
+		<div class="row add_album_body_content_row">
+			<div
+				class="col-lg-4 col-md-4 col-sm-4 col-xs-12 new_album_details_content">
+				<div class="row new_album_image" ng-if="!addAlbum.albumGuid">
+					<div class="problem_cover_photo_content">
+						<label class="problem_cover_file_upload" for="file-upload">
+							<div class="btn app_btn cover_photo_btn">Choose Album Photo</div>
+						</label>
+						<file-upload callback="addAlbum.uploadAlbumPhoto" type="Single"
+							ng-if="!addAlbum.albumPhotoFileAdded"></file-upload>
+						<img class="problem_cover_photo" show-preview
+							file="addAlbum.albumPhotoFile"
+							ng-if="addAlbum.albumPhotoFileAdded" />
+					</div>
+				</div>
+				<div class="row new_album_image" ng-if="addAlbum.albumGuid">
+					<div class="problem_cover_photo_content">
+						<img class="problem_album_photo" alt="{{addAlbum.albumImageName}}" src="{{addAlbum.albumImage}}">
+					</div>
+				</div>
+				<form role="form" method="post" name="add_new_album_form" novalidate>
+					<div class="form-group new_album_name">
+						<div class="new_album_name_text">
+							<input type="text" name="new_album_name"
+								ng-model="addAlbum.albumName" placeholder="Album Name"
+								class="form-control" id="new_album_name" ng-required="true">
+						</div>
+					</div>
+					<div class="form-group new_album_description">
+						<div class="new_album_description_text">
+							<textarea name="new_album_desc"
+								ng-model="addAlbum.albumDescription"
+								placeholder="Album Description" class="form-control"
+								id="new_album_desc"></textarea>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div
+				class="col-lg-8 col-md-8 col-sm-8 col-xs-12 new_album_photo_details_content">
+				<div class="height305" ng-if="addAlbum.addedAlbumPhotos.length==0">
+					<div class="choose_photos_cover_photo">
+						<label class="problem_cover_file_upload" for="file-upload">
+							<div class="btn app_btn cover_photo_btn"
+								ng-disabled="!addAlbum.albumPhotoFileAdded">Choose Album
+								Photos</div>
+						</label>
+						<file-upload callback="addAlbum.getChoosenFiles"
+							ng-if="addAlbum.albumPhotoFileAdded" type="Multiple"></file-upload>
+					</div>
+				</div>
+				<div class="height305" ng-if="addAlbum.addedAlbumPhotos.length>0">
+					<div uib-carousel active="active" interval="addAlbum.myInterval"
+						no-wrap="addAlbum.noWrapSlides">
+						<div uib-slide
+							ng-repeat="eachPhoto in addAlbum.addedAlbumPhotoFiles track by $index"
+							index="$index">
+							<img show-preview file="eachPhoto" class="autoMargin" />
+							<div class="carousel-caption">
+								<p>{{eachPhoto.name}}</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="add_more_photos_cover_photo"
+					ng-if="addAlbum.addedAlbumPhotos.length>0">
+					<label class="problem_cover_file_upload" for="file-upload">
+						<div class="btn app_btn cover_photo_btn">Add More Album
+							Photos</div>
+					</label>
+					<file-upload callback="addAlbum.getMoreChoosenFiles"
+						type="Multiple"></file-upload>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn app_btn"
+		ng-click="addAlbum.closePopUp()">Cancel</button>
+	<button type="button" class="btn app_btn"
+		ng-click="addAlbum.uploadAlbum()"
+		ng-disabled="addAlbum.addedAlbumPhotos.length==0 || !addAlbum.albumName"
+		ng-if="!addAlbum.albumGuid">Add Album</button>
+	<button type="button" class="btn app_btn" ng-if="addAlbum.albumGuid"
+		ng-click="addAlbum.uploadPhotosToAlbum()" ng-disabled="addAlbum.addedAlbumPhotos.length==0 || !addAlbum.albumName">Upload Album Photos</button>
+</div>

@@ -22,21 +22,16 @@ import org.springframework.security.oauth2.provider.token.ConsumerTokenServices;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 
 import com.kasisripriyawebapps.myindia.configs.LoggedInUserDetails;
-import com.kasisripriyawebapps.myindia.constants.ApplicationConstants;
 import com.kasisripriyawebapps.myindia.constants.EndPointConstants;
 import com.kasisripriyawebapps.myindia.constants.ExceptionConstants;
-import com.kasisripriyawebapps.myindia.entity.Account;
-import com.kasisripriyawebapps.myindia.exception.ConflictException;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 import com.kasisripriyawebapps.myindia.exception.PreConditionFailedException;
 import com.kasisripriyawebapps.myindia.exception.PreConditionRequiredException;
 import com.kasisripriyawebapps.myindia.exception.RecordNotFoundException;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.BaseUserInformation;
-import com.kasisripriyawebapps.myindia.requestresponsemodel.CreateAccountRequest;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.ForgotPasswordRequest;
 import com.kasisripriyawebapps.myindia.requestresponsemodel.LoginRequest;
 import com.kasisripriyawebapps.myindia.service.AccountService;
-import com.kasisripriyawebapps.myindia.util.CommonUtil;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -55,25 +50,6 @@ public class AccountEndPoint extends BaseEndPoint {
 
 	@Autowired
 	private ConsumerTokenServices defaultTokenServices;
-
-	@POST
-	@ApiOperation(value = EndPointConstants.CREATE_ACCOUNT_API_VALUE, nickname = EndPointConstants.CREATE_ACCOUNT_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.CREATE_ACCOUNT_API_DESCRIPTION)
-	@Path(EndPointConstants.CREATE_ACCOUNT_REQUEST_MAPPING)
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response createAccount(CreateAccountRequest createAccountRequest) throws PreConditionFailedException,
-			PreConditionRequiredException, InternalServerException, ConflictException, RecordNotFoundException {
-		BaseUserInformation baseUserInfo = null;
-		if (validateCreateAccountRequest(createAccountRequest)
-				&& !validateDuplicateAccountByUserNameRequest(createAccountRequest.getLoginUserName())) {
-			Account account = accountService.createAccount(createAccountRequest);
-			baseUserInfo = accountService.prepareBaseUserInformation(account);
-		}
-		NewCookie accessTokenCookie = new NewCookie("access_token", baseUserInfo.getAccessToken());
-		NewCookie refreshTokenCookie = new NewCookie("refresh_token", baseUserInfo.getRefreshToken());
-
-		return Response.status(Status.OK).entity(baseUserInfo).cookie(accessTokenCookie).cookie(refreshTokenCookie)
-				.build();
-	}
 
 	@POST
 	@ApiOperation(value = EndPointConstants.LOGIN_ACCOUNT_API_VALUE, nickname = EndPointConstants.LOGIN_ACCOUNT_API_NICKNAME, httpMethod = EndPointConstants.HTTP_POST, notes = EndPointConstants.LOGIN_ACCOUNT_API_DESCRIPTION)
@@ -190,41 +166,6 @@ public class AccountEndPoint extends BaseEndPoint {
 			throw new PreConditionRequiredException(ExceptionConstants.LOGIN_REFERENCE_NAME_REQUIRED);
 		}
 		return true;
-	}
-
-	private Boolean validateCreateAccountRequest(CreateAccountRequest createAccountRequest)
-			throws PreConditionFailedException, PreConditionRequiredException {
-		if (createAccountRequest == null) {
-			throw new PreConditionFailedException(ExceptionConstants.REQUEST_NOT_NULL);
-		} else if (createAccountRequest.getLoginUserName() == null) {
-			throw new PreConditionRequiredException(ExceptionConstants.LOGIN_USER_NAME_REQUIRED);
-		} else if (createAccountRequest.getPassword() == null) {
-			throw new PreConditionRequiredException(ExceptionConstants.PASSWORD_REQUIRED);
-		} else if (createAccountRequest.getUserGuid() == null) {
-			throw new PreConditionRequiredException(ExceptionConstants.USER_GUID_REQUIRED);
-		} else if (createAccountRequest.getChildLocation().getLocationGuid() == null) {
-			throw new PreConditionRequiredException(ExceptionConstants.LOCATION_GUID_REQUIRED);
-		} else if (createAccountRequest.getLoginUserName().isEmpty()) {
-			throw new PreConditionFailedException(ExceptionConstants.LOGIN_USER_NAME_NOT_EMPTY);
-		} else if (createAccountRequest.getPassword().isEmpty()) {
-			throw new PreConditionFailedException(ExceptionConstants.PASSWORD_NOT_EMPTY);
-		} else if (!CommonUtil.isValidSizeFiled(createAccountRequest.getLoginUserName(),
-				ApplicationConstants.MIN_PASSWORD_LENGTH, ApplicationConstants.MAX_PASSWORD_LENGTH)) {
-			throw new PreConditionFailedException(ExceptionConstants.LOGIN_USER_NAME_NOT_EMPTY);
-		} else if (!CommonUtil.isValidSizeFiled(createAccountRequest.getPassword(),
-				ApplicationConstants.MIN_USER_NAME_LENGTH, ApplicationConstants.MAX_USER_NAME_LENGTH)) {
-			throw new PreConditionFailedException(ExceptionConstants.LOGIN_USER_NAME_NOT_EMPTY);
-		}
-		return true;
-	}
-
-	private boolean validateDuplicateAccountByUserNameRequest(String userName)
-			throws InternalServerException, ConflictException {
-		Boolean isDuplicateAccount = Boolean.FALSE;
-		if (accountService.getAccountByUserName(userName) != null) {
-			throw new ConflictException(ExceptionConstants.ACCOUNT_EXISTS_WITH_USER_NAME);
-		}
-		return isDuplicateAccount;
 	}
 
 	private Boolean validateLoginRequest(LoginRequest loginRequest)

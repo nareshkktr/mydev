@@ -1,0 +1,71 @@
+.add_album_modal_body_container {
+	padding: 0px !important;
+}
+
+#add_album_modal_body_content {
+	
+}
+
+#add_album_modal_body_content .add_album_body_content_row {
+	margin: 0px !important;
+}
+
+#add_album_modal_body_content .new_album_details_content {
+	padding: 10px !important;
+	border-right: 1px solid #e5e5e5;
+}
+
+#add_album_modal_body_content .new_album_details_content .new_album_image
+	{
+	margin: 0px !important;
+}
+
+#add_album_modal_body_content .new_album_details_content .new_album_name
+	{
+	margin: 0px !important;
+	margin-top: 5px !important;
+}
+
+#add_album_modal_body_content .new_album_details_content .new_album_description
+	{
+	margin-top: 10px;
+}
+
+#add_album_modal_body_content .new_album_details_content .new_album_description textarea
+	{
+	height: 63px !important;
+}
+
+#add_album_modal_body_content .new_album_details_content .new_album_name .new_album_name_text
+	{
+	margin-top: 5px;
+}
+
+#add_album_modal_body_content .new_album_photo_details_content {
+	padding: 10px !important;
+}
+
+#add_album_modal_body_content .new_album_photo_details_content .cover_photo_btn
+	{
+	width: 30% !important;
+	letter-spacing: 1px;
+}
+
+#add_album_modal_body_content .new_album_details_content .cover_photo_btn
+	{
+	width: 55% !important;
+	letter-spacing: 1px;
+}
+
+#add_album_modal_body_content .new_album_details_content .new_album_image .problem_cover_photo
+	{
+	position: absolute !important;
+	top: 15px !important;
+	left: 15px !important;
+	width: 90% !important;
+	height: 233px;
+}
+.problem_cover_photo_content .problem_album_photo{
+	    width: 100%;
+    height: 100%;
+}

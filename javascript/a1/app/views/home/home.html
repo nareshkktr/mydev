@@ -6,18 +6,17 @@
 				<div id="app_objects_grid_tabs_content">
 					<div class="col-lg-1 col-md-1 col-sm-2 xs-4"
 						id="app_objects_grid_tabs">
-
 						<div class="app_object_grid_tab">
-							<i class="fa fa-user-o" aria-hidden="true"></i>
+							<img src="assets/objectIcons/problem.png">
 						</div>
 						<div class="app_object_grid_tab">
-							<i class="fa fa-user-o" aria-hidden="true"></i>
+							<img src="assets/objectIcons/event.png">
 						</div>
 						<div class="app_object_grid_tab">
-							<i class="fa fa-user-o" aria-hidden="true"></i>
+							<img src="assets/objectIcons/politician.png">
 						</div>
 						<div class="app_object_grid_tab">
-							<i class="fa fa-user-o" aria-hidden="true"></i>
+							<img src="assets/objectIcons/party.png">
 						</div>
 					</div>
 
@@ -33,8 +32,8 @@
 											x="home.xFunction()" y="home.yFunction()" donut="true"
 											donutRatio=".40" color="home.color" tooltips="true"
 											interactive="true" showXAxis="true" showYAxis="true"
-											showValues="true" showLegend="true"
-											labelType="value"> <svg></svg> </nvd3-pie-chart>
+											showValues="true" showLegend="true" labelType="value">
+										<svg></svg> </nvd3-pie-chart>
 									</div>
 									<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12"
 										id="app_objects_grid_chart_legends"></div>
@@ -51,133 +50,47 @@
 				<div id="actiivty_feed_title">Activity Feed</div>
 				<div class="row" id="app_activity_tabs">
 					<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 app_activity_tab">
-						<i class="fa fa-user-o" aria-hidden="true"></i>
+						<img src="assets/objectIcons/all.png">
 					</div>
 					<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 app_activity_tab">
-						<i class="fa fa-user-o" aria-hidden="true"></i>
+						<img src="assets/objectIcons/problem.png">
 					</div>
 					<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 app_activity_tab">
-						<i class="fa fa-user-o" aria-hidden="true"></i>
+						<img src="assets/objectIcons/event.png">
 					</div>
 					<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 app_activity_tab">
-						<i class="fa fa-user-o" aria-hidden="true"></i>
+						<img src="assets/objectIcons/politician.png">
 					</div>
 					<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 app_activity_tab">
-						<i class="fa fa-user-o" aria-hidden="true"></i>
+						<img src="assets/objectIcons/party.png">
 					</div>
 					<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 app_activity_tab">
-						<i class="fa fa-user-o" aria-hidden="true"></i>
+						<img src="assets/objectIcons/location.png">
 					</div>
 				</div>
 				<div id="app_activity_content">
-					<div class="row activity_feed">
+					<div class="row activity_feed"
+						ng-repeat="eachActivity in home.activities">
 						<div class="col-lg-1 col-md-2 col-sm-2 col-xs-2 activity_icon">
-							<i class="fa fa-comments" aria-hidden="true"></i>
+							<i ng-if="eachActivity.activityName=='Commented'"
+								class="fa fa-comments" aria-hidden="true"></i> <i
+								ng-if="eachActivity.activityName=='Created Problem'"
+								class="fa fa-plus" aria-hidden="true"></i> <i
+								ng-if="eachActivity.activityName=='Added Album'"
+								class="fa fa-picture-o" aria-hidden="true"></i> <i
+								ng-if="eachActivity.activityName=='Added Photo'"
+								class="fa fa-camera" aria-hidden="true"></i>
 						</div>
 						<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 activity_text">
-							<p>XXX Commented on YYY Problem</p>
+							<p>
+								{{eachActivity.userInfo.name}} {{eachActivity.activityName}} <span
+									ng-if="eachActivity.onObjectName">on </span> <label
+									ng-if="eachActivity.onObjectName"
+									ng-click="home.gotoObject(eachActivity)" class="cursor_pointer">{{eachActivity.onObjectName}}</label>
+							</p>
 						</div>
 						<div class="col-lg-1 col-md-2 col-sm-2 col-xs-2 activity_icon">
-							<p class="activity_time">4h</p>
-						</div>
-					</div>
-					<div class="row activity_feed">
-						<div class="col-lg-1 col-md-2 col-sm-2 col-xs-2 activity_icon">
-							<i class="fa fa-thumbs-down" aria-hidden="true"></i>
-						</div>
-						<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 activity_text">
-							<p>XXX Liked YYY Problem</p>
-						</div>
-						<div class="col-lg-1 col-md-2 col-sm-2 col-xs-2 activity_icon">
-							<p class="activity_time">4h</p>
-						</div>
-					</div>
-					<div class="row activity_feed">
-						<div class="col-lg-1 col-md-2 col-sm-2 col-xs-2 activity_icon">
-							<i class="fa fa-thumbs-up" aria-hidden="true"></i>
-						</div>
-						<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 activity_text">
-							<p>XXX Unliked on YYY Problem</p>
-						</div>
-						<div class="col-lg-1 col-md-2 col-sm-2 col-xs-2 activity_icon">
-							<p class="activity_time">4h</p>
-						</div>
-					</div>
-					<div class="row activity_feed">
-						<div class="col-lg-1 col-md-2 col-sm-2 col-xs-2 activity_icon">
-							<i class="fa fa-share" aria-hidden="true"></i>
-						</div>
-						<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 activity_text">
-							<p>XXX Shared YYY Problem</p>
-						</div>
-						<div class="col-lg-1 col-md-2 col-sm-2 col-xs-2 activity_icon">
-							<p class="activity_time">4h</p>
-						</div>
-					</div>
-					<div class="row activity_feed">
-						<div class="col-lg-1 col-md-2 col-sm-2 col-xs-2 activity_icon">
-							<i class="fa fa-reply" aria-hidden="true"></i>
-						</div>
-						<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 activity_text">
-							<p>XXX Replied To Comment on YYY Problem</p>
-						</div>
-						<div class="col-lg-1 col-md-2 col-sm-2 col-xs-2 activity_icon">
-							<p class="activity_time">4h</p>
-						</div>
-					</div>
-					<div class="row activity_feed">
-						<div class="col-lg-1 col-md-2 col-sm-2 col-xs-2 activity_icon">
-							<i class="fa fa-comments" aria-hidden="true"></i>
-						</div>
-						<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 activity_text">
-							<p>XXX Commented on YYY Problem</p>
-						</div>
-						<div class="col-lg-1 col-md-2 col-sm-2 col-xs-2 activity_icon">
-							<p class="activity_time">4h</p>
-						</div>
-					</div>
-					<div class="row activity_feed">
-						<div class="col-lg-1 col-md-2 col-sm-2 col-xs-2 activity_icon">
-							<i class="fa fa-thumbs-down" aria-hidden="true"></i>
-						</div>
-						<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 activity_text">
-							<p>XXX Liked YYY Problem</p>
-						</div>
-						<div class="col-lg-1 col-md-2 col-sm-2 col-xs-2 activity_icon">
-							<p class="activity_time">4h</p>
-						</div>
-					</div>
-					<div class="row activity_feed">
-						<div class="col-lg-1 col-md-2 col-sm-2 col-xs-2 activity_icon">
-							<i class="fa fa-comments" aria-hidden="true"></i>
-						</div>
-						<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 activity_text">
-							<p>XXX Commented on YYY Problem</p>
-						</div>
-						<div class="col-lg-1 col-md-2 col-sm-2 col-xs-2 activity_icon">
-							<p class="activity_time">4h</p>
-						</div>
-					</div>
-					<div class="row activity_feed">
-						<div class="col-lg-1 col-md-2 col-sm-2 col-xs-2 activity_icon">
-							<i class="fa fa-thumbs-down" aria-hidden="true"></i>
-						</div>
-						<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 activity_text">
-							<p>XXX Liked YYY Problem</p>
-						</div>
-						<div class="col-lg-1 col-md-2 col-sm-2 col-xs-2 activity_icon">
-							<p class="activity_time">4h</p>
-						</div>
-					</div>
-					<div class="row activity_feed">
-						<div class="col-lg-1 col-md-2 col-sm-2 col-xs-2 activity_icon">
-							<i class="fa fa-thumbs-down" aria-hidden="true"></i>
-						</div>
-						<div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 activity_text">
-							<p>XXX Liked YYY Problem</p>
-						</div>
-						<div class="col-lg-1 col-md-2 col-sm-2 col-xs-2 activity_icon">
-							<p class="activity_time">4h</p>
+							<p class="activity_time">{{eachActivity.loggedTimeShort}}</p>
 						</div>
 					</div>
 				</div>

@@ -1096,8 +1096,8 @@ public class PoliticianImportExportServiceImpl implements PoliticianImportExport
 
 		WebElement webElement = driver.findElement(By.cssSelector("table.sortable"));
 		List<WebElement> rows = webElement.findElements(By.tagName("tr"));
-		for (WebElement webElement_1 : rows) {
-			List<WebElement> colums = webElement_1.findElements(By.tagName("td"));
+		for (final WebElement webElement1 : rows) {
+			List<WebElement> colums = webElement1.findElements(By.tagName("td"));
 			if (colums.size() > 0) {
 
 				WebElement locationName = colums.get(0);

@@ -85,8 +85,8 @@ public class ExceptionConstants {
 	public static final String OBJECT_TYPE_NOT_FOUND = "Object Type Not Found";
 	public static final String OBJECT_ID_NOT_FOUND = "Object ID Not Found";
 	public static final String INVALID_OBECT_TYPE = "Invalid Object Type";
-	public static final String INVALID_ID_CARD_NO = "ID Not Found";
-	public static final String INVALID_ID_CARD_NO_NAME = "Name Not Found";
+	public static final String INVALID_ID_CARD_NO = "Elector ID Not Found";
+	public static final String INVALID_ID_CARD_NO_NAME = "Elector Name Not Found";
 	public static final String NAME_REQUIRED = "Name Required";
 	public static final String REFERENCCE_TYPE_REQUIRED = "Reference Type Required";
 	public static final String REFERENCE_NAME_REQUIRED = "Reference Name Required";
@@ -152,5 +152,6 @@ public class ExceptionConstants {
 	public static final String LOGIN_REFERENCE_NAME_REQUIRED = "Reference Name Required";
 	public static final String REFERENCE_NAME_WRONG = "Invalid Reference Name";
 	public static final String ACCOUNT_GUID_REQUIRED = "Account Guid Required";
+	public static final String INVALID_DETAILS = "Details Not Correct";
 	
 }

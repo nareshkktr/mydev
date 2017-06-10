@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Restrictions;
 
 import com.kasisripriyawebapps.myindia.dto.SortCriteriaData;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
@@ -128,4 +127,5 @@ public interface BaseDao<PK, T> {
 	T getByORConditions(List<Criterion> criterions, SortCriteriaData sortCriteria)
 			throws InternalServerException;
 
+	void merge(T entity) throws InternalServerException;
 }

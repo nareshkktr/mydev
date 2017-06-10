@@ -14,7 +14,11 @@
 				modalTemplateUrl : '=modalTemplateUrl',
 				dismissModal : '=',
 				modalControllerName : '=modalControllerName',
-				modalControllerAlias : '=modalControllerAlias'
+				modalControllerAlias : '=modalControllerAlias',
+				modalSize : '=modalSize',
+				objectType : '=objectType',
+				objectGuid : '=objectGuid',
+				selectedAlbum : '=selectedAlbum'
 			}
 		};
 
@@ -27,7 +31,19 @@
 				ariaDescribedBy : 'modal-body',
 				templateUrl : scope.modalTemplateUrl,
 				controller : scope.modalControllerName,
-				controllerAs : scope.modalControllerAlias
+				controllerAs : scope.modalControllerAlias,
+				size : scope.modalSize,
+				resolve : {
+					objectType : function() {
+						return scope.objectType;
+					},
+					objectGuid : function() {
+						return scope.objectGuid;
+					},
+					selectedAlbum : function() {
+						return scope.selectedAlbum;
+					}
+				}
 			});
 			modalInstance.result.then(function() {
 			}, function() {

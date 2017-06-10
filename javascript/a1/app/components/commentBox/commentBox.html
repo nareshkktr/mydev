@@ -1,7 +1,15 @@
 <div class="comment_box_container">
 	<div class="row margin0">
-		<div class="col-lg-8 col-md-7 col-sm-7 col-xs-5 textbox">
-			<textarea ng-model="commentBox.commentText"></textarea>
+		<div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 comment_user_icon">
+			<user-profile-image-display ng-if="commentBox.userInfo"
+				image-url="commentBox.userInfo.userImage"
+				name="commentBox.userInfo.name"
+				label-class="commentBox.userProfileLabelClass"
+				image-class="commentBox.userProfileImageClass"></user-profile-image-display>
+		</div>
+		<div class="col-lg-7 col-md-7 col-sm-7 col-xs-5 textbox">
+			<textarea ng-model="commentBox.commentText"
+				placeholder="Have something in mind? Ask here......"></textarea>
 		</div>
 		<div class="col-lg-2 col-md-3 col-sm-3 col-xs-5 addons">
 			<div class="row margin0">
@@ -28,7 +36,8 @@
 			</div>
 		</div>
 		<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 send_btn">
-			<button type="button" class="btn app_btn" ng-click="commentBox.sendComment()">Ask</button>
+			<button type="button" class="btn app_btn"
+				ng-click="commentBox.sendComment()">Ask</button>
 		</div>
 	</div>
 </div>

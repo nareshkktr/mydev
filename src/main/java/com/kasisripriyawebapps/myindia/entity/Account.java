@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -48,12 +49,19 @@ public class Account implements Serializable {
 	@Column(name = "TYPE")
 	private String type;
 
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "USER_OCCUPATION_GUID")
+	private UserOccupation userOccupation;
+
 	@Column(name = "CREATED_TIMESTAMP")
 	private Timestamp createdTimeStamp;
 
 	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "USER_INFO_GUID")
 	private UserInfo userInfo;
+
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "account", cascade = CascadeType.ALL)
+	private PoliticianAccount politicianAccount;
 
 	/**
 	 * Instantiates a new account entity.
@@ -66,7 +74,7 @@ public class Account implements Serializable {
 		this.userName = account.getUserName();
 		this.password = account.getPassword();
 		this.salt = account.getSalt();
-		this.type = account.getType();
+		this.userOccupation = account.getUserOccupation();
 		this.createdTimeStamp = account.getCreatedTimeStamp();
 	}
 
@@ -92,13 +100,14 @@ public class Account implements Serializable {
 	 * @param updatedBy
 	 *            the updated by
 	 */
-	public Account(Long guid, String userName, String password, String salt, String type, Timestamp createdTimeStamp) {
+	public Account(Long guid, String userName, String password, String salt, UserOccupation userOccupation,
+			Timestamp createdTimeStamp) {
 		super();
 		this.guid = guid;
 		this.userName = userName;
 		this.password = password;
 		this.salt = salt;
-		this.type = type;
+		this.userOccupation = userOccupation;
 		this.createdTimeStamp = createdTimeStamp;
 
 	}
@@ -165,25 +174,6 @@ public class Account implements Serializable {
 	}
 
 	/**
-	 * Gets the type.
-	 *
-	 * @return the type
-	 */
-	public String getType() {
-		return type;
-	}
-
-	/**
-	 * Sets the type.
-	 *
-	 * @param type
-	 *            the new type
-	 */
-	public void setType(String type) {
-		this.type = type;
-	}
-
-	/**
 	 * Gets the created time stamp.
 	 *
 	 * @return the created time stamp
@@ -224,6 +214,30 @@ public class Account implements Serializable {
 
 	public void setUserEmail(String userEmail) {
 		this.userEmail = userEmail;
+	}
+
+	public UserOccupation getUserOccupation() {
+		return userOccupation;
+	}
+
+	public void setUserOccupation(UserOccupation userOccupation) {
+		this.userOccupation = userOccupation;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public PoliticianAccount getPoliticianAccount() {
+		return politicianAccount;
+	}
+
+	public void setPoliticianAccount(PoliticianAccount politicianAccount) {
+		this.politicianAccount = politicianAccount;
 	}
 
 }

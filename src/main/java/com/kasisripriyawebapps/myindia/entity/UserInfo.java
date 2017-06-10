@@ -96,7 +96,7 @@ public class UserInfo implements Serializable {
 	@JoinColumn(name = "USER_GUID")
 	private User user;
 
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "LOCATION_REF_GUID")
 	private Location nativeLocation;
 

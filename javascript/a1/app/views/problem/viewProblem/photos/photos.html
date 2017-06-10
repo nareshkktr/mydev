@@ -1,0 +1,153 @@
+<div class="problem_tab_content_container">
+	<div class="row problem_tab_header_content">
+		<div
+			class="col-lg-12 col-md-12 col-sm-12 col-xs-12 problem_tab_header_name">
+			<p>Photos</p>
+		</div>
+	</div>
+	<div class="problem_tab_body_content">
+		<div id="problem_photos_container">
+			<div class="row photos_tab_header_container">
+				<div
+					class="col-lg-9 col-md-6 col-sm-6 col-xs-4 photos_tab_header_content">
+					<div class="row photos_tab_header_content_row">
+						<div
+							class="col-lg-2 col-md-3 col-sm-3 col-xs-3 photos_tab_header_name"
+							ng-click="photos.getProblemPhotos()"
+							ng-class="{'selected_photos_sub_tab':photos.showPhotos}">Photos</div>
+						<div
+							class="col-lg-2 col-md-3 col-sm-3 col-xs-3 photos_tab_header_name"
+							ng-click="photos.getProblemAlbums()"
+							ng-class="{'selected_photos_sub_tab':!photos.showPhotos}">Albums</div>
+					</div>
+				</div>
+				<div
+					class="col-lg-3 col-md-6 col-sm-6 col-xs-4 photos_tab_header_actions">
+					<div class="row photos_tab_header_actions_row">
+						<div
+							class="col-lg-3 col-md-3 col-sm-3 col-xs-3 photos_tab_header_action_name">
+							<div class="add_photos_albums_icon"
+								ng-click="photos.showAddPhotosPopup()" ng-if="photos.showPhotos">
+								<i class="fa fa-plus" aria-hidden="true"></i>
+							</div>
+							<div class="add_photos_albums_icon"
+								ng-click="photos.showAddAlbumPopup()" ng-if="!photos.showPhotos">
+								<i class="fa fa-plus" aria-hidden="true"></i>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="problem_photos_container" ng-if="photos.showPhotos">
+				<div class="row problem_photos_list">
+					<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 problem_photo_col"
+						ng-repeat="eachPhoto in photos.problemPhotos">
+						<div class="problem_photo">
+							<div class="problem_photo_img_row">
+								<div class="problem_photo_img">
+									<img ng-src="{{eachPhoto.imageUrl}}" />
+								</div>
+							</div>
+							<div class="problem_photo_name_row">
+								<div class="problem_photo_name">
+									<label> {{eachPhoto.name}}</label>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div ng-if="photos.problemPhotos.length==0"
+						class="no_photos_albums_found">
+						<p>No Photos Found</p>
+					</div>
+				</div>
+			</div>
+			<div id="problem_albums_container" ng-if="!photos.showPhotos">
+				<div class="row problem_albums_list_header" ng-if="photos.showAlbumPhotos">
+					<div
+						class="col-lg-3 col-md-3 col-sm-3 col-xs-3 problem_albums_list_header_combo">
+						<div class="form-group">
+							<select class="form-control" name="selected_problem_album"
+								ng-model="photos.selctedProblemAlbum"
+								ng-options="problemAlbum.name for problemAlbum in photos.problemAlbums"
+								ng-change="photos.getAlbumPhotos(photos.selctedProblemAlbum)">
+							</select>
+						</div>
+					</div>
+					<div
+						class="col-lg-3 col-md-3 col-sm-3 col-xs-3 problem_albums_list_header_add_to_album">
+						<label class="add_more_photos_to_album" ng-click="photos.showAddAlbumPopup()">Add More Photos</label> <label
+							class="close_album_photos_view" ng-click="photos.closeAlbumPhotosView()"> <i
+							class="fa fa-times-circle-o" aria-hidden="true"></i>
+						</label>
+					</div>
+				</div>
+				<div class="row problem_photos_list" ng-if="photos.showAlbumPhotos">
+					<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 problem_photo_col"
+						ng-repeat="eachPhoto in photos.problemAlbumPhotos">
+						<div class="problem_photo">
+							<div class="problem_photo_img_row">
+								<div class="problem_photo_img">
+									<img ng-src="{{eachPhoto.imageUrl}}" />
+								</div>
+							</div>
+							<div class="problem_photo_name_row">
+								<div class="problem_photo_name">
+									<label> {{eachPhoto.name}}</label>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div ng-if="photos.problemAlbumPhotos.length==0"
+						class="no_photos_albums_found">
+						<p>No Photos Found In {{photos.selctedProblemAlbum.name}}</p>
+					</div>
+				</div>
+				<div class="row problem_albums_list" ng-if="photos.showAlbums">
+					<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 problem_album_col"
+						ng-repeat="eachAlbum in photos.problemAlbums"
+						ng-click="photos.getAlbumPhotos(eachAlbum)">
+						<div class="problem_album">
+							<div class="problem_album_name_row">
+								<div class="problem_album_name">
+									<label>
+										{{eachAlbum.name}}&nbsp;({{eachAlbum.noOfPhotos}})</label>
+								</div>
+							</div>
+							<div class="problem_img_row">
+								<div class="problem_img">
+									<img ng-src="{{eachAlbum.imageUrl}}" />
+								</div>
+							</div>
+						</div>
+					</div>
+					<div ng-if="photos.problemAlbums.length==0"
+						class="no_photos_albums_found">
+						<p>No Albums Found</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<modal ng-if="photos.showAddPhotosModal"
+	animations-enabled="photos.animationsEnabled"
+	modal-template-url="photos.addPhotosPopUpUrl"
+	dismiss-modal="photos.closeAddPhotosModal()"
+	modal-controller-name="photos.photosModalControllerName"
+	modal-controller-alias="photos.photosModalControllerAlias"
+	modal-size="photos.photosModalSize" object-type="photos.objectType"
+	object-guid="photos.objectGuid"> </modal>
+
+<modal ng-if="photos.showAddAlbumModal"
+	animations-enabled="photos.animationsEnabled"
+	modal-template-url="photos.addAlbumPopUpUrl"
+	dismiss-modal="photos.closeAddAlbumModal()"
+	modal-controller-name="photos.albumsModalControllerName"
+	modal-controller-alias="photos.albumsModalControllerAlias"
+	modal-size="photos.albumsModalSize" object-type="photos.objectType"
+	object-guid="photos.objectGuid"
+	selected-album="photos.selctedProblemAlbum"> </modal>
+
+<full-overlay ng-if="photos.showOverlay"></full-overlay>
+<add-album-wizard ng-if="photos.showOverlay"
+	object-type="photos.objectType" object-guid="photos.objectGuid"></add-album-wizard>

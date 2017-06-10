@@ -101,7 +101,7 @@ public class ActivityServiceImpl implements ActivityService {
 			activityResponse.setActivityGuid(activity.getActivityObjectGuid());
 			activityResponse.setActivityType(activity.getActivityObjectType());
 			
-			if(activity.getOnObjectType().equalsIgnoreCase(ApplicationConstants.OBJECT_TYPE_PROBLEM)){
+			if(activity.getOnObjectType()!=null && activity.getOnObjectType().equalsIgnoreCase(ApplicationConstants.OBJECT_TYPE_PROBLEM)){
 				ProblemResponse problem = problemService.retreiveProblemBaseInfo(activity.getOnObjectGuid());
 				activityResponse.setOnObjectImage(problem.getPhotoURL());
 				activityResponse.setOnObjectName(problem.getProblemShortDescription());

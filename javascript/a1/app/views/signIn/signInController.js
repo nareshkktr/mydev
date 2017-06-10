@@ -22,7 +22,7 @@
 
     		function loginSuccess(data){
                 dataShareService.setUserInfo(data);
-                $state.go('createProblem.problemTypeSelection');
+                $state.go('home');
     		}
 
     		function loginFailure(error){

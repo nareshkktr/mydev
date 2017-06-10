@@ -45,5 +45,21 @@
 
 #comments_list_container .comment .row .comment_text {
 	word-wrap: break-word;
-	margin-top: 10px;
+	margin-top: 0px;
+}
+
+
+.discussion_user_profile_label {
+	border-radius: 50%;
+	text-align: center;
+	width: 55px;
+	background-color: #f94c59 !important;
+	border: 2px solid #00a699;
+	height: 55px;
+}
+
+.discussion_user_profile_image {
+	border-radius: 50%;
+	width: 50px !important;
+	border: 2px solid #fda68a;
 }

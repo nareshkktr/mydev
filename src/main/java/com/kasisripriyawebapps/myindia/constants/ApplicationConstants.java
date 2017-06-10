@@ -11,16 +11,16 @@ import java.io.File;
 public class ApplicationConstants {
 
 	/** The Constant MIN_PASSWORD_LENGTH. */
-	public static final Integer MIN_USER_NAME_LENGTH = (int) 6;
+	public static final Integer MIN_USER_NAME_LENGTH = (int) 3;
 
 	/** The Constant MAX_PASSWORD_LENGTH. */
-	public static final Integer MAX_USER_NAME_LENGTH = (int) 15;
+	public static final Integer MAX_USER_NAME_LENGTH = (int) 150;
 
 	/** The Constant MIN_PASSWORD_LENGTH. */
-	public static final Integer MIN_PASSWORD_LENGTH = (int) 6;
+	public static final Integer MIN_PASSWORD_LENGTH = (int) 3;
 
 	/** The Constant MAX_PASSWORD_LENGTH. */
-	public static final Integer MAX_PASSWORD_LENGTH = (int) 15;
+	public static final Integer MAX_PASSWORD_LENGTH = (int) 150;
 
 	/** The Constant IDENTITY_CARD_TYPE_ADHAR. */
 	public static final String IDENTITY_CARD_TYPE_ADHAR = "ADHAR";
@@ -112,6 +112,8 @@ public class ApplicationConstants {
 	public static final String OBJECT_TYPE_PROBLEM = "Problem";
 	public static final String OBJECT_TYPE_EVENT = "Event";
 	public static final String OBJECT_TYPE_COMMENT = "Comment";
+	public static final String OBJECT_TYPE_ALBUM = "Album";
+	public static final String OBJECT_TYPE_PHOTO = "Photo";
 	public static final String OBJECT_TYPE_POST = "Post";
 	public static final String OBJECT_TYPE_PROBLEM_TYPE = "ProblemType";
 
@@ -122,19 +124,22 @@ public class ApplicationConstants {
 
 	public static final String COMMENT_REPLIED = "Replied";
 	public static final String COMMENTED = "Commented";
+	public static final String ADDED_ALBUM = "Added Album";
+	public static final String ADDED_PHOTO = "Added Photo";
 
 	public static final Integer PAGE_START = 1;
 	public static final Integer PAGE_LIMIT = 20;
-	
+
 	public static final String SUFFIX = "/";
 	public static final String THUMBS_UP_DOWN = "ThumsUpDown";
 	public static final Integer THUMBS_ZERO = 0;
 	public static final Integer THUMBS_ONE = 1;
-	
+
 	public static final String THUMBS_LIKE = "Like";
 	public static final String THUMBS_UNLIKE = "UnLike";
 
 	public static final String CREATED_PROBLEM = "Created Problem";
-
-
+	public static final String ALBUM = "Albums";
+	public static final String PHOTOS = "Photos";
+	public static final String CONTRIBUTOR = "Contributor";
 }

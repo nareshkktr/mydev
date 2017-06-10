@@ -3,15 +3,30 @@
 	angular.module('myindia-app').controller("commentBoxController",
 			commentBoxController);
 
-	commentBoxController.$inject = [ '$scope','commentBoxService' ];
+	commentBoxController.$inject = [ '$scope','commentBoxService','dataShareService','userInfoService' ];
 
-	function commentBoxController($scope,commentBoxService) {
+	function commentBoxController($scope,commentBoxService,dataShareService,userInfoService) {
 		var commentBox = this;
-		console.log($scope.objectType);
-		console.log($scope.objectGuid);
 		commentBox.commentText="";
 		commentBox.sendComment = sendComment;
 		
+		commentBox.userInfo = dataShareService.getUserInfo();
+		if (!commentBox.userInfo) {
+			userInfoService.getUserInfo().then(userInfoSuccess).catch(userInfoFailure);
+
+			function userInfoSuccess(data){
+				dataShareService.setUserInfo(data);
+				commentBox.userInfo=data;
+			}
+
+			function userInfoFailure(error){
+				alert(error);
+			}
+		}
+		
+		commentBox.userProfileImageClass = "comment_user_profile_image";
+		commentBox.userProfileLabelClass = "comment_user_profile_label";
+
 		function sendComment(){
 			let commentData={};
 			commentData.objectType=$scope.objectType;
@@ -20,7 +35,7 @@
 			
 			commentBoxService.sendComment(commentData).then(sendCommentSuccess).catch(sendCommentFailure);
     		function sendCommentSuccess(data){
-    			alert(data);
+    			commentData.commentText="";
     		}
     		function sendCommentFailure(error){
     			alert(error);

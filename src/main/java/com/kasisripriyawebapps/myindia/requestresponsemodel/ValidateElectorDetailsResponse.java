@@ -6,16 +6,15 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.kasisripriyawebapps.myindia.solr.entity.SolrLocationMaster;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class GetUserByPropertyResponse {
+public class ValidateElectorDetailsResponse {
 
 	private Long userGuid;
-	private String referenceType;
-	private String referenceName;
 	private String locationState;
 	private String locationDistrict;
 	private String locationMandal;
-
-	private List<SolrLocationMaster> locations = null;
+	private String mainTown;
+	private List<SolrLocationMaster> locations;
+	private List<UserOccupationResponse> occupations;
 
 	public Long getUserGuid() {
 		return userGuid;
@@ -23,22 +22,6 @@ public class GetUserByPropertyResponse {
 
 	public void setUserGuid(Long userGuid) {
 		this.userGuid = userGuid;
-	}
-
-	public String getReferenceType() {
-		return referenceType;
-	}
-
-	public void setReferenceType(String referenceType) {
-		this.referenceType = referenceType;
-	}
-
-	public String getReferenceName() {
-		return referenceName;
-	}
-
-	public void setReferenceName(String referenceName) {
-		this.referenceName = referenceName;
 	}
 
 	public String getLocationState() {
@@ -71,6 +54,22 @@ public class GetUserByPropertyResponse {
 
 	public void setLocations(List<SolrLocationMaster> locations) {
 		this.locations = locations;
+	}
+
+	public String getMainTown() {
+		return mainTown;
+	}
+
+	public void setMainTown(String mainTown) {
+		this.mainTown = mainTown;
+	}
+
+	public List<UserOccupationResponse> getOccupations() {
+		return occupations;
+	}
+
+	public void setOccupations(List<UserOccupationResponse> occupations) {
+		this.occupations = occupations;
 	}
 
 }

@@ -3,14 +3,10 @@
  */
 package com.kasisripriyawebapps.myindia.daoimpl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 

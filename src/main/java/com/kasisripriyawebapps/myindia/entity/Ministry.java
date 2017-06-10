@@ -1,6 +1,5 @@
 package com.kasisripriyawebapps.myindia.entity;
 
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,7 +10,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "MINISTRY")
 public class Ministry {
-	
+
 	@Id
 	@Column(name = "MINISTRY_DEPARTMENT_GUID")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,19 +23,19 @@ public class Ministry {
 	private String level;
 
 	@Column(name = "MINISTRY_DEPARTMENT_PARENT_GUID")
-	private Long parent_guid;
+	private Long parentGuid;
 
 	public Ministry() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public Ministry(Long guid, String name, String level, Long parent_guid) {
+	public Ministry(Long guid, String name, String level, Long parentGuid) {
 		super();
 		this.guid = guid;
 		this.name = name;
 		this.level = level;
-		this.parent_guid = parent_guid;
+		this.parentGuid = parentGuid;
 	}
 
 	public Long getGuid() {
@@ -63,12 +62,12 @@ public class Ministry {
 		this.level = level;
 	}
 
-	public Long getParent_guid() {
-		return parent_guid;
+	public Long getParentGuid() {
+		return parentGuid;
 	}
 
-	public void setParent_guid(Long parent_guid) {
-		this.parent_guid = parent_guid;
+	public void setParentGuid(Long parentGuid) {
+		this.parentGuid = parentGuid;
 	}
 
 }

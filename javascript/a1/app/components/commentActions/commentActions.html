@@ -1,18 +1,23 @@
 <div class="row comment_actions_container">
 	<div class="col-lg-1 col-md-2">&nbsp;</div>
 	<div class="col-lg-1 col-md-2 comment_action">
-		<label> (0) </label><i class="fa fa-thumbs-up" aria-hidden="true"></i>
+		<label> ({{commentActions.objectData.thumbsUpCount}}) </label><i
+			class="fa fa-thumbs-up" aria-hidden="true" title="Like Comment"></i>
 	</div>
 	<div class="col-lg-1 col-md-2 comment_action">
-		<label> (0) </label><i class="fa fa-thumbs-down" aria-hidden="true"></i>
+		<label> ({{commentActions.objectData.thumbsDownCount}}) </label><i
+			class="fa fa-thumbs-down" aria-hidden="true" title="Dislike Comment"></i>
 	</div>
 	<div class="col-lg-1 col-md-2 comment_action">
-		<label> (0) </label><i class="fa fa-reply" aria-hidden="true"></i>
+		<label> ({{commentActions.objectData.replyCount}}) </label><i
+			class="fa fa-reply" aria-hidden="true" title="Reply Comment"></i>
 	</div>
 	<div class="col-lg-1 col-md-2 comment_action">
-		<label> (0) </label><i class="fa fa-bug" aria-hidden="true"></i>
+		<label> ({{commentActions.objectData.reportAbuseCount}}) </label><i
+			class="fa fa-bug" aria-hidden="true" title="Abuse Comment"></i>
 	</div>
 	<div class="col-lg-1 col-md-2 comment_action">
-		<label> (0) </label><i class="fa fa-share" aria-hidden="true"></i>
+		<label> ({{commentActions.objectData.shareCount}}) </label><i
+			class="fa fa-share" aria-hidden="true" title="Share Comment"></i>
 	</div>
 </div>

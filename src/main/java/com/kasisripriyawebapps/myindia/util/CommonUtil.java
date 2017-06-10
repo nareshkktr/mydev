@@ -15,7 +15,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
@@ -38,8 +37,8 @@ import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -318,21 +317,6 @@ public class CommonUtil {
 		return lsFilePath;
 	}
 
-	public static String saveFileIntoAmazonS3(String bucketName, String folderName, String fsBase64, String fsFileName)
-			throws InternalServerException {
-		String lsFilePath = "";
-		String base64String = fsBase64;
-		BASE64Decoder decoder = new BASE64Decoder();
-		byte[] decodedBytes = null;
-		try {
-			decodedBytes = decoder.decodeBuffer(base64String);
-		} catch (IOException e) {
-			new InternalServerException(e.getMessage());
-		}
-
-		return lsFilePath;
-	}
-
 	/**
 	 * Decode to image.
 	 *
@@ -601,7 +585,7 @@ public class CommonUtil {
 		return year;
 	}
 
-	public static void main(String args[]) {
+	public static void main1(String args[]) {
 
 		Date date = new Date();
 		Calendar cal = Calendar.getInstance();
@@ -732,7 +716,7 @@ public class CommonUtil {
 		}
 		return bytesArray;
 	}
-	
+
 	public static void writeDataIntoSheet(Map<Integer, Object[]> sheetData, Sheet exportWorkBookSheet) {
 
 		Set<Integer> newRows = sheetData.keySet();
@@ -756,5 +740,11 @@ public class CommonUtil {
 		}
 	}
 	
-	
+	public static void main(String args[]){
+		String eachPolitician="ODITE|RAMANAIK";
+		String politicianName="ODITE|RAMANAIK";
+		double minDistance = StringUtils.getLevenshteinDistance(eachPolitician, politicianName);
+		
+		System.out.println(minDistance);
+	}
 }

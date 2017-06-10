@@ -48,6 +48,12 @@ public class ProblemHistory implements Serializable {
 	@Column(name = "ACCOUNT_ID")
 	private Long accountId;
 
+	@Column(name = "MODIFIED_TIMESTAMP")
+	private Timestamp modifiedTimestamp;
+
+	@Column(name = "MODIFIED_BY")
+	private Long modifiedBy;
+
 	public Long getGuid() {
 		return guid;
 	}
@@ -104,5 +110,20 @@ public class ProblemHistory implements Serializable {
 		this.accountId = accountId;
 	}
 
-	
+	public Timestamp getModifiedTimestamp() {
+		return modifiedTimestamp;
+	}
+
+	public void setModifiedTimestamp(Timestamp modifiedTimestamp) {
+		this.modifiedTimestamp = modifiedTimestamp;
+	}
+
+	public Long getModifiedBy() {
+		return modifiedBy;
+	}
+
+	public void setModifiedBy(Long modifiedBy) {
+		this.modifiedBy = modifiedBy;
+	}
+
 }

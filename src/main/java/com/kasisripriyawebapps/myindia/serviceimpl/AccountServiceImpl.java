@@ -14,16 +14,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.google.gson.Gson;
+import com.kasisripriyawebapps.myindia.constants.ApplicationConstants;
 import com.kasisripriyawebapps.myindia.constants.ExceptionConstants;
 import com.kasisripriyawebapps.myindia.dao.AccountDao;
 import com.kasisripriyawebapps.myindia.dao.LocationDao;
 import com.kasisripriyawebapps.myindia.dao.LocationMasterDao;
+import com.kasisripriyawebapps.myindia.dao.PoliticianAccountDao;
+import com.kasisripriyawebapps.myindia.dao.PoliticianDao;
 import com.kasisripriyawebapps.myindia.dao.UserDao;
+import com.kasisripriyawebapps.myindia.dao.UserOccupationDao;
 import com.kasisripriyawebapps.myindia.entity.Account;
 import com.kasisripriyawebapps.myindia.entity.Location;
 import com.kasisripriyawebapps.myindia.entity.LocationMaster;
+import com.kasisripriyawebapps.myindia.entity.PoliticianAccount;
 import com.kasisripriyawebapps.myindia.entity.User;
 import com.kasisripriyawebapps.myindia.entity.UserInfo;
+import com.kasisripriyawebapps.myindia.entity.UserOccupation;
 import com.kasisripriyawebapps.myindia.exception.ConflictException;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 import com.kasisripriyawebapps.myindia.exception.RecordNotFoundException;
@@ -58,10 +64,19 @@ public class AccountServiceImpl implements AccountService {
 	LocationDao locationDao;
 
 	@Autowired
+	PoliticianDao politicianDao;
+
+	@Autowired
 	UserService userService;
 
 	@Autowired
 	private UserMasterRepository userMasterRepository;
+
+	@Autowired
+	PoliticianAccountDao politicianAccountDao;
+
+	@Autowired
+	private UserOccupationDao userOccupationDao;
 
 	@Override
 	@Transactional
@@ -80,14 +95,17 @@ public class AccountServiceImpl implements AccountService {
 				account.setCreatedTimeStamp(CommonUtil.getCurrentGMTTimestamp());
 				account.setUserEmail(createAccountRequest.getEmailAddress());
 				SolrUserMaster solrUser = userMasterRepository.findByUserGuid(createAccountRequest.getUserGuid());
-				account.setType(createAccountRequest.getOccupation());
+				UserOccupation occupation = userOccupationDao
+						.getUserOccupationById(createAccountRequest.getOccupation().getGuid());
+				account.setUserOccupation(occupation);
+				account.setType(occupation.getOccupation());
 				UserInfo userInfo = new UserInfo();
 				if (solrUser != null) {
 					String solrUserJsonStr = new Gson().toJson(solrUser);
 					userInfo = new Gson().fromJson(solrUserJsonStr, UserInfo.class);
 					userInfo.setCreatedTimeStamp(CommonUtil.getCurrentGMTTimestamp());
 					userInfo.setAccount(account);
-					userInfo.setOccupation(createAccountRequest.getOccupation());
+					userInfo.setOccupation(occupation.getOccupation());
 					User user = userDao.getUserByGuid(createAccountRequest.getUserGuid());
 					Location nativeLocation = locationDao.getLocationByGuidAndParentGuid(
 							createAccountRequest.getChildLocation().getLocationType(),
@@ -100,7 +118,18 @@ public class AccountServiceImpl implements AccountService {
 							.getLocationByGuid(createAccountRequest.getChildLocation().getLocationGuid());
 					userInfo.setMasterLocation(masterLocation);
 					account.setUserInfo(userInfo);
-					accountDao.createAccount(account);
+					Long accountGuid = accountDao.createAccount(account);
+
+					if (accountGuid != null && occupation.getOccupation()
+							.equalsIgnoreCase(ApplicationConstants.OBJECT_TYPE_POLTIICIAN)) {
+
+						PoliticianAccount politicianAccount = new PoliticianAccount();
+						politicianAccount.setAccount(accountDao.getAccountById(accountGuid));
+						politicianAccount.setPolitician(
+								politicianDao.getPoliticianById(createAccountRequest.getPoliticianGuid()));
+
+						politicianAccountDao.savePoliticianAccount(politicianAccount);
+					}
 
 				} else {
 					throw new RecordNotFoundException(ExceptionConstants.USER_NOT_FOUND);
@@ -166,6 +195,12 @@ public class AccountServiceImpl implements AccountService {
 		baseUserInfo.setUserName(account.getUserName());
 		baseUserInfo.setAccountGuid(account.getGuid());
 
+		UserOccupation userOccupation = account.getUserOccupation();
+		baseUserInfo.setCurrentDesignation(userOccupation.getOccupation());
+
+		if (userOccupation.getOccupation().equalsIgnoreCase(ApplicationConstants.OBJECT_TYPE_POLTIICIAN)) {
+			baseUserInfo.setCurrentDesignation(account.getPoliticianAccount().getPolitician().getCurrentDesignation());
+		}
 		return baseUserInfo;
 	}
 
@@ -188,6 +223,13 @@ public class AccountServiceImpl implements AccountService {
 		// populateLocationInformation
 		UserLocationDetails userLocationDetails = userService.getLoggedInUserLocation(account.getGuid());
 		baseUserInfo.setUserLocation(userLocationDetails);
+
+		UserOccupation userOccupation = account.getUserOccupation();
+		baseUserInfo.setCurrentDesignation(userOccupation.getOccupation());
+
+		if (userOccupation.getOccupation().equalsIgnoreCase(ApplicationConstants.OBJECT_TYPE_POLTIICIAN)) {
+			baseUserInfo.setCurrentDesignation(account.getPoliticianAccount().getPolitician().getCurrentDesignation());
+		}
 
 		return baseUserInfo;
 	}
@@ -261,7 +303,7 @@ public class AccountServiceImpl implements AccountService {
 		List<BaseUserInformation> baseUserInfoForAccounts = new ArrayList<BaseUserInformation>();
 
 		for (Account acc : accounts) {
-			baseUserInfoForAccounts.add(prepareBasicPrimaryBaseUserInformation(acc));
+			baseUserInfoForAccounts.add(prepareBasicSecondaryBaseUserInformation(acc));
 		}
 		return baseUserInfoForAccounts;
 	}
@@ -290,7 +332,6 @@ public class AccountServiceImpl implements AccountService {
 	@Transactional
 	public void resetPassword(ForgotPasswordRequest resetPasswordRequest)
 			throws InternalServerException, RecordNotFoundException {
-		BaseUserInformation baseUserInfo = null;
 		Account account = accountDao.getAccountById(resetPasswordRequest.getAccountGuid());
 		if (account == null) {
 			throw new RecordNotFoundException(ExceptionConstants.LOGIN_ACCOUNT_NOT_FOUND_USER_NAME);

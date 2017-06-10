@@ -20,4 +20,6 @@ public interface PoliticianDao {
 
 	List<Politician> getAllPoliticians(PoliticianRequest politicianRequest) throws InternalServerException;
 
+	Politician getPoliticianById(Long politicianGuid) throws InternalServerException;
+
 }

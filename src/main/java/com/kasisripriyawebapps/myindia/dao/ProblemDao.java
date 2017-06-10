@@ -8,7 +8,6 @@ import java.util.Set;
 
 import com.kasisripriyawebapps.myindia.entity.Problem;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
-import com.kasisripriyawebapps.myindia.requestresponsemodel.ProblemResponse;
 
 /**
  * The Interface ProblemDao.

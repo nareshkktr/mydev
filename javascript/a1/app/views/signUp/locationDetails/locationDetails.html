@@ -1,0 +1,56 @@
+<div class="form-group">
+	
+	<label for="search_college">State: &nbsp;</label>  <label for="search_college">{{locationDetails.userSignUpInfo.locationState}}</label>
+
+</div>
+
+<div class="form-group">
+	
+	<label for="search_college">District: &nbsp;</label>  <label for="search_college">{{locationDetails.userSignUpInfo.locationDistrict}}</label>
+
+</div>
+
+<div class="form-group">
+	
+	<label for="search_college">Mandal: &nbsp;</label>  <label for="search_college">{{locationDetails.userSignUpInfo.locationMandal}}</label>
+
+</div>
+
+<div class="form-group" ng-if="signUp.elector.conflictParentLocations">
+	<label for="search_college">Parent Location: &nbsp;</label> <select class="form-control" name="parent_lcoation" ng-model="locationDetails.parentLocation" ng-options="location.locationName group by location.locationType for location in locationDetails.conflictParentLocations" ng-required="true">
+		<option value=''>Select Location</option>
+	</select> 
+	
+	<div ng-messages="signup_form.parent_lcoation.$error" ng-if="signup_form.parent_lcoation.$touched">
+	    <p ng-message="required" class="help-block"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> &nbsp;Resolve Conflict in Parent Location.</p>
+	</div>
+
+</div>
+
+<div class="form-group">
+	<label for="search_college">Village/MC/M/TP</label> <select class="form-control" name="leaf_location" ng-model="locationDetails.leafLocation" ng-options="location.locationName group by location.locationType for location in locationDetails.userSignUpInfo.locations" ng-required="true">
+		<option value=''>Select Location</option>
+	</select> 
+	
+	<div ng-messages="signup_form.leaf_location.$error" ng-if="signup_form.leaf_location.$touched">
+	    <p ng-message="required" class="help-block"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> &nbsp;Location is required.</p>
+	</div>
+
+</div>
+
+<div class="form-group">
+	<label for="user_occupation">Occupation &nbsp;</label>
+	 <select class="form-control" name="user_occupation" ng-model="locationDetails.selectedOccupation" ng-options="eachOccupation.occupation for eachOccupation in locationDetails.userSignUpInfo.occupations" ng-required="true">
+		<option value=''>Select Occupation</option>
+	</select> 
+	
+	<div ng-messages="signup_form.user_occupation.$error" ng-if="signup_form.user_occupation.$touched">
+	    <p ng-message="required" class="help-block"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> &nbsp;Occupation Required.</p>
+	</div>
+</div>
+
+<div class="form-group">
+	&nbsp;
+	<button type="button" class="btn app_btn" ng-click="locationDetails.validationLocationForConflict()"
+		id="connect-btn" ng-disabled="signup_form.$invalid">Pin It!</button>
+</div>

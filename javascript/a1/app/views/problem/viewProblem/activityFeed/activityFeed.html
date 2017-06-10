@@ -1,0 +1,49 @@
+<div class="problem_tab_content_container">
+	<div class="row problem_tab_header_content">
+		<div
+			class="col-lg-12 col-md-12 col-sm-12 col-xs-12 problem_tab_header_name">
+			<p>Activity Feed</p>
+		</div>
+	</div>
+	<div class="problem_tab_body_content">
+		<div class="row" id="problem_activites_container">
+			<div
+				class="col-lg-2 col-md-2 col-sm-4 col-xs-12 problem_activites_timeline">
+			</div>
+			<div
+				class="col-lg-10 col-md-10 col-sm-8 col-xs-12 problem_activites_list">
+				<div class="row activity_feed"
+					ng-repeat="eachActivity in activityFeed.activities">
+					<div class="row activity_feed_title">
+						<div class="col-lg-1 col-md-2 activity_feed_owner_img">
+							<user-profile-image-display ng-if="eachActivity.userInfo"
+								image-url="eachActivity.userInfo.userImage"
+								name="eachActivity.userInfo.name"
+								label-class="activityFeed.userProfileLabelClass"
+								image-class="activityFeed.userProfileImageClass"></user-profile-image-display>
+						</div>
+						<div class="col-lg-11 col-md-10 activity_feed_owner_activity_name">
+							<div class="activity_feed_owner_name">
+								<label> {{eachActivity.userInfo.name}}</label> &nbsp;<span>{{eachActivity.activityName}}</</span>
+							</div>
+							<div class="activity_feed_date">
+								<p>{{eachActivity.loggedTimeLong}}</p>
+							</div>
+						</div>
+					</div>
+					<div class="row activity_feed_content">
+						<div class="col-lg-11 col-md-10 activity_content">
+							<p
+								ng-if="eachActivity.activityType!='Album' && eachActivity.activityType!='Photo'">{{eachActivity.activityContent}}</p>
+							<img
+								ng-if="eachActivity.activityType=='Album' || eachActivity.activityType=='Photo'"
+								ng-src="{{eachActivity.activityContent}}" />
+						</div>
+					</div>
+					<activity-feed-actions object-type="activityFeed.objectType"
+						object-guid="activityFeed.problemDetails.guid"></activity-feed-actions>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

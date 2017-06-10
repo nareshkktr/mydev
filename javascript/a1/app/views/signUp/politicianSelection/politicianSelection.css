@@ -1,0 +1,92 @@
+#politicians_list_container {
+	overflow-y: auto;
+	max-height: 400px;
+}
+
+#politicians_list_container .politicians_list_row {
+	margin: 0px !important;
+}
+
+#politicians_list_container .politicians_list_row .selected_politician {
+	height: 100%;
+	line-height: 50px;
+	margin-bottom: 10px;
+	cursor: pointer;
+	border-radius: 5px;
+	margin-left: 0px;
+	padding: 10px 5px 10px 0px;
+	PADDING-LEFT: 0px !important;
+	padding-right: 0px !important;
+	-webkit-box-shadow: 0 10px 10px 0 rgba(36, 50, 56, 0.2);
+	box-shadow: 0 10px 10px 0 rgba(18, 61, 79, 0.2);
+	background-color: white;
+}
+
+#politicians_list_container .politicians_list_row .selected_politician .selected_politician_img_name .selected_politician_img
+	{
+	float: left;
+	width: 50px;
+}
+
+#politicians_list_container .politicians_list_row .selected_politician .selected_politician_img_name .selected_politician_img img
+	{
+	display: inline-block;
+	width: 50px;
+	vertical-align: middle;
+	border-radius: 50%;
+}
+
+#politicians_list_container .politicians_list_row .selected_politician .selected_politician_img_name .selected_politician_details
+	{
+	float: left;
+	padding-left: 10px;
+	width: calc(100% - 50px);
+}
+
+#politicians_list_container .politicians_list_row .selected_politician .selected_politician_img_name .selected_politician_details .selected_politician_name
+	{
+	letter-spacing: 1px;
+	cursor: pointer;
+	line-height: 22px;
+	color: black;
+	font-weight: 600;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	word-wrap: break-word;
+}
+
+#politicians_list_container .politicians_list_row .selected_politician .selected_politician_img_name .selected_politician_details .selected_politician_designation
+	{
+	letter-spacing: 1px;
+	cursor: pointer;
+	line-height: 30px;
+	color: black;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	word-wrap: break-word;
+}
+
+.politician_select_proceed {
+	margin-top: 10px;
+}
+
+.elected_location_col .search_icon {
+	margin-top: 0px !important;
+	left: 2px !important;
+}
+
+#politician_validate_data_container {
+	margin-top: 30px;
+}
+
+#politician_validate_data_container .search_locations_container {
+	position: absolute;
+	max-height: 200px;
+	overflow-y: auto;
+	z-index: 1000;
+	background-color: white;
+	width: 100%;
+	display: block !important;
+}

@@ -278,9 +278,8 @@ static WebDriver driver;
 		
 		//ctl00_Main_Label1
 		
-		WebElement NewGrienvenceRadioButton = driver.findElement(By.id("ctl00_Main_Label1"));
-
-		NewGrienvenceRadioButton.click();
+		WebElement newGrienvenceRadioButton = driver.findElement(By.id("ctl00_Main_Label1"));
+		newGrienvenceRadioButton.click();
 
 		try {
 			Thread.sleep(2000);

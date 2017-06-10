@@ -43,7 +43,6 @@ public class ConstituencyUtil {
 			new InternalServerException(e.getMessage());
 		}
 
-		List<WebElement> stateNameHeaderElements = driver.findElements(By.tagName("h3"));
 		List<WebElement> mpConstiencyTables = driver.findElements(By.cssSelector("table.wikitable"));
 		if (mpConstiencyTables != null && !mpConstiencyTables.isEmpty()) {
 
@@ -54,10 +53,6 @@ public class ConstituencyUtil {
 					continue;
 				}
 				if (eachMpConstiencyTable != null) {
-					WebElement stateNameHeaderElement = stateNameHeaderElements.get(tableIndex - 1);
-					WebElement stateNameHeaderSpanElement = stateNameHeaderElement.findElement(By.xpath("span"));
-					WebElement stateNameHeaderSpanAchorElement = stateNameHeaderSpanElement.findElement(By.xpath("a"));
-					String stateName = stateNameHeaderSpanAchorElement.getText();
 					WebElement eachMpConstiencyTableTbody = eachMpConstiencyTable.findElements(By.xpath("tbody"))
 							.get(0);
 					List<WebElement> eachMpConstiencyTableTbodyTrList = eachMpConstiencyTableTbody

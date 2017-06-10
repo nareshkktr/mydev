@@ -1,0 +1,40 @@
+<div class="modal-header">
+	<h3 class="modal-title" id="modal-title">Add Photos</h3>
+</div>
+<div class="modal-body" id="modal-body">
+	<div class="height305" ng-if="addPhotos.addedPhotos.length==0">
+		<div class="choose_photos_cover_photo">
+			<label class="problem_cover_file_upload" for="file-upload">
+				<div class="btn app_btn cover_photo_btn">Choose Photos</div>
+			</label>
+			<file-upload callback="addPhotos.getChoosenFiles" type="Multiple"></file-upload>
+		</div>
+	</div>
+	<div class="height305" ng-if="addPhotos.addedPhotos.length>0">
+		<div uib-carousel active="active" interval="addPhotos.myInterval"
+			no-wrap="addPhotos.noWrapSlides">
+			<div uib-slide
+				ng-repeat="eachPhoto in addPhotos.addedPhotoFiles track by $index"
+				index="$index">
+				<img show-preview file="eachPhoto" class="autoMargin" />
+				<div class="carousel-caption">
+					<p>{{eachPhoto.name}}</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="add_more_photos_cover_photo"
+		ng-if="addPhotos.addedPhotos.length>0">
+		<label class="problem_cover_file_upload" for="file-upload">
+			<div class="btn app_btn cover_photo_btn">Add More Photos</div>
+		</label>
+		<file-upload callback="addPhotos.getMoreChoosenFiles" type="Multiple"></file-upload>
+	</div>
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn app_btn"
+		ng-click="addPhotos.closePopUp()">Cancel</button>
+	<button type="button" class="btn app_btn"
+		ng-click="addPhotos.uploadPhotos()"
+		ng-disabled="addPhotos.addedPhotos.length==0">Upload Photos</button>
+</div>

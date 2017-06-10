@@ -7,25 +7,21 @@ import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 
 public class UploadLocationFilesToAmazonS3 {
 
-	private static String bucketName = "myindialocations";
-	private static String SUFFIX = "/";
-	private static String folderName = "Downloaded";
-	private static String globalFolderName = "Global";
-	private static String countryFolderName = "India";
-	private static String urbanFolderName = "Urban";
-	private static String ruralFolderName = "Rural";
-
-	static {
-		
-	}
+	private static final String BUCKET_NAME = "myindialocations";
+	private static final String SUFFIX = "/";
+	private static final String FOLDER_NAME = "Downloaded";
+	private static final String GLOBAL_FOLDER_NAME = "Global";
+	private static final String COUNTRY_FOLDER_NAME = "India";
+	private static final String URBAN_FOLDER_NAME = "Urban";
+	private static final String RURAL_FOLDER_NAME = "Rural";
 
 	private static void uploadCountriesToAmazonS3() {
 
-		String countriesFilePath = "C:\\Users\\kanduk\\Documents\\My Work\\Documents\\My Web Sites\\My India\\MyIndia\\Locations\\Downloaded\\Global\\Countries.xls";
-		String countriesFileName = folderName + SUFFIX + globalFolderName + SUFFIX + "Countries.xls";
-		byte[] countryLocationsContent = CommonUtil.readBytesFromFile(countriesFilePath);
+		final String countriesFilePath = "C:\\Users\\kanduk\\Documents\\My Work\\Documents\\My Web Sites\\My India\\MyIndia\\Locations\\Downloaded\\Global\\Countries.xls";
+		final String countriesFileName = FOLDER_NAME + SUFFIX + GLOBAL_FOLDER_NAME + SUFFIX + "Countries.xls";
+		final byte[] countryLocationsContent = CommonUtil.readBytesFromFile(countriesFilePath);
 		try {
-			AmazonS3Util.createFile(bucketName, null, countryLocationsContent, countriesFileName);
+			AmazonS3Util.createFile(BUCKET_NAME, null, countryLocationsContent, countriesFileName);
 		} catch (InternalServerException e) {
 			e.printStackTrace();
 		}
@@ -33,12 +29,12 @@ public class UploadLocationFilesToAmazonS3 {
 
 	private static void uploadStatesToAmazonS3() {
 
-		String statesFilePath = "C:\\Users\\kanduk\\Documents\\My Work\\Documents\\My Web Sites\\My India\\MyIndia\\Locations\\Downloaded\\Global\\India\\States.xls";
-		String statesFileName = folderName + SUFFIX + globalFolderName + SUFFIX + countryFolderName + SUFFIX
+		final String statesFilePath = "C:\\Users\\kanduk\\Documents\\My Work\\Documents\\My Web Sites\\My India\\MyIndia\\Locations\\Downloaded\\Global\\India\\States.xls";
+		final String statesFileName = FOLDER_NAME + SUFFIX + GLOBAL_FOLDER_NAME + SUFFIX + COUNTRY_FOLDER_NAME + SUFFIX
 				+ "States.xls";
-		byte[] stateLocationsContent = CommonUtil.readBytesFromFile(statesFilePath);
+		final byte[] stateLocationsContent = CommonUtil.readBytesFromFile(statesFilePath);
 		try {
-			AmazonS3Util.createFile(bucketName, null, stateLocationsContent, statesFileName);
+			AmazonS3Util.createFile(BUCKET_NAME, null, stateLocationsContent, statesFileName);
 		} catch (InternalServerException e) {
 			e.printStackTrace();
 		}
@@ -46,62 +42,63 @@ public class UploadLocationFilesToAmazonS3 {
 
 	private static void uploadStateLocationBodiesToAmazonS3() {
 
-		String statesFolderPath = "C:\\Users\\kanduk\\Documents\\My Work\\Documents\\My Web Sites\\My India\\MyIndia\\Locations\\Downloaded\\Global\\India";
+		final String statesFolderPath = "C:\\Users\\kanduk\\Documents\\My Work\\Documents\\My Web Sites\\My India\\MyIndia\\Locations\\Downloaded\\Global\\India";
 
-		File locationsDirectoryFile = new File(statesFolderPath);
+		final File locationsDirectoryFile = new File(statesFolderPath);
 
 		if (locationsDirectoryFile.exists()) {
 			String[] stateLocations = getSubDirectories(locationsDirectoryFile);
 			if (stateLocations != null && stateLocations.length > 0) {
 				for (String stateLocation : stateLocations) {
-					String stateLocationDirectoryPath = statesFolderPath + SUFFIX + stateLocation + SUFFIX;
+					
+					final String stateLocationDirectoryPath = statesFolderPath + SUFFIX + stateLocation + SUFFIX;
 
-					String districtFileNameStr = "Districts.xls";
-					String subDistrictFileNameStr = "Sub Districts.xls";
-					String urbanBodiesFileNameStr = "Urban Bodies.xls";
-					String urbanLocalBodiesFileNameStr = "Urban Local Bodies.xls";
-					String villagePanchayathiesFileNameStr = "Village Panchayathies.xls";
-					String villagesFileNameStr = "Villages.xls";
+					final String districtFileNameStr = "Districts.xls";
+					final String subDistrictFileNameStr = "Sub Districts.xls";
+					final String urbanBodiesFileNameStr = "Urban Bodies.xls";
+					final String urbanLocalBodiesFileNameStr = "Urban Local Bodies.xls";
+					final String villagePanchayathiesFileNameStr = "Village Panchayathies.xls";
+					final String villagesFileNameStr = "Villages.xls";
 
-					String districtLocationFilePath = stateLocationDirectoryPath + districtFileNameStr;
-					String subDistrictLocationFilePath = stateLocationDirectoryPath + subDistrictFileNameStr;
-					String urbanLocationFilePath = stateLocationDirectoryPath + urbanBodiesFileNameStr;
-					String urbanLocalLocationFilePath = stateLocationDirectoryPath + urbanLocalBodiesFileNameStr;
-					String villagePanchayathLocationFilePath = stateLocationDirectoryPath
+					final String districtLocationFilePath = stateLocationDirectoryPath + districtFileNameStr;
+					final String subDistrictLocationFilePath = stateLocationDirectoryPath + subDistrictFileNameStr;
+					final String urbanLocationFilePath = stateLocationDirectoryPath + urbanBodiesFileNameStr;
+					final String urbanLocalLocationFilePath = stateLocationDirectoryPath + urbanLocalBodiesFileNameStr;
+					final String villagePanchayathLocationFilePath = stateLocationDirectoryPath
 							+ villagePanchayathiesFileNameStr;
-					String villageLocationFilePath = stateLocationDirectoryPath + villagesFileNameStr;
+					final String villageLocationFilePath = stateLocationDirectoryPath + villagesFileNameStr;
 
-					byte[] districtLocationContent = CommonUtil.readBytesFromFile(districtLocationFilePath);
-					byte[] subDistrictLocationContent = CommonUtil.readBytesFromFile(subDistrictLocationFilePath);
-					byte[] urbanLocationContent = CommonUtil.readBytesFromFile(urbanLocationFilePath);
-					byte[] urbanLocalLocationContent = CommonUtil.readBytesFromFile(urbanLocalLocationFilePath);
-					byte[] villagePanchayathLocationContent = CommonUtil
+					final byte[] districtLocationContent = CommonUtil.readBytesFromFile(districtLocationFilePath);
+					final byte[] subDistrictLocationContent = CommonUtil.readBytesFromFile(subDistrictLocationFilePath);
+					final byte[] urbanLocationContent = CommonUtil.readBytesFromFile(urbanLocationFilePath);
+					final byte[] urbanLocalLocationContent = CommonUtil.readBytesFromFile(urbanLocalLocationFilePath);
+					final byte[] villagePanchayathLocationContent = CommonUtil
 							.readBytesFromFile(villagePanchayathLocationFilePath);
-					byte[] villageLocationContent = CommonUtil.readBytesFromFile(villageLocationFilePath);
+					final byte[] villageLocationContent = CommonUtil.readBytesFromFile(villageLocationFilePath);
 
-					String direcotryPath = folderName + SUFFIX + globalFolderName + SUFFIX + countryFolderName + SUFFIX
-							+ stateLocation + SUFFIX;
+					final String direcotryPath = FOLDER_NAME + SUFFIX + GLOBAL_FOLDER_NAME + SUFFIX + COUNTRY_FOLDER_NAME
+							+ SUFFIX + stateLocation + SUFFIX;
 
-					String districtsFileName = direcotryPath + ruralFolderName + SUFFIX + districtFileNameStr;
-					String subDistrictsFileName = direcotryPath + ruralFolderName + SUFFIX + subDistrictFileNameStr;
-					String urbanBodiesFileName = direcotryPath + urbanFolderName + SUFFIX + urbanBodiesFileNameStr;
-					String urbanLocalBodiesFileName = direcotryPath + urbanFolderName + SUFFIX
+					final String districtsFileName = direcotryPath + RURAL_FOLDER_NAME + SUFFIX + districtFileNameStr;
+					final String subDistrictsFileName = direcotryPath + RURAL_FOLDER_NAME + SUFFIX + subDistrictFileNameStr;
+					final String urbanBodiesFileName = direcotryPath + URBAN_FOLDER_NAME + SUFFIX + urbanBodiesFileNameStr;
+					final String urbanLocalBodiesFileName = direcotryPath + URBAN_FOLDER_NAME + SUFFIX
 							+ urbanLocalBodiesFileNameStr;
-					String villagePanchayathiesFileName = direcotryPath + ruralFolderName + SUFFIX
+					final String villagePanchayathiesFileName = direcotryPath + RURAL_FOLDER_NAME + SUFFIX
 							+ villagePanchayathiesFileNameStr;
-					String villagesFileName = direcotryPath + ruralFolderName + SUFFIX + villagesFileNameStr;
+					final String villagesFileName = direcotryPath + RURAL_FOLDER_NAME + SUFFIX + villagesFileNameStr;
 
 					try {
-						AmazonS3Util.createFile(bucketName, stateLocation, districtLocationContent, districtsFileName);
+						AmazonS3Util.createFile(BUCKET_NAME, stateLocation, districtLocationContent, districtsFileName);
 
-						AmazonS3Util.createFile(bucketName, stateLocation, subDistrictLocationContent,
+						AmazonS3Util.createFile(BUCKET_NAME, stateLocation, subDistrictLocationContent,
 								subDistrictsFileName);
-						AmazonS3Util.createFile(bucketName, stateLocation, urbanLocationContent, urbanBodiesFileName);
-						AmazonS3Util.createFile(bucketName, stateLocation, urbanLocalLocationContent,
+						AmazonS3Util.createFile(BUCKET_NAME, stateLocation, urbanLocationContent, urbanBodiesFileName);
+						AmazonS3Util.createFile(BUCKET_NAME, stateLocation, urbanLocalLocationContent,
 								urbanLocalBodiesFileName);
-						AmazonS3Util.createFile(bucketName, stateLocation, villagePanchayathLocationContent,
+						AmazonS3Util.createFile(BUCKET_NAME, stateLocation, villagePanchayathLocationContent,
 								villagePanchayathiesFileName);
-						AmazonS3Util.createFile(bucketName, stateLocation, villageLocationContent, villagesFileName);
+						AmazonS3Util.createFile(BUCKET_NAME, stateLocation, villageLocationContent, villagesFileName);
 
 					} catch (InternalServerException e) {
 						e.printStackTrace();

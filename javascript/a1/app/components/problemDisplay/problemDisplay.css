@@ -17,6 +17,7 @@
 	padding: 10px 10px 0px 10px;
 	width: 60px;
 	float: left;
+	cursor: pointer;
 }
 
 #problem_selection_container .problem .problem_severity .problem_severity_circle
@@ -25,6 +26,7 @@
 	text-align: center;
 	width: 46px;
 	height: 46px;
+	cursor: pointer;
 }
 
 #problem_selection_container .problem .problem_name {
@@ -51,12 +53,14 @@
 	text-overflow: ellipsis;
 	word-break: break-word;
 	white-space: inherit;
+	cursor: pointer;
 }
 
 #problem_selection_container .problem .problem_located_in {
 	letter-spacing: 1px;
 	font-size: 12px;
 	padding: 0px 0px 0px 10px !important;
+	cursor: pointer;
 }
 
 #problem_selection_container .problem .Critical {

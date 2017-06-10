@@ -22,18 +22,6 @@
 			scope.header.userInfo = dataShareService.getUserInfo();
 			
 			if (scope.header.userInfo) {
-
-				// Preapre user profile image
-				if (!scope.header.userInfo.userImage) {
-					if (scope.header.userInfo.gender == 'Male') {
-						scope.header.userInfo.userImage = resource
-								+ 'Users-User-Male-icon.png';
-					} else if (header.userInfo.gender == 'Female') {
-						scope.header.userInfo.userImage = resource
-								+ 'Users-User-Female-icon.png';
-					}
-				}
-
 			}else if(sessionStorage.getItem("access_token")){
 
 				//If shared data has not been set yet.Call the service.

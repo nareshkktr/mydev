@@ -3,6 +3,8 @@
  */
 package com.kasisripriyawebapps.myindia.endpoints;
 
+import java.util.List;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -15,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.kasisripriyawebapps.myindia.constants.EndPointConstants;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
+import com.kasisripriyawebapps.myindia.exception.RecordNotFoundException;
+import com.kasisripriyawebapps.myindia.requestresponsemodel.PartyResponse;
 import com.kasisripriyawebapps.myindia.service.PartyService;
 
 import io.swagger.annotations.Api;
@@ -36,8 +40,9 @@ public class PartyEndpoint {
 	@ApiOperation(value = EndPointConstants.GET_ALL_PARTIES_API_VALUE, nickname = EndPointConstants.GET_ALL_PARTIES_API_NICKNAME, httpMethod = EndPointConstants.HTTP_GET, notes = EndPointConstants.GET_ALL_PARTIES_API_DESCRIPTION)
 	@Path(EndPointConstants.GET_ALL_PARTIES_REQUEST_MAPPING)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getAllParties() throws InternalServerException {
-		return Response.status(Status.OK).entity(null).build();
+	public Response getAllParties() throws InternalServerException, RecordNotFoundException {
+		List<PartyResponse> partiesList = partyService.getAllParties();
+		return Response.status(Status.OK).entity(partiesList).build();
 	}
 
 	@POST

@@ -1,0 +1,145 @@
+.add_album_top_overlay_content {
+	position: fixed;
+	width: 80%;
+	height: 90%;
+	background-color: white;
+	opacity: 1;
+	top: 0;
+	z-index: 1100;
+	left: 0px;
+	margin-left: 10%;
+	margin-top: 4%;
+	border: 5px solid #f94c59;
+}
+
+.add_album_top_overlay_content .new_album_details_row {
+	margin: 0px !important;
+	height: 100%;
+}
+
+.add_album_top_overlay_content .new_album_details {
+	margin: 0px !important;
+	padding: 15px !important;
+	height: 100%;
+	border-right: 5px solid lightgrey;
+}
+
+.add_album_top_overlay_content .new_album_image {
+	margin: 0px !important;
+}
+
+.add_album_top_overlay_content .new_album_name {
+	margin: 0px;
+}
+
+.add_album_top_overlay_content .new_album_name .new_album_name_text {
+	
+}
+
+.add_album_top_overlay_content .new_album_name .new_album_name_text_input
+	{
+	width: 100%;
+	padding: 10px;
+	font-size: 19px !important;
+	margin-top: 2px;
+	border: 2px dashed #f94c59;
+}
+
+.add_album_top_overlay_content .new_album_add_photos_btn {
+	margin: 44px 0px 0px 10px !important;
+}
+
+.add_album_top_overlay_content .new_album_add_photos_container .album_photos_list
+	{
+	margin: 0px !important;
+}
+
+.add_album_top_overlay_content .new_album_image .cover_photo_btn {
+	width: 70% !important;
+	text-align: center !important;
+}
+
+.add_album_top_overlay_content .new_album_image .problem_cover_photo {
+	position: absolute !important;
+	top: 15px !important;
+	left: 15px !important;
+	width: 90% !important;
+	height: 245px;
+}
+
+.album_photos_list .new_album_photo {
+	margin-top: 10px;
+	padding: 5px !important;
+	height: 200px;
+}
+
+.album_photos_list .new_album_photo 
+	.new_album_photo_col {
+	margin: 2px;
+	border: 1px solid #cfd8dc;
+	border-bottom: 1px solid #cfd8dc;
+	-webkit-box-shadow: 0 10px 10px 0 rgba(36, 50, 56, 0.2);
+	box-shadow: 0 10px 10px 0 rgba(36, 50, 56, 0.2);
+}
+
+.album_photos_list .new_album_photo .new_album_photo_col .new_album_photo_img
+	{
+	
+}
+
+.album_photos_list .new_album_photo .new_album_photo_col .new_album_photo_img img
+	{
+	width: 100%;
+	height: 150px;
+	padding: 10px;
+}
+
+.album_photos_list .new_album_photo .new_album_photo_col .new_album_photo_name
+	{
+	padding: 0px 10px 5px 10px;
+}
+
+.album_photos_list .new_album_photo .new_album_photo_col .new_album_photo_name label
+	{
+	
+}
+
+.new_album_details .problem_cover_photo_content {
+	width: 100%;
+	height: 245px;
+	border: 4px dashed #f94c59;
+	background-color: white;
+}
+
+.choose_photos_cover_photo {
+	width: 100%;
+	height: 100%;
+	border: 4px dashed #f94c59;
+	background-color: white;
+}
+
+.choose_photos_cover_photo .cover_photo_btn {
+	display: flex;
+	height: 34px;
+	margin: 0 auto;
+	margin-top: 125px;
+	width: 20%;
+}
+
+.height305 {
+	height: 305px;
+}
+
+.autoMargin {
+	margin: auto;
+	height: 305px;
+	width: 100%;
+}
+
+.add_more_photos_cover_photo .cover_photo_btn {
+	display: flex;
+	height: 34px;
+	margin: 0 auto;
+	margin-top: 20px;
+	width: 20%;
+}

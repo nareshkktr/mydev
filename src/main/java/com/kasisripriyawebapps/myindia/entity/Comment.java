@@ -62,21 +62,37 @@ public class Comment implements Serializable {
 	/** The created time stamp. */
 	@Column(name = "CREATED_TIMESTAMP")
 	private Timestamp createdTimeStamp;
-	
+
 	/** The created time stamp. */
 	@Column(name = "UPDATED_TIMESTAMP")
 	private Timestamp updatedTimeStamp;
-	
+
 	/** The number of replies for the given comment. */
 	@Column(name = "REPLY_COUNT")
 	private Integer replyCount;
-	
+
 	/** The number of replies for the given comment. */
 	@Column(name = "COMMENT_TYPE")
 	private String commentType;
 
 	@OneToMany(mappedBy = "comment", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<CommentImage> commentImages = new ArrayList<CommentImage>(0);
+
+	/** The following count. */
+	@Column(name = "THUMBS_UP_COUNT")
+	private Integer thumbsUpCount = 0;
+
+	/** The share count. */
+	@Column(name = "THUMBS_DOWN_COUNT")
+	private Integer thumbsDownCount = 0;
+
+	/** The view count. */
+	@Column(name = "SHARE_COUNT")
+	private Integer shareCount = 0;
+
+	/** The popularity count. */
+	@Column(name = "REPORT_ABUSE_COUNT")
+	private Integer reportAbuseCount = 0;
 
 	/**
 	 * Gets the guid.
@@ -265,5 +281,36 @@ public class Comment implements Serializable {
 		this.commentType = commentType;
 	}
 
-	
+	public Integer getThumbsUpCount() {
+		return thumbsUpCount;
+	}
+
+	public void setThumbsUpCount(Integer thumbsUpCount) {
+		this.thumbsUpCount = thumbsUpCount;
+	}
+
+	public Integer getThumbsDownCount() {
+		return thumbsDownCount;
+	}
+
+	public void setThumbsDownCount(Integer thumbsDownCount) {
+		this.thumbsDownCount = thumbsDownCount;
+	}
+
+	public Integer getShareCount() {
+		return shareCount;
+	}
+
+	public void setShareCount(Integer shareCount) {
+		this.shareCount = shareCount;
+	}
+
+	public Integer getReportAbuseCount() {
+		return reportAbuseCount;
+	}
+
+	public void setReportAbuseCount(Integer reportAbuseCount) {
+		this.reportAbuseCount = reportAbuseCount;
+	}
+
 }

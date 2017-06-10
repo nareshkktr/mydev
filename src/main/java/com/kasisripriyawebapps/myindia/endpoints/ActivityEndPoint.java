@@ -46,40 +46,43 @@ public class ActivityEndPoint {
 	public Response getAllActivites() throws InternalServerException {
 		return Response.status(Status.OK).entity(null).build();
 	}
-	
+
 	@GET
 	@ApiOperation(value = EndPointConstants.GET_ACTIVITIES_API_VALUE, nickname = EndPointConstants.GET_ACTIVITIES_API_NICKNAME, httpMethod = EndPointConstants.HTTP_GET, notes = EndPointConstants.GET_ACTIVITIES_API_DESCRIPTION)
 	@Path(EndPointConstants.GET_ACTIVITIES_REQUEST_MAPPING)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getActivities(@QueryParam("pageNo") Integer pageNo,@QueryParam("pageLimit") Integer pageLimit) throws InternalServerException, RecordNotFoundException {
-		
-		//Validate input
-		if(pageNo == null){
-			pageNo=ApplicationConstants.PAGE_START;
+	public Response getActivities(@QueryParam("pageNo") Integer pageNo, @QueryParam("pageLimit") Integer pageLimit)
+			throws InternalServerException, RecordNotFoundException {
+
+		// Validate input
+		if (pageNo == null) {
+			pageNo = ApplicationConstants.PAGE_START;
 		}
-		if(pageLimit == null){
+		if (pageLimit == null) {
 			pageLimit = ApplicationConstants.PAGE_LIMIT;
 		}
-		List<ActivityResponse> activities = activityService.getActivities(pageNo,pageLimit);
-		
+		List<ActivityResponse> activities = activityService.getActivities(pageNo, pageLimit);
+
 		return Response.status(Status.OK).entity(activities).build();
 	}
-	
+
 	@GET
 	@ApiOperation(value = EndPointConstants.GET_ACTIVITIES_BY_OBJECT_API_VALUE, nickname = EndPointConstants.GET_ACTIVITIES_BY_OBJECT_API_NICKNAME, httpMethod = EndPointConstants.HTTP_GET, notes = EndPointConstants.GET_ACTIVITIES_BY_OBJECT_API_DESCRIPTION)
 	@Path(EndPointConstants.GET_ACTIVITIES_BY_OBJECT_REQUEST_MAPPING)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getActivitiesByObject(@QueryParam("objectGuid") Long objectGuid,@QueryParam("pageNo") Integer pageNo,@QueryParam("pageLimit") Integer pageLimit) throws InternalServerException, RecordNotFoundException {
-		
-		//Validate input
-		if(pageNo == null){
-			pageNo=ApplicationConstants.PAGE_START;
+	public Response getActivitiesByObject(@QueryParam("objectGuid") Long objectGuid,
+			@QueryParam("pageNo") Integer pageNo, @QueryParam("pageLimit") Integer pageLimit)
+			throws InternalServerException, RecordNotFoundException {
+
+		// Validate input
+		if (pageNo == null) {
+			pageNo = ApplicationConstants.PAGE_START;
 		}
-		if(pageLimit == null){
+		if (pageLimit == null) {
 			pageLimit = ApplicationConstants.PAGE_LIMIT;
 		}
-		List<ActivityResponse> activities = activityService.getActivitiesByObjectGuid(objectGuid,pageNo,pageLimit);
-		
+		List<ActivityResponse> activities = activityService.getActivitiesByObjectGuid(objectGuid, pageNo, pageLimit);
+
 		return Response.status(Status.OK).entity(activities).build();
 	}
 }

@@ -1,7 +1,42 @@
 (function() {
      'use strict';
-	var myIndiaApp=angular.module('myindia-app', ['ui.router','ui.bootstrap','ngAnimate','ngMessages','angularTrix','ngTagsInput','nvd3ChartDirectives']);
+	var myIndiaApp=angular.module('myindia-app', ['ui.router','ui.bootstrap','ngAnimate','ngMessages','angularTrix','ngTagsInput','nvd3ChartDirectives','angularFileUpload']);
 	
+})();
+
+(function() {
+	'use strict';
+
+	angular.module('myindia-app').controller("activityFeedActionsController",
+			activityFeedActionsController);
+	activityFeedActionsController.$inject = [];
+
+	function activityFeedActionsController() {
+		var activityFeedActions = this;
+	}
+
+})();
+
+(function() {
+	'use strict';
+
+	angular.module('myindia-app').directive("activityFeedActions", activityFeedActions);
+
+	function activityFeedActions() {
+
+		var activityFeedActions = {
+			restrict : 'E',
+			scope : {
+				objectType : '=',
+				objectGuid : '='
+			},
+			templateUrl : resource + 'partials/activityFeedActions.html',
+			controller : 'activityFeedActionsController',
+			controllerAs : 'activityFeedActions'
+		};
+		return activityFeedActions;
+	}
+
 })();
 
 (function() {
@@ -9,10 +44,19 @@
 
 	angular.module('myindia-app').controller("commentActionsController",
 			commentActionsController);
-	commentActionsController.$inject = [];
+	commentActionsController.$inject = ['$scope'];
 
-	function commentActionsController() {
+	function commentActionsController($scope) {
 		var commentActions = this;
+		
+		commentActions.objectType=$scope.objectType;
+		commentActions.objectGuid=$scope.objectGuid;
+		commentActions.objectData=$scope.objectData;
+		
+		console.log(commentActions.objectType);
+		console.log(commentActions.objectGuid);
+		console.log(commentActions.objectData);
+		
 	}
 
 })();
@@ -28,7 +72,8 @@
 			restrict : 'E',
 			scope : {
 				objectType : '=',
-				objectGuid : '='
+				objectGuid : '=',
+				objectData:'='
 			},
 			templateUrl : resource + 'partials/commentActions.html',
 			controller : 'commentActionsController',
@@ -44,15 +89,30 @@
 	angular.module('myindia-app').controller("commentBoxController",
 			commentBoxController);
 
-	commentBoxController.$inject = [ '$scope','commentBoxService' ];
+	commentBoxController.$inject = [ '$scope','commentBoxService','dataShareService','userInfoService' ];
 
-	function commentBoxController($scope,commentBoxService) {
+	function commentBoxController($scope,commentBoxService,dataShareService,userInfoService) {
 		var commentBox = this;
-		console.log($scope.objectType);
-		console.log($scope.objectGuid);
 		commentBox.commentText="";
 		commentBox.sendComment = sendComment;
 		
+		commentBox.userInfo = dataShareService.getUserInfo();
+		if (!commentBox.userInfo) {
+			userInfoService.getUserInfo().then(userInfoSuccess).catch(userInfoFailure);
+
+			function userInfoSuccess(data){
+				dataShareService.setUserInfo(data);
+				commentBox.userInfo=data;
+			}
+
+			function userInfoFailure(error){
+				alert(error);
+			}
+		}
+		
+		commentBox.userProfileImageClass = "comment_user_profile_image";
+		commentBox.userProfileLabelClass = "comment_user_profile_label";
+
 		function sendComment(){
 			let commentData={};
 			commentData.objectType=$scope.objectType;
@@ -61,7 +121,7 @@
 			
 			commentBoxService.sendComment(commentData).then(sendCommentSuccess).catch(sendCommentFailure);
     		function sendCommentSuccess(data){
-    			alert(data);
+    			commentData.commentText="";
     		}
     		function sendCommentFailure(error){
     			alert(error);
@@ -416,6 +476,26 @@
 })();
 (function() {
 	'use strict';
+
+	angular.module('myindia-app').directive("fullOverlay", fullOverlay);
+
+	function fullOverlay() {
+
+		var fullOverlay = {
+			restrict : 'E',
+			link : link,
+			templateUrl : resource + 'partials/fullOverlay.html'
+		};
+
+		return fullOverlay;
+
+		function link(scope, element, attrs) {
+		}
+	}
+})();
+
+(function() {
+	'use strict';
 	angular.module('myindia-app').controller("headerController",
 			headerController);
 
@@ -493,18 +573,6 @@
 			scope.header.userInfo = dataShareService.getUserInfo();
 			
 			if (scope.header.userInfo) {
-
-				// Preapre user profile image
-				if (!scope.header.userInfo.userImage) {
-					if (scope.header.userInfo.gender == 'Male') {
-						scope.header.userInfo.userImage = resource
-								+ 'Users-User-Male-icon.png';
-					} else if (header.userInfo.gender == 'Female') {
-						scope.header.userInfo.userImage = resource
-								+ 'Users-User-Female-icon.png';
-					}
-				}
-
 			}else if(sessionStorage.getItem("access_token")){
 
 				//If shared data has not been set yet.Call the service.
@@ -742,7 +810,11 @@
 				modalTemplateUrl : '=modalTemplateUrl',
 				dismissModal : '=',
 				modalControllerName : '=modalControllerName',
-				modalControllerAlias : '=modalControllerAlias'
+				modalControllerAlias : '=modalControllerAlias',
+				modalSize : '=modalSize',
+				objectType : '=objectType',
+				objectGuid : '=objectGuid',
+				selectedAlbum : '=selectedAlbum'
 			}
 		};
 
@@ -755,7 +827,19 @@
 				ariaDescribedBy : 'modal-body',
 				templateUrl : scope.modalTemplateUrl,
 				controller : scope.modalControllerName,
-				controllerAs : scope.modalControllerAlias
+				controllerAs : scope.modalControllerAlias,
+				size : scope.modalSize,
+				resolve : {
+					objectType : function() {
+						return scope.objectType;
+					},
+					objectGuid : function() {
+						return scope.objectGuid;
+					},
+					selectedAlbum : function() {
+						return scope.selectedAlbum;
+					}
+				}
 			});
 			modalInstance.result.then(function() {
 			}, function() {
@@ -932,7 +1016,7 @@
 
 				if(splitValues && splitValues.length>1){
 					scope.labelName = splitValues[0].charAt(0)+splitValues[1].charAt(0);
-				}else if(splitValues && splitValues.length>0){
+				}else if(splitValues && splitValues.length==1){
 					scope.labelName = splitValues[0].charAt(0);
 				}
 			}
@@ -1013,13 +1097,24 @@
 			controllerAs : 'signUp'
 		}).state('signUp.validate', {
 			url : '/validate',
-			templateUrl : resource + 'partials/validateElector.html'
+			templateUrl : resource + 'partials/electorDetails.html',
+			controller : 'electorDetailsController',
+			controllerAs : 'electorDetails'
 		}).state('signUp.locationSetup', {
 			url : '/locationSetup',
-			templateUrl : resource + 'partials/userLocationSetup.html'
+			templateUrl : resource + 'partials/locationDetails.html',
+			controller : 'locationDetailsController',
+			controllerAs : 'locationDetails'
+		}).state('signUp.politicianSelection', {
+			url : '/politicianSelection',
+			templateUrl : resource + 'partials/politicianSelection.html',
+			controller : 'politicianSelectionController',
+			controllerAs : 'politicianSelection'
 		}).state('signUp.accountSetup', {
 			url : '/accountSetup',
-			templateUrl : resource + 'partials/accountSetup.html'
+			templateUrl : resource + 'partials/accountSetup.html',
+			controller : 'accountDetailsController',
+			controllerAs : 'accountDetails'
 		}).state('search', {
 			url : '/search/:searchTerm',
 			templateUrl : resource + 'partials/globalSearch.html',
@@ -1059,11 +1154,36 @@
 		}).state('viewProblem.overview', {
 			url : '/overview',
 			templateUrl : resource + 'partials/overview.html'
+		}).state('viewProblem.activityFeed', {
+			url : '/activityFeed',
+			templateUrl : resource + 'partials/activityFeed.html',
+			controller : 'activityFeedController',
+			controllerAs : 'activityFeed',
 		}).state('viewProblem.discussions', {
 			url : '/discussions',
 			templateUrl : resource + 'partials/discussions.html',
 			controller : 'discussionsController',
 			controllerAs : 'discussions',
+		}).state('viewProblem.photos', {
+			url : '/photos',
+			templateUrl : resource + 'partials/photos.html',
+			controller : 'photosController',
+			controllerAs : 'photos'
+		}).state('viewProblem.attachments', {
+			url : '/attachments',
+			templateUrl : resource + 'partials/attachments.html',
+			controller : 'attachmentController',
+			controllerAs : 'attachment'
+		}).state('viewProblem.contributors', {
+			url : '/contributors',
+			templateUrl : resource + 'partials/contributors.html',
+			controller : 'contributorController',
+			controllerAs : 'contributor'
+		}).state('viewProblem.videos', {
+			url : '/videos',
+			templateUrl : resource + 'partials/videos.html',
+			controller : 'videoController',
+			controllerAs : 'video'
 		}).state('forgotPassword', {
 			url : '/forgotPassword',
 			templateUrl : resource + 'partials/forgotPassword.html',
@@ -1080,6 +1200,16 @@
 			params : {
 				'baseUserInfo' : ''
 			}
+		}).state('poc', {
+			url : '/poc',
+			templateUrl : resource + 'partials/poc.html',
+			controller : 'pocController',
+			controllerAs : 'poc',
+		}).state('user', {
+			url : '/user',
+			templateUrl : resource + 'partials/user.html',
+			controller : 'userController',
+			controllerAs : 'user',
 		});
 	}
 })();
@@ -1087,20 +1217,87 @@
 (function() {
 	'use strict';
 
+	angular.module('myindia-app').factory("activityService",
+			activityService);
+
+	activityService.$inject = [ '$q', 'swaggerShareService'];
+
+	function activityService($q, swaggerShareService) {
+
+		var services = {};
+
+		var activityService = {
+			getAllActivities: getAllActivities
+		};
+
+		// Call and save the data
+		let swaggerPromise = swaggerShareService.getAPIMetaData(setAPIMetaData);
+
+		return activityService;
+
+		function setAPIMetaData(metaInfo) {
+			services = metaInfo;
+		}
+
+		function getAllActivities(pageNo,pageLimit) {
+
+			let deferred = $q.defer();
+			
+			if(swaggerPromise){
+				swaggerPromise.then(function(){
+					services.activity.getActivities({pageNo:pageNo,pageLimit:pageLimit},
+							getAllActivitiesSuccess, getAllActivitiesFailure);
+					swaggerPromise = undefined;
+				})
+			}else{
+				services.activity.getActivities({pageNo:pageNo,pageLimit:pageLimit},
+						getAllActivitiesSuccess, getAllActivitiesFailure);
+			}
+			
+
+			return deferred.promise;
+
+			function getAllActivitiesSuccess(data) {
+				deferred.resolve(data.obj);
+			}
+
+			function getAllActivitiesFailure(error) {
+				deferred.reject(error);
+			}
+
+		}
+
+	}
+
+})();
+(function() {
+	'use strict';
+
 	angular.module('myindia-app').factory("dataShareService", dataShareService);
 
-	dataShareService.$inject = ['$rootScope'];
+	dataShareService.$inject = [ '$rootScope' ];
 
 	function dataShareService($rootScope) {
 
 		var data = {};
+		var userSignUpData = {};
 
 		var dataShareService = {
 			getUserInfo : getUserInfo,
-			setUserInfo : setUserInfo
+			setUserInfo : setUserInfo,
+			getUserSignUpInfo : getUserSignUpInfo,
+			setUserSignUpInfo : setUserSignUpInfo
 		};
 
 		return dataShareService;
+
+		function getUserSignUpInfo() {
+			return userSignUpData.responseData;
+		}
+
+		function setUserSignUpInfo(userSignUpResponseData) {
+			userSignUpData.responseData = userSignUpResponseData;
+		}
 
 		function getUserInfo() {
 			return data.userInfo;
@@ -1108,18 +1305,20 @@
 
 		function setUserInfo(userInfo) {
 
-			if(userInfo.userSelectedLocation){
+			if (userInfo.userSelectedLocation) {
 				userInfo.displayLocation = userInfo.userSelectedLocation;
-			}else if(data.userInfo && data.userInfo.userSelectedLocation){
+			} else if (data.userInfo && data.userInfo.userSelectedLocation) {
 				userInfo.userSelectedLocation = data.userInfo.userSelectedLocation;
 				userInfo.displayLocation = userInfo.userSelectedLocation;
-			}else if(sessionStorage.getItem("display_location")){
-				userInfo.displayLocation = JSON.parse(sessionStorage.getItem("display_location"));
-			}else{
+			} else if (sessionStorage.getItem("display_location")) {
+				userInfo.displayLocation = JSON.parse(sessionStorage
+						.getItem("display_location"));
+			} else {
 				userInfo.displayLocation = userInfo.userLocation;
 			}
 
-			sessionStorage.setItem("display_location",JSON.stringify(userInfo.displayLocation));
+			sessionStorage.setItem("display_location", JSON
+					.stringify(userInfo.displayLocation));
 
 			data.userInfo = userInfo;
 
@@ -1127,7 +1326,7 @@
 			broadcast('userInfoChanged');
 		}
 
-		function broadcast(eventName){
+		function broadcast(eventName) {
 			$rootScope.$broadcast(eventName);
 		}
 	}
@@ -1399,80 +1598,87 @@
 
 })();
 (function() {
-    'use strict';
+	'use strict';
 
-    angular.module('myindia-app').factory("swaggerShareService", swaggerShareService);
+	angular.module('myindia-app').factory("swaggerShareService",
+			swaggerShareService);
 
-    swaggerShareService.$inject = ['$q'];
+	swaggerShareService.$inject = [ '$q' ];
 
-    function swaggerShareService($q) {
+	function swaggerShareService($q) {
 
-        var apiMetaData = {};
+		var apiMetaData = {};
 
-        var hostName = 'http://localhost:8080/';
+		var hostName = window.location.origin+"/";
 
-    	var swaggerShareService = {
-    		getAPIMetaData : getAPIMetaData,
-            setAuthorization: setAuthorization
-    	};
+		var swaggerShareService = {
+			getAPIMetaData : getAPIMetaData,
+			setAuthorization : setAuthorization
+		};
 
-        return swaggerShareService;
+		return swaggerShareService;
 
-    	function getAPIMetaData(setMetaData){
+		function getAPIMetaData(setMetaData) {
 
-    		if(apiMetaData.metaInfo){
-    			setMetaData(apiMetaData.metaInfo);
-    		}else{
-                let swaggerPromise = fetchAPIMetaData(hostName);
-    			swaggerPromise.then(function(data){
-    				apiMetaData.metaInfo = data;
-                    setAuthorization();
-    				setMetaData(apiMetaData.metaInfo);
-    			});
-                return swaggerPromise;
-    		}
+			if (apiMetaData.metaInfo) {
+				setMetaData(apiMetaData.metaInfo);
+			} else {
+				let
+				swaggerPromise = fetchAPIMetaData(hostName);
+				swaggerPromise.then(function(data) {
+					apiMetaData.metaInfo = data;
+					setAuthorization();
+					setMetaData(apiMetaData.metaInfo);
+				});
+				return swaggerPromise;
+			}
 
-    	}
+		}
 
-    	function fetchAPIMetaData(hostName){
-    		
-    		let deferred = $q.defer();
+		function fetchAPIMetaData(hostName) {
 
-    		let swagger = new SwaggerClient({
-                url: hostName+'api/swagger.json',
-                success: function() {
-                    deferred.resolve(swagger);
-                },error: function(error){
-                	deferred.reject(error);
-                }
-        	});
+			let
+			deferred = $q.defer();
 
-        	return deferred.promise;	
+			let
+			swagger = new SwaggerClient({
+				url : hostName + 'api/swagger.json',
+				success : function() {
+					deferred.resolve(swagger);
+				},
+				error : function(error) {
+					deferred.reject(error);
+				}
+			});
 
-    	}
+			return deferred.promise;
 
-    	function setAuthorization(token,refreshToken,expiresIn){
+		}
 
-            let accessToken;
+		function setAuthorization(token, refreshToken, expiresIn) {
 
-            if(token){
-                accessToken = token;
-                sessionStorage.setItem("access_token",accessToken);
-                sessionStorage.setItem("refresh_token",refreshToken);
-                sessionStorage.setItem("expires_in",expiresIn);
-            }else if(sessionStorage.getItem("access_token")){
-                accessToken = sessionStorage.getItem("access_token");   
-            }
+			let
+			accessToken;
 
-            if(accessToken && apiMetaData.metaInfo){
-                var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization( "Authorization", "Bearer " + accessToken, "header" );
-                apiMetaData.metaInfo.clientAuthorizations.remove("bearer");
-                apiMetaData.metaInfo.clientAuthorizations.add("bearer",apiKeyAuth);
-            }
-        }
+			if (token) {
+				accessToken = token;
+				sessionStorage.setItem("access_token", accessToken);
+				sessionStorage.setItem("refresh_token", refreshToken);
+				sessionStorage.setItem("expires_in", expiresIn);
+			} else if (sessionStorage.getItem("access_token")) {
+				accessToken = sessionStorage.getItem("access_token");
+			}
 
-        
-    }
+			if (accessToken && apiMetaData.metaInfo) {
+				var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization(
+						"Authorization", "Bearer " + accessToken, "header");
+				apiMetaData.metaInfo.clientAuthorizations.remove("bearer");
+				apiMetaData.metaInfo.clientAuthorizations.add("bearer",
+						apiKeyAuth);
+			}
+		}
+
+	}
 
 })();
 (function() {
@@ -1752,10 +1958,14 @@
 	'use strict';
 
 	angular.module('myindia-app').controller("homeController", homeController);
-	homeController.$inject = [ '$scope' ];
+	homeController.$inject = [ '$scope','activityService','$state' ];
 
-	function homeController($scope) {
+	function homeController($scope,activityService,$state) {
 		var home = this;
+		home.getAllActivties=getAllActivties;
+		home.gotoObject=gotoObject;
+		home.pageOffset=1;
+		home.pageLimit=6;
 		home.xFunction = xFunction;
 		home.yFunction = yFunction;
 		home.color = [ "#ED1C24", "#EB7422", "#FFDF16", "#0AA24B" ];
@@ -1783,10 +1993,124 @@
 				return d.y;
 			};
 		}
+		
+		getAllActivties();
+		
+		function getAllActivties(){
+			activityService.getAllActivities(home.pageOffset,home.pageLimit).then(getAllActivitiesSuccess).catch(getAllActivitiesFailure);
+
+			function getAllActivitiesSuccess(data){
+				home.activities = data;
+			}
+
+			function getAllActivitiesFailure(error){
+				alert(error);
+			}
+		}
+		
+		function gotoObject(activityContent){
+			if(activityContent){
+				if(activityContent.onObjectType && activityContent.onObjectType!=null){
+					if(activityContent.onObjectType=='PROBLEM' || activityContent.onObjectType=='Problem'){
+						$state.go('viewProblem', {
+							selectedProblemGuid : activityContent.onObjectGuid
+						});
+					}
+				}
+			}
+		}
 	}
 
 })();
 
+(function() {
+	'use strict';
+
+	angular.module('myindia-app').controller("pocController", pocController);
+	pocController.$inject = [ '$scope','pocService'];
+	
+	angular.module('myindia-app').directive('fileModel', [ '$parse', function($parse) {
+		return {
+			restrict : 'A',
+			link : function(scope, element, attrs) {
+				var model = $parse(attrs.fileModel);
+				var modelSetter = model.assign;
+
+				element.bind('change', function() {
+					scope.$apply(function() {
+						modelSetter(scope, element[0].files[0]);
+					});
+				});
+			}
+		};
+	} ]);
+
+	function pocController($scope,pocService) {
+		var poc = this;
+		poc.uploadFile=uploadFile;
+		function uploadFile(){
+            pocService.uploadFiles(poc.myFile).then(uploadFilesSuccess).catch(uploadFilesFailure);
+
+			function uploadFilesSuccess(data){
+			}
+			function uploadFilesFailure(error){
+				alert(error);
+			}
+		}
+        
+	}
+
+})();
+
+(function() {
+	'use strict';
+
+	angular.module('myindia-app').factory("pocService", pocService);
+
+	pocService.$inject = [ '$q', 'swaggerShareService' ];
+
+	function pocService($q, swaggerShareService) {
+
+		var services = {};
+
+		var pocService = {
+			uploadFiles : uploadFiles
+		};
+
+		// // Call and save the data
+		let
+		swaggerPromise = swaggerShareService.getAPIMetaData(setAPIMetaData);
+
+		return pocService;
+
+		function setAPIMetaData(metaInfo) {
+			services = metaInfo;
+		}
+
+		function uploadFiles(uploadedFile) {
+			let
+			deferred = $q.defer();
+			 var formData = new FormData();
+			 formData.append('file', uploadedFile);
+			 
+			services.fileUpload.addFiles({
+				body : formData
+			}, uploadFilesSuccess, uploadFilesFailure);
+
+			return deferred.promise;
+
+			function uploadFilesSuccess(data) {
+				deferred.resolve(data.obj);
+			}
+
+			function uploadFilesFailure(error) {
+				deferred.reject(error);
+			}
+		}
+
+	}
+
+})();
 (function() {
 	'use strict';
 
@@ -2312,6 +2636,200 @@
 (function() {
 	'use strict';
 
+	angular.module('myindia-app').controller("activityFeedController",
+			activityFeedController);
+	activityFeedController.$inject = ['$scope','activityService'];
+
+	function activityFeedController($scope,activityService) {
+		var activityFeed = this;
+		activityFeed.activities = [];
+		activityFeed.pageOffset=1;
+		activityFeed.pageLimit=10;
+		activityFeed.userProfileImageClass = "activity_user_profile_image";
+		activityFeed.userProfileLabelClass = "activity_user_profile_label";
+		activityFeed.problemDetails=$scope.$parent.viewProblem.problemDetails;
+		activityFeed.objectGuid=activityFeed.problemDetails.guid;
+		activityFeed.objectType="ACTIVITY";
+		
+		getActivitiesByObjectGuid();
+		
+		function getActivitiesByObjectGuid(){
+			activityService.getActivitiesByObjectGuid(activityFeed.objectGuid,activityFeed.pageOffset,activityFeed.pageLimit).then(getActivitiesByObjectGuidSuccess).catch(getActivitiesByObjectGuidFailure);
+
+			function getActivitiesByObjectGuidSuccess(data){
+				activityFeed.activities = data;
+			}
+
+			function getActivitiesByObjectGuidFailure(error){
+				alert(error);
+			}
+		}
+	}
+})();
+
+(function() {
+	'use strict';
+
+	angular.module('myindia-app').factory("activityService", activityService);
+
+	activityService.$inject = [ '$q', 'swaggerShareService' ];
+
+	function activityService($q, swaggerShareService) {
+
+		var services = {};
+
+		var activityService = {
+			getAllActivities : getAllActivities,
+			getActivitiesByObjectGuid : getActivitiesByObjectGuid
+		};
+
+		// Call and save the data
+		let
+		swaggerPromise = swaggerShareService.getAPIMetaData(setAPIMetaData);
+
+		return activityService;
+
+		function setAPIMetaData(metaInfo) {
+			services = metaInfo;
+		}
+
+		function getAllActivities(pageNo, pageLimit) {
+
+			let
+			deferred = $q.defer();
+
+			if (swaggerPromise) {
+				swaggerPromise.then(function() {
+					services.activity.getActivities({
+						pageNo : pageNo,
+						pageLimit : pageLimit
+					}, getAllActivitiesSuccess, getAllActivitiesFailure);
+					swaggerPromise = undefined;
+				})
+			} else {
+				services.activity.getActivities({
+					pageNo : pageNo,
+					pageLimit : pageLimit
+				}, getAllActivitiesSuccess, getAllActivitiesFailure);
+			}
+
+			return deferred.promise;
+
+			function getAllActivitiesSuccess(data) {
+				deferred.resolve(data.obj);
+			}
+
+			function getAllActivitiesFailure(error) {
+				deferred.reject(error);
+			}
+
+		}
+
+		function getActivitiesByObjectGuid(objectGuid,pageNo, pageLimit) {
+
+			let
+			deferred = $q.defer();
+
+			services.activity.getActivitiesByObject({
+				objectGuid:objectGuid,
+				pageNo : pageNo,
+				pageLimit : pageLimit
+			}, getActivitiesByObjectGuidSuccess, getActivitiesByObjectGuidFailure);
+
+			return deferred.promise;
+
+			function getActivitiesByObjectGuidSuccess(data) {
+				deferred.resolve(data.obj);
+			}
+
+			function getActivitiesByObjectGuidFailure(error) {
+				deferred.reject(error);
+			}
+
+		}
+
+	}
+
+})();
+(function() {
+	'use strict';
+
+	angular.module('myindia-app').controller("attachmentController",
+			attachmentController);
+	attachmentController.$inject = ['$scope','attachmentService'];
+
+	function attachmentController($scope,attachmentService) {
+		var attachment = this;
+	}
+})();
+
+(function() {
+	'use strict';
+
+	angular.module('myindia-app').factory("attachmentService", attachmentService);
+
+	attachmentService.$inject = [ '$q', 'swaggerShareService' ];
+
+	function attachmentService($q, swaggerShareService) {
+
+		var services = {};
+
+		var attachmentService = {};
+
+		// Call and save the data
+		let
+		swaggerPromise = swaggerShareService.getAPIMetaData(setAPIMetaData);
+
+		return attachmentService;
+
+		function setAPIMetaData(metaInfo) {
+			services = metaInfo;
+		}
+	}
+})();
+(function() {
+	'use strict';
+
+	angular.module('myindia-app').controller("contributorController",
+			contributorController);
+	contributorController.$inject = ['$scope','contributorService'];
+
+	function contributorController($scope,contributorService) {
+		var contributor = this;
+	}
+})();
+
+(function() {
+	'use strict';
+
+	angular.module('myindia-app').factory("contributorService",
+			contributorService);
+
+	contributorService.$inject = [ '$q', 'swaggerShareService' ];
+
+	function contributorService($q, swaggerShareService) {
+
+		var services = {};
+
+		var contributorService = {
+
+		};
+
+		// Call and save the data
+		let
+		swaggerPromise = swaggerShareService.getAPIMetaData(setAPIMetaData);
+
+		return contributorService;
+
+		function setAPIMetaData(metaInfo) {
+			services = metaInfo;
+		}
+	}
+
+})();
+(function() {
+	'use strict';
+
 	angular.module('myindia-app').controller("discussionsController",
 			discussionsController);
 	discussionsController.$inject = ['$scope', 'discussionsService' ];
@@ -2322,6 +2840,8 @@
 		discussions.problemDetails=$scope.$parent.viewProblem.problemDetails;
 		discussions.objectType="PROBLEM";
 		discussionsService.getProblemComments(discussions.problemDetails.guid,1,20).then(getProblemCommentsSuccess).catch(getProblemCommentsFailure);
+		discussions.userProfileImageClass = "discussion_user_profile_image";
+		discussions.userProfileLabelClass = "discussion_user_profile_label";
 
 		function getProblemCommentsSuccess(data){
 			discussions.comments = data;
@@ -2385,6 +2905,588 @@
 (function() {
 	'use strict';
 
+	angular.module('myindia-app').controller("addAlbumController",
+			addAlbumController);
+	addAlbumController.$inject = [ '$scope', '$uibModalInstance','albumService','objectType',
+			'objectGuid','selectedAlbum'];
+
+	function addAlbumController($scope, $uibModalInstance,albumService, objectType,
+			objectGuid,selectedAlbum) {
+		var addAlbum = this;
+		
+		addAlbum.addedAlbumPhotoFiles=new Array();
+		addAlbum.addedAlbumPhotos= [];
+		addAlbum.getChoosenFiles=getChoosenFiles;
+		addAlbum.myInterval = 2000;
+		addAlbum.noWrapSlides = false;
+		addAlbum.active = 0;
+		addAlbum.closePopUp = closePopUp;
+		addAlbum.objectType = objectType;
+		addAlbum.objectGuid = objectGuid;
+		addAlbum.getMoreChoosenFiles=getMoreChoosenFiles;
+		addAlbum.uploadAlbumPhoto=uploadAlbumPhoto;
+		addAlbum.albumPhotoFileAdded=false;
+		addAlbum.uploadAlbum=uploadAlbum;
+		addAlbum.uploadPhotosToAlbum=uploadPhotosToAlbum;
+		addAlbum.selectedAlbum=selectedAlbum;
+		if(addAlbum.selectedAlbum){
+			addAlbum.albumGuid=addAlbum.selectedAlbum.guid;
+			addAlbum.albumName=addAlbum.selectedAlbum.name;
+			addAlbum.albumDescription=addAlbum.selectedAlbum.description;
+			addAlbum.albumImage = addAlbum.selectedAlbum.imageUrl;
+			addAlbum.albumImageName=addAlbum.selectedAlbum.imageUrl.split("/").pop();
+			addAlbum.albumPhotoFileAdded=true;
+		}
+		function getChoosenFiles(files){
+			addAlbum.addedAlbumPhotos=files;
+			for(let eachFileIndex=0;eachFileIndex<files.length;eachFileIndex++){
+				addAlbum.addedAlbumPhotoFiles.push(files[eachFileIndex]);
+			}
+		}
+		function getMoreChoosenFiles(moreFiles){
+			for(let eachFileIndex=0;eachFileIndex<moreFiles.length;eachFileIndex++){
+				addAlbum.addedAlbumPhotoFiles.push(moreFiles[eachFileIndex]);
+			}
+		}
+		function closePopUp() {
+			$uibModalInstance.dismiss('cancel');
+		}
+		
+		function uploadAlbumPhoto(files){
+			addAlbum.albumPhotoFile = files[0];
+			addAlbum.albumPhotoFileAdded=true;
+		}
+		
+		function uploadAlbum(){
+			albumService.createUpdateAlbum(addAlbum.albumGuid,addAlbum.albumName,addAlbum.albumDescription,addAlbum.albumPhotoFile,addAlbum.objectType,addAlbum.objectGuid).then(uploadAlbumSuccess).catch(uploadAlbumFailure);
+			function uploadAlbumSuccess(data){
+				addAlbum.albumGuid=data.saveUpdateDeleteRecordId;
+				uploadPhotosToAlbum(addAlbum.albumGuid);
+			}
+			function uploadAlbumFailure(error){
+				alert(error);
+			}
+		}
+		
+		function uploadPhotosToAlbum(){
+			let albumPhotos=addAlbum.addedAlbumPhotoFiles;
+			if(albumPhotos!=null && albumPhotos.length>0){
+				albumService.uploadPhotosToAlbum(addAlbum.albumGuid,albumPhotos,addAlbum.objectType,addAlbum.objectGuid).then(uploadPhotosToAlbumSuccess).catch(uploadPhotosToAlbumFailure);
+				function uploadPhotosToAlbumSuccess(data){
+					closePopUp();
+				}
+				function uploadPhotosToAlbumFailure(error){
+					alert(error);
+				}
+			}
+		}
+	}
+})();
+
+(function() {
+	'use strict';
+
+	angular.module('myindia-app').factory("albumService", albumService);
+
+	albumService.$inject = [ '$q', 'swaggerShareService' ];
+
+	function albumService($q, swaggerShareService) {
+
+		var services = {};
+
+		var albumService = {
+			createUpdateAlbum : createUpdateAlbum,
+			uploadPhotosToAlbum : uploadPhotosToAlbum,
+			getAlbums:getAlbums,
+			getProblemPhotos:getProblemPhotos,
+			getAlbumPhotos:getAlbumPhotos
+		};
+
+		// // Call and save the data
+		let
+		swaggerPromise = swaggerShareService.getAPIMetaData(setAPIMetaData);
+
+		return albumService;
+
+		function setAPIMetaData(metaInfo) {
+			services = metaInfo;
+		}
+
+		function uploadPhotosToAlbum(albumGuid, files, objectType, objectGuid) {
+
+			let
+			deferred = $q.defer();
+
+			let
+			promises = [];
+
+			angular.forEach(files, function(file, key) {
+				promises.push(preapreUploadFileRequest(file, objectType,
+						objectGuid, albumGuid, null));
+			});
+
+			$q.all(promises).then(function(filesData) {
+
+				services.image.addPhotosToAlbum({
+					body : JSON.stringify(filesData)
+				}, uploadPhotosToAlbumSuccess, uploadPhotosToAlbumFailure);
+
+				function uploadPhotosToAlbumSuccess(data) {
+					deferred.resolve(data);
+				}
+
+				function uploadPhotosToAlbumFailure(error) {
+					deferred.reject(error);
+				}
+			})
+
+			return deferred.promise;
+		}
+
+		function createUpdateAlbum(albumGuid,albumName,albumDescription, albumPhotoFile,
+				objectType, objectGuid) {
+
+			let
+			deferred = $q.defer();
+
+			let
+			albumFilePromise = preapreUploadAlbumFileRequest(albumPhotoFile,
+					objectType, objectGuid, albumGuid,albumName,albumDescription);
+
+			albumFilePromise.then(function(filesData) {
+
+				services.image.createUpdateAlbum({
+					body : JSON.stringify(filesData)
+				}, createUpdateAlbumSuccess, createUpdateAlbumFailure);
+
+				function createUpdateAlbumSuccess(data) {
+					deferred.resolve(data.obj);
+				}
+
+				function createUpdateAlbumFailure(error) {
+					deferred.reject(error);
+				}
+			})
+
+			return deferred.promise;
+
+		}
+		function preapreUploadAlbumFileRequest(file, objectType, objectGuid,
+				albumGuid, albumName,albumDescription) {
+
+			let
+			deferred = $q.defer();
+
+			var name = file.name;
+			var reader = new FileReader();
+			reader.onload = function() {
+
+				var req = {};
+				req.imageName = name;
+				req.imageData = reader.result;
+				req.objectType = objectType;
+				req.objectGuId = objectGuid;
+				req.albumDescription = albumDescription;
+				req.albumGuid = albumGuid;
+				req.albumName = albumName,
+
+				deferred.resolve(req);
+			}
+			reader.readAsDataURL(file);
+
+			return deferred.promise;
+		}
+		
+		function preapreUploadFileRequest(file, objectType, objectGuid,
+				albumGuid, albumName) {
+
+			let
+			deferred = $q.defer();
+
+			var name = file.name;
+			var reader = new FileReader();
+			reader.onload = function() {
+
+				var req = {};
+				req.imageName = name;
+				req.imageData = reader.result;
+				req.objectType = objectType;
+				req.objectGuId = objectGuid;
+				req.albumGuid = albumGuid;
+				req.albumName = albumName,
+
+				deferred.resolve(req);
+			}
+			reader.readAsDataURL(file);
+
+			return deferred.promise;
+		}
+		function getProblemPhotos(objectGuid,objectType,pageNo, pageLimit) {
+
+			let
+			deferred = $q.defer();
+			
+			let requestData={
+					objectType:objectType,
+					objectGuid:objectGuid,
+					pageOffset:pageNo,
+					pageLimit:pageLimit
+			};
+			services.image.getPhotosByObject({
+				body : JSON.stringify(requestData)
+			}, getProblemPhotosSuccess, getProblemPhotosFailure);
+
+			return deferred.promise;
+
+			function getProblemPhotosSuccess(data) {
+				deferred.resolve(data.obj);
+			}
+			function getProblemPhotosFailure(error) {
+				deferred.reject(error);
+			}
+		}
+		function getAlbums(objectGuid,objectType,pageNo, pageLimit) {
+
+			let
+			deferred = $q.defer();
+			
+			let requestData={
+					objectType:objectType,
+					objectGuid:objectGuid,
+					pageOffset:pageNo,
+					pageLimit:pageLimit
+			};
+			services.image.getAlbumsByObject({
+				body : JSON.stringify(requestData)
+			}, getAlbumsSuccess, getAlbumsFailure);
+
+			return deferred.promise;
+
+			function getAlbumsSuccess(data) {
+				deferred.resolve(data.obj);
+			}
+
+			function getAlbumsFailure(error) {
+				deferred.reject(error);
+			}
+
+		}
+		
+		function getAlbumPhotos(albumGuid,objectGuid,objectType,pageNo, pageLimit) {
+
+			let
+			deferred = $q.defer();
+			
+			let requestData={
+					objectType:objectType,
+					objectGuid:objectGuid,
+					pageOffset:pageNo,
+					pageLimit:pageLimit,
+					subObjectGuid:albumGuid
+			};
+			services.image.getAlbumPhotosByObject({
+				body : JSON.stringify(requestData)
+			}, getAlbumPhotosSuccess, getAlbumPhotosFailure);
+
+			return deferred.promise;
+
+			function getAlbumPhotosSuccess(data) {
+				deferred.resolve(data.obj);
+			}
+			function getAlbumPhotosFailure(error) {
+				deferred.reject(error);
+			}
+
+		}
+	}
+
+})();
+(function() {
+	'use strict';
+
+	angular.module('myindia-app').controller("addPhotosController",
+			addPhotosController);
+	addPhotosController.$inject = [ '$scope', 'addPhotosService',
+			'$uibModalInstance','objectType','objectGuid' ];
+
+	function addPhotosController($scope, addPhotosService, $uibModalInstance,objectType,objectGuid) {
+		var addPhotos = this;
+		addPhotos.closePopUp = closePopUp;
+		addPhotos.uploadPhotos = uploadPhotos;
+		addPhotos.addedPhotos= [];
+		addPhotos.getChoosenFiles=getChoosenFiles;
+		addPhotos.myInterval = 2000;
+		addPhotos.noWrapSlides = false;
+		addPhotos.active = 0;
+		addPhotos.addedPhotoFiles=new Array();
+		addPhotos.objectType = objectType;
+		addPhotos.objectGuid = objectGuid;
+		
+		addPhotos.getMoreChoosenFiles=getMoreChoosenFiles;
+		
+		function getChoosenFiles(files){
+			addPhotos.addedPhotos=files;
+			for(let eachFileIndex=0;eachFileIndex<files.length;eachFileIndex++){
+				addPhotos.addedPhotoFiles.push(files[eachFileIndex]);
+			}
+		}
+		function getMoreChoosenFiles(moreFiles){
+			for(let eachFileIndex=0;eachFileIndex<moreFiles.length;eachFileIndex++){
+				addPhotos.addedPhotoFiles.push(moreFiles[eachFileIndex]);
+			}
+		}
+		function closePopUp() {
+			$uibModalInstance.dismiss('cancel');
+		}
+		function uploadPhotos() {
+			
+			if(addPhotos.addedPhotoFiles!=null && addPhotos.addedPhotoFiles.length>0){
+				addPhotosService.uploadPhotos(addPhotos.addedPhotoFiles,addPhotos.objectType,addPhotos.objectGuid).then(uploadPhotosSuccess).catch(uploadPhotosFailure);
+				
+				function uploadPhotosSuccess(data){
+					closePopUp();
+				}
+				function uploadPhotosFailure(error){
+					alert(error);
+				}
+			}
+		}
+		
+	}
+})();
+
+(function() {
+	'use strict';
+
+	angular.module('myindia-app').factory("addPhotosService", addPhotosService);
+
+	addPhotosService.$inject = [ '$q', 'swaggerShareService' ];
+
+	function addPhotosService($q, swaggerShareService) {
+
+		var services = {};
+
+		var addPhotosService = {
+			uploadPhotos : uploadPhotos
+		};
+
+		// // Call and save the data
+		let
+		swaggerPromise = swaggerShareService.getAPIMetaData(setAPIMetaData);
+
+		return addPhotosService;
+
+		function setAPIMetaData(metaInfo) {
+			services = metaInfo;
+		}
+
+		function uploadPhotos(files, objectType, objectGuid) {
+
+			let
+			deferred = $q.defer();
+
+			let
+			promises = [];
+
+			angular.forEach(files, function(file, key) {
+				promises.push(preapreUploadFileRequest(file, objectType,
+						objectGuid));
+			});
+
+			$q.all(promises).then(function(filesData) {
+
+				services.image.addPhotos({
+					body : JSON.stringify(filesData)
+				}, uploadPhotosSuccess, uploadPhotosFailure);
+
+				function uploadPhotosSuccess(data) {
+					deferred.resolve(data);
+				}
+
+				function uploadPhotosFailure(error) {
+					deferred.reject(error);
+				}
+			})
+
+			return deferred.promise;
+		}
+
+		function preapreUploadFileRequest(file, objectType, objectGuid) {
+
+			let
+			deferred = $q.defer();
+
+			var name = file.name;
+			var reader = new FileReader();
+			reader.onload = function() {
+
+				var req = {};
+				req.imageName = name;
+				req.imageData = reader.result;
+				req.objectType = objectType;
+				req.objectGuId = objectGuid;
+
+				deferred.resolve(req);
+			}
+			reader.readAsDataURL(file);
+
+			return deferred.promise;
+		}
+	}
+
+})();
+(function() {
+	'use strict';
+
+	angular.module('myindia-app').controller("photosController",
+			photosController);
+	photosController.$inject = [ '$scope','albumService'];
+
+	function photosController($scope,albumService) {
+		var photos = this;
+		photos.openOverlayForCreateProblem = openOverlayForCreateProblem;
+		photos.problemDetails=$scope.$parent.viewProblem.problemDetails;
+		photos.objectGuid=photos.problemDetails.guid;
+		photos.objectType="PROBLEM";
+		photos.getProblemAlbums=getProblemAlbums;
+		photos.getProblemPhotos=getProblemPhotos
+		photos.albumPageOffset=1;
+		photos.albumPageLimit=10;
+		photos.photoPageOffset=1;
+		photos.photoPageLimit=10;
+		photos.albumPhotoPageOffset=1;
+		photos.albumPhotoPageLimit=10;
+		photos.showPhotos=true;
+		photos.showAddPhotosPopup=showAddPhotosPopup;
+		photos.showAddAlbumPopup=showAddAlbumPopup;
+		photos.animationsEnabled = true;
+		photos.addPhotosPopUpUrl = resource
+				+ "partials/addPhotos.html";
+		photos.showAddPhotosModal = false;
+		photos.closeAddPhotosModal = closeAddPhotosModal;
+		photos.photosModalControllerName = "addPhotosController";
+		photos.photosModalControllerAlias = "addPhotos";
+		photos.photosModalSize="";
+		photos.closeAddAlbumModal = closeAddAlbumModal;
+		photos.addAlbumPopUpUrl = resource
+		+ "partials/addAlbum.html";
+		photos.albumsModalControllerName = "addAlbumController";
+		photos.albumsModalControllerAlias = "addAlbum";
+		photos.albumsModalSize="lg";
+		photos.getAlbumPhotos=getAlbumPhotos;
+		photos.closeAlbumPhotosView=closeAlbumPhotosView;
+		
+		getProblemPhotos();
+		
+		function openOverlayForCreateProblem() {
+			photos.showOverlay = true;
+		}
+		function getProblemPhotos(){
+			albumService.getProblemPhotos(photos.objectGuid,photos.objectType,photos.photoPageOffset,photos.photoPageLimit).then(getProblemPhotosSuccess).catch(getProblemPhotosFailure);
+			function getProblemPhotosSuccess(data){
+				photos.problemPhotos = data;
+			}
+			function getProblemPhotosFailure(error){
+				alert(error);
+			}
+		}
+		
+		function getProblemAlbums(){
+			photos.showPhotos=false;
+			photos.showAlbums=true;
+			albumService.getAlbums(photos.objectGuid,photos.objectType,photos.albumPageOffset,photos.albumPageLimit).then(getAlbumsSuccess).catch(getAlbumsFailure);
+
+			function getAlbumsSuccess(data){
+				photos.problemAlbums = data;
+				photos.selctedProblemAlbum=photos.problemAlbums[0];
+			}
+			function getAlbumsFailure(error){
+				alert(error);
+			}
+		}
+		
+		function showAddPhotosPopup(){
+			photos.showAddPhotosModal = true;
+		}
+		function closeAddPhotosModal(){
+			photos.showAddPhotosModal = false;
+			getProblemPhotos();
+		}
+		function showAddAlbumPopup(){
+			if(photos.showAlbums){
+				photos.selctedProblemAlbum=false;
+			}
+			photos.showAddAlbumModal = true;
+		}
+		function closeAddAlbumModal(){
+			photos.showAddAlbumModal = false;
+			if(photos.showAlbums){
+				getProblemAlbums();
+			}else{
+				getAlbumPhotos(photos.selctedProblemAlbum)
+			}
+		}
+		function getAlbumPhotos(selectedAlbum){
+			photos.showAlbums=false;
+			photos.showAlbumPhotos=true;
+			photos.selctedProblemAlbum=selectedAlbum;
+			albumService.getAlbumPhotos(photos.selctedProblemAlbum.guid,photos.objectGuid,photos.objectType,photos.albumPhotoPageOffset,photos.albumPhotoPageLimit).then(getAlbumPhotosSuccess).catch(getAlbumPhotosFailure);
+
+			function getAlbumPhotosSuccess(data){
+				photos.problemAlbumPhotos = data;
+			}
+			function getAlbumPhotosFailure(error){
+				alert(error);
+			}
+		}
+		function closeAlbumPhotosView(){
+			photos.showPhotos=false;
+			photos.showAlbums=true;
+			photos.showAlbumPhotos=false;
+		}
+	}
+})();
+
+(function() {
+	'use strict';
+
+	angular.module('myindia-app').controller("videoController",
+			videoController);
+	videoController.$inject = ['$scope','videoService'];
+
+	function videoController($scope,videoService) {
+		var video = this;
+	}
+})();
+
+(function() {
+	'use strict';
+
+	angular.module('myindia-app').factory("videoService", videoService);
+
+	videoService.$inject = [ '$q', 'swaggerShareService' ];
+
+	function videoService($q, swaggerShareService) {
+
+		var services = {};
+
+		var videoService = {
+		};
+
+		// Call and save the data
+		let
+		swaggerPromise = swaggerShareService.getAPIMetaData(setAPIMetaData);
+
+		return videoService;
+
+		function setAPIMetaData(metaInfo) {
+			services = metaInfo;
+		}
+	}
+})();
+(function() {
+	'use strict';
+
 	angular.module('myindia-app').controller("viewProblemController",
 			viewProblemController);
 	viewProblemController.$inject = ['$state','viewProblemService','filterEntityByCriteria'];
@@ -2400,6 +3502,10 @@
 		viewProblem.similarProblems.pageLimit =4;
 		viewProblem.similarProblems.problems = [];
 		viewProblem.changeTab=changeTab;
+		
+		viewProblem.userProfileImageClass = "view_problem_user_profile_image";
+		viewProblem.userProfileLabelClass = "view_problem_user_profile_label";
+
 		
 		changeTab('viewProblem.overview');
 		
@@ -2445,7 +3551,8 @@
 			alert(error);
 		}
 		
-		function changeTab(tabURL){
+		function changeTab(tabURL,tabName){
+			viewProblem.selectedTabName=tabName;
 			$state.go(tabURL);
 		}
 	}
@@ -2533,7 +3640,7 @@
 
     		function loginSuccess(data){
                 dataShareService.setUserInfo(data);
-                $state.go('createProblem.problemTypeSelection');
+                $state.go('home');
     		}
 
     		function loginFailure(error){
@@ -2608,257 +3715,498 @@
 
 })();
 (function() {
-    'use strict';
-
-    angular.module('myindia-app').factory("createAccountService", createAccountService);
-
-    createAccountService.$inject = ['$q','swaggerShareService','refreshAccessTokenService'];
-
-    function createAccountService($q,swaggerShareService,refreshAccessTokenService) {
-
-        var services = {};
-
-    	var createAccountService = {
-    		create : create
-    	};
-
-        //Call and save the data
-        swaggerShareService.getAPIMetaData(setAPIMetaData);
-
-        return createAccountService;
-
-        function setAPIMetaData(metaInfo){
-            services = metaInfo;
-        }
-
-    	function create(userGuid,userName,password,childLocation,parentLocation,emailAddress,occupation){
-
-            let requestBody = {
-                loginUserName: userName,
-                password: password,
-                userGuid: userGuid,
-                childLocation: childLocation,
-                parentLocation: parentLocation,
-                emailAddress: emailAddress,
-                occupation: occupation
-            };
-
-            let deferred = $q.defer();
-
-            services.account.createAccount({body:JSON.stringify(requestBody)},createAccountSuccess,createAccountFailure);
-        
-            return deferred.promise;
-
-            function createAccountSuccess(data){
-                //Process cookie into swagger
-                swaggerShareService.setAuthorization(data.obj.accessToken,data.obj.refreshToken,data.obj.expirationTimeInSeconds);
-
-                //Start token expiration timer
-                refreshAccessTokenService.startTokenExpiryTimer(sessionStorage.getItem("expires_in"));
-
-                deferred.resolve(data.obj);
-            }
-
-            function createAccountFailure(error){
-                deferred.reject(error);
-            }
-
-    	}
-        
-    }
-
-})();
-(function() {
-    'use strict';
-
-    angular.module('myindia-app').factory("identifyConflictParentLocationsService", identifyConflictParentLocationsService);
-
-    identifyConflictParentLocationsService.$inject = ['$q','swaggerShareService'];
-
-    function identifyConflictParentLocationsService($q,swaggerShareService) {
-
-        var services = {};
-
-    	var identifyConflictParentLocationsService = {
-    		setup : setup
-    	};
-
-        //Call and save the data
-        swaggerShareService.getAPIMetaData(setAPIMetaData);
-
-        return identifyConflictParentLocationsService;
-
-        function setAPIMetaData(metaInfo){
-            services = metaInfo;
-        }
-
-    	function setup(locationObj){
-
-            let deferred = $q.defer();
-
-            services.user.getReferenceLocationForMaster({body:JSON.stringify(locationObj)},identifyConflictParentLocationsServiceSuccess,identifyConflictParentLocationsServiceFailure);
-        
-            return deferred.promise;
-
-            function identifyConflictParentLocationsServiceSuccess(data){
-                deferred.resolve(data.obj);
-            }
-
-            function identifyConflictParentLocationsServiceFailure(error){
-                deferred.reject(error);
-            }
-
-    	}
-        
-    }
-
-})();
-(function() {
 	'use strict';
 
-	angular.module('myindia-app').controller("signUpController",
-			signUpController);
+	angular.module('myindia-app').controller("accountDetailsController",
+			accountDetailsController);
 
-	signUpController.$inject = [ '$state','validateElectorService','identifyConflictParentLocationsService','createAccountService','dataShareService' ];
+	accountDetailsController.$inject = [ '$state','signUpService','dataShareService'];
 
-	function signUpController($state,validateElectorService,identifyConflictParentLocationsService,createAccountService,dataShareService) {
+	function accountDetailsController($state,signUpService,dataShareService) {
+		var accountDetails = this;
+		accountDetails.userSignUpInfo = dataShareService.getUserSignUpInfo();
+
+		accountDetails.createAccount = createAccount;
+		accountDetails.passwordRegex = "^.*(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[~!@#$%^&*(),./?]).*$";
 		
-		var signUp = this;
-		signUp.validateElector = validateElector;
-		signUp.validationLocationForConflict = validationLocationForConflict;
-		signUp.createAccount = createAccount;
-		signUp.elector = {};
-		signUp.years = [];
-		signUp.numberOfYears = 100;
-		signUp.gender = 'Male';
-		signUp.passwordRegex = "^.*(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[~!@#$%^&*(),./?]).*$";
-		signUp.gotoSignIn = gotoSignIn;
-		signUp.occupations=["Engineering","Computer Professional","Farming","Fishing and Forestry","Education","Training and Library","Arts", "Media and Sports","Financial Services","Business","Military","Legal","Politician","Others"];
-		
-		populateYears();
-		
-		function gotoSignIn(){
-    		$state.go('signIn');
-    	}
-
-		function validateElector(){
-
-			// Make an API call to valdiate user
-			validateElectorService.validate(signUp.electorId,signUp.electorName,signUp.referenceName,signUp.gender,signUp.yob)
-									.then(validationSuccess).catch(validationFailure);
-
-			function validationSuccess(data){
-				signUp.elector.location = data;
-				$state.transitionTo('signUp.locationSetup');
-			}
-
-			function validationFailure(error){
-				alert(error);
-			}
-			
-		}
-
-		function validationLocationForConflict(){
-
-			if(signUp.elector.conflictParentLocations && signUp.parentLocation){
-				$state.transitionTo('signUp.accountSetup');
-			}
-
-			// Indetify if there are conflicting parents
-			identifyConflictParentLocationsService.setup(signUp.leafLocation).then(identifyConflictParentLocationsSuccess)
-												.catch(identifyConflictParentLocationsFailure);
-
-
-			function identifyConflictParentLocationsSuccess(data){
-				if(data.parentLocations && data.parentLocations.length == 1){
-					signUp.parentLocation = data.parentLocations[0];
-					$state.transitionTo('signUp.accountSetup');
-				}  
-				// If not there are multiple location populate them.
-				signUp.elector.conflictParentLocations = data.parentLocations;
-			}
-
-			function identifyConflictParentLocationsFailure(error){
-				alert(error);
-			}
-		}
-
 		function createAccount(){
 
-			createAccountService.create(signUp.elector.location.userGuid,signUp.userName,signUp.userPassword,signUp.leafLocation,signUp.parentLocation,signUp.emailAddress,signUp.occupation)
+			signUpService.createAccount(accountDetails.userSignUpInfo.politicianGuid,accountDetails.userSignUpInfo.userGuid,accountDetails.userName,accountDetails.userPassword,accountDetails.userSignUpInfo.leafLocation,accountDetails.userSignUpInfo.parentLocation,accountDetails.emailAddress,accountDetails.userSignUpInfo.occupation)
 								.then(createAccountSuccess).catch(createAccountFailure);
 
 			function createAccountSuccess(data){
 				dataShareService.setUserInfo(data);
 				$state.transitionTo('home');
 			}
-
 			function createAccountFailure(error){
 				alert(error);
 			}
-		}
-
-		function populateYears(){
-	    	let currentYear = new Date().getFullYear();
-		    // populate default ste of years.
-		    for(let start=0;start<signUp.numberOfYears;start++){
-		       signUp.years.push(currentYear--);
-		    }
 		}
 	}
 })();
 
 (function() {
-    'use strict';
+	'use strict';
 
-    angular.module('myindia-app').factory("validateElectorService", validateElectorService);
+	angular.module('myindia-app').controller("electorDetailsController",
+			electorDetailsController);
 
-    validateElectorService.$inject = ['$q','swaggerShareService'];
+	electorDetailsController.$inject = [ '$state', 'signUpService',
+			'dataShareService' ];
 
-    function validateElectorService($q,swaggerShareService) {
+	function electorDetailsController($state, signUpService, dataShareService) {
+		var electorDetails = this;
+		electorDetails.years = [];
+		electorDetails.numberOfYears = 100;
+		electorDetails.validateElector = validateElector;
+		electorDetails.gender = 'Male';
+		
+		populateYears();
+		function populateYears(){
+	    	let currentYear = new Date().getFullYear();
+		    
+		    for(let start=0;start<electorDetails.numberOfYears;start++){
+		    	electorDetails.years.push(currentYear--);
+		    }
+		}
+		
+		function validateElector(){
+			signUpService.validateElectorDetails(electorDetails.electorId,electorDetails.electorName,electorDetails.referenceName,electorDetails.gender,electorDetails.yob)
+									.then(getUserByVoterCardDetailsSuccess).catch(getUserByVoterCardDetailsFailure);
+			function getUserByVoterCardDetailsSuccess(data){
+				dataShareService.setUserSignUpInfo(data);
+				$state.transitionTo('signUp.locationSetup');
+			}
+			function getUserByVoterCardDetailsFailure(error){
+				alert(error);
+			}
+		}
+	}
+})();
 
-        var services = {};
+(function() {
+	'use strict';
 
-    	var validateElectorService = {
-    		validate : validate
-    	};
+	angular.module('myindia-app').controller("locationDetailsController",
+			locationDetailsController);
 
-        //Call and save the data
-        swaggerShareService.getAPIMetaData(setAPIMetaData);
+	locationDetailsController.$inject = [ '$state', 'signUpService',
+			'dataShareService' ];
 
-        return validateElectorService;
+	function locationDetailsController($state, signUpService, dataShareService) {
+		var locationDetails = this;
+		locationDetails.validationLocationForConflict = validationLocationForConflict;
+		locationDetails.userSignUpInfo =dataShareService.getUserSignUpInfo();
 
-        function setAPIMetaData(metaInfo){
-            services = metaInfo;
-        }
+		function validationLocationForConflict(){
 
-    	function validate(electorId,electorName,referenceName,gender,yob){
+			if(locationDetails.conflictParentLocations && locationDetails.parentLocation){
+				$state.transitionTo('signUp.accountSetup');
+			}
 
-            let requestBody = {
-                idCardNo: electorId,
-                userName: electorName,
-                referenceName: referenceName,
-                gender: gender,
-                yearOfBirth: yob
-            };
+			signUpService.validateLocationForConflict(locationDetails.leafLocation).then(validateLocationForConflictSuccess)
+												.catch(validateLocationForConflictFailure);
 
-            let deferred = $q.defer();
 
-            services.user.getUserByVoterCardDetails({body:JSON.stringify(requestBody)},validationSuccess,validationFailure);
-        
-            return deferred.promise;
+			function validateLocationForConflictSuccess(data){
+				if(data.parentLocations && data.parentLocations.length == 1){
+					locationDetails.parentLocation = data.parentLocations[0];
+					
+					let userSignUpInfo=dataShareService.getUserSignUpInfo();
+					userSignUpInfo.parentLocation=locationDetails.parentLocation;
+					userSignUpInfo.leafLocation=locationDetails.leafLocation;
+					userSignUpInfo.occupation=locationDetails.selectedOccupation;
+	    			dataShareService.setUserSignUpInfo(userSignUpInfo);
+					
+					if(locationDetails.selectedOccupation.occupation!="Politician"){
+						$state.transitionTo('signUp.accountSetup');
+					}else{
+						$state.transitionTo('signUp.politicianSelection');
+					}
+				}  
+				locationDetails.conflictParentLocations = data.parentLocations;
+			}
+			function validateLocationForConflictFailure(error){
+				alert(error);
+			}
+		}
+	}
+})();
+(function() {
+	'use strict';
 
-            function validationSuccess(data){
-                deferred.resolve(data.obj);
-            }
+	angular.module('myindia-app').controller("politicianSelectionController",
+			politicianSelectionController);
 
-            function validationFailure(error){
-                deferred.reject(error);
-            }
+	politicianSelectionController.$inject = [ '$state',
+			'signUpService', 'dataShareService' ];
 
+	function politicianSelectionController($state, signUpService,
+			dataShareService) {
+		
+		var politicianSelection = this;
+		politicianSelection.userGuid=dataShareService.getUserSignUpInfo().userGuid;
+		politicianSelection.politicians=[];
+		politicianSelection.selectPolitician=selectPolitician;
+		politicianSelection.getLocationSearchResults=getLocationSearchResults;
+		politicianSelection.selectElectedLocation=selectElectedLocation;
+		politicianSelection.validatePoliticianSelection=validatePoliticianSelection;
+		
+		politicianSelection.selectedPolitician={politicianGuid:6497,fullName:"ODITE.RAMANAIK",photoURL:null,currentDesignation:"Sarpanch"};
+		getMatchingPoliticians(politicianSelection.userGuid);
+		getAllParties();
+		
+		function selectPolitician(selectedPoliticianData){
+			politicianSelection.selectedPolitician=selectedPoliticianData;
+		}
+		
+		function getLocationSearchResults(){
+			if(politicianSelection.electedLocationSearchTerm.length>=3){
+				signUpService.getLocationSearchResults(politicianSelection.electedLocationSearchTerm).then(searchLocationsSuccess).catch(searchLocationsFailure);
+	    		function searchLocationsSuccess(data){
+	    			politicianSelection.searchLocations=data;
+	    		}
+	    		function searchLocationsFailure(error){
+	    			alert(error);
+	    		}
+			}
     	}
-        
-    }
+		function selectElectedLocation(searchLocation){
+			politicianSelection.selectedElectedLocation=searchLocation;
+			politicianSelection.electedLocationSearchTerm=searchLocation.locationName+" ("+searchLocation.locationType+")";
+			politicianSelection.searchLocations=undefined;
+		}
+		
+		function getAllParties(){
+			signUpService.getAllParties().then(getAllPartiesSuccess).catch(getAllPartiesFailure);
+    		function getAllPartiesSuccess(data){
+    			politicianSelection.parties=data;
+    		}
+    		function getAllPartiesFailure(error){
+    			alert(error);
+    		}
+		}
+		
+		function getMatchingPoliticians(userGuid){
+			signUpService.getMatchingPoliticiansByName(userGuid).then(getMatchingPoliticiansSuccess).catch(getMatchingPoliticiansFailure);
+    		function getMatchingPoliticiansSuccess(data){
+    			politicianSelection.politicians=data;
+    		}
+    		function getMatchingPoliticiansFailure(error){
+    			alert(error);
+    		}
+		}
+		
+		function validatePoliticianSelection(){
+			signUpService.validatePoliticianSelection(politicianSelection.selectedPolitician.politicianGuid,politicianSelection.selectedElectedLocation.locationGuid,politicianSelection.politicianParty.guid).then(validatePoliticianSelectionSuccess).catch(validatePoliticianSelectionFailure);
+    		function validatePoliticianSelectionSuccess(data){
+    			let userSignUpInfo=dataShareService.getUserSignUpInfo();
+    			userSignUpInfo.politicianGuid=politicianSelection.selectedPolitician.politicianGuid;
+    			dataShareService.setUserSignUpInfo(locationInfo);
+    			$state.transitionTo('signUp.accountSetup');
+    		}
+    		function validatePoliticianSelectionFailure(error){
+    			alert(error);
+    		}
+		}
+		
+	}
+})();
+
+(function() {
+	'use strict';
+
+	angular.module('myindia-app').controller("signUpController",
+			signUpController);
+
+	signUpController.$inject = [ '$state'];
+
+	function signUpController($state) {
+
+		var signUp = this;
+		signUp.gotoSignIn = gotoSignIn;
+
+		function gotoSignIn() {
+			$state.go('signIn');
+		}
+	}
+})();
+
+(function() {
+	'use strict';
+
+	angular.module('myindia-app').factory("signUpService", signUpService);
+
+	signUpService.$inject = [ '$q', 'swaggerShareService','refreshAccessTokenService' ];
+
+	function signUpService($q, swaggerShareService,refreshAccessTokenService) {
+
+		var services = {};
+
+		var signUpService = {
+			validateElectorDetails : validateElectorDetails,
+			validateLocationForConflict : validateLocationForConflict,
+			createAccount : createAccount,
+			getLocationSearchResults : getLocationSearchResults,
+			getAllParties : getAllParties,
+			getMatchingPoliticiansByName : getMatchingPoliticiansByName,
+			validatePoliticianSelection : validatePoliticianSelection
+		};
+
+		let
+		swaggerPromise = swaggerShareService.getAPIMetaData(setAPIMetaData);
+
+		return signUpService;
+
+		function setAPIMetaData(metaInfo) {
+			services = metaInfo;
+		}
+
+		function validateElectorDetails(electorId, electorName, referenceName,
+				gender, yob) {
+
+			let
+			requestBody = {
+				idCardNo : electorId,
+				electorName : electorName,
+				referenceName : referenceName,
+				gender : gender,
+				yearOfBirth : yob
+			};
+
+			let
+			deferred = $q.defer();
+
+			services.signUp.validateElectorDetails({
+				body : JSON.stringify(requestBody)
+			}, validateElectorDetailsSuccess, validateElectorDetailsFailure);
+
+			return deferred.promise;
+
+			function validateElectorDetailsSuccess(data) {
+				deferred.resolve(data.obj);
+			}
+
+			function validateElectorDetailsFailure(error) {
+				deferred.reject(error);
+			}
+
+		}
+
+		function validateLocationForConflict(locationObj) {
+
+			let
+			deferred = $q.defer();
+
+			services.signUp.validateLocationForConflict({
+				body : JSON.stringify(locationObj)
+			}, validationLocationForConflictSuccess,
+					validationLocationForConflictFailure);
+
+			return deferred.promise;
+
+			function validationLocationForConflictSuccess(data) {
+				deferred.resolve(data.obj);
+			}
+
+			function validationLocationForConflictFailure(error) {
+				deferred.reject(error);
+			}
+
+		}
+
+		function getLocationSearchResults(searchTerm) {
+
+			let
+			deferred = $q.defer();
+
+			services.signUp.getSearchResultsByLocationName({
+				"searchTerm" : searchTerm
+			}, searchLocationsSuccess, searchLocationsFailure);
+
+			return deferred.promise;
+
+			function searchLocationsSuccess(data) {
+				deferred.resolve(data.obj);
+			}
+
+			function searchLocationsFailure(error) {
+				deferred.reject(error);
+			}
+
+		}
+
+		function getAllParties() {
+
+			let
+			deferred = $q.defer();
+			if (swaggerPromise) {
+				swaggerPromise.then(function() {
+					services.party.getAllParties({}, getAllPartiesSuccess,
+							getAllPartiesFailure);
+					swaggerPromise = undefined;
+				})
+			} else {
+				services.signUp.getAllParties({}, getAllPartiesSuccess,
+						getAllPartiesFailure);
+			}
+
+			return deferred.promise;
+
+			function getAllPartiesSuccess(data) {
+				deferred.resolve(data.obj);
+			}
+
+			function getAllPartiesFailure(error) {
+				deferred.reject(error);
+			}
+		}
+
+		function getMatchingPoliticiansByName(userGuid) {
+
+			let
+			deferred = $q.defer();
+			if (swaggerPromise) {
+				swaggerPromise.then(function() {
+					services.user.getPoliticiansByName({
+						userGuid : userGuid
+					}, getMatchingPoliticiansSuccess,
+							getMatchingPoliticiansFailure);
+					swaggerPromise = undefined;
+				})
+			} else {
+				services.signUp
+						.getPoliticiansByName({
+							userGuid : userGuid
+						}, getMatchingPoliticiansSuccess,
+								getMatchingPoliticiansFailure);
+			}
+
+			return deferred.promise;
+
+			function getMatchingPoliticiansSuccess(data) {
+				deferred.resolve(data.obj);
+			}
+
+			function getMatchingPoliticiansFailure(error) {
+				deferred.reject(error);
+			}
+		}
+
+		function validatePoliticianSelection(politicianGuid, locationGuid,
+				partyGuid) {
+
+			let
+			deferred = $q.defer();
+
+			let
+			requestBody = {
+				politicianGuid : politicianGuid,
+				locationGuid : locationGuid,
+				partyGuid : partyGuid
+			}
+
+			services.signUp.validatePoliticianSelectionByLocationParty({
+				body : JSON.stringify(requestBody)
+			}, validatePoliticianSelectionSuccess,
+					validatePoliticianSelectionFailure);
+
+			return deferred.promise;
+
+			function validatePoliticianSelectionSuccess(data) {
+				deferred.resolve(data.obj);
+			}
+
+			function validatePoliticianSelectionFailure(error) {
+				deferred.reject(error);
+			}
+
+		}
+
+		function createAccount(politicianGuid, userGuid, userName, password,
+				childLocation, parentLocation, emailAddress, occupation) {
+
+			let
+			requestBody = {
+				politicianGuid : politicianGuid,
+				loginUserName : userName,
+				password : password,
+				userGuid : userGuid,
+				childLocation : childLocation,
+				parentLocation : parentLocation,
+				emailAddress : emailAddress,
+				occupation : occupation
+			};
+
+			let
+			deferred = $q.defer();
+
+			services.signUp.createAccount({
+				body : JSON.stringify(requestBody)
+			}, createAccountSuccess, createAccountFailure);
+
+			return deferred.promise;
+
+			function createAccountSuccess(data) {
+				// Process cookie into swagger
+				swaggerShareService
+						.setAuthorization(data.obj.accessToken,
+								data.obj.refreshToken,
+								data.obj.expirationTimeInSeconds);
+
+				// Start token expiration timer
+				refreshAccessTokenService.startTokenExpiryTimer(sessionStorage
+						.getItem("expires_in"));
+
+				deferred.resolve(data.obj);
+			}
+
+			function createAccountFailure(error) {
+				deferred.reject(error);
+			}
+
+		}
+
+	}
+
+})();
+(function() {
+	'use strict';
+
+	angular.module('myindia-app').controller("userController", userController);
+	userController.$inject = [ '$scope', 'userService' ];
+
+	function userController($scope, userService) {
+		var user = this;
+	}
+})();
+
+(function() {
+	'use strict';
+
+	angular.module('myindia-app').factory("userService", userService);
+
+	userService.$inject = [ '$q', 'swaggerShareService' ];
+
+	function userService($q, swaggerShareService) {
+
+		var services = {};
+
+		var userService = {
+
+		};
+
+		// // Call and save the data
+		let
+		swaggerPromise = swaggerShareService.getAPIMetaData(setAPIMetaData);
+
+		return userService;
+
+		function setAPIMetaData(metaInfo) {
+			services = metaInfo;
+		}
+
+	}
 
 })();
 

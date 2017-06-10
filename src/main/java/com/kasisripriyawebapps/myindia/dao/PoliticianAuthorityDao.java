@@ -1,7 +1,6 @@
 package com.kasisripriyawebapps.myindia.dao;
 
 import java.util.List;
-import java.util.Set;
 
 import com.kasisripriyawebapps.myindia.entity.PoliticianAuthority;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;

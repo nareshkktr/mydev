@@ -36,7 +36,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers("/api/account/forgotPasswordUserValidation").antMatchers("/api/account/refreshAccessToken")
 				.antMatchers("/api/swagger.json").antMatchers("/api/locationImportExport/*")
 				.antMatchers("/api/userImportExport/*").antMatchers("/api/politicianImportExport/*")
-				.antMatchers("/api/location/*").antMatchers("/api/user/*").antMatchers("/api/search/*")
+				.antMatchers("/api/location/*").antMatchers("/api/signUp/*").antMatchers("/api/search/*")
 				.antMatchers("/api/party/*").antMatchers("/api/account/resetPassword");
 	}
 

@@ -20,7 +20,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Problem.
  */
@@ -168,27 +167,26 @@ public class Problem implements Serializable {
 	/** The updated by. */
 	@Column(name = "MODIFIED_BY")
 	private Long updatedBy;
-	
+
 	/** The following count. */
 	@Column(name = "FOLLOWING_COUNT")
-	private Integer followingCount ;
-	
+	private Integer followingCount;
+
 	/** The share count. */
 	@Column(name = "SHARE_COUNT")
 	private Integer shareCount;
-	
+
 	/** The Support count. */
 	@Column(name = "SUPPORT_COUNT")
 	private Integer supportCount;
-	
+
 	/** The view count. */
 	@Column(name = "VIEW_COUNT")
 	private Integer viewCount;
-	
+
 	/** The popularity count. */
 	@Column(name = "POPULARITY_COUNT")
 	private Integer popularityCount;
-	
 
 	@OneToMany(mappedBy = "problem", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<ProblemImage> problemImages = new ArrayList<ProblemImage>(0);
@@ -202,6 +200,18 @@ public class Problem implements Serializable {
 
 	@Column(name = "TAGS")
 	private String tags;
+
+	@OneToMany(mappedBy = "problem", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<ProblemAttachment> problemAttachments = new ArrayList<ProblemAttachment>(0);
+
+	@OneToMany(mappedBy = "problem", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<ProblemAttachmentFolder> problemAttachmentFolders = new ArrayList<ProblemAttachmentFolder>(0);
+
+	@OneToMany(mappedBy = "problem", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<ProblemAlbum> problemAlbums = new ArrayList<ProblemAlbum>(0);
+
+	@OneToMany(mappedBy = "problem", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<ProblemOwner> problemOwners = new ArrayList<ProblemOwner>(0);
 
 	public Long getGuid() {
 		return guid;
@@ -360,7 +370,38 @@ public class Problem implements Serializable {
 	public void setPopularityCount(Integer popularityCount) {
 		this.popularityCount = popularityCount;
 	}
-	
-	
 
+	public List<ProblemAttachment> getProblemAttachments() {
+		return problemAttachments;
+	}
+
+	public void setProblemAttachments(List<ProblemAttachment> problemAttachments) {
+		this.problemAttachments = problemAttachments;
+	}
+
+	public List<ProblemAttachmentFolder> getProblemAttachmentFolders() {
+		return problemAttachmentFolders;
+	}
+
+	public void setProblemAttachmentFolders(List<ProblemAttachmentFolder> problemAttachmentFolders) {
+		this.problemAttachmentFolders = problemAttachmentFolders;
+	}
+
+	public List<ProblemAlbum> getProblemAlbums() {
+		return problemAlbums;
+	}
+
+	public void setProblemAlbums(List<ProblemAlbum> problemAlbums) {
+		this.problemAlbums = problemAlbums;
+	}
+
+	public List<ProblemOwner> getProblemOwners() {
+		return problemOwners;
+	}
+
+	public void setProblemOwners(List<ProblemOwner> problemOwners) {
+		this.problemOwners = problemOwners;
+	}
+
+	
 }

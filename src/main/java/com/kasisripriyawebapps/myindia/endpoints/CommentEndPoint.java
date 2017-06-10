@@ -48,60 +48,60 @@ public class CommentEndPoint extends BaseEndPoint {
 		Long commentGuid = null;
 		LoggedInUserDetails userDetails = getLoggedInUserDetails();
 
-		commentRequest.setCommentorObjectGuid(userDetails.getGuid());
-		commentRequest.setCommentorObjectType(userDetails.getType());
-
 		if (validateCreateUpdateCommentRequest(commentRequest)) {
-			commentGuid = commentService.postComment(commentRequest);
+			commentGuid = commentService.postComment(commentRequest, userDetails);
 		}
 		SaveOrUpdateDeleteObjectResponse comemntObjResponse = new SaveOrUpdateDeleteObjectResponse(commentGuid);
 		return Response.status(Status.OK).entity(comemntObjResponse).build();
 	}
-	
+
 	@GET
 	@ApiOperation(value = EndPointConstants.GET_FIRST_LEVEL_COMMENTS_API_VALUE, nickname = EndPointConstants.GET_FIRST_LEVEL_COMMENTS_API_NICKNAME, httpMethod = EndPointConstants.HTTP_GET, notes = EndPointConstants.GET_FIRST_LEVEL_COMMENTS_API_DESCRIPTION)
 	@Path(EndPointConstants.GET_FIRST_LEVEL_COMMENTS_REQUEST_MAPPING)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getFirstLevelComments(@QueryParam("objectGuid") Long objectGuid,@QueryParam("pageNo") Integer pageNo,@QueryParam("limit") Integer limit) throws InternalServerException, PreConditionRequiredException, RecordNotFoundException {
-		
+	public Response getFirstLevelComments(@QueryParam("objectGuid") Long objectGuid,
+			@QueryParam("pageNo") Integer pageNo, @QueryParam("limit") Integer limit)
+			throws InternalServerException, PreConditionRequiredException, RecordNotFoundException {
+
 		List<CommentResponse> comments = null;
-		
+
 		if (objectGuid != null) {
-			comments = commentService.getFirstLevelComemnts(objectGuid,pageNo,limit);
-		}else{
+			comments = commentService.getFirstLevelComemnts(objectGuid, pageNo, limit);
+		} else {
 			throw new PreConditionRequiredException(ExceptionConstants.REQUEST_NOT_NULL);
 		}
-		
+
 		return Response.status(Status.OK).entity(comments).build();
 	}
-	
+
 	@GET
 	@ApiOperation(value = EndPointConstants.GET_SECOND_LEVEL_COMMENTS_API_VALUE, nickname = EndPointConstants.GET_SECOND_LEVEL_COMMENTS_API_NICKNAME, httpMethod = EndPointConstants.HTTP_GET, notes = EndPointConstants.GET_SECOND_LEVEL_COMMENTS_API_DESCRIPTION)
 	@Path(EndPointConstants.GET_SECOND_LEVEL_COMMENTS_REQUEST_MAPPING)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getSecondLevelComments(@QueryParam("objectGuid") Long objectGuid,@QueryParam("parentCommentId") Long parentCommentId,@QueryParam("pageNo") Integer pageNo,@QueryParam("limit") Integer limit) throws InternalServerException, PreConditionRequiredException, RecordNotFoundException {
-		
+	public Response getSecondLevelComments(@QueryParam("objectGuid") Long objectGuid,
+			@QueryParam("parentCommentId") Long parentCommentId, @QueryParam("pageNo") Integer pageNo,
+			@QueryParam("limit") Integer limit)
+			throws InternalServerException, PreConditionRequiredException, RecordNotFoundException {
+
 		List<CommentResponse> comments = null;
-		
-		//Validate input
-		if(pageNo == null){
-			pageNo=ApplicationConstants.PAGE_START;
+
+		// Validate input
+		if (pageNo == null) {
+			pageNo = ApplicationConstants.PAGE_START;
 		}
-		if(limit == null){
+		if (limit == null) {
 			limit = ApplicationConstants.PAGE_LIMIT;
 		}
-		
+
 		if (objectGuid != null && parentCommentId != null) {
-			comments = commentService.getSecondLevelComments(objectGuid,parentCommentId,pageNo,limit);
-		}else{
+			comments = commentService.getSecondLevelComments(objectGuid, parentCommentId, pageNo, limit);
+		} else {
 			throw new PreConditionRequiredException(ExceptionConstants.REQUEST_NOT_NULL);
 		}
-		
+
 		return Response.status(Status.OK).entity(comments).build();
 	}
-	
-	
-	
+
 	private boolean validateCreateUpdateCommentRequest(CommentRequest commentRequest)
 			throws PreConditionFailedException, PreConditionRequiredException {
 		if (commentRequest == null) {

@@ -1,28 +1,44 @@
-<div class="row" id="comments_list_container">
-	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 comment_container"
-		ng-repeat="eachComment in discussions.comments">
-		<div class="comment">
-			<div class="row">
-				<div class="col-lg-1 col-md-2 commentor_img">
-					<img ng-src="{{eachComment.commentor.userImage}}" />
-				</div>
-				<div class="col-lg-11 col-md-10 commentor_name_date">
-					<div class="commentor_name">
-						<label> {{eachComment.commentor.name}} </label>
+<div class="problem_tab_content_container">
+	<div class="row problem_tab_header_content">
+		<div
+			class="col-lg-12 col-md-12 col-sm-12 col-xs-12 problem_tab_header_name">
+			<p>Discussion</p>
+		</div>
+	</div>
+	<div class="problem_tab_body_content">
+		<div class="row" id="comments_list_container">
+			<div
+				class="col-lg-12 col-md-12 col-sm-12 col-xs-12 comment_container"
+				ng-repeat="eachComment in discussions.comments">
+				<div class="comment">
+					<div class="row">
+						<div class="col-lg-1 col-md-2 commentor_img">
+							<user-profile-image-display ng-if="eachComment.commentor"
+								image-url="eachComment.commentor.userImage"
+								name="eachComment.commentor.name"
+								label-class="discussions.userProfileLabelClass"
+								image-class="discussions.userProfileImageClass"></user-profile-image-display>
+						</div>
+						<div class="col-lg-11 col-md-10 commentor_name_date">
+							<div class="commentor_name">
+								<label> {{eachComment.commentor.name}} </label>
+							</div>
+							<div class="commentor_date">
+								<label> {{eachComment.createdTimeStamp}} </label>
+							</div>
+						</div>
 					</div>
-					<div class="commentor_date">
-						<label> {{eachComment.createdTimeStamp}} </label>
+					<div class="row">
+						<div class="col-lg-1 col-md-2">&nbsp;</div>
+						<div class="col-lg-11 col-md-10 comment_text">
+							<p>{{eachComment.commentText}}</p>
+						</div>
 					</div>
+					<comment-actions object-type="discussions.objectType"
+						object-guid="discussions.problemDetails.guid"
+						object-data="eachComment"></comment-actions>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-lg-1 col-md-2">&nbsp;</div>
-				<div class="col-lg-11 col-md-10 comment_text">
-					<p>{{eachComment.commentText}}</p>
-				</div>
-			</div>
-			<comment-actions object-type="discussions.objectType"
-				object-guid="discussions.problemDetails.guid"></comment-actions>
 		</div>
 	</div>
 </div>

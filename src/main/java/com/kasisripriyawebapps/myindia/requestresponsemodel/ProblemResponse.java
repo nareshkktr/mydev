@@ -1,9 +1,8 @@
 package com.kasisripriyawebapps.myindia.requestresponsemodel;
 
 import java.sql.Timestamp;
+import java.util.List;
 
-import com.kasisripriyawebapps.myindia.entity.LocationMaster;
-import com.kasisripriyawebapps.myindia.entity.ProblemType;
 import com.kasisripriyawebapps.myindia.solr.entity.SolrLocationMaster;
 
 public class ProblemResponse {
@@ -22,14 +21,16 @@ public class ProblemResponse {
 	private Timestamp createdTimeStamp;
 	private Boolean escalationEnabled;
 	private BaseUserInformation createdBy;
-	private PoliticianResponse owner;
 	private ProblemTypeResponse problemType;
 	private Integer followingCount;
 	private Integer supportCount;
 	private Integer viewCount;
 	private Integer shareCount;
 	private Integer popularityCount;
-	
+	private String peopleEffected;
+	private String moneyAtStake;
+	private BaseUserInformation currentlyWith;
+	private List<BaseUserInformation> contributors;
 
 	public Long getGuid() {
 		return guid;
@@ -56,6 +57,10 @@ public class ProblemResponse {
 	}
 
 	public String getProblemLongDescription() {
+		problemLongDescription = problemLongDescription.startsWith("'") ? problemLongDescription.substring(1)
+				: problemLongDescription;
+		problemLongDescription = problemLongDescription.endsWith("'")
+				? problemLongDescription.substring(0, problemLongDescription.length() - 1) : problemLongDescription;
 		return problemLongDescription;
 	}
 
@@ -143,16 +148,8 @@ public class ProblemResponse {
 		this.problemType = problemType;
 	}
 
-	public PoliticianResponse getOwner() {
-		return owner;
-	}
-
-	public void setOwner(PoliticianResponse owner) {
-		this.owner = owner;
-	}
-
 	public String getSeverityLevelCode() {
-		if(this.problemSeverity != null)
+		if (this.problemSeverity != null)
 			this.severityLevelCode = this.problemSeverity.equalsIgnoreCase("Critical") ? "C"
 					: this.problemSeverity.equalsIgnoreCase("High") ? "H"
 							: this.problemSeverity.equalsIgnoreCase("Medium") ? "M" : "L";
@@ -164,6 +161,9 @@ public class ProblemResponse {
 	}
 
 	public Integer getFollowingCount() {
+		if (followingCount == null) {
+			followingCount = 0;
+		}
 		return followingCount;
 	}
 
@@ -172,6 +172,9 @@ public class ProblemResponse {
 	}
 
 	public Integer getSupportCount() {
+		if (supportCount == null) {
+			supportCount = 0;
+		}
 		return supportCount;
 	}
 
@@ -180,6 +183,9 @@ public class ProblemResponse {
 	}
 
 	public Integer getViewCount() {
+		if (viewCount == null) {
+			viewCount = 0;
+		}
 		return viewCount;
 	}
 
@@ -188,6 +194,9 @@ public class ProblemResponse {
 	}
 
 	public Integer getShareCount() {
+		if (shareCount == null) {
+			shareCount = 0;
+		}
 		return shareCount;
 	}
 
@@ -196,11 +205,64 @@ public class ProblemResponse {
 	}
 
 	public Integer getPopularityCount() {
+		if (popularityCount == null) {
+			popularityCount = 0;
+		}
 		return popularityCount;
 	}
 
 	public void setPopularityCount(Integer popularityCount) {
 		this.popularityCount = popularityCount;
+	}
+
+	public String getPeopleEffected() {
+		if (amountInvolved.longValue() == 1) {
+			peopleEffected = ">1000";
+		} else if (amountInvolved.longValue() == 2) {
+			peopleEffected = "<1000";
+		} else if (amountInvolved.longValue() == 3) {
+			peopleEffected = "<100";
+		} else if (amountInvolved.longValue() == 4) {
+			peopleEffected = "<5";
+		}
+		return peopleEffected;
+	}
+
+	public void setPeopleEffected(String peopleEffected) {
+		this.peopleEffected = peopleEffected;
+	}
+
+	public String getMoneyAtStake() {
+		if (amountInvolved.longValue() == 1) {
+			moneyAtStake = ">50,00,000";
+		} else if (amountInvolved.longValue() == 2) {
+			moneyAtStake = "<50,00,000";
+		} else if (amountInvolved.longValue() == 3) {
+			moneyAtStake = "<10,00,000";
+		} else if (amountInvolved.longValue() == 4) {
+			moneyAtStake = "1,00,000";
+		}
+		return moneyAtStake;
+	}
+
+	public void setMoneyAtStake(String moneyAtStake) {
+		this.moneyAtStake = moneyAtStake;
+	}
+
+	public BaseUserInformation getCurrentlyWith() {
+		return currentlyWith;
+	}
+
+	public void setCurrentlyWith(BaseUserInformation currentlyWith) {
+		this.currentlyWith = currentlyWith;
+	}
+
+	public List<BaseUserInformation> getContributors() {
+		return contributors;
+	}
+
+	public void setContributors(List<BaseUserInformation> contributors) {
+		this.contributors = contributors;
 	}
 
 }

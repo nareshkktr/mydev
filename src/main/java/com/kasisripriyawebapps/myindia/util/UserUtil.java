@@ -46,7 +46,7 @@ public class UserUtil {
 
 				ElectroralRollPDFHeaderData pdfHeaderData = getPDFHeaderData(eachURLData.getPdfUrl());
 
-				for (int i = 1; i <= 0; i++) {
+				for (int i = 1; i <= noOfPages; i++) {
 					if (i < 3) {
 						continue;
 					}

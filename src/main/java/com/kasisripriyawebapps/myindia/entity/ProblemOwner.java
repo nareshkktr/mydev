@@ -43,11 +43,87 @@ public class ProblemOwner implements Serializable {
 	private Long modifiedBy;
 	
 	@Column(name = "CATEGORY")
-	private Long category;
+	private String category;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "PROBLEM_GUID")
 	private Problem problem;
 
+	@Column(name = "ACCOUNT_ID")
+	private Long accountId;
 
+	public Long getGuid() {
+		return guid;
+	}
+
+	public void setGuid(Long guid) {
+		this.guid = guid;
+	}
+
+	public String getImageURL() {
+		return imageURL;
+	}
+
+	public void setImageURL(String imageURL) {
+		this.imageURL = imageURL;
+	}
+
+	public Timestamp getCreatedTimeStamp() {
+		return createdTimeStamp;
+	}
+
+	public void setCreatedTimeStamp(Timestamp createdTimeStamp) {
+		this.createdTimeStamp = createdTimeStamp;
+	}
+
+	public Long getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(Long createdBy) {
+		this.createdBy = createdBy;
+	}
+
+	public Timestamp getModifiedTimestamp() {
+		return modifiedTimestamp;
+	}
+
+	public void setModifiedTimestamp(Timestamp modifiedTimestamp) {
+		this.modifiedTimestamp = modifiedTimestamp;
+	}
+
+	public Long getModifiedBy() {
+		return modifiedBy;
+	}
+
+	public void setModifiedBy(Long modifiedBy) {
+		this.modifiedBy = modifiedBy;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public Problem getProblem() {
+		return problem;
+	}
+
+	public void setProblem(Problem problem) {
+		this.problem = problem;
+	}
+
+	public Long getAccountId() {
+		return accountId;
+	}
+
+	public void setAccountId(Long accountId) {
+		this.accountId = accountId;
+	}
+
+	
+	
 }

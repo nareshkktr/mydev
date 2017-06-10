@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CommentResponse {
-	
+
 	/** The guid. */
 	private Long guid;
 
@@ -29,18 +29,21 @@ public class CommentResponse {
 	/** The created time stamp. */
 	@JsonFormat(pattern = "EEE, MMM dd yyyy HH:mm:ss")
 	private Timestamp createdTimeStamp;
-	
+
 	/** The created time stamp. */
 	@JsonFormat(pattern = "EEE, MMM dd yyyy HH:mm:ss")
 	private Timestamp updatedTimeStamp;
-	
+
 	/** The number of replies for the given comment. */
 	private Integer replyCount;
-	
+
 	/** Type of comment **/
 	private String commentType;
-	
-	
+
+	private Integer thumbsUpCount = 0;
+	private Integer thumbsDownCount = 0;
+	private Integer shareCount = 0;
+	private Integer reportAbuseCount = 0;
 
 	public CommentResponse() {
 		super();
@@ -62,8 +65,6 @@ public class CommentResponse {
 		this.replyCount = replyCount;
 		this.commentType = commentType;
 	}
-
-
 
 	public Long getGuid() {
 		return guid;
@@ -143,6 +144,38 @@ public class CommentResponse {
 
 	public void setCommentType(String commentType) {
 		this.commentType = commentType;
+	}
+
+	public Integer getThumbsUpCount() {
+		return thumbsUpCount;
+	}
+
+	public void setThumbsUpCount(Integer thumbsUpCount) {
+		this.thumbsUpCount = thumbsUpCount;
+	}
+
+	public Integer getThumbsDownCount() {
+		return thumbsDownCount;
+	}
+
+	public void setThumbsDownCount(Integer thumbsDownCount) {
+		this.thumbsDownCount = thumbsDownCount;
+	}
+
+	public Integer getShareCount() {
+		return shareCount;
+	}
+
+	public void setShareCount(Integer shareCount) {
+		this.shareCount = shareCount;
+	}
+
+	public Integer getReportAbuseCount() {
+		return reportAbuseCount;
+	}
+
+	public void setReportAbuseCount(Integer reportAbuseCount) {
+		this.reportAbuseCount = reportAbuseCount;
 	}
 
 }

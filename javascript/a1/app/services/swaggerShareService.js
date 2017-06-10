@@ -1,77 +1,84 @@
 (function() {
-    'use strict';
+	'use strict';
 
-    angular.module('myindia-app').factory("swaggerShareService", swaggerShareService);
+	angular.module('myindia-app').factory("swaggerShareService",
+			swaggerShareService);
 
-    swaggerShareService.$inject = ['$q'];
+	swaggerShareService.$inject = [ '$q' ];
 
-    function swaggerShareService($q) {
+	function swaggerShareService($q) {
 
-        var apiMetaData = {};
+		var apiMetaData = {};
 
-        var hostName = 'http://localhost:8080/';
+		var hostName = window.location.origin+"/";
 
-    	var swaggerShareService = {
-    		getAPIMetaData : getAPIMetaData,
-            setAuthorization: setAuthorization
-    	};
+		var swaggerShareService = {
+			getAPIMetaData : getAPIMetaData,
+			setAuthorization : setAuthorization
+		};
 
-        return swaggerShareService;
+		return swaggerShareService;
 
-    	function getAPIMetaData(setMetaData){
+		function getAPIMetaData(setMetaData) {
 
-    		if(apiMetaData.metaInfo){
-    			setMetaData(apiMetaData.metaInfo);
-    		}else{
-                let swaggerPromise = fetchAPIMetaData(hostName);
-    			swaggerPromise.then(function(data){
-    				apiMetaData.metaInfo = data;
-                    setAuthorization();
-    				setMetaData(apiMetaData.metaInfo);
-    			});
-                return swaggerPromise;
-    		}
+			if (apiMetaData.metaInfo) {
+				setMetaData(apiMetaData.metaInfo);
+			} else {
+				let
+				swaggerPromise = fetchAPIMetaData(hostName);
+				swaggerPromise.then(function(data) {
+					apiMetaData.metaInfo = data;
+					setAuthorization();
+					setMetaData(apiMetaData.metaInfo);
+				});
+				return swaggerPromise;
+			}
 
-    	}
+		}
 
-    	function fetchAPIMetaData(hostName){
-    		
-    		let deferred = $q.defer();
+		function fetchAPIMetaData(hostName) {
 
-    		let swagger = new SwaggerClient({
-                url: hostName+'api/swagger.json',
-                success: function() {
-                    deferred.resolve(swagger);
-                },error: function(error){
-                	deferred.reject(error);
-                }
-        	});
+			let
+			deferred = $q.defer();
 
-        	return deferred.promise;	
+			let
+			swagger = new SwaggerClient({
+				url : hostName + 'api/swagger.json',
+				success : function() {
+					deferred.resolve(swagger);
+				},
+				error : function(error) {
+					deferred.reject(error);
+				}
+			});
 
-    	}
+			return deferred.promise;
 
-    	function setAuthorization(token,refreshToken,expiresIn){
+		}
 
-            let accessToken;
+		function setAuthorization(token, refreshToken, expiresIn) {
 
-            if(token){
-                accessToken = token;
-                sessionStorage.setItem("access_token",accessToken);
-                sessionStorage.setItem("refresh_token",refreshToken);
-                sessionStorage.setItem("expires_in",expiresIn);
-            }else if(sessionStorage.getItem("access_token")){
-                accessToken = sessionStorage.getItem("access_token");   
-            }
+			let
+			accessToken;
 
-            if(accessToken && apiMetaData.metaInfo){
-                var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization( "Authorization", "Bearer " + accessToken, "header" );
-                apiMetaData.metaInfo.clientAuthorizations.remove("bearer");
-                apiMetaData.metaInfo.clientAuthorizations.add("bearer",apiKeyAuth);
-            }
-        }
+			if (token) {
+				accessToken = token;
+				sessionStorage.setItem("access_token", accessToken);
+				sessionStorage.setItem("refresh_token", refreshToken);
+				sessionStorage.setItem("expires_in", expiresIn);
+			} else if (sessionStorage.getItem("access_token")) {
+				accessToken = sessionStorage.getItem("access_token");
+			}
 
-        
-    }
+			if (accessToken && apiMetaData.metaInfo) {
+				var apiKeyAuth = new SwaggerClient.ApiKeyAuthorization(
+						"Authorization", "Bearer " + accessToken, "header");
+				apiMetaData.metaInfo.clientAuthorizations.remove("bearer");
+				apiMetaData.metaInfo.clientAuthorizations.add("bearer",
+						apiKeyAuth);
+			}
+		}
+
+	}
 
 })();

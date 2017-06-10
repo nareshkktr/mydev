@@ -348,7 +348,7 @@ public class BaseDaoImpl<PK extends Serializable, T> implements BaseDao<PK, T> {
 	@Override
 	public List<T> getAllByPage(SortCriteriaData sortCriteria, Integer pageNo, Integer pageLimit)
 			throws InternalServerException {
-		Criteria criteria = getCriteria();
+		Criteria criteria = getCriteria(sortCriteria);
 		criteria.setFirstResult((pageNo - 1) * pageLimit);
 		criteria.setMaxResults(pageLimit);
 		return criteria.list();
@@ -478,5 +478,10 @@ public class BaseDaoImpl<PK extends Serializable, T> implements BaseDao<PK, T> {
 			return (T) objects.get(0);
 		}
 		return null;
+	}
+
+	@Override
+	public void merge(T entity) throws InternalServerException {
+		getSession().merge(entity);
 	}
 }

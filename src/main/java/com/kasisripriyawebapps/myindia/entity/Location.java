@@ -4,6 +4,8 @@
 package com.kasisripriyawebapps.myindia.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,7 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 // TODO: Auto-generated Javadoc
@@ -81,8 +83,8 @@ public class Location implements Serializable {
 	@Column(name = "LOCATION_VILLAGE")
 	private Long locationVillage;
 
-	@OneToOne(fetch = FetchType.LAZY, mappedBy = "nativeLocation", cascade = CascadeType.ALL)
-	private UserInfo userInfo;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "nativeLocation", cascade = CascadeType.ALL)
+	private List<UserInfo> locationUsers =new ArrayList<UserInfo>(0);;
 
 	public Long getGuid() {
 		return guid;
@@ -156,12 +158,14 @@ public class Location implements Serializable {
 		this.locationVillage = locationVillage;
 	}
 
-	public UserInfo getUserInfo() {
-		return userInfo;
+	
+
+	public List<UserInfo> getLocationUsers() {
+		return locationUsers;
 	}
 
-	public void setUserInfo(UserInfo userInfo) {
-		this.userInfo = userInfo;
+	public void setLocationUsers(List<UserInfo> locationUsers) {
+		this.locationUsers = locationUsers;
 	}
 
 	public Long getLocationCountry() {

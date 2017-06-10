@@ -22,7 +22,11 @@ import com.kasisripriyawebapps.myindia.dao.LocationMasterDao;
 import com.kasisripriyawebapps.myindia.dao.PartyDao;
 import com.kasisripriyawebapps.myindia.entity.LocationMaster;
 import com.kasisripriyawebapps.myindia.entity.Party;
+import com.kasisripriyawebapps.myindia.entity.Problem;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
+import com.kasisripriyawebapps.myindia.exception.RecordNotFoundException;
+import com.kasisripriyawebapps.myindia.requestresponsemodel.PartyResponse;
+import com.kasisripriyawebapps.myindia.requestresponsemodel.ProblemResponse;
 import com.kasisripriyawebapps.myindia.service.PartyService;
 import com.kasisripriyawebapps.myindia.util.CommonUtil;
 
@@ -194,4 +198,24 @@ public class PartyServiceImpl implements PartyService {
 		driver.quit();
 	}
 
+	@Override
+	@Transactional
+	public List<PartyResponse> getAllParties() throws InternalServerException, RecordNotFoundException {
+		List<Party> partiesList = partyDao.getAllParties();
+		return preparePartyResponse(partiesList);
+	}
+
+	private List<PartyResponse> preparePartyResponse(List<Party> partiesList)
+			throws InternalServerException, RecordNotFoundException {
+		List<PartyResponse> partiesResponse = new ArrayList<PartyResponse>();
+		for (Party party : partiesList) {
+			PartyResponse partyResponse = new PartyResponse();
+			partyResponse.setGuid(party.getGuid());
+			partyResponse.setPartyAbbrevation(party.getPartyAbbrevation());
+			partyResponse.setPartyName(party.getPartyName());
+			partyResponse.setPhotoURL(party.getPhotoURL());
+			partiesResponse.add(partyResponse);
+		}
+		return partiesResponse;
+	}
 }

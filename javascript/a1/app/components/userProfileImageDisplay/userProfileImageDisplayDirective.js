@@ -26,7 +26,7 @@
 
 				if(splitValues && splitValues.length>1){
 					scope.labelName = splitValues[0].charAt(0)+splitValues[1].charAt(0);
-				}else if(splitValues && splitValues.length>0){
+				}else if(splitValues && splitValues.length==1){
 					scope.labelName = splitValues[0].charAt(0);
 				}
 			}

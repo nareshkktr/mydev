@@ -1,5 +1,7 @@
-.displayLabel{
-	color: white;
-	padding-top: 9px;
-	font-size: 20px;
+.displayLabel {
+	color: #ffffff;
+	padding-top: 15px;
+	font-size: 16px;
+	height: 100%;
+	letter-spacing: 2px;
 }

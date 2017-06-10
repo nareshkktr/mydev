@@ -1,31 +1,12 @@
 package com.kasisripriyawebapps.myindia.requestresponsemodel;
 
-public class GetUserByPropertyRequest {
+public class ValidateElectorDetailsRequest {
 
-	private Long userGuid;
-	private String idCardType;
 	private String idCardNo;
-	private String referenceType;
 	private String referenceName;
-	private String userName;
+	private String electorName;
 	private String gender;
 	private Integer yearOfBirth;
-
-	public Long getUserGuid() {
-		return userGuid;
-	}
-
-	public void setUserGuid(Long userGuid) {
-		this.userGuid = userGuid;
-	}
-
-	public String getIdCardType() {
-		return idCardType;
-	}
-
-	public void setIdCardType(String idCardType) {
-		this.idCardType = idCardType;
-	}
 
 	public String getIdCardNo() {
 		return idCardNo;
@@ -33,14 +14,6 @@ public class GetUserByPropertyRequest {
 
 	public void setIdCardNo(String idCardNo) {
 		this.idCardNo = idCardNo;
-	}
-
-	public String getReferenceType() {
-		return referenceType;
-	}
-
-	public void setReferenceType(String referenceType) {
-		this.referenceType = referenceType;
 	}
 
 	public String getReferenceName() {
@@ -51,12 +24,12 @@ public class GetUserByPropertyRequest {
 		this.referenceName = referenceName;
 	}
 
-	public String getUserName() {
-		return userName;
+	public String getElectorName() {
+		return electorName;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setElectorName(String electorName) {
+		this.electorName = electorName;
 	}
 
 	public Integer getYearOfBirth() {

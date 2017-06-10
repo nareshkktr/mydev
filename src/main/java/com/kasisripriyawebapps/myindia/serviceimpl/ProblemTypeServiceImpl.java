@@ -1,22 +1,16 @@
 package com.kasisripriyawebapps.myindia.serviceimpl;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import javax.imageio.ImageIO;
-
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,9 +43,6 @@ public class ProblemTypeServiceImpl implements ProblemTypeService {
 	@Autowired
 	ImageService imageService;
 
-	@Autowired
-	private Environment env;
-
 	private static AmazonS3 s3Client = null;
 
 	@Override
@@ -76,7 +67,7 @@ public class ProblemTypeServiceImpl implements ProblemTypeService {
 
 	private boolean validateDuplicateProblemTypeByTypeNameRequest(
 			CreateUpdateDeleteProblemTypeRequest createUpdateDeleteProblemTypeRequest)
-					throws ConflictException, InternalServerException {
+			throws ConflictException, InternalServerException {
 		Boolean isDuplicateProblemType = Boolean.FALSE;
 		if (getProblemTypeByName(createUpdateDeleteProblemTypeRequest.getProblemTypeName()) != null) {
 			throw new ConflictException(ExceptionConstants.PROBLEM_TYPE_EXISTS_WITH_NAME);
@@ -221,16 +212,15 @@ public class ProblemTypeServiceImpl implements ProblemTypeService {
 		for (ProblemType problemType : problemTypesList) {
 			String probCategory = problemType.getProblemCategory().trim() + ".jpg";
 			probCategory = probCategory.replaceAll("/", " ");
-			File exportFile = new File(
-					"C:\\Users\\patchn\\Documents\\my-india-code\\ProblemTypes\\" + probCategory);
-			String exportFileName=exportFile.getName();
-			if(exportFileName.equalsIgnoreCase("Corruption Vigilance Issues.jpg")){
-				exportFileName="Corruption/Vigilance Issues.jpg";
+			File exportFile = new File("C:\\Users\\patchn\\Documents\\my-india-code\\ProblemTypes\\" + probCategory);
+			String exportFileName = exportFile.getName();
+			if (exportFileName.equalsIgnoreCase("Corruption Vigilance Issues.jpg")) {
+				exportFileName = "Corruption/Vigilance Issues.jpg";
 			}
 			createFile("myindiaproblems", null, exportFile, "problemtypes/" + exportFileName);
-			String problemTypePhotoURL = "https://s3.amazonaws.com/myindiaproblems/problemtypes/"+ exportFileName;
+			String problemTypePhotoURL = "https://s3.amazonaws.com/myindiaproblems/problemtypes/" + exportFileName;
 			problemType.setProblemTypePhotoURL(problemTypePhotoURL);
-			
+
 		}
 		problemTypeDao.updateProblemTypes(problemTypesList);
 	}

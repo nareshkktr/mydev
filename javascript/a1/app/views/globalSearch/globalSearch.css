@@ -42,6 +42,8 @@
 	margin-left: 0px;
 	PADDING-LEFT: 10px !important;
 	padding-right: 10px !important;
+	-webkit-box-shadow: 0 10px 10px 0 rgba(36, 50, 56, 0.2);
+	box-shadow: 0 10px 10px 0 rgba(36, 50, 56, 0.2);
 }
 
 .search-item img {
@@ -70,22 +72,18 @@
 	font-size: 13px;
 }
 
-.search-item:HOVER {
-	background: rgb(229, 194, 194);
-}
-
 .search_object_tab:HOVER {
 	background-color: #f94c59;
 	color: #ebebeb;
 }
 
 .search_objects_tab {
-	background-color: white;
+	background-color: #00a699;
 	padding: 0px !important;
 }
 
 .search_object_tab {
-	border-bottom: 1px solid #d7c7c9;
+	border-bottom: 1px solid white;
 	padding: 15px;
 	cursor: pointer;
 }
@@ -98,10 +96,10 @@
 .search_object_tab_icon img {
 	width: 40px;
 	height: 40px;
-	border: 2px solid black;
+	border: 2px solid #0d0d32;
 	border-radius: 50%;
 	padding: 6px;
-	background-color: #ebebeb;
+	background-color: #ffffff;
 	cursor: pointer;
 }
 
@@ -117,11 +115,13 @@
 	font-weight: 600;
 	letter-spacing: 1px;
 	cursor: pointer;
+	COLOR: white;
 }
 
 .search_object_tab_count {
 	padding-left: 8px;
 	cursor: pointer;
+	color: white;
 }
 
 .search_objects_tab_content {

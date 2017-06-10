@@ -6,6 +6,12 @@
 	padding: 0px !important;
 }
 
+.comment_box_container .comment_user_icon {
+	padding: 0px !important;
+	height: 100%;
+	margin-top: 17px;
+}
+
 .comment_box_container .textbox textarea {
 	width: 100%;
 	height: 79px;
@@ -31,6 +37,7 @@
 	border: 1px solid #ccc;
 	resize: none;
 	border-right: none;
+	letter-spacing: 1px;
 }
 
 .comment_box_container .addons {
@@ -63,4 +70,20 @@
 	height: 46px;
 	letter-spacing: 1px;
 	font-size: 19px;
+}
+
+
+.comment_user_profile_label {
+	border-radius: 50%;
+	text-align: center;
+	width: 63px;
+	background-color: #f94c59 !important;
+	border: 2px solid #00a699;
+	height: 55px;
+}
+
+.comment_user_profile_image {
+	border-radius: 50%;
+	width: 55px !important;
+	border: 2px solid #fda68a;
 }

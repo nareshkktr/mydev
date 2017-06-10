@@ -1,0 +1,91 @@
+<div id="politicians_list_container">
+	<div class="row politicians_list_row"
+		ng-if="!politicianSelection.selectedPolitician">
+		<div
+			class="selected_politician col-lg-12 col-md-12 col-sm-12 col-xs-12"
+			ng-repeat="eachPolitician in politicianSelection.politicians"
+			ng-click="politicianSelection.selectPolitician(eachPolitician)">
+			<div
+				class="col-lg-12 col-md-12 col-sm-12 col-xs-12 selected_politician_img_name">
+				<div class="selected_politician_img">
+					<img alt=""
+						src="https://0.gravatar.com/avatar/48959f453dffdb6236f4b33eb8e9f4b7?s=50&d=identicon&r=G">
+				</div>
+				<div class="selected_politician_details">
+					<div class="selected_politician_name">{{eachPolitician.fullName}}</div>
+					<div class="selected_politician_designation">{{eachPolitician.currentDesignation}}</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row politicians_list_row"
+		ng-if="politicianSelection.selectedPolitician">
+		<div
+			class="selected_politician col-lg-12 col-md-12 col-sm-12 col-xs-12">
+			<div
+				class="col-lg-12 col-md-12 col-sm-12 col-xs-12 selected_politician_img_name">
+				<div class="selected_politician_img">
+					<img alt=""
+						src="https://0.gravatar.com/avatar/48959f453dffdb6236f4b33eb8e9f4b7?s=50&d=identicon&r=G">
+				</div>
+				<div class="selected_politician_details">
+					<div class="selected_politician_name">{{politicianSelection.selectedPolitician.fullName}}</div>
+					<div class="selected_politician_designation">{{politicianSelection.selectedPolitician.currentDesignation}}</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="politician_validate_data_container"
+	ng-if="politicianSelection.selectedPolitician">
+	<div class="form-group elected_location_col">
+		<label for="elector_name_input">Elected Location</label> <i
+			class="fa fa-info-circle info_icon" aria-hidden="true"
+			tooltip-placement="top" uib-tooltip="Elected Location"></i> <i
+			class="fa fa-search login_icon search_icon" aria-hidden="true"></i></span><input
+			type="text" name="elected_location_name"
+			placeholder="Elected Location"
+			ng-model="politicianSelection.electedLocationSearchTerm"
+			class="form-control" id="elector_name_input" ng-required="true"
+			ng-keyup="politicianSelection.getLocationSearchResults()">
+		<div class="input-group search_locations_container"
+			ng-if="politicianSelection.searchLocations">
+			<div class="search_location"
+				ng-repeat="searchLocation in politicianSelection.searchLocations"
+				ng-click="politicianSelection.selectElectedLocation(searchLocation)">
+				<label> {{searchLocation.locationName}}
+					&nbsp;({{searchLocation.locationType}}) </label>
+			</div>
+		</div>
+		<div ng-messages="signup_form.elected_location_name.$error"
+			ng-if="signup_form.elector_name_input.$touched">
+			<p ng-message="required" class="help-block">
+				<i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+				&nbsp;Elected location is required.
+			</p>
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="search_college">Party</label> <select class="form-control"
+			name="politician_party"
+			ng-model="politicianSelection.politicianParty"
+			ng-options="party.partyName for party in politicianSelection.parties"
+			ng-required="true">
+			<option value=''>Select Party</option>
+		</select>
+
+		<div ng-messages="signup_form.politician_party.$error"
+			ng-if="signup_form.politician_party.$touched">
+			<p ng-message="required" class="help-block">
+				<i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+				&nbsp;Party is required.
+			</p>
+		</div>
+	</div>
+</div>
+<div class="form-group politician_select_proceed">
+	<label>&nbsp;</label>
+	<button type="button" class="btn app_btn"
+		ng-click="politicianSelection.validatePoliticianSelection()"
+		ng-disabled="!politicianSelection.selectedPolitician || !politicianSelection.politicianParty || !politicianSelection.selectedElectedLocation">Proceed!</button>
+</div>

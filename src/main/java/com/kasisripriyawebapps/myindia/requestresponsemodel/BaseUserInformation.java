@@ -15,6 +15,8 @@ public class BaseUserInformation {
 	private Integer expirationTimeInSeconds;
 	private UserLocationDetails userLocation;
 	private Long accountGuid;
+	private String currentDesignation;
+	
 
 	public BaseUserInformation() {
 		super();
@@ -115,6 +117,18 @@ public class BaseUserInformation {
 
 	public void setAccountGuid(Long accountGuid) {
 		this.accountGuid = accountGuid;
+	}
+
+
+
+	public String getCurrentDesignation() {
+		return currentDesignation;
+	}
+
+
+
+	public void setCurrentDesignation(String currentDesignation) {
+		this.currentDesignation = currentDesignation;
 	}
 	
 	

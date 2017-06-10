@@ -28,7 +28,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.kasisripriyawebapps.myindia.constants.ApplicationConstants;
 import com.kasisripriyawebapps.myindia.exception.InternalServerException;
 
-public class AmazonS3Util {
+public final class AmazonS3Util {
 
 	private static AmazonS3Util amazonS3Util = new AmazonS3Util();
 	private static final String SUFFIX = "/";
@@ -189,7 +189,7 @@ public class AmazonS3Util {
 		} // if
 		return image;
 	}
-	
+
 	public static void writeExcelDataIntoAmazonS3File(String fileName, Workbook exportWorkBook, String bucketName,
 			String uploadedFolderName) throws InternalServerException {
 		FileOutputStream os = null;
@@ -210,7 +210,7 @@ public class AmazonS3Util {
 			throw new InternalServerException(e.getMessage());
 		}
 	}
-	
+
 	public static byte[] readBytesFromFile(String filePath) {
 
 		FileInputStream fileInputStream = null;
@@ -237,29 +237,28 @@ public class AmazonS3Util {
 		}
 		return bytesArray;
 	}
-	
-	public static List<String> getListOfObjects(String bucketName, String prefixPath) throws InternalServerException{
+
+	public static List<String> getListOfObjects(String bucketName, String prefixPath) throws InternalServerException {
 		intializeAmazonS3Client();
-		
-		if(!prefixPath.endsWith("/")){
-			prefixPath +=ApplicationConstants.SUFFIX;
+
+		if (!prefixPath.endsWith("/")) {
+			prefixPath += ApplicationConstants.SUFFIX;
 		}
-		
-		ListObjectsRequest lor = new ListObjectsRequest().withBucketName(bucketName)
-                .withPrefix(prefixPath)
-                .withDelimiter("/");
-		
+
+		ListObjectsRequest lor = new ListObjectsRequest().withBucketName(bucketName).withPrefix(prefixPath)
+				.withDelimiter("/");
+
 		ObjectListing fileList = s3Client.listObjects(lor);
-		
+
 		List<String> files = fileList.getCommonPrefixes();
-		
+
 		return files;
 	}
 
-	public static void main(String argv[]) throws Exception {		
-		File exportedFile = new File("C:\\Users\\kanduk\\Documents\\My Work\\Documents\\My Web Sites\\My India\\MyIndia\\ProblemTypes.xls");
-		createFile("myindiaproblems",null,exportedFile,"problemtypes/ProblemTypes.xls");
-		
+	public static void main(String argv[]) throws Exception {
+		File exportedFile = new File("C:\\Users\\kanduk\\Desktop\\photo.jpg");
+		createFile("myindiaaccounts", null, exportedFile, "30/profilePicture.jpg");
+
 	}
 
 }

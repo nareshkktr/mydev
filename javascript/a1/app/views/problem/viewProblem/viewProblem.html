@@ -10,7 +10,8 @@
 			<div id="problem_highlites">
 				<div id="problem_category_name">
 					<label>
-						{{viewProblem.problemDetails.problemType.problemCategory}} </label>
+						{{viewProblem.problemDetails.problemType.problemCategory}}&nbsp;({{viewProblem.problemDetails.problemType.problemTypeName}})
+					</label>
 				</div>
 				<div id="problem_status"></div>
 				<div id="problem_popularity">
@@ -21,34 +22,40 @@
 			</div>
 			<div id="problem_tabs">
 				<div class="problem_tab"
-					ng-click="viewProblem.changeTab('viewProblem.overview')">
+					ng-click="viewProblem.changeTab('viewProblem.overview','Overview')">
 					<span class="problem_tab_icon"><i class="fa fa-info"
 						aria-hidden="true"></i></span> <span class="problem_tab_name">Overview</span>
 				</div>
 				<div class="problem_tab"
-					ng-click="viewProblem.changeTab('viewProblem.activityFeed')">
+					ng-click="viewProblem.changeTab('viewProblem.activityFeed','Activities')">
 					<span class="problem_tab_icon"><i class="fa fa-tasks"
-						aria-hidden="true"></i></span> <span class="problem_tab_name">Activities</span>
+						aria-hidden="true"></i></span> <span class="problem_tab_name">Activity
+						Feed</span>
 				</div>
 				<div class="problem_tab"
-					ng-click="viewProblem.changeTab('viewProblem.photos')">
+					ng-click="viewProblem.changeTab('viewProblem.photos','Photos')">
 					<span class="problem_tab_icon"><i class="fa fa-picture-o"
 						aria-hidden="true"></i></span> <span class="problem_tab_name">Photos</span>
 				</div>
 				<div class="problem_tab"
-					ng-click="viewProblem.changeTab('viewProblem.videos')">
+					ng-click="viewProblem.changeTab('viewProblem.videos','Videos')">
 					<span class="problem_tab_icon"><i class="fa fa-video-camera"
 						aria-hidden="true"></i></span> <span class="problem_tab_name">Videos</span>
 				</div>
 				<div class="problem_tab"
-					ng-click="viewProblem.changeTab('viewProblem.contributors')">
+					ng-click="viewProblem.changeTab('viewProblem.contributors','Contributors')">
 					<span class="problem_tab_icon"><i class="fa fa-users"
 						aria-hidden="true"></i></span> <span class="problem_tab_name">Contributors</span>
 				</div>
 				<div class="problem_tab"
-					ng-click="viewProblem.changeTab('viewProblem.discussions')">
-					<span class="problem_tab_icon"><i class="fa fa-video-camera"
+					ng-click="viewProblem.changeTab('viewProblem.discussions','Discussion')">
+					<span class="problem_tab_icon"><i class="fa fa-comment"
 						aria-hidden="true"></i></span> <span class="problem_tab_name">Discussion</span>
+				</div>
+				<div class="problem_tab"
+					ng-click="viewProblem.changeTab('viewProblem.attachments','Attachements')">
+					<span class="problem_tab_icon"><i class="fa fa-paperclip"
+						aria-hidden="true"></i></span> <span class="problem_tab_name">Attachments</span>
 				</div>
 			</div>
 		</div>
@@ -99,12 +106,18 @@
 									<div
 										class="col-lg-12 col-md-12 col-sm-12 col-xs-12 logged_currently_with">
 										<div class="logged_currently_with_photo">
-											<img alt=""
-												src="https://0.gravatar.com/avatar/48959f453dffdb6236f4b33eb8e9f4b7?s=50&d=identicon&r=G">
+											<user-profile-image-display
+												ng-if="viewProblem.problemDetails.createdBy"
+												image-url="viewProblem.problemDetails.createdBy.userImage"
+												name="viewProblem.problemDetails.createdBy.name"
+												label-class="viewProblem.userProfileLabelClass"
+												image-class="viewProblem.userProfileImageClass"></user-profile-image-display>
+
 										</div>
 										<div class="logged_currently_with_name">
-											<div class="ltrspc1">{{viewProblem.problemDetails.createdBy.name}}</div>
-											<div class="ltrspc1">{{viewProblem.problemDetails.createdBy.userLocation.locationName}}</div>
+											<div class="ltrspc1 owner_name">{{viewProblem.problemDetails.createdBy.name}}</div>
+											<div class="ltrspc1 owner_desig">{{viewProblem.problemDetails.createdBy.currentDesignation}}</div>
+											<div class="ltrspc1 owner_loc">{{viewProblem.problemDetails.createdBy.userLocation.locationName}}</div>
 										</div>
 									</div>
 								</div>
@@ -115,12 +128,18 @@
 									<div
 										class="col-lg-12 col-md-12 col-sm-12 col-xs-12 logged_currently_with">
 										<div class="logged_currently_with_photo">
-											<img alt=""
-												src="https://0.gravatar.com/avatar/48959f453dffdb6236f4b33eb8e9f4b7?s=50&d=identicon&r=G">
+
+											<user-profile-image-display
+												ng-if="viewProblem.problemDetails.currentlyWith"
+												image-url="viewProblem.problemDetails.currentlyWith.userImage"
+												name="viewProblem.problemDetails.currentlyWith.name"
+												label-class="viewProblem.userProfileLabelClass"
+												image-class="viewProblem.userProfileImageClass"></user-profile-image-display>
 										</div>
 										<div class="logged_currently_with_name">
-											<div class="ltrspc1">Kasireddy Kandula</div>
-											<div class="ltrspc1">Pulipadu</div>
+											<div class="ltrspc1 owner_name">{{viewProblem.problemDetails.currentlyWith.name}}</div>
+											<div class="ltrspc1 owner_desig">{{viewProblem.problemDetails.currentlyWith.currentDesignation}}</div>
+											<div class="ltrspc1 owner_loc">{{viewProblem.problemDetails.currentlyWith.userLocation.locationName}}</div>
 										</div>
 									</div>
 								</div>
@@ -132,7 +151,7 @@
 								<div class="row margin0 affected_row">
 									<div
 										class="col-lg-6 col-md-6 col-sm-12 col-xs-12 people_affected_col">
-										<div class="count">5000+</div>
+										<div class="count">{{viewProblem.problemDetails.peopleEffected}}</div>
 										<div class="desc">
 											<div>People</div>
 											<div>Affected</div>
@@ -140,7 +159,7 @@
 									</div>
 									<div
 										class="col-lg-6 col-md-6 col-sm-12 col-xs-12 people_affected_col">
-										<div class="count">1000+</div>
+										<div class="count">{{viewProblem.problemDetails.moneyAtStake}}</div>
 										<div class="desc">
 											<div>Money At</div>
 											<div>Stake</div>
@@ -155,29 +174,13 @@
 										class="col-lg-12 col-md-12 col-sm-12 col-xs-12 contributor_info">
 										<div class="row">
 											<div
-												class="contributor_photo col-lg-2 col-md-2 col-sm-3 col-xs-6">
-												<img alt=""
-													src="https://0.gravatar.com/avatar/48959f453dffdb6236f4b33eb8e9f4b7?s=50&d=identicon&r=G">
-											</div>
-											<div
-												class="contributor_photo col-lg-2 col-md-2 col-sm-3 col-xs-6">
-												<img alt=""
-													src="https://0.gravatar.com/avatar/48959f453dffdb6236f4b33eb8e9f4b7?s=50&d=identicon&r=G">
-											</div>
-											<div
-												class="contributor_photo col-lg-2 col-md-2 col-sm-3 col-xs-6">
-												<img alt=""
-													src="https://0.gravatar.com/avatar/48959f453dffdb6236f4b33eb8e9f4b7?s=50&d=identicon&r=G">
-											</div>
-											<div
-												class="contributor_photo col-lg-2 col-md-2 col-sm-3 col-xs-6">
-												<img alt=""
-													src="https://0.gravatar.com/avatar/48959f453dffdb6236f4b33eb8e9f4b7?s=50&d=identicon&r=G">
-											</div>
-											<div
-												class="contributor_photo col-lg-2 col-md-2 col-sm-3 col-xs-6">
-												<img alt=""
-													src="https://0.gravatar.com/avatar/48959f453dffdb6236f4b33eb8e9f4b7?s=50&d=identicon&r=G">
+												class="contributor_photo col-lg-2 col-md-2 col-sm-3 col-xs-6"
+												ng-repeat="eachContributor in viewProblem.problemDetails.contributors">
+												<user-profile-image-display ng-if="eachContributor"
+													image-url="eachContributor.userImage"
+													name="eachContributor.name"
+													label-class="viewProblem.userProfileLabelClass"
+													image-class="viewProblem.userProfileImageClass"></user-profile-image-display>
 											</div>
 										</div>
 									</div>
@@ -187,19 +190,19 @@
 					</div>
 					<div class="row margin0 problem_counts">
 						<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 problem_count">
-							<div class="count">1000</div>
+							<div class="count">{{viewProblem.problemDetails.popularityCount}}</div>
 							<div class="desc">Popularity</div>
 						</div>
 						<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 problem_count">
-							<div class="count">2000+</div>
+							<div class="count">{{viewProblem.problemDetails.followingCount}}</div>
 							<div class="desc">Followers</div>
 						</div>
 						<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 problem_count">
-							<div class="count">3000+</div>
+							<div class="count">{{viewProblem.problemDetails.supportCount}}</div>
 							<div class="desc">Supporters</div>
 						</div>
 						<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 problem_count">
-							<div class="count">4000+</div>
+							<div class="count">{{viewProblem.problemDetails.shareCount}}</div>
 							<div class="desc">Shares</div>
 						</div>
 					</div>
@@ -207,20 +210,13 @@
 						<comment-box object-type="viewProblem.objectType"
 							object-guid="viewProblem.selectedProblemGuid"> </problem-display>
 					</div>
-					<div class="row margin0 problem_tabs_content">
-						<div
-							class="col-lg-12 col-md-12 col-sm-12 col-xs-12 problem_tabs_content_tab">
-							<div ui-view></div>
-						</div>
-					</div>
+					<div ui-view></div>
 				</div>
 				<div
 					class="col-lg-3 col-md-3 col-sm-3 col-xs-12 relative_problems_container padding0">
 					<problem-display problems="viewProblem.similarProblems.problems"></problem-display>
 				</div>
 			</div>
-
 		</div>
-
 	</div>
 </div>

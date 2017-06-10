@@ -29,13 +29,24 @@
 			controllerAs : 'signUp'
 		}).state('signUp.validate', {
 			url : '/validate',
-			templateUrl : resource + 'partials/validateElector.html'
+			templateUrl : resource + 'partials/electorDetails.html',
+			controller : 'electorDetailsController',
+			controllerAs : 'electorDetails'
 		}).state('signUp.locationSetup', {
 			url : '/locationSetup',
-			templateUrl : resource + 'partials/userLocationSetup.html'
+			templateUrl : resource + 'partials/locationDetails.html',
+			controller : 'locationDetailsController',
+			controllerAs : 'locationDetails'
+		}).state('signUp.politicianSelection', {
+			url : '/politicianSelection',
+			templateUrl : resource + 'partials/politicianSelection.html',
+			controller : 'politicianSelectionController',
+			controllerAs : 'politicianSelection'
 		}).state('signUp.accountSetup', {
 			url : '/accountSetup',
-			templateUrl : resource + 'partials/accountSetup.html'
+			templateUrl : resource + 'partials/accountSetup.html',
+			controller : 'accountDetailsController',
+			controllerAs : 'accountDetails'
 		}).state('search', {
 			url : '/search/:searchTerm',
 			templateUrl : resource + 'partials/globalSearch.html',
@@ -75,11 +86,36 @@
 		}).state('viewProblem.overview', {
 			url : '/overview',
 			templateUrl : resource + 'partials/overview.html'
+		}).state('viewProblem.activityFeed', {
+			url : '/activityFeed',
+			templateUrl : resource + 'partials/activityFeed.html',
+			controller : 'activityFeedController',
+			controllerAs : 'activityFeed',
 		}).state('viewProblem.discussions', {
 			url : '/discussions',
 			templateUrl : resource + 'partials/discussions.html',
 			controller : 'discussionsController',
 			controllerAs : 'discussions',
+		}).state('viewProblem.photos', {
+			url : '/photos',
+			templateUrl : resource + 'partials/photos.html',
+			controller : 'photosController',
+			controllerAs : 'photos'
+		}).state('viewProblem.attachments', {
+			url : '/attachments',
+			templateUrl : resource + 'partials/attachments.html',
+			controller : 'attachmentController',
+			controllerAs : 'attachment'
+		}).state('viewProblem.contributors', {
+			url : '/contributors',
+			templateUrl : resource + 'partials/contributors.html',
+			controller : 'contributorController',
+			controllerAs : 'contributor'
+		}).state('viewProblem.videos', {
+			url : '/videos',
+			templateUrl : resource + 'partials/videos.html',
+			controller : 'videoController',
+			controllerAs : 'video'
 		}).state('forgotPassword', {
 			url : '/forgotPassword',
 			templateUrl : resource + 'partials/forgotPassword.html',
@@ -96,6 +132,16 @@
 			params : {
 				'baseUserInfo' : ''
 			}
+		}).state('poc', {
+			url : '/poc',
+			templateUrl : resource + 'partials/poc.html',
+			controller : 'pocController',
+			controllerAs : 'poc',
+		}).state('user', {
+			url : '/user',
+			templateUrl : resource + 'partials/user.html',
+			controller : 'userController',
+			controllerAs : 'user',
 		});
 	}
 })();

@@ -17,6 +17,10 @@
 		viewProblem.similarProblems.problems = [];
 		viewProblem.changeTab=changeTab;
 		
+		viewProblem.userProfileImageClass = "view_problem_user_profile_image";
+		viewProblem.userProfileLabelClass = "view_problem_user_profile_label";
+
+		
 		changeTab('viewProblem.overview');
 		
 		viewProblemService.getProblemDetails(viewProblem.selectedProblemGuid).then(getProblemDetailsSuccess).catch(getProblemDetailsFailure);
@@ -61,7 +65,8 @@
 			alert(error);
 		}
 		
-		function changeTab(tabURL){
+		function changeTab(tabURL,tabName){
+			viewProblem.selectedTabName=tabName;
 			$state.go(tabURL);
 		}
 	}
